@@ -47,7 +47,7 @@ export default defineStrings({
     fc_stat_memes: "Meme power",
   },
   es: {
-    t_fan: "Fan card",
+    t_fan: "Tarjeta de fan",
     d_fan: "Consigue tu fan card de Monero y tu avatar pixelado, y luce tu estilo.",
     fc_name: "Tu nombre o apodo",
     fc_hint: "Mismo nombre, misma carta. Compárala con tus amigos.",
@@ -92,7 +92,7 @@ export default defineStrings({
     fc_stat_memes: "Poder memero",
   },
   ru: {
-    t_fan: "Fan card",
+    t_fan: "Карточка фаната",
     d_fan: "Получи свою фан-карту Monero и пиксельный аватар и похвастайся ими.",
     fc_name: "Твоё имя или ник",
     fc_hint: "То же имя, та же карта. Сравни с друзьями.",
@@ -137,7 +137,7 @@ export default defineStrings({
     fc_stat_memes: "Мемная мощь",
   },
   fr: {
-    t_fan: "Fan card",
+    t_fan: "Carte de fan",
     d_fan: "Obtiens ta fan card Monero et ton avatar pixel, puis frime un peu.",
     fc_name: "Ton nom ou pseudo",
     fc_hint: "Même nom, même carte. Compare avec tes amis.",
@@ -182,7 +182,7 @@ export default defineStrings({
     fc_stat_memes: "Puissance mème",
   },
   pt: {
-    t_fan: "Fan card",
+    t_fan: "Cartão de fã",
     d_fan: "Pegue seu fan card de Monero e seu avatar pixelado, e saia por aí se exibindo.",
     fc_name: "Seu nome ou apelido",
     fc_hint: "Mesmo nome, mesma carta. Compare com os amigos.",
