@@ -1,44 +1,20 @@
 [
   {
-    "id": "getmonero",
-    "name": "Monero General Fund",
-    "category": "monero",
-    "address": "888tNkZrPN6JsEgekjMnABU4TBzc2Dt29EPAvkRxbANsAnjyPbb3iQ1YBRk1UXcdRsiKc9dhwMVgN5S9cQUiyoogDavup3H",
-    "source": "https://www.getmonero.org/get-started/contributing/",
-    "checked": "2026-10-21"
-  },
-  {
-    "id": "p2pool",
-    "name": "P2Pool",
-    "category": "monero",
-    "address": "44MnN1f3Eto8DZYUWuE5XZNUtE3vcRzt2j6PzqWpPau34e6Cf4fAxt6X2MBmrm6F9YMEiMNjN6W4Shn4pLcfNAja621jwyg",
-    "source": "https://github.com/SChernykh/p2pool",
-    "checked": "2026-10-21"
-  },
-  {
-    "id": "observer",
-    "name": "Monero Observer",
-    "category": "monero",
-    "address": "867TAc58FK2ScH6Kyz9VSJZYSKGbyGfRiJB7M7yV2qEdamdQsxJafEbXxp6QoAkVCjjarKTbsmsZuEm1XymGmSquRdZnN2C",
-    "source": "https://monero.observer/monero-observer-funding-2027/",
-    "checked": "2026-10-21"
-  },
-  {
-    "id": "monerocoalition",
-    "name": "Monero Coalition",
-    "category": "monero",
-    "address": "458KqN1qCy5BXevWrGaqUNHaFXRRcQE739BH9M4BKBi6Ng4U9htN3NbCZdyezD2qNBDaaQ5KZHFhnEQ9brFL8EdL5fxsBfC",
-    "source": "https://donate.monerocoalition.org/",
-    "checked": "2026-10-21"
-  },
-  {
     "id": "kycnotme",
     "name": "KYCnot.me",
     "category": "monero",
     "address": "83g1QHgQkbJeHr7m1wpDnNFsJcFMaFx6W7DsH4HuSR5ZHPRkeGErJAjYkHrJgBhq4TUrNrCimXNqwYTV1ywB6Rv86Z8iCAu",
     "source": "https://kycnot.me/about",
     "checked": "2026-10-21",
-    "openalias": "kycnot.me"
+    "openalias": "kycnot.me",
+    "description": {
+      "en": "A directory of services that work without identity checks.",
+      "es": "Un directorio de servicios que funcionan sin verificación de identidad.",
+      "ru": "Каталог сервисов, работающих без проверки личности.",
+      "fr": "Un annuaire de services qui fonctionnent sans vérification d'identité.",
+      "pt": "Um diretório de serviços que funcionam sem verificação de identidade.",
+      "ja": "本人確認なしで使えるサービスのディレクトリ。"
+    }
   },
   {
     "id": "monerica",
@@ -46,7 +22,63 @@
     "category": "monero",
     "address": "8BciMHULmH1Gu6Jrwv1vEJB11f3sNNSGRVU2PKMuaMJ48wndUuNDbaZ94ijH7H3fKQbhkUA5k98ZHUB3cmuoJjwV7WcT3dC",
     "source": "https://monerica.com/donate",
-    "checked": "2026-10-21"
+    "checked": "2026-10-21",
+    "description": {
+      "en": "A directory of businesses and services that accept Monero.",
+      "es": "Un directorio de negocios y servicios que aceptan Monero.",
+      "ru": "Каталог компаний и сервисов, принимающих Monero.",
+      "fr": "Un annuaire d'entreprises et de services qui acceptent le Monero.",
+      "pt": "Um diretório de empresas e serviços que aceitam Monero.",
+      "ja": "Monero を受け付ける店舗やサービスのディレクトリ。"
+    }
+  },
+  {
+    "id": "monerocoalition",
+    "name": "Monero Coalition",
+    "category": "monero",
+    "address": "458KqN1qCy5BXevWrGaqUNHaFXRRcQE739BH9M4BKBi6Ng4U9htN3NbCZdyezD2qNBDaaQ5KZHFhnEQ9brFL8EdL5fxsBfC",
+    "source": "https://donate.monerocoalition.org/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "A policy group working for Monero adoption.",
+      "es": "Un grupo de incidencia que trabaja por la adopción de Monero.",
+      "ru": "Группа, которая продвигает Monero в политике и обществе.",
+      "fr": "Un groupe de plaidoyer pour l'adoption du Monero.",
+      "pt": "Um grupo de advocacy pela adoção do Monero.",
+      "ja": "Monero の普及に取り組む政策グループ。"
+    }
+  },
+  {
+    "id": "getmonero",
+    "name": "Monero General Fund",
+    "category": "monero",
+    "address": "888tNkZrPN6JsEgekjMnABU4TBzc2Dt29EPAvkRxbANsAnjyPbb3iQ1YBRk1UXcdRsiKc9dhwMVgN5S9cQUiyoogDavup3H",
+    "source": "https://www.getmonero.org/get-started/contributing/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Monero's General Fund, used for the project's needs and emergencies.",
+      "es": "El fondo general de Monero, para las necesidades y emergencias del proyecto.",
+      "ru": "Общий фонд Monero на нужды и непредвиденные расходы проекта.",
+      "fr": "Le fonds général de Monero, pour les besoins et les urgences du projet.",
+      "pt": "O fundo geral do Monero, para as necessidades e emergências do projeto.",
+      "ja": "プロジェクトの必要経費や緊急時に使われる Monero の一般基金。"
+    }
+  },
+  {
+    "id": "observer",
+    "name": "Monero Observer",
+    "category": "monero",
+    "address": "867TAc58FK2ScH6Kyz9VSJZYSKGbyGfRiJB7M7yV2qEdamdQsxJafEbXxp6QoAkVCjjarKTbsmsZuEm1XymGmSquRdZnN2C",
+    "source": "https://monero.observer/monero-observer-funding-2027/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Monero news every day, plus a weekly summary.",
+      "es": "Noticias de Monero cada día, y un resumen semanal.",
+      "ru": "Новости Monero каждый день и еженедельный обзор.",
+      "fr": "L'actualité Monero chaque jour, plus un résumé hebdomadaire.",
+      "pt": "Notícias do Monero todo dia, mais um resumo semanal.",
+      "ja": "毎日の Monero ニュースと週刊まとめ。"
+    }
   },
   {
     "id": "orangefren",
@@ -54,15 +86,111 @@
     "category": "monero",
     "address": "868i3uV9Q8NjigjCnJ6P3L6oMizRYniGuAiVXYVYsBQE9g4gqVWs6qVEDC6SZR3ZiWgC787A9iTcdeFkUdTu8n7q2e7BN9m",
     "source": "https://orangefren.com/",
-    "checked": "2026-10-21"
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Compare and swap crypto without identity checks.",
+      "es": "Compara e intercambia cripto sin verificación de identidad.",
+      "ru": "Сравнение и обмен криптовалют без проверки личности.",
+      "fr": "Comparez et échangez des cryptos sans vérification d'identité.",
+      "pt": "Compare e troque cripto sem verificação de identidade.",
+      "ja": "本人確認なしで暗号資産を比較・交換。"
+    }
   },
   {
-    "id": "torproject",
-    "name": "Tor Project",
+    "id": "p2pool",
+    "name": "P2Pool",
+    "category": "monero",
+    "address": "44MnN1f3Eto8DZYUWuE5XZNUtE3vcRzt2j6PzqWpPau34e6Cf4fAxt6X2MBmrm6F9YMEiMNjN6W4Shn4pLcfNAja621jwyg",
+    "source": "https://github.com/SChernykh/p2pool",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "The decentralized Monero mining pool, with no fees.",
+      "es": "El pool de minería descentralizado de Monero, sin comisiones.",
+      "ru": "Децентрализованный пул для майнинга Monero без комиссий.",
+      "fr": "Le pool de minage Monero décentralisé, sans frais.",
+      "pt": "O pool de mineração descentralizado do Monero, sem taxas.",
+      "ja": "手数料なしの分散型 Monero マイニングプール。"
+    }
+  },
+  {
+    "id": "xmrig",
+    "name": "XMRig",
+    "category": "monero",
+    "address": "48edfHu7V9Z84YzzMa6fUueoELZ9ZRXq9VetWzYGzKt52XU5xvqgzYnDK9URnRoJMk1j8nLwEVsaSWJ4fhdUyZijBGUicoD",
+    "source": "https://github.com/xmrig",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "The open-source miner most Monero CPU miners use.",
+      "es": "El minero de código abierto que usa la mayoría de quienes minan Monero con CPU.",
+      "ru": "Открытый майнер, которым пользуется большинство CPU-майнеров Monero.",
+      "fr": "Le logiciel de minage libre qu'utilisent la plupart des mineurs Monero sur CPU.",
+      "pt": "O minerador de código aberto usado pela maioria de quem minera Monero com CPU.",
+      "ja": "CPU で Monero を掘る人の多くが使うオープンソースのマイナー。"
+    }
+  },
+  {
+    "id": "accrescent",
+    "name": "Accrescent",
     "category": "privacy",
-    "address": "4AcQxuMBUfJM7uAWpZP1Vs1BzQLC1QR6zZL3sMYdBuayWmpZHmaVYo7EQ3cSneyHYf2LRKJnRtrGz5ogZzjmmGygAyusEcJ",
-    "source": "https://donate.torproject.org/cryptocurrency/",
-    "checked": "2026-10-21"
+    "address": "8AsSJ4LMLYHBQxzMXfotoxb6H7knjnzz6XnY1ymrpLBof1SgqJJHPkEbKXiCxVf54STpqmXWJE5hscTK9xLWjkBM3mWDujR",
+    "source": "https://accrescent.app/donate/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "A private and secure app store for Android.",
+      "es": "Una tienda de aplicaciones privada y segura para Android.",
+      "ru": "Приватный и безопасный магазин приложений для Android.",
+      "fr": "Une boutique d'applications privée et sécurisée pour Android.",
+      "pt": "Uma loja de apps privada e segura para Android.",
+      "ja": "Android 向けのプライベートで安全なアプリストア。"
+    }
+  },
+  {
+    "id": "addy",
+    "name": "addy.io",
+    "category": "privacy",
+    "address": "84qZgh4rLS16PMuw6PBPbsBQPfzQSLpaJ9DENzXVTwgJPjsAPNFxvf5BpJF9Y2ayp47GFVWvDYnmNJ9dYyT1aAB9BvbVJbk",
+    "source": "https://addy.io/donate/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Anonymous email forwarding to keep your real address private.",
+      "es": "Reenvío de correo anónimo para mantener privada tu dirección real.",
+      "ru": "Анонимная пересылка почты, чтобы скрыть ваш настоящий адрес.",
+      "fr": "Transfert d'e-mails anonyme pour garder votre vraie adresse privée.",
+      "pt": "Encaminhamento de e-mail anônimo para manter seu endereço real privado.",
+      "ja": "本当のアドレスを隠せる匿名メール転送。"
+    }
+  },
+  {
+    "id": "decentraleyes",
+    "name": "Decentraleyes",
+    "category": "privacy",
+    "address": "459FkXUzgevLxJrN8oovyTTtMtk8Cs6XkQX6z4Gr839w9HnpKs2joeWV3ufbe2gHDrYgFAMi7ESHy5uiWwr4zsAQ4Cnda6N",
+    "source": "https://decentraleyes.org/donate/monero/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Protects you from tracking by content delivery networks.",
+      "es": "Te protege del rastreo de las redes de distribución de contenido.",
+      "ru": "Защищает от слежки через сети доставки контента.",
+      "fr": "Vous protège du pistage par les réseaux de diffusion de contenu.",
+      "pt": "Protege você do rastreamento por redes de distribuição de conteúdo.",
+      "ja": "コンテンツ配信ネットワークによる追跡から守ります。"
+    }
+  },
+  {
+    "id": "disroot",
+    "name": "Disroot",
+    "category": "privacy",
+    "address": "87gHbf4XtTBcxyWkVbjD3zNH6U7mgZj3sbGc2id98sxWG8fCoDTTFQAUrbtLCXNYSw2kP4NLW8kMfi9kzAooE6JVR1cditB",
+    "source": "https://disroot.org/cryptocurrency",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Free, privacy-respecting online services run by volunteers.",
+      "es": "Servicios en línea gratuitos y respetuosos con la privacidad, gestionados por voluntarios.",
+      "ru": "Бесплатные сервисы с уважением к приватности, которые держат волонтёры.",
+      "fr": "Des services en ligne gratuits et respectueux de la vie privée, tenus par des bénévoles.",
+      "pt": "Serviços online gratuitos e respeitosos com a privacidade, mantidos por voluntários.",
+      "ja": "ボランティアが運営する、無料でプライバシーを尊重するオンラインサービス。"
+    }
   },
   {
     "id": "grapheneos",
@@ -70,15 +198,15 @@
     "category": "privacy",
     "address": "862CebHaBpFPgYoNC6zw4U8rsXrDjD8s5LMJNS7yVCRHMUKr9dDi7adMSLUMjkDYJ85xahQTCJHHyK5RCvvRJu9x7iSzN9D",
     "source": "https://grapheneos.org/donate",
-    "checked": "2026-10-21"
-  },
-  {
-    "id": "whonix",
-    "name": "Whonix",
-    "category": "privacy",
-    "address": "84ZZSsqyh5niztCgxmWAejDLu9eDerWo4Wsx8woEhDGpdKP3BWPtqenNjKuv8vojrB968U3hqYTKgLGt2zEcGopX1qaEPew",
-    "source": "https://www.whonix.org/wiki/Donate",
-    "checked": "2026-10-21"
+    "checked": "2026-10-21",
+    "description": {
+      "en": "A private and secure mobile operating system.",
+      "es": "Un sistema operativo móvil privado y seguro.",
+      "ru": "Приватная и защищённая мобильная операционная система.",
+      "fr": "Un système d'exploitation mobile privé et sécurisé.",
+      "pt": "Um sistema operacional móvel privado e seguro.",
+      "ja": "プライベートで安全なモバイル OS。"
+    }
   },
   {
     "id": "kicksecure",
@@ -86,7 +214,47 @@
     "category": "privacy",
     "address": "84ozcSohQfoV6nRgGfaQ8uBvWphXAH8zDTTuotVnJWF1JMNQfvgNFdbEo4ZnJ9hxPMeYfJuUoWGH3MRaXCfbYk8sFFgm4XL",
     "source": "https://www.kicksecure.com/wiki/Donate",
-    "checked": "2026-10-21"
+    "checked": "2026-10-21",
+    "description": {
+      "en": "A security-hardened Linux system, the base of Whonix.",
+      "es": "Un sistema Linux reforzado en seguridad, la base de Whonix.",
+      "ru": "Защищённая система Linux, основа Whonix.",
+      "fr": "Un système Linux renforcé, la base de Whonix.",
+      "pt": "Um sistema Linux reforçado, a base do Whonix.",
+      "ja": "セキュリティを強化した Linux。Whonix の土台です。"
+    }
+  },
+  {
+    "id": "lockdown",
+    "name": "Lockdown Systems",
+    "category": "privacy",
+    "address": "46H7kvzXh2Uho3L2YGfZEVAoRit48zYBofHysSLoaC53EJZjWadSvACNWf8YFii27eV9HXZ1bAypn5yrVUKDnE1T7bHnVmU",
+    "source": "https://lockdown.systems/donate/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "A nonprofit making tools that protect people from surveillance.",
+      "es": "Una organización sin ánimo de lucro que crea herramientas contra la vigilancia.",
+      "ru": "Некоммерческая организация, создающая инструменты защиты от слежки.",
+      "fr": "Une association qui crée des outils contre la surveillance.",
+      "pt": "Uma organização sem fins lucrativos que cria ferramentas contra a vigilância.",
+      "ja": "監視から人々を守るツールを作る非営利団体。"
+    }
+  },
+  {
+    "id": "privacyguides",
+    "name": "Privacy Guides",
+    "category": "privacy",
+    "address": "882XLsoGHjXipTq8oKF35H2ytPg28TMFrim35MwvQUir54wuAmXUCx68X1mWGgR5KSdZqykf87tKei5xcJiP3dLSCiWgxUk",
+    "source": "https://www.privacyguides.org/donate-monero/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Independent guides and reviews of privacy tools.",
+      "es": "Guías y análisis independientes de herramientas de privacidad.",
+      "ru": "Независимые руководства и обзоры инструментов приватности.",
+      "fr": "Guides et tests indépendants d'outils pour la vie privée.",
+      "pt": "Guias e análises independentes de ferramentas de privacidade.",
+      "ja": "プライバシーツールの独立したガイドとレビュー。"
+    }
   },
   {
     "id": "qubes",
@@ -94,7 +262,15 @@
     "category": "privacy",
     "address": "46PrVgXBdD4cps3SVkHoCDZvMfFdG5q4ej5DYKpuKpTnjiL7pv6KGv7dPh4DPijCGqTbxLDPqZJkobd9SttMiauoP1CQU4y",
     "source": "https://www.qubes-os.org/donate/",
-    "checked": "2026-10-21"
+    "checked": "2026-10-21",
+    "description": {
+      "en": "A desktop system that isolates apps in separate virtual machines.",
+      "es": "Un sistema de escritorio que aísla las aplicaciones en máquinas virtuales separadas.",
+      "ru": "Настольная система, изолирующая приложения в отдельных виртуальных машинах.",
+      "fr": "Un système de bureau qui isole les applications dans des machines virtuelles séparées.",
+      "pt": "Um sistema de desktop que isola os apps em máquinas virtuais separadas.",
+      "ja": "アプリを別々の仮想マシンに分離するデスクトップ OS。"
+    }
   },
   {
     "id": "simplex",
@@ -102,23 +278,95 @@
     "category": "privacy",
     "address": "8A3ZWAXrrQddvnT1fPrtbK86ZAoM4nai3Gjg1LEow3JWcryJtovMnHYZnxTJpCLmAbfWbnPMeTzPmMBjAhyd4xoM89hYq1c",
     "source": "https://simplex.chat/donate/",
-    "checked": "2026-10-21"
+    "checked": "2026-10-21",
+    "description": {
+      "en": "A private messenger with no user IDs at all.",
+      "es": "Una mensajería privada sin ningún identificador de usuario.",
+      "ru": "Приватный мессенджер вообще без идентификаторов пользователей.",
+      "fr": "Une messagerie privée sans aucun identifiant d'utilisateur.",
+      "pt": "Um mensageiro privado sem nenhum identificador de usuário.",
+      "ja": "ユーザー ID を一切使わないプライベートなメッセンジャー。"
+    }
   },
   {
-    "id": "linuxmint",
-    "name": "Linux Mint",
-    "category": "software",
-    "address": "45ZzMXudMd7RpCGLAwxJxpiccddpVdYmgc5ZV1vL9xhJUN6AK4hY8nEhCJfaT8b81n6wiS32UZSJYMQRxHxACxNDCYzXsew",
-    "source": "https://linuxmint.com/donors.php",
-    "checked": "2026-10-21"
+    "id": "simplifiedprivacy",
+    "name": "Simplified Privacy",
+    "category": "privacy",
+    "address": "8BroF38PgGV5KXRMU5fCyfZoidwJgRs23SDv8WwZoaV6BYYKsZJoKBbeBm5fqnw4nKKrhCfemoxivC7mcR13CHnJSo9Dmnh",
+    "source": "https://simplifiedprivacy.com/donate.html",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Privacy guides, videos and VPN tools.",
+      "es": "Guías de privacidad, vídeos y herramientas VPN.",
+      "ru": "Руководства по приватности, видео и VPN-инструменты.",
+      "fr": "Guides, vidéos et outils VPN pour la vie privée.",
+      "pt": "Guias de privacidade, vídeos e ferramentas de VPN.",
+      "ja": "プライバシーのガイド、動画、VPN ツール。"
+    }
   },
   {
-    "id": "parrot",
-    "name": "Parrot OS",
+    "id": "torproject",
+    "name": "Tor Project",
+    "category": "privacy",
+    "address": "4AcQxuMBUfJM7uAWpZP1Vs1BzQLC1QR6zZL3sMYdBuayWmpZHmaVYo7EQ3cSneyHYf2LRKJnRtrGz5ogZzjmmGygAyusEcJ",
+    "source": "https://donate.torproject.org/cryptocurrency/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Free software and a volunteer network for anonymous browsing.",
+      "es": "Software libre y una red de voluntarios para navegar de forma anónima.",
+      "ru": "Свободное ПО и сеть добровольцев для анонимного доступа в интернет.",
+      "fr": "Des logiciels libres et un réseau de bénévoles pour naviguer anonymement.",
+      "pt": "Software livre e uma rede de voluntários para navegar de forma anônima.",
+      "ja": "匿名でブラウジングするための自由ソフトウェアとボランティアのネットワーク。"
+    }
+  },
+  {
+    "id": "tuta",
+    "name": "Tuta",
+    "category": "privacy",
+    "address": "42REtZh8xwFTadpcd1mB6qH1PBwSJDzF7eyiTQP4HnoU8VEzEktYfavbmpbzutFzLU6CmwX97cpMZ8cbGoKEp6MpRH3qjEF",
+    "source": "https://tuta.com/community",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Encrypted email and calendar.",
+      "es": "Correo y calendario cifrados.",
+      "ru": "Зашифрованная почта и календарь.",
+      "fr": "E-mail et agenda chiffrés.",
+      "pt": "E-mail e calendário criptografados.",
+      "ja": "暗号化されたメールとカレンダー。"
+    }
+  },
+  {
+    "id": "whonix",
+    "name": "Whonix",
+    "category": "privacy",
+    "address": "84ZZSsqyh5niztCgxmWAejDLu9eDerWo4Wsx8woEhDGpdKP3BWPtqenNjKuv8vojrB968U3hqYTKgLGt2zEcGopX1qaEPew",
+    "source": "https://www.whonix.org/wiki/Donate",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "An operating system that sends all traffic through Tor.",
+      "es": "Un sistema operativo que envía todo el tráfico por Tor.",
+      "ru": "Операционная система, которая пускает весь трафик через Tor.",
+      "fr": "Un système d'exploitation qui fait passer tout le trafic par Tor.",
+      "pt": "Um sistema operacional que envia todo o tráfego pelo Tor.",
+      "ja": "すべての通信を Tor 経由にする OS。"
+    }
+  },
+  {
+    "id": "acabinc",
+    "name": "All Computers Are Brilliant",
     "category": "software",
-    "address": "88SXv9zrs5sWQr27JDR9sUURJQT3pF77F3xZrQLBv6sxZGNdgzGZyH54E5BT7G9TWfUgThM1SQBcMd6mHjzRo3pJ5whHeaP",
-    "source": "https://parrotsec.org/donate/",
-    "checked": "2026-10-21"
+    "address": "4BDKYvkZVTKdbFbcgsq3NeDXN45jsGKWGFH235J6KqKaDAfqcKEDhhv5y3xp2tMUX6M8u1vJnHPEZahrEZ2mRmmUMKbKpxB",
+    "source": "https://acabinc.org/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "The nonprofit behind 4d2.org's free community tools.",
+      "es": "La organización sin ánimo de lucro detrás de las herramientas comunitarias de 4d2.org.",
+      "ru": "Некоммерческая организация, которая держит бесплатные сервисы 4d2.org.",
+      "fr": "L'association derrière les outils communautaires gratuits de 4d2.org.",
+      "pt": "A organização sem fins lucrativos por trás das ferramentas comunitárias do 4d2.org.",
+      "ja": "4d2.org の無料コミュニティツールを運営する非営利団体。"
+    }
   },
   {
     "id": "distrowatch",
@@ -126,7 +374,95 @@
     "category": "software",
     "address": "86fA3qPTeQtNb2k1vLwEQaAp3XxkvvvXt69gSG5LGunXXikK9koPWZaRQgfFPBPWhMgXjPjccy9LA9xRFchPWQAnPvxh5Le",
     "source": "https://distrowatch.com/dwres.php?resource=donate",
-    "checked": "2026-10-21"
+    "checked": "2026-10-21",
+    "description": {
+      "en": "News and reviews of Linux and BSD systems since 2001.",
+      "es": "Noticias y reseñas de sistemas Linux y BSD desde 2001.",
+      "ru": "Новости и обзоры систем Linux и BSD с 2001 года.",
+      "fr": "Actualités et tests des systèmes Linux et BSD depuis 2001.",
+      "pt": "Notícias e análises de sistemas Linux e BSD desde 2001.",
+      "ja": "2001 年から続く Linux と BSD のニュースとレビュー。"
+    }
+  },
+  {
+    "id": "linuxmint",
+    "name": "Linux Mint",
+    "category": "software",
+    "address": "45ZzMXudMd7RpCGLAwxJxpiccddpVdYmgc5ZV1vL9xhJUN6AK4hY8nEhCJfaT8b81n6wiS32UZSJYMQRxHxACxNDCYzXsew",
+    "source": "https://linuxmint.com/donors.php",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "A popular, friendly Linux desktop.",
+      "es": "Un escritorio Linux popular y sencillo.",
+      "ru": "Популярный и дружелюбный рабочий стол Linux.",
+      "fr": "Un bureau Linux populaire et accueillant.",
+      "pt": "Um desktop Linux popular e amigável.",
+      "ja": "人気で使いやすい Linux デスクトップ。"
+    }
+  },
+  {
+    "id": "organicmaps",
+    "name": "Organic Maps",
+    "category": "software",
+    "address": "4AHUaNcqAzPEC4mdh6njj7Hu3Pt9sFdM7h13vBaMvdzYJ3a5X4rrpVBCggbKCWtDYnh3gPvzHLsXRjiMydsukky7BBoeCKC",
+    "source": "https://organicmaps.app/donate/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Offline maps for hiking, cycling and driving, without tracking.",
+      "es": "Mapas sin conexión para senderismo, bici y coche, sin rastreo.",
+      "ru": "Офлайн-карты для походов, велосипеда и машины без слежки.",
+      "fr": "Cartes hors ligne pour la rando, le vélo et la voiture, sans pistage.",
+      "pt": "Mapas offline para trilhas, bicicleta e carro, sem rastreamento.",
+      "ja": "追跡なしで使える、ハイキング・自転車・車向けのオフライン地図。"
+    }
+  },
+  {
+    "id": "parrot",
+    "name": "Parrot OS",
+    "category": "software",
+    "address": "88SXv9zrs5sWQr27JDR9sUURJQT3pF77F3xZrQLBv6sxZGNdgzGZyH54E5BT7G9TWfUgThM1SQBcMd6mHjzRo3pJ5whHeaP",
+    "source": "https://parrotsec.org/donate/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "A Linux system for security, privacy and development.",
+      "es": "Un sistema Linux para seguridad, privacidad y desarrollo.",
+      "ru": "Система Linux для безопасности, приватности и разработки.",
+      "fr": "Un système Linux pour la sécurité, la vie privée et le développement.",
+      "pt": "Um sistema Linux para segurança, privacidade e desenvolvimento.",
+      "ja": "セキュリティ、プライバシー、開発向けの Linux。"
+    }
+  },
+  {
+    "id": "sponsorblock",
+    "name": "SponsorBlock",
+    "category": "software",
+    "address": "85vyiPD4yby5bfkN51kSuc9sjZCMmBaoE5t1MCvxX4SuQMamgK7D8LGYbhkm1XGkgPgYn1FBBa3MiDGANXigEUJcEWib6H8",
+    "source": "https://sponsor.ajay.app/donate/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Skips sponsored segments in YouTube videos.",
+      "es": "Salta los segmentos patrocinados de los vídeos de YouTube.",
+      "ru": "Пропускает спонсорские вставки в видео на YouTube.",
+      "fr": "Saute les passages sponsorisés des vidéos YouTube.",
+      "pt": "Pula os trechos patrocinados dos vídeos do YouTube.",
+      "ja": "YouTube 動画のスポンサー部分をスキップします。"
+    }
+  },
+  {
+    "id": "winboat",
+    "name": "WinBoat",
+    "category": "software",
+    "address": "4AkmHDdHDmJgsz75Yj9gRUJKcroWLg7x6Rf3bBWd4G5ZebiFtPebynKCsJRrVyzh8TZdEM6VqiKF4do5tnQzLAojDzDcs8L",
+    "source": "https://www.winboat.app/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Runs Windows apps on Linux.",
+      "es": "Ejecuta aplicaciones de Windows en Linux.",
+      "ru": "Запуск приложений Windows в Linux.",
+      "fr": "Fait tourner des applications Windows sous Linux.",
+      "pt": "Roda apps do Windows no Linux.",
+      "ja": "Linux で Windows アプリを動かします。"
+    }
   },
   {
     "id": "wikileaks",
@@ -134,6 +470,14 @@
     "category": "press",
     "address": "42adSJwHXzzLrxvMQ5SkWr45oXYQMnva4WA4wwXWYLmohnWgBeUG6WoK4YEzhRpWwc25wvzNyeF4vBQphQ4saDRx42erDPD",
     "source": "https://shop.wikileaks.org/donate",
-    "checked": "2026-10-21"
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Publishes censored and secret documents from whistleblowers.",
+      "es": "Publica documentos censurados y secretos de denunciantes.",
+      "ru": "Публикует засекреченные и цензурированные документы от информаторов.",
+      "fr": "Publie des documents censurés et secrets venant de lanceurs d'alerte.",
+      "pt": "Publica documentos censurados e secretos de denunciantes.",
+      "ja": "内部告発者による検閲・機密文書を公開。"
+    }
   }
 ]

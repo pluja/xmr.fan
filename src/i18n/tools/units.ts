@@ -1,4 +1,4 @@
-import { defineStrings } from "../define";
+import { defineStrings } from "../define.ts";
 
 export default defineStrings({
   en: {

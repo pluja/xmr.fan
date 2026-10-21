@@ -1,15 +1,15 @@
-import seo from "../seo";
-import address from "./address";
-import checksum from "./checksum";
-import donate from "./donate";
-import fee from "./fee";
-import height from "./height";
-import live from "./live";
-import mining from "./mining";
-import node from "./node";
-import tx from "./tx";
-import units from "./units";
-import verify from "./verify";
+import seo from "../seo.ts";
+import address from "./address.ts";
+import checksum from "./checksum.ts";
+import donate from "./donate.ts";
+import fee from "./fee.ts";
+import height from "./height.ts";
+import live from "./live.ts";
+import mining from "./mining.ts";
+import node from "./node.ts";
+import tx from "./tx.ts";
+import units from "./units.ts";
+import verify from "./verify.ts";
 
 export const STRING_MODULES = [live, fee, height, address, units, node, mining, verify, checksum, tx, donate, seo] as const;
 

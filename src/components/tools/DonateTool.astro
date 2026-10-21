@@ -10,7 +10,7 @@ interface Props { lang: Locale }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const list = data as Donation[];
-const descriptions = Object.fromEntries(list.map((d) => [d.id, t(`dn_desc_${d.id}` as never)]));
+const descriptions = Object.fromEntries(list.map((d) => [d.id, d.description[lang]]));
 const categories = Object.fromEntries(DONATION_CATEGORIES.map((c) => [c, t(`dn_cat_${c}`)]));
 const strings = pickStrings(lang, ["dn_source", "qr_alt"]);
 const site = (url: string) => new URL(url).hostname.replace(/^www\./, "");

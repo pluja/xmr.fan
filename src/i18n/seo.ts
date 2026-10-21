@@ -1,4 +1,4 @@
-import { defineStrings } from "./define";
+import { defineStrings } from "./define.ts";
 
 /** Search-friendly page titles and descriptions. Visible headings stay short; these name Monero and say what the page does. */
 export default defineStrings({

@@ -1,4 +1,6 @@
-export const DONATION_CATEGORIES = ["monero", "privacy", "software", "press"] as const;
+import type { Locale } from "../i18n/ui";
+
+export const DONATION_CATEGORIES = ["monero", "privacy", "software", "press", "knowledge"] as const;
 export type DonationCategory = (typeof DONATION_CATEGORIES)[number];
 
 export interface Donation {
@@ -11,6 +13,8 @@ export interface Donation {
   /** Last day scripts/donations.ts found the address on `source`. */
   checked: string;
   openalias?: string;
+  /** One short sentence per site language. */
+  description: Record<Locale, string>;
 }
 
 /** A random project from `list`, never `current` when there is another choice. */

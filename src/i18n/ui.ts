@@ -1,5 +1,5 @@
-import { format } from "./format";
-import { STRING_MODULES, type ModuleKey } from "./tools";
+import { format } from "./format.ts";
+import { STRING_MODULES, type ModuleKey } from "./tools/index.ts";
 
 export const LOCALES = ["en", "es", "ru", "fr", "pt", "ja"] as const;
 export type Locale = (typeof LOCALES)[number];

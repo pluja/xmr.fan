@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import data from "../data/donations.json" with { type: "json" };
 import { DONATION_CATEGORIES, spin } from "./donations.ts";
+import { LOCALES } from "../i18n/ui.ts";
 import { parseAddress } from "./monero.ts";
 
 test("every donation entry is a valid mainnet address with an https source", () => {
@@ -12,6 +13,7 @@ test("every donation entry is a valid mainnet address with an https source", () 
     assert.ok(d.source.startsWith("https://"), `${d.id}: source must be https`);
     assert.ok((DONATION_CATEGORIES as readonly string[]).includes(d.category), `${d.id}: unknown category`);
     assert.match(d.checked, /^\d{4}-\d{2}-\d{2}$/);
+    for (const lang of LOCALES) assert.ok((d.description as Record<string, string>)[lang]?.trim(), `${d.id}: missing ${lang} description`);
     assert.ok(!ids.has(d.id), `${d.id}: duplicate id`);
     ids.add(d.id);
   }
