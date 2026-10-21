@@ -1,0 +1,22 @@
+---
+import PixelIcon from "../PixelIcon.astro";
+import { useTranslations, type Locale } from "../../i18n/ui";
+import type { Sponsor } from "../../lib/sponsor-schema";
+
+interface Props { lang: Locale; sponsors: Sponsor[] }
+const { lang, sponsors } = Astro.props;
+const t = useTranslations(lang);
+---
+<aside class="border-2 border-dashed border-ink px-5 py-4">
+  <div class="mb-2 flex flex-wrap items-center justify-between gap-2">
+    <span class="flex items-center gap-2 font-pixel text-sm"><PixelIcon name="coin" size={18} />{t("sp_this_week")}</span>
+    <span class="text-sm text-graphite">{t("sp_thanks")}</span>
+  </div>
+  <ul class="grid gap-1">
+    {sponsors.map((s) => (
+      <li class="text-[16px]">
+        {s.url ? <a class="font-bold text-ink" href={s.url} rel="sponsored noopener noreferrer">{s.name}</a> : <b>{s.name}</b>}: {s.line}
+      </li>
+    ))}
+  </ul>
+</aside>

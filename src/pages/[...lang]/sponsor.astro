@@ -1,0 +1,162 @@
+---
+/* The minimum is set in USD and shown in XMR at last week's price. */
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import Container from "../../components/Container.astro";
+import Field from "../../components/Field.astro";
+import InkBand from "../../components/InkBand.astro";
+import TierBadge from "../../components/sponsor/TierBadge.astro";
+import { TIER_LOOK } from "../../components/sponsor/tiers";
+import { langFromParams, localeParams, localePath, pickStrings, useTranslations } from "../../i18n/ui";
+import { latestFirst } from "../../lib/gazette";
+import { buildUri } from "../../lib/monero";
+import { drawQr, qrSvg } from "../../lib/qr";
+import { LIMITS, sponsorship, sponsorshipOpen } from "../../lib/sponsor";
+
+export const getStaticPaths = () => localeParams().map((params) => ({ params }));
+
+const lang = langFromParams(Astro.params);
+const t = useTranslations(lang);
+const usd = (n: number) => new Intl.NumberFormat(lang, { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n);
+
+// The minimum in XMR at the latest weekly close we have (rounded up, so it never falls short).
+const close = latestFirst(await getCollection("gazette")).find((e) => e.data.market)?.data.market?.close;
+const minXmr = close ? (Math.ceil((sponsorship.minUsd / close) * 1000) / 1000).toString() : "";
+const uri = sponsorshipOpen ? buildUri({ address: sponsorship.address, amount: minXmr || undefined, name: "xmr.fan", description: "Sponsorship" }) : "";
+const qr = uri ? qrSvg(drawQr(uri), t("qr_alt")) : "";
+const labels = pickStrings(lang, ["f_sp_name", "f_sp_line", "f_sp_url", "f_sp_week", "f_sp_amount", "f_sp_txid", "f_sp_txkey", "f_sp_contact", "f_sp_accept_short", "sp_error", "sp_sent", "qr_alt"]);
+const h2 = "mb-4 font-pixel text-[22px]";
+---
+<Base lang={lang} path="/sponsor" title={t("sp_title")} description={t("sp_intro")}>
+  <Container as="section" class="pb-12 pt-6">
+    <h1 class="mb-4 max-w-[24ch] font-pixel text-[clamp(28px,4.2vw,46px)] leading-tight">{t("sp_title")}</h1>
+    <p class="mb-10 max-w-[60ch] text-lg">{t("sp_intro")}</p>
+    <div class="grid gap-10 md:grid-cols-2">
+      <div>
+        <h2 class={h2}>{t("sp_get_t")}</h2>
+        <ul class="grid gap-3 text-[17px]">
+          {[t("sp_get_1"), t("sp_get_2"), t("sp_get_3")].map((x) => <li class="border-l-2 border-ink pl-3">{x}</li>)}
+        </ul>
+        <p class="mt-5 text-sm text-graphite">{t("sp_rules")}</p>
+      </div>
+      <div>
+        <h2 class={h2}>{t("sp_how_t")}</h2>
+        <ol class="grid list-inside list-decimal gap-3 text-[17px] marker:font-pixel">
+          <li>{t("sp_step_1", { min: usd(sponsorship.minUsd), xmr: minXmr || "?" })}</li>
+          <li>{t("sp_step_2")}</li>
+          <li>{t("sp_step_3")}</li>
+        </ol>
+      </div>
+    </div>
+
+    <section id="rules" class="mt-14 border-2 border-ink bg-cream p-5 shadow-[6px_6px_0_var(--color-ink)] sm:p-6">
+      <h2 class="mb-3 font-pixel text-[22px]">{t("sp_rules_t")}</h2>
+      <p class="mb-3 text-[17px]">{t("sp_rules_intro")}</p>
+      <ul class="mb-5 grid gap-x-8 gap-y-2 text-[16px] md:grid-cols-2">
+        {[1, 2, 3, 4, 5, 6].map((n) => (
+          <li class="flex gap-2.5"><span class="font-pixel text-danger" aria-hidden="true">×</span><span>{t(`sp_rule_${n}` as never)}</span></li>
+        ))}
+      </ul>
+      <p class="mb-2 text-[16px]">{t("sp_rules_ok")}</p>
+      <p class="text-sm text-graphite">{t("sp_rules_terms")}</p>
+    </section>
+
+    <h2 class="mb-2 mt-14 font-pixel text-[22px]">{t("sp_tiers_t")}</h2>
+    <p class="mb-6 max-w-[60ch] text-[17px]">{t("sp_tiers_intro")}</p>
+    <ol class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {sponsorship.tiers.map((tier, i) => (
+        <li class:list={["relative flex flex-col items-center gap-3 px-4 pb-5 pt-6 text-center", TIER_LOOK[tier.key].card]}>
+          <span class="absolute left-2 top-1 font-pixel text-xs opacity-70">LV {i + 1}</span>
+          <TierBadge lang={lang} tier={tier.key} size={48} class="flex-col text-xl" />
+          <span class="font-pixel text-sm">{t("sp_tier_from", { usd: usd(tier.minUsd) })}</span>
+        </li>
+      ))}
+    </ol>
+  </Container>
+
+  <InkBand>
+    <Container class="py-12">
+      {!sponsorshipOpen ? (
+        <p class="font-pixel text-xl text-orange">{t("sp_closed")}</p>
+      ) : (
+        <div class="grid gap-10 md:grid-cols-[260px_minmax(0,1fr)]">
+          <div id="pay" data-address={sponsorship.address} data-strings={labels}>
+            <h2 class="mb-4 font-pixel text-[22px] text-orange">{t("sp_pay")}</h2>
+            <div class="qr max-w-[260px] border-2 border-orange bg-paper" set:html={qr} />
+            <label class="mt-4 grid gap-1 font-pixel text-sm text-orange">
+              <span>{t("sp_amount_label")}</span>
+              <input class="field font-mono" name="pay-amount" inputmode="decimal" value={minXmr} />
+              <span class="text-xs text-ash">{t("sp_min_note", { min: `${usd(sponsorship.minUsd)}${minXmr ? ` ≈ ${minXmr} XMR` : ""}` })}</span>
+            </label>
+            <p class="mt-3 break-all font-mono text-xs text-ash">{sponsorship.address}</p>
+            <a class="wallet btn mt-4 border-orange bg-orange text-ink" href={uri}>{t("sp_open_wallet")}</a>
+          </div>
+          <form id="form" method="post" action="/api/sponsor" class="grid content-start gap-4 bg-cream p-5 text-ink" data-strings={labels}>
+            <h2 class="font-pixel text-[22px]">{t("sp_form_t")}</h2>
+            <p id="form-message" class="text-sm empty:hidden" role="status"></p>
+            <input type="hidden" name="lang" value={lang} />
+            <input type="text" name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+            <div class="grid gap-4 sm:grid-cols-2">
+              <Field label={t("f_sp_name")}><input class="field" name="name" required maxlength={LIMITS.name} /></Field>
+              <Field label={t("f_sp_url")}><input class="field" name="url" type="url" inputmode="url" placeholder="https://" maxlength={LIMITS.url} /></Field>
+            </div>
+            <Field label={t("f_sp_line")}><input class="field" name="line" required maxlength={LIMITS.line} /></Field>
+            <div class="grid gap-4 sm:grid-cols-3">
+              <Field label={t("f_sp_amount")}><input class="field font-mono" name="amount" required inputmode="decimal" placeholder={minXmr} /></Field>
+              <Field label={t("f_sp_week")}><input class="field" name="week" type="date" /></Field>
+              <Field label={t("f_sp_contact")}><input class="field" name="contact" maxlength={LIMITS.contact} /></Field>
+            </div>
+            <Field label={t("f_sp_txid")}><input class="field font-mono text-[13px]" name="txid" required pattern="[0-9a-fA-F]{64}" spellcheck="false" autocomplete="off" /></Field>
+            <Field label={t("f_sp_txkey")}><input class="field font-mono text-[13px]" name="txkey" required pattern="[0-9a-fA-F]{64,}" spellcheck="false" autocomplete="off" /></Field>
+            <p class="-mt-2 text-sm text-graphite">{t("sp_txkey_help")}</p>
+            <label class="flex items-start gap-2.5 text-[15px] font-normal">
+              <input type="checkbox" name="accept" value="yes" required class="mt-1 size-4 accent-ink" />
+              <span><a class="text-ink" href="#rules">{t("f_sp_accept")}</a></span>
+            </label>
+            <button class="btn justify-self-start" type="submit">{t("sp_send")}</button>
+          </form>
+        </div>
+      )}
+    </Container>
+  </InkBand>
+  <Container as="section" class="py-10">
+    <a class="text-ink" href={localePath(lang, "/sponsors")}>{t("sp_all_t")}</a>
+  </Container>
+</Base>
+
+<script>
+  import { readStrings } from "../../i18n/format";
+  import { buildUri, normalizeAmount } from "../../lib/monero";
+  import { drawQr, qrSvg } from "../../lib/qr";
+
+  const pay = document.getElementById("pay");
+  if (pay) {
+    const t = readStrings(pay);
+    const input = pay.querySelector<HTMLInputElement>("input[name=pay-amount]")!;
+    const qrBox = pay.querySelector<HTMLElement>(".qr")!;
+    const wallet = pay.querySelector<HTMLAnchorElement>(".wallet")!;
+    input.addEventListener("input", () => {
+      const amount = normalizeAmount(input.value);
+      input.setAttribute("aria-invalid", String(amount === null));
+      if (amount === null) return;
+      const uri = buildUri({ address: pay.dataset.address!, amount: amount || undefined, name: "xmr.fan", description: "Sponsorship" });
+      qrBox.innerHTML = qrSvg(drawQr(uri), t("qr_alt"));
+      wallet.href = uri;
+    });
+  }
+
+  // The form posts to the server, which redirects back here with ?sent=1 or ?error=fields.
+  const form = document.getElementById("form") as HTMLFormElement | null;
+  if (form) {
+    const t = readStrings(form);
+    const msg = document.getElementById("form-message")!;
+    const q = new URLSearchParams(location.search);
+    const LABELS: Record<string, string> = { name: "f_sp_name", line: "f_sp_line", url: "f_sp_url", week: "f_sp_week", amount: "f_sp_amount", txid: "f_sp_txid", txkey: "f_sp_txkey", contact: "f_sp_contact", accept: "f_sp_accept_short" };
+    if (q.has("sent")) { msg.textContent = t("sp_sent"); msg.classList.add("text-ok"); }
+    if (q.has("error")) {
+      const fields = (q.get("error") ?? "").split(",").map((f) => (LABELS[f] ? t(LABELS[f]) : f)).join(", ");
+      msg.textContent = t("sp_error", { fields });
+      msg.classList.add("text-danger");
+    }
+  }
+</script>

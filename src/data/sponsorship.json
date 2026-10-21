@@ -1,0 +1,10 @@
+{
+  "address": "",
+  "minUsd": 50,
+  "tiers": [
+    { "key": "fan", "minUsd": 50 },
+    { "key": "bigfan", "minUsd": 150 },
+    { "key": "superfan", "minUsd": 500 },
+    { "key": "legend", "minUsd": 1000 }
+  ]
+}

@@ -1,0 +1,17 @@
+---
+import PixelIcon from "../PixelIcon.astro";
+import { TIER_LOOK } from "./tiers";
+import { useTranslations, type Locale } from "../../i18n/ui";
+import type { TierKey } from "../../lib/sponsor";
+
+interface Props { lang: Locale; tier: TierKey; size?: number; class?: string; onInk?: boolean }
+const { lang, tier, size = 28, class: cls, onInk } = Astro.props;
+const t = useTranslations(lang);
+const look = TIER_LOOK[tier];
+// On a dark bar every tier needs light colors to stay readable.
+const INK = { fan: "text-ash", bigfan: "text-orange", superfan: "text-peach", legend: "text-flame" } as const;
+---
+<span class:list={["inline-flex items-center gap-2 font-pixel", cls]}>
+  <PixelIcon name={look.icon} size={size} class={onInk ? INK[tier] : look.badge} />
+  <span class={onInk ? "text-cream" : look.name}>{t(`tier_${tier}`)}</span>
+</span>

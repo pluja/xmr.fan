@@ -1,0 +1,47 @@
+---
+/* Amounts are never shown; the tier says enough. */
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import Container from "../../components/Container.astro";
+import TierBadge from "../../components/sponsor/TierBadge.astro";
+import { TIER_LOOK } from "../../components/sponsor/tiers";
+import { langFromParams, localeParams, localePath, useTranslations } from "../../i18n/ui";
+import { sponsorship, summarize } from "../../lib/sponsor";
+
+export const getStaticPaths = () => localeParams().map((params) => ({ params }));
+
+const lang = langFromParams(Astro.params);
+const t = useTranslations(lang);
+const all = summarize((await getCollection("sponsors")).map((s) => s.data));
+const tiers = [...sponsorship.tiers].reverse()
+  .map((tier) => ({ tier: tier.key, sponsors: all.filter((s) => s.tier === tier.key).sort((a, b) => b.total - a.total || b.latest.localeCompare(a.latest)) }))
+  .filter((g) => g.sponsors.length);
+const GRID = { legend: "md:grid-cols-2", superfan: "md:grid-cols-2 lg:grid-cols-3", bigfan: "sm:grid-cols-2 lg:grid-cols-3", fan: "sm:grid-cols-2 lg:grid-cols-4" } as const;
+---
+<Base lang={lang} path="/sponsors" title={t("sp_all_t")} description={t("sp_all_intro")}>
+  <Container as="section" class="pb-20 pt-6">
+    <h1 class="mb-4 font-pixel text-[clamp(28px,4.2vw,46px)] leading-tight">{t("sp_all_t")}</h1>
+    <p class="mb-10 max-w-[60ch] text-lg">{t("sp_all_intro")}</p>
+    {tiers.length === 0 ? (
+      <p class="font-pixel text-lg">{t("sp_none")}</p>
+    ) : tiers.map(({ tier, sponsors }) => (
+      <section class="mb-12">
+        <h2 class="mb-5 flex bg-ink px-3.5 py-2"><TierBadge lang={lang} tier={tier} size={26} class="text-xl" onInk /></h2>
+        <ul class:list={["grid gap-5", GRID[tier]]}>
+          {sponsors.map((s) => (
+            <li class:list={["flex flex-col gap-2 p-4", TIER_LOOK[tier].card]}>
+              <div class="flex items-start justify-between gap-3">
+                {s.url
+                  ? <a class:list={["font-pixel text-lg no-underline hover:underline", TIER_LOOK[tier].name]} href={s.url} rel="sponsored noopener noreferrer">{s.name}</a>
+                  : <span class:list={["font-pixel text-lg", TIER_LOOK[tier].name]}>{s.name}</span>}
+                {s.times > 1 && <span class="shrink-0 border-2 border-current px-1.5 font-pixel text-sm" title={t("sp_times_label", { n: s.times })} aria-label={t("sp_times_label", { n: s.times })}>×{s.times}</span>}
+              </div>
+              <p class="text-[15px] leading-snug">{s.line}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+    <a class="btn mt-4" href={localePath(lang, "/sponsor")}>{t("sp_become")}</a>
+  </Container>
+</Base>
