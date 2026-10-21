@@ -85,7 +85,7 @@ curl "https://xmr.fan/uri?address=44AFFq5k...&tx_amount=1.5&rawqr"   # the QR co
 
 A weekly issue every Monday, covering the previous week (Monday to Sunday, UTC).
 
-1. **Sources:** GitHub (releases, merged PRs, meetings), getmonero.org, Monero Observer, Revuo, CCS, crypto outlets filtered to Monero, privacy news (GrapheneOS, EFF, Privacy Guides, 404 Media, The Record, Tor and Signal blogs), Reddit and, with `NANO_GPT_API_KEY`, X.
+1. **Sources:** GitHub (releases, merged PRs, meetings), getmonero.org, Monero Observer, Revuo, CCS, wallet and app blogs (Cake Wallet, Feather, Haveno), crypto outlets filtered to Monero, privacy news and blogs (GrapheneOS, EFF, Privacy Guides, 404 Media, The Record, Tor, Signal, Mullvad, IVPN, Proton, Tails, Qubes OS, Whonix, SimpleX, Session), Reddit and, with `NANO_GPT_API_KEY`, X. The list is `FEEDS` in `scripts/gazette/sources.ts`.
 2. **Numbers:** network averages from public nodes; price, volume and a Bitcoin comparison from CoinGecko.
 3. **AI, in three steps:** triage scores every item; the editorial writes the lead, a feature, quotes checked word for word, and the news; a short price note cites its sources. The model cites items by id and links come from the sources, so it can't invent URLs.
 4. **Art and audio (optional):** pixel-art headline image (`scripts/gazette/art.ts`), and a two-host podcast voiced with text-to-speech and joined with ffmpeg.

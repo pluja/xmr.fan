@@ -138,6 +138,10 @@ const FEEDS: Feed[] = [
   { source: "monero.observer", url: "https://monero.observer/feed.xml", kind: "news", max: 30 },
   { source: "revuo-xmr.com", url: "https://www.revuo-xmr.com/index.xml", kind: "newsletter" },
   { source: "CCS proposals", url: "https://repo.getmonero.org/monero-project/ccs-proposals/-/merge_requests.atom", kind: "funding" },
+  // Monero wallets and apps.
+  { source: "cakewallet.com", url: "https://blog.cakewallet.com/rss/", kind: "blog" },
+  { source: "featherwallet.org", url: "https://featherwallet.org/feed.xml", kind: "blog" },
+  { source: "haveno.exchange", url: "https://haveno.exchange/feed.xml", kind: "blog" },
   // Crypto outlets: only what mentions Monero.
   { source: "cointelegraph.com", url: "https://cointelegraph.com/rss/tag/monero", kind: "news" },
   { source: "coindesk.com", url: "https://www.coindesk.com/arc/outboundfeeds/rss/", kind: "news", match: MONERO },
@@ -152,6 +156,14 @@ const FEEDS: Feed[] = [
   { source: "grapheneos.social", url: "https://grapheneos.social/@GrapheneOS.rss", kind: "privacy", max: 15 },
   { source: "eff.org", url: "https://www.eff.org/rss/updates.xml", kind: "privacy", max: 15 },
   { source: "privacyguides.org", url: "https://www.privacyguides.org/articles/feed_rss_created.xml", kind: "privacy" },
+  { source: "mullvad.net", url: "https://mullvad.net/en/blog/feed/rss", kind: "privacy" },
+  { source: "ivpn.net", url: "https://www.ivpn.net/blog/index.xml", kind: "privacy", max: 10 },
+  { source: "proton.me", url: "https://proton.me/blog/feed", kind: "privacy", max: 10 },
+  { source: "tails.net", url: "https://tails.net/news/index.en.rss", kind: "privacy" },
+  { source: "qubes-os.org", url: "https://www.qubes-os.org/feed.xml", kind: "privacy" },
+  { source: "whonix.org", url: "https://www.whonix.org/blog/feed", kind: "privacy" },
+  { source: "simplex.chat", url: "https://simplex.chat/feed.rss", kind: "privacy" },
+  { source: "getsession.org", url: "https://getsession.org/feed", kind: "privacy", max: 10 },
 ];
 
 // X and Reddit via nano-gpt: optional and paid, needs NANO_GPT_API_KEY.
