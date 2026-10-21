@@ -1,0 +1,151 @@
+---
+import Field from "../Field.astro";
+import CurrencySelect from "../live/CurrencySelect.astro";
+import NodeSource from "../live/NodeSource.astro";
+import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const strings = pickStrings(lang, ["m_p2pool_share", "m_p2pool_pick", "m_solo", "m_network", "dur_s", "dur_min", "dur_h", "dur_d", "dur_y"]);
+const cell = "border-b-2 border-dotted border-graphite/40 py-2.5 pr-3";
+const secondary = "hidden sm:table-cell";
+const PERIODS = [["day", 1], ["month", 30], ["year", 365]] as const;
+---
+<div id="mining-tool" class="grid gap-7" data-strings={strings} data-lang={lang}>
+  <form data-inputs class="grid gap-4 sm:grid-cols-[repeat(auto-fit,minmax(200px,1fr))]" novalidate>
+    <Field label={t("m_hashrate")}>
+      <span class="flex gap-2">
+        <input name="hashrate" inputmode="decimal" value="10" autocomplete="off" class="field min-w-0 font-mono" />
+        <select name="unit" class="field w-auto font-mono text-sm"><option value="1">H/s</option><option value="1000" selected>kH/s</option><option value="1000000">MH/s</option></select>
+      </span>
+    </Field>
+    <Field label={t("m_power")}><input name="watts" inputmode="decimal" value="100" autocomplete="off" class="field font-mono" /></Field>
+    <Field label={t("m_price")}><input name="kwh" inputmode="decimal" value="0.15" autocomplete="off" class="field font-mono" /></Field>
+    <div class="grid content-end pb-1"><CurrencySelect lang={lang} /></div>
+  </form>
+
+  <section class="grid gap-1">
+    <h2 class="text-sm font-semibold">{t("m_earn")}</h2>
+    <p class="flex flex-wrap items-baseline gap-x-4 font-pixel">
+      <span data-daily class="text-[clamp(30px,5vw,44px)] text-flame">…</span>
+      <span class="text-xl">{t("m_per_day")}</span>
+    </p>
+  </section>
+
+  <div class="overflow-x-auto">
+    <table class="w-full border-t-[3px] border-ink text-left text-[15px]">
+      <thead class="font-pixel text-sm">
+        <tr>
+          <th class={cell}>{t("m_col_period")}</th><th class={cell}>{t("m_col_mined")}</th>
+          <th class:list={[cell, secondary]}>{t("m_col_value")}</th><th class:list={[cell, secondary]}>{t("m_col_power")}</th>
+          <th class={cell}>{t("m_col_profit")}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {PERIODS.map(([p, days]) => (
+          <tr data-days={days}>
+            <td class={cell}>{t(`m_${p}`)}</td>
+            <td class:list={[cell, "font-mono"]} data-mined></td>
+            <td class:list={[cell, secondary, "font-mono"]} data-value></td>
+            <td class:list={[cell, secondary, "font-mono"]} data-cost></td>
+            <td class:list={[cell, "font-mono font-bold"]} data-profit></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <section class="grid gap-3 border-2 border-ink bg-paper p-4">
+    <h2 class="font-pixel text-lg">{t("m_p2pool_t")}</h2>
+    <ul data-chains class="grid gap-1.5 text-[15px]">
+      {["main", "mini", "nano"].map((c) => <li data-chain={c} class="flex flex-wrap items-baseline gap-x-3"><span data-text>…</span><b data-pick class="border border-ok px-1.5 font-pixel text-xs font-normal text-ok" hidden></b></li>)}
+    </ul>
+    <p class="text-sm text-graphite">{t("m_p2pool_help")}</p>
+  </section>
+
+  <p data-solo class="text-[15px]"></p>
+  <div class="grid gap-1 text-sm text-graphite">
+    <p data-network></p>
+    <p class="max-w-[66ch]">{t("m_note")}</p>
+  </div>
+  <NodeSource lang={lang} prices />
+</div>
+
+<script>
+  import { liveTask } from "../live/live";
+  import { currencyPicker } from "../live/currency";
+  import { readStrings } from "../../i18n/format";
+  import type { Locale } from "../../i18n/ui";
+  import { formatMoney, formatNumber } from "../../lib/currency";
+  import { formatDuration } from "../../lib/duration";
+  import { bestSidechain, networkHashrate, powerCostPerDay, timeToFind, xmrPerDay, type Sidechain } from "../../lib/mining";
+  import { getLastBlockHeader, rpc } from "../../lib/node-client";
+  import type { BlockHeader } from "../../lib/nodes";
+  import { getPrices, type Prices } from "../../lib/price-client";
+
+  const root = document.getElementById("mining-tool")!;
+  const t = readStrings(root);
+  const lang = root.dataset.lang as Locale;
+  const form = root.querySelector<HTMLFormElement>("[data-inputs]")!;
+  const $ = (s: string) => root.querySelector<HTMLElement>(s)!;
+  const currency = currencyPicker(lang, render);
+
+  let difficulty: number | undefined, reward: number | undefined, prices: Prices | undefined, chains: Sidechain[] = [];
+
+  const value = (name: string) => {
+    const n = Number((form.elements.namedItem(name) as HTMLInputElement).value.trim().replace(",", "."));
+    return Number.isFinite(n) && n >= 0 ? n : 0;
+  };
+  const xmr = (n: number) => `${formatNumber(n, lang, n < 1 ? 6 : 3)} XMR`;
+  const hashrateText = (h: number) => (h >= 1e9 ? `${formatNumber(h / 1e9, lang)} GH/s` : `${formatNumber(h / 1e6, lang)} MH/s`);
+
+  function render() {
+    if (!difficulty || !reward) return;
+    const hashrate = value("hashrate") * Number((form.elements.namedItem("unit") as HTMLSelectElement).value);
+    const daily = xmrPerDay(hashrate, difficulty, reward);
+    const price = prices?.[currency()];
+    const money = (n: number) => (price === undefined ? "–" : formatMoney(n, currency(), lang));
+    $("[data-daily]").textContent = xmr(daily);
+
+    for (const row of root.querySelectorAll<HTMLElement>("tr[data-days]")) {
+      const days = Number(row.dataset.days);
+      const mined = daily * days, cost = powerCostPerDay(value("watts"), value("kwh")) * days;
+      const cell = (s: string) => row.querySelector<HTMLElement>(s)!;
+      cell("[data-mined]").textContent = xmr(mined);
+      cell("[data-value]").textContent = money(mined * (price ?? 0));
+      cell("[data-cost]").textContent = money(cost);
+      const profit = mined * (price ?? 0) - cost;
+      cell("[data-profit]").textContent = money(profit);
+      cell("[data-profit]").classList.toggle("text-danger", price !== undefined && profit < 0);
+      cell("[data-profit]").classList.toggle("text-ok", price !== undefined && profit >= 0);
+    }
+
+    const pick = bestSidechain(hashrate, chains);
+    for (const li of root.querySelectorAll<HTMLElement>("[data-chain]")) {
+      const chain = chains.find((c) => c.name === li.dataset.chain);
+      li.hidden = !chain;
+      if (!chain) continue;
+      li.querySelector("[data-text]")!.textContent = t("m_p2pool_share", { time: formatDuration(timeToFind(hashrate, chain.difficulty), t, lang), chain: `P2Pool ${chain.name}` });
+      const badge = li.querySelector<HTMLElement>("[data-pick]")!;
+      badge.hidden = chain.name !== pick;
+      badge.textContent = t("m_p2pool_pick");
+    }
+    $("[data-solo]").textContent = hashrate > 0 ? t("m_solo", { time: formatDuration(timeToFind(hashrate, difficulty), t, lang) }) : "";
+    $("[data-network]").textContent = t("m_network", { hashrate: hashrateText(networkHashrate(difficulty)), reward: formatNumber(reward / 1e12, lang, 4) });
+  }
+
+  form.addEventListener("input", render);
+  form.addEventListener("submit", (e) => e.preventDefault());
+
+  liveTask(async () => {
+    const last = await getLastBlockHeader();
+    const { headers } = await rpc<{ headers: BlockHeader[] }>("get_block_headers_range", { start_height: last.height - 29, end_height: last.height });
+    difficulty = last.difficulty;
+    // Fees vary per block; a month-long average would be steadier, but the last hour is close enough.
+    reward = headers.reduce((n, h) => n + h.reward, 0) / headers.length;
+    render();
+  });
+  getPrices().then((p) => { prices = p; render(); }).catch(() => {});
+  fetch("/api/p2pool").then((r) => r.json()).then((list: Sidechain[]) => { chains = list; render(); }).catch(() => {});
+</script>
