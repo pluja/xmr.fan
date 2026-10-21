@@ -1,0 +1,8 @@
+node_modules
+dist
+.astro
+.gazette
+.preview-build
+sponsor-requests
+.env
+.git
