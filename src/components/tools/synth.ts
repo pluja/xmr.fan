@@ -61,8 +61,9 @@ export class Synth {
   }
 
   /** A soft bell: a sine with a quieter octave above, quick to strike and slow to fade. */
-  bell(hz: number, t: number, peak = 0.12) {
-    for (const [mult, level, length] of [[1, 1, 0.9], [2, 0.35, 0.5], [3, 0.12, 0.3]] as const) {
+  bell(hz: number, t: number, peak = 0.12, ring = 1) {
+    for (const [mult, level, decay] of [[1, 1, 0.9], [2, 0.35, 0.5], [3, 0.12, 0.3]] as const) {
+      const length = decay * ring;
       const osc = this.ctx.createOscillator();
       osc.type = "sine";
       osc.frequency.value = hz * mult;

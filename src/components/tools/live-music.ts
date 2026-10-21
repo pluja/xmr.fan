@@ -59,11 +59,14 @@ export class LiveMusic {
     });
   }
 
+  /** A rising chime through the current chord over a low bell: easy to notice, soft enough not to startle. */
   block() {
     if (!this.playing) return;
-    const at = this.synth.now + 0.05;
-    for (const note of [36, 43, 48]) this.synth.bell(midiToHz(note), at, 0.12);
-    this.synth.kick(at, 0.25);
+    const at = this.synth.now + 0.05, chord = CHORDS[(this.chord - 1) % CHORDS.length];
+    this.synth.bell(midiToHz(chord[0] - 12), at, 0.1, 3);
+    [...chord.map((n) => n + 12), chord[0] + 36].forEach((note, i, all) => {
+      this.synth.bell(midiToHz(note), at + i * 0.12, 0.06, i === all.length - 1 ? 3 : 1.5);
+    });
   }
 
   /** A hovered transaction plays its note an octave up; rapid sweeps are thinned so they stay pleasant. */
