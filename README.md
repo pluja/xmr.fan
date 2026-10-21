@@ -33,7 +33,7 @@ Requires Node.js 22.9 or newer.
 
 ```sh
 npm install
-npm run dev      # http://localhost:4321
+npm run dev      # http://localhost:4321 (rebuilds the content cache on start)
 npm test         # unit tests, including real mainnet payment proofs and the signed hashes.txt
 npm run check    # type check
 npm run build    # dist/client (static) + dist/server (Node server)
@@ -103,7 +103,7 @@ npm run gazette:publish -- 2026-10-12    # approve the draft
 npm run gazette:translate -- 2026-10-12  # translate the text (es, ru, fr, pt, ja); --lang es,ja
 ```
 
-`.gazette/` keeps the sources, triage scores and podcast script of each issue for review. After changing the issue format (`src/lib/gazette-schema.ts`), restart `npm run dev`. Rough cost per issue with nano-gpt: about $3 (X search, writing, art, 10 minutes of audio).
+`.gazette/` keeps the sources, triage scores and podcast script of each issue for review. Rough cost per issue with nano-gpt: about $3 (X search, writing, art, 10 minutes of audio).
 
 ## Sponsorships
 
