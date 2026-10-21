@@ -1,0 +1,183 @@
+---
+import CopyButton from "../CopyButton.astro";
+import Disclosure from "../Disclosure.astro";
+import Field from "../Field.astro";
+import TryExample from "../TryExample.astro";
+import NodeSource from "../live/NodeSource.astro";
+import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const ERRORS = ["bad-tx", "bad-key", "bad-address", "bad-signature-format", "bad-signature", "no-tx-pubkey", "no-outputs", "commitment-mismatch", "unsupported-tx-type"].map((e) => `v_err_${e}`);
+const strings = pickStrings(lang, [
+  "v_checking", "v_kind_key", "v_kind_out", "v_kind_in", "v_paid", "v_outputs", "v_confirmed", "v_pool", "v_locked",
+  "v_err_txid", "v_err_address", "v_err_secret", "v_err_network", "v_err_not_found", "live_error", ...ERRORS,
+] as never);
+---
+<div id="verify-tool" class="grid gap-6" data-strings={strings} data-lang={lang}>
+  <form data-form class="grid gap-3.5" novalidate>
+    <Field label={t("v_txid")} messageId="txid-message">
+      <input name="txid" spellcheck="false" autocomplete="off" autocapitalize="off" class="field font-mono text-[13px]" aria-describedby="txid-message" autofocus />
+    </Field>
+    <Field label={t("v_address")} messageId="address-message">
+      <textarea name="address" rows="2" spellcheck="false" autocomplete="off" autocapitalize="off" class="field min-h-14 resize-y font-mono text-[13px] [word-break:break-all]" aria-describedby="address-message"></textarea>
+    </Field>
+    <Field label={t("v_secret")} messageId="secret-message">
+      <textarea name="secret" rows="2" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder={t("v_secret_placeholder")} class="field min-h-14 resize-y font-mono text-[13px] [word-break:break-all]" aria-describedby="secret-message"></textarea>
+    </Field>
+    <p data-kind class="-mt-1 font-pixel text-xs text-graphite empty:hidden"></p>
+    <div data-message-field hidden>
+      <Field label={t("v_message")}><input name="message" autocomplete="off" class="field" /></Field>
+    </div>
+    <div class="flex flex-wrap items-center gap-x-5 gap-y-2">
+      <button class="btn" type="submit">{t("v_check")}</button>
+      <TryExample lang={lang} />
+    </div>
+  </form>
+
+  <p data-status class="text-[15px] empty:hidden" aria-live="polite"></p>
+
+  <section data-result class="result ok" hidden>
+    <p class="flex items-baseline gap-2 font-pixel text-[clamp(20px,3.4vw,28px)]"><span aria-hidden="true">✓</span><span data-paid></span></p>
+    <p data-detail class="text-[15px]"></p>
+    <p data-confirmations class="text-[15px]"></p>
+    <div class="mt-2 flex flex-wrap items-center gap-3">
+      <input id="verify-link" class="sr-only" readonly tabindex="-1" aria-hidden="true" />
+      <CopyButton lang={lang} from="#verify-link" label={t("v_share")} class="btn-ghost" />
+      <span class="text-xs text-graphite">{t("v_share_note")}</span>
+    </div>
+  </section>
+
+  <section data-failure class="result bad" hidden>
+    <p class="flex items-baseline gap-2 font-pixel text-lg"><span aria-hidden="true">×</span><span data-reason></span></p>
+  </section>
+
+  <Disclosure title={t("v_where_t")}><p class="max-w-[70ch] text-[15px]">{t("v_where")}</p></Disclosure>
+  <p class="text-sm text-graphite">{t("v_privacy")}</p>
+  <NodeSource lang={lang} />
+</div>
+
+<script>
+  import { liveTask } from "../live/live";
+  import { readStrings } from "../../i18n/format";
+  import type { Locale } from "../../i18n/ui";
+  import { EXAMPLE_PAYMENT } from "../../lib/examples";
+  import { parseAddress, picoToXmr } from "../../lib/monero";
+  import { call, customNode, getInfo } from "../../lib/node-client";
+  import { checkTxKey, checkTxProof, isTxid, parseTxKey, txFromJson, type PaymentCheck } from "../../lib/txproof";
+
+  const root = document.getElementById("verify-tool")!;
+  const t = readStrings(root);
+  const lang = root.dataset.lang as Locale;
+  const form = root.querySelector<HTMLFormElement>("[data-form]")!;
+  const $ = (s: string) => root.querySelector<HTMLElement>(s)!;
+  const field = (name: string) => form.elements.namedItem(name) as HTMLInputElement;
+  const dateTime = new Intl.DateTimeFormat(lang, { dateStyle: "long", timeStyle: "short" });
+  const UNLOCK_BLOCKS = 10;
+
+  type Kind = "key" | "out" | "in";
+  const kindOf = (secret: string): Kind | null => {
+    const s = secret.replace(/\s+/g, "");
+    if (s.startsWith("OutProof")) return "out";
+    if (s.startsWith("InProof")) return "in";
+    return parseTxKey(s) ? "key" : null;
+  };
+
+  function showKind() {
+    const kind = kindOf(field("secret").value);
+    $("[data-kind]").textContent = kind ? t(`v_kind_${kind}`) : "";
+    $("[data-message-field]").hidden = kind !== "out" && kind !== "in";
+  }
+
+  function fieldError(name: string, key: string | null, vars?: Record<string, string>) {
+    field(name).setAttribute("aria-invalid", String(!!key));
+    $(`#${name}-message`).textContent = key ? t(key, vars) : "";
+    return !!key;
+  }
+
+  function reset() {
+    $("[data-result]").hidden = $("[data-failure]").hidden = true;
+    $("[data-status]").textContent = "";
+  }
+
+  function fail(key: string, vars?: Record<string, string>) {
+    $("[data-status]").textContent = "";
+    $("[data-reason]").textContent = t(key, vars);
+    $("[data-failure]").hidden = false;
+  }
+
+  let run = 0;
+  async function check() {
+    reset();
+    const txid = field("txid").value.trim().toLowerCase();
+    const address = field("address").value.trim();
+    const secret = field("secret").value.replace(/\s+/g, "");
+    const kind = kindOf(secret);
+    const parsed = parseAddress(address);
+    const bad = [
+      fieldError("txid", isTxid(txid) ? null : "v_err_txid"),
+      fieldError("address", parsed.ok ? null : "v_err_address"),
+      fieldError("secret", kind ? null : "v_err_secret"),
+    ].some(Boolean);
+    if (bad || !parsed.ok) return;
+    if (parsed.network !== "mainnet" && !customNode()) return void fieldError("address", "v_err_network", { net: parsed.network });
+
+    const mine = ++run;
+    $("[data-status]").textContent = t("v_checking");
+    let response: { txs?: { as_json: string; in_pool: boolean; block_height: number; block_timestamp: number }[] };
+    let height: number;
+    try {
+      [response, { height }] = await Promise.all([
+        call<typeof response>("/get_transactions", { txs_hashes: [txid], decode_as_json: true }),
+        getInfo(),
+      ]);
+    } catch {
+      if (mine === run) fail("live_error");
+      return;
+    }
+    if (mine !== run) return;
+    const found = response.txs?.[0];
+    if (!found) return fail("v_err_not_found");
+    const tx = txFromJson(found.as_json);
+    if (!tx) return fail("v_err_bad-tx");
+
+    const message = field("message").value;
+    const result: PaymentCheck = kind === "key"
+      ? checkTxKey({ tx, txKey: secret, address })
+      : checkTxProof({ tx, txid, address, message, signature: secret });
+    if (!result.ok) return fail(`v_err_${result.error ?? "no-outputs"}`);
+
+    $("[data-status]").textContent = "";
+    $("[data-paid]").textContent = t("v_paid", { amount: picoToXmr(result.total.toString())! });
+    $("[data-detail]").textContent = `${t(`v_kind_${kind}`)} · ${t("v_outputs", { n: String(result.outputs.length) })}`;
+    const confirmations = found.in_pool ? 0 : height - found.block_height;
+    $("[data-confirmations]").textContent = found.in_pool
+      ? t("v_pool")
+      : `${t("v_confirmed", { n: new Intl.NumberFormat(lang).format(confirmations), date: dateTime.format(found.block_timestamp * 1000) })}${confirmations < UNLOCK_BLOCKS ? ` ${t("v_locked")}` : ""}`;
+    const share = new URLSearchParams({ tx: txid, address, [kind === "key" ? "key" : "proof"]: secret, ...(message && kind !== "key" ? { message } : {}) });
+    (document.getElementById("verify-link") as HTMLInputElement).value = `${location.origin}${location.pathname}#${share}`;
+    $("[data-result]").hidden = false;
+  }
+
+  field("secret").addEventListener("input", showKind);
+  $("[data-example]").addEventListener("click", () => {
+    field("txid").value = EXAMPLE_PAYMENT.txid;
+    field("address").value = EXAMPLE_PAYMENT.address;
+    field("secret").value = EXAMPLE_PAYMENT.txKey;
+    showKind();
+    check();
+  });
+  form.addEventListener("submit", (e) => { e.preventDefault(); check(); });
+
+  const shared = new URLSearchParams(location.hash.slice(1));
+  if (shared.get("tx")) {
+    field("txid").value = shared.get("tx") ?? "";
+    field("address").value = shared.get("address") ?? "";
+    field("secret").value = shared.get("key") ?? shared.get("proof") ?? "";
+    field("message").value = shared.get("message") ?? "";
+    showKind();
+  }
+  // A shared link checks as soon as the page opens.
+  liveTask(async () => { if (shared.get("tx")) await check(); });
+</script>
