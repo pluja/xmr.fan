@@ -3,6 +3,8 @@ import { defineStrings } from "./define.ts";
 /** Search-friendly page titles and descriptions. Visible headings stay short; these name Monero and say what the page does. */
 export default defineStrings({
   en: {
+    seo_title_beat: "Monero address beat: hear your address as music",
+    seo_desc_beat: "Turn any Monero address into a looping 8-bit chiptune with a pixel visualizer. Every address plays its own song, generated in your browser.",
     seo_title_fan: "Monero fan card: your pixel avatar and rarity",
     seo_desc_fan: "Type your nickname and get a Monero fan card: a pixel avatar, a rarity from Common to Mythic, a class, stats and a special move. Share it and compare.",
     seo_title_donate: "Monero donation roulette: support privacy projects",
@@ -33,6 +35,8 @@ export default defineStrings({
     seo_desc_gazette: "The week in Monero, every Monday: development, ecosystem, community and privacy news, price and network numbers, with sources and a podcast.",
   },
   es: {
+    seo_title_beat: "Ritmo de dirección Monero: escucha tu dirección",
+    seo_desc_beat: "Convierte cualquier dirección de Monero en un chiptune de 8 bits con visualizador pixelado. Cada dirección suena distinta, generada en tu navegador.",
     seo_title_fan: "Tarjeta de fan de Monero: tu avatar pixelado y tu rareza",
     seo_desc_fan: "Escribe tu apodo y consigue una tarjeta de fan de Monero: avatar pixelado, rareza de Común a Mítica, clase, estadísticas y movimiento especial. Compártela.",
     seo_title_donate: "Ruleta de donaciones en Monero: apoya proyectos de privacidad",
@@ -63,6 +67,8 @@ export default defineStrings({
     seo_desc_gazette: "La semana de Monero cada lunes: desarrollo, ecosistema, comunidad y privacidad, precio y red, con fuentes y un podcast.",
   },
   ru: {
+    seo_title_beat: "Бит адреса Monero: услышьте свой адрес",
+    seo_desc_beat: "Превратите любой адрес Monero в 8-битный чиптюн с пиксельной визуализацией. У каждого адреса своя мелодия, созданная в вашем браузере.",
     seo_title_fan: "Карточка фаната Monero: пиксельный аватар и редкость",
     seo_desc_fan: "Введите ник и получите карточку фаната Monero: пиксельный аватар, редкость от обычной до мифической, класс, характеристики и суперприём. Делитесь ей.",
     seo_title_donate: "Рулетка пожертвований в Monero: поддержите проекты приватности",
@@ -93,6 +99,8 @@ export default defineStrings({
     seo_desc_gazette: "Неделя Monero каждый понедельник: разработка, экосистема, сообщество и приватность, цена и сеть, с источниками и подкастом.",
   },
   fr: {
+    seo_title_beat: "Beat d'adresse Monero : écoute ton adresse",
+    seo_desc_beat: "Transforme n'importe quelle adresse Monero en chiptune 8 bits avec visualiseur pixel. Chaque adresse a sa musique, générée dans ton navigateur.",
     seo_title_fan: "Carte de fan Monero : ton avatar pixel et ta rareté",
     seo_desc_fan: "Tape ton pseudo et obtiens une carte de fan Monero : avatar pixel, rareté de Commune à Mythique, classe, stats et coup spécial. Partage-la et compare.",
     seo_title_donate: "Roulette des dons en Monero : soutenez la vie privée",
@@ -123,6 +131,8 @@ export default defineStrings({
     seo_desc_gazette: "La semaine Monero chaque lundi : développement, écosystème, communauté et vie privée, prix et réseau, avec les sources et un podcast.",
   },
   pt: {
+    seo_title_beat: "Batida de endereço Monero: ouça seu endereço",
+    seo_desc_beat: "Transforme qualquer endereço Monero em um chiptune 8 bits com visualizador pixelado. Cada endereço toca sua música, gerada no seu navegador.",
     seo_title_fan: "Cartão de fã do Monero: seu avatar pixelado e raridade",
     seo_desc_fan: "Digite seu apelido e ganhe um cartão de fã do Monero: avatar pixelado, raridade de Comum a Mítica, classe, atributos e golpe especial. Compartilhe.",
     seo_title_donate: "Roleta de doações em Monero: apoie projetos de privacidade",
@@ -153,6 +163,8 @@ export default defineStrings({
     seo_desc_gazette: "A semana do Monero toda segunda-feira: desenvolvimento, ecossistema, comunidade e privacidade, preço e rede, com fontes e podcast.",
   },
   ja: {
+    seo_title_beat: "Monero アドレスビート：アドレスを音楽で聴く",
+    seo_desc_beat: "Monero アドレスをドット絵ビジュアライザー付きの 8 ビット チップチューンに変換。アドレスごとに違う曲をブラウザ内で生成します。",
     seo_title_fan: "Monero ファンカード：ドット絵アバターとレア度",
     seo_desc_fan: "ニックネームを入れると Monero ファンカードが手に入ります。ドット絵アバター、コモンからミシックまでのレア度、クラス、ステータス、必殺技。シェアして比べよう。",
     seo_title_donate: "Monero 寄付ルーレット：プライバシー関連プロジェクトを支援",

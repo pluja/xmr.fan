@@ -20,6 +20,7 @@ No trackers, no accounts. Available in English, Spanish, Russian, French, Portug
 | [`/mining`](https://xmr.fan/mining) | Mining income for your CPU, and which P2Pool chain fits you |
 | [`/donate`](https://xmr.fan/donate) | Donation roulette: a random privacy, free software or Monero project to support |
 | [`/fan`](https://xmr.fan/fan) | Fan card: a pixel avatar, rarity, class and stats from your nickname, to share |
+| [`/beat`](https://xmr.fan/beat) | Address beat: any Monero address as a looping chiptune with a pixel visualizer |
 | [`/news`](https://xmr.fan/news) | The xmr.fan Times |
 
 ### Privacy model
