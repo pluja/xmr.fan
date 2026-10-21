@@ -1,5 +1,4 @@
 ---
-import Disclosure from "../Disclosure.astro";
 import { useTranslations, type Locale } from "../../i18n/ui";
 import type { Edition } from "../../lib/gazette";
 import { linkLabel, linksBySite } from "../../lib/gazette-links";
@@ -11,32 +10,43 @@ const sources = data.generated?.sources ?? [];
 const sites = linksBySite(data);
 const linkCount = sites.reduce((n, s) => n + s.links.length, 0);
 const num = new Intl.NumberFormat(lang);
+const tag = "border border-ink/35 px-1.5 py-0.5 text-xs leading-5 [overflow-wrap:anywhere]";
 ---
 {(sources.length > 0 || sites.length > 0) && (
-  <Disclosure title={t("g_read_t")} class="mt-4 max-w-[80ch] text-sm">
-    {data.generated && <p>{t("g_read_summary", { items: num.format(data.generated.items), sources: sources.length, links: linkCount })}</p>}
-    {sources.length > 0 && (
-      <div class="grid gap-1.5">
-        <h3 class="font-pixel">{t("g_read_sources")}</h3>
-        <ul class="flex flex-wrap gap-1.5">
-          {sources.map((s) => <li class="border border-graphite/50 px-1.5 py-0.5 font-mono text-xs [overflow-wrap:anywhere]">{s.name} <span class="text-graphite">{s.count}</span></li>)}
-        </ul>
-      </div>
-    )}
-    {sites.length > 0 && (
-      <div class="grid gap-1.5">
-        <h3 class="font-pixel">{t("g_read_links")}</h3>
-        <dl class="grid gap-x-4 gap-y-1 sm:grid-cols-[minmax(0,180px)_1fr]">
-          {sites.map((s) => (
-            <>
-              <dt class="font-mono text-xs leading-5 text-graphite">{s.site}</dt>
-              <dd class="flex flex-wrap gap-x-3 gap-y-0.5 text-xs leading-5">
-                {s.links.map((l) => <a class="text-ink [overflow-wrap:anywhere]" href={l.url} title={l.url} rel="noopener noreferrer">{linkLabel(l.url)}</a>)}
-              </dd>
-            </>
-          ))}
-        </dl>
-      </div>
-    )}
-  </Disclosure>
+  <details class="group mt-4 max-w-[80ch] text-sm">
+    <summary class="flex cursor-pointer list-none items-center gap-2 font-pixel text-ink [&::-webkit-details-marker]:hidden">
+      <span class="inline-block w-3 transition-transform group-open:rotate-90" aria-hidden="true">▶</span>
+      <span class="underline decoration-dotted underline-offset-4">{t("g_read_t")}</span>
+    </summary>
+    <div class="mt-3 grid gap-5 border-l-2 border-ink pl-4">
+      {data.generated && sources.length > 0 && (
+        <p>{t("g_read_summary", { items: num.format(data.generated.items), sources: sources.length, links: linkCount })}</p>
+      )}
+      {sources.length > 0 && (
+        <section class="grid gap-2">
+          <h3 class="font-pixel">{t("g_read_sources")}</h3>
+          <ul class="flex flex-wrap gap-1.5">
+            {sources.map((s) => <li class:list={[tag, "font-mono"]}>{s.name} <b class="font-normal text-graphite">{s.count}</b></li>)}
+          </ul>
+        </section>
+      )}
+      {sites.length > 0 && (
+        <section class="grid gap-2">
+          <h3 class="font-pixel">{t("g_read_links")}</h3>
+          <dl>
+            {sites.map((s) => (
+              <div class="grid gap-x-4 gap-y-1.5 border-b-2 border-dotted border-ink/30 py-2 last:border-b-0 sm:grid-cols-[170px_1fr]">
+                <dt class="font-mono text-xs leading-6 text-graphite">{s.site}</dt>
+                <dd class="flex flex-wrap gap-1.5">
+                  {s.links.map((l) => (
+                    <a class:list={[tag, "text-ink no-underline hover:border-ink hover:bg-ink hover:text-orange"]} href={l.url} title={l.url} rel="noopener noreferrer">{linkLabel(l.url)}</a>
+                  ))}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )}
+    </div>
+  </details>
 )}
