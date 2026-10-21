@@ -310,7 +310,7 @@
       },
       {
         "host": "Jessica",
-        "text": "And I'm Jessica. Issue number one! [excited] We should have brought confetti or something."
+        "text": "And I'm Jessica. Issue number one! We should have brought confetti or something."
       },
       {
         "host": "Chris",
@@ -577,6 +577,254 @@
         "text": "Update your node, ask where your invoices go, and we'll see you next week."
       }
     ]
+  },
+  "podcasts": {
+    "es": {
+      "file": "/podcast/2026-10-12.es.mp3",
+      "duration": 647,
+      "hosts": [
+        "Chris",
+        "Jessica"
+      ],
+      "transcript": [
+        {
+          "host": "Chris",
+          "text": "¡Hola a todos y bienvenidos a The xmr.fan Times! Soy Chris, y esta es la semana del doce de octubre de dos mil veintiséis."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y yo soy Jessica. Hoy tenemos una versión nueva de Monero que conviene instalar, una filtración de datos bastante incómoda, el precio con su subida del domingo y un montón de novedades del ecosistema."
+        },
+        {
+          "host": "Chris",
+          "text": "Empecemos por lo de la versión. Monero cero punto dieciocho punto cinco punto cuatro, con nombre en clave 'Fluorine Fermi'."
+        },
+        {
+          "host": "Jessica",
+          "text": "Sí, es una versión pequeñita, puntual. Arregla la validación DNSSEC en el daemon. Y para quien no lo tenga fresco, DNSSEC es la extensión de seguridad del sistema de nombres de dominio, la que comprueba que las respuestas de las búsquedas DNS no estén manipuladas."
+        },
+        {
+          "host": "Chris",
+          "text": "Vale, ¿y eso a quién le afecta en la práctica? Porque suena muy de fontanería."
+        },
+        {
+          "host": "Jessica",
+          "text": "Lo es, [laughs] pero afecta a cómo el daemon verifica los puntos de control, las listas de bloqueo y las comprobaciones de actualización. Además, la cartera GUI recibe una corrección para poder reabrir carteras de testnet y stagenet."
+        },
+        {
+          "host": "Chris",
+          "text": "O sea que, si ejecutas un nodo, merece la pena actualizar."
+        },
+        {
+          "host": "Jessica",
+          "text": "Exacto. Sin dramas, pero actualiza."
+        },
+        {
+          "host": "Chris",
+          "text": "Pasemos al precio. Semana buena. XMR abrió en unos quinientos treinta y siete dólares y cerró en unos quinientos noventa y tres. Eso es un diez coma cuatro por ciento arriba."
+        },
+        {
+          "host": "Jessica",
+          "text": "Mientras Bitcoin bajaba un dos coma cuatro por ciento, ojo. Y casi toda la subida llegó el domingo: ese día XMR avanzó un cuatro coma ocho por ciento, tras un ascenso gradual a principios de semana."
+        },
+        {
+          "host": "Chris",
+          "text": "El rango de la semana fue de unos quinientos veintidós a unos seiscientos cinco dólares. Y el cierre queda justo por debajo del máximo de treinta días, que era de seiscientos catorce coma ocho, y muy por encima del mínimo de treinta días, quinientos quince coma veintitrés."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y hay un comentario que lo ilustra. Según @Jonathan__offic, XMR subía cerca de un seis por ciento en veinticuatro horas el dieciocho de octubre, mientras el resto del mercado cripto seguía plano, con un volumen en veinticuatro horas que se reportaba un noventa y uno por ciento mayor que el día anterior."
+        },
+        {
+          "host": "Chris",
+          "text": "Dato curioso, nada más. Aquí no damos predicciones."
+        },
+        {
+          "host": "Jessica",
+          "text": "Cero. [laughs] Describimos lo que pasó y ya está."
+        },
+        {
+          "host": "Chris",
+          "text": "Bien, ahora el tema de fondo de la semana. ShopInBit."
+        },
+        {
+          "host": "Jessica",
+          "text": "Sí, el servicio de conserjería que mucha gente de Monero conoce para comprar cosas con cripto. Ha estado enviando correos a sus clientes sobre una filtración de datos."
+        },
+        {
+          "host": "Chris",
+          "text": "Y la historia es más fea de lo normal, porque, según una publicación de Reddit recogida por Monero Observer, la empresa había dicho que guardaba las facturas sin conexión."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y resulta que, desde octubre de dos mil veinticinco, las facturas se estaban subiendo al sistema polaco de facturación electrónica. [sighs] Esa plataforma fue hackeada, y se copiaron datos de clientes y facturas."
+        },
+        {
+          "host": "Chris",
+          "text": "Quien publica lo describe como uno de los mayores hackeos de Polonia. Pero ojo, que solo sabemos lo que dice esa publicación. Qué quedó expuesto exactamente, todavía no está claro."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y ahí está la lección, que es vieja con un ejemplo nuevo. El eslabón débil a menudo no es la moneda, sino el papeleo que la rodea."
+        },
+        {
+          "host": "Chris",
+          "text": "Wait, entonces, ¿qué hago yo si compro con Monero? Porque pagar en XMR no me protege de esto."
+        },
+        {
+          "host": "Jessica",
+          "text": "Justo eso. Conviene preguntarse dónde acaban los detalles de tu pedido, y no solo cómo pagas. La promesa de un comercio sobre cómo trata tus datos solo vale tanto como los sistemas que toca."
+        },
+        {
+          "host": "Chris",
+          "text": "Ahora sí, un par de citas de lo que se oyó por ahí esta semana, ¿no?"
+        },
+        {
+          "host": "Jessica",
+          "text": "Sí, aunque esta semana la sección de lo que se oyó la tenemos casi vacía, y solo contamos con lo de @Jonathan__offic que ya comentamos. Así que seguimos con las noticias."
+        },
+        {
+          "host": "Chris",
+          "text": "Vamos con desarrollo. Hay una corrección en la cartera que me gusta mucho, [curious] porque es de esas que parecen técnicas pero tocan la privacidad de verdad."
+        },
+        {
+          "host": "Jessica",
+          "text": "A ver, explícalo tú, que lo hiciste mejor que yo en el borrador."
+        },
+        {
+          "host": "Chris",
+          "text": "Vale. Al reconstruir una transacción con una nueva entrada, las demás entradas recibían anillos nuevos. Y si dos anillos distintos apuntan a la misma key image, eso revelaría su salida real."
+        },
+        {
+          "host": "Jessica",
+          "text": "Es decir, el observador compara los dos anillos y la salida que aparece en ambos es la verdadera. Brutal."
+        },
+        {
+          "host": "Chris",
+          "text": "Ahora cada entrada que ya tiene un anillo guardado lo reutiliza. Problema resuelto."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y en la misma línea de DNSSEC, los nodos semilla se vuelven más estrictos. El código peer-to-peer ahora actúa según la validación DNSSEC en las búsquedas de nodos semilla. Si falla, registra una advertencia con las direcciones rechazadas y descarta los resultados."
+        },
+        {
+          "host": "Chris",
+          "text": "Además se añadió un nuevo ancla de confianza DNSSEC a las utilidades DNS. Y simplewallet incorpora una opción --seed, mientras que --electrum-seed queda obsoleta."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y las bibliotecas: woodser publicó monero-java versión cero punto ocho punto sesenta y tres y monero-cpp cero punto nueve punto diez. La de Java ahora lanza un error con direcciones base58 mal formadas."
+        },
+        {
+          "host": "Chris",
+          "text": "Y la de C++ se actualiza a Monero cero punto dieciocho punto cinco punto tres, y permite desactivar la verificación de certificados TLS."
+        },
+        {
+          "host": "Jessica",
+          "text": "Pasamos al ecosistema, que viene cargado. Haveno uno punto once punto cero, el exchange descentralizado, actualiza Tor a la cero punto cuatro punto nueve punto catorce, con correcciones de gravedad alta."
+        },
+        {
+          "host": "Chris",
+          "text": "También actualiza Jackson y Logback, corrige que los árbitros descartaran solicitudes simultáneas de firma de ofertas del mismo maker, y permite nodos de Monero IPv6 sin Tor."
+        },
+        {
+          "host": "Jessica",
+          "text": "Luego, propuestas del CCS, el Community Crowdfunding System, o sea, el sistema de crowdfunding de la comunidad. silverpill presentó una primera propuesta para migrar los paquetes de monero-rs a monero-oxide en aproximadamente un mes, y pide dos coma noventa y seis XMR."
+        },
+        {
+          "host": "Chris",
+          "text": "El objetivo es acabar con la división en el ecosistema Rust y dar a quienes usan monero-rs una biblioteca mejor mantenida."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y esta semana se publicó también una segunda propuesta para el trabajo a tiempo completo de jpk68, que cubre tres meses."
+        },
+        {
+          "host": "Chris",
+          "text": "Hay herramientas nuevas de la comunidad que pidieron opiniones. Monkstash, una cartera que funciona en el navegador."
+        },
+        {
+          "host": "Jessica",
+          "text": "monero-pay, una pasarela de pago autoalojada que mantiene wallet-rpc y las claves en una intranet aparte. Y ColdPunk, un firmware que convierte una placa ESP32-S3 en una cartera hardware."
+        },
+        {
+          "host": "Chris",
+          "text": "Una cold wallet casera, [mischievously] qué tentación. Pero, como siempre, revisa el código antes de confiarle fondos."
+        },
+        {
+          "host": "Jessica",
+          "text": "Eso. Y ahora cosas de uso real. ToriSIM, un proveedor de eSIM centrado en la privacidad, cuenta que su primer cliente pagó en XMR, usando su propio BTCPay Server y su nodo de Monero."
+        },
+        {
+          "host": "Chris",
+          "text": "Cake Wallet seis punto cinco punto cero ya está como versión preliminar, con cuentas de Bitcoin, más nodos Tor y un núcleo de Monero actualizado."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y la app monostr llegó a F-Droid. Permite dar propinas en Nostr con Monero, sin Lightning y sin custodio de por medio."
+        },
+        {
+          "host": "Chris",
+          "text": "Ahora la privacidad más allá de Monero. Los anuncios como canal de vigilancia: según informes de esta semana, empresas de spyware distribuyen malware a través de redes publicitarias, y se acusa a una firma israelí de usar anuncios en línea para espiar a personas."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y 404 Media señala que la segmentación de anuncios de ChatGPT puede usar números de teléfono y correos electrónicos."
+        },
+        {
+          "host": "Chris",
+          "text": "En matrículas, EFF pidió al Tribunal Supremo de Wisconsin que exija órdenes judiciales para las búsquedas en bases de datos de matrículas de cuatro ciudades."
+        },
+        {
+          "host": "Jessica",
+          "text": "En California, un tribunal desestimó el caso de EFF contra San Jose, algo que EFF considera erróneo en lo jurídico y que va a recurrir. Y el podcast de 404 Media cuenta que un juez declaró inconstitucional una búsqueda de Flock."
+        },
+        {
+          "host": "Chris",
+          "text": "Luego, la TSA. Un resumen de la Inspección General del DHS encontró una 'debilidad significativa' en cómo su tecnología de reconocimiento facial protege los datos de los pasajeros. Los hallazgos detallados son confidenciales."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y Telegram: unos documentos judiciales recién presentados incluyen una carta que muestra a Telegram compartiendo datos de usuarios tras una orden judicial."
+        },
+        {
+          "host": "Chris",
+          "text": "Para cerrar este bloque, actualizaciones. Tor Browser quince punto cero punto veinticinco y Tails siete punto quince traen Tor cero punto cuatro punto nueve punto catorce y correcciones de seguridad de Firefox. GrapheneOS publicó la versión dos mil veintiséis diez uno seis."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y no olvidemos lo que viene. El diecinueve de octubre a las dieciocho UTC, reunión Monero Tech sobre Seraphis, JAMTIS, FCMPs y otro desarrollo a largo plazo."
+        },
+        {
+          "host": "Chris",
+          "text": "El veinte, a las dieciocho UTC, reunión de Cuprate, la implementación alternativa de nodo de Monero. El veintiuno, a las diecisiete UTC, el Monero Research Lab, con el estado de FCMP más más y la stressnet beta de FCMP en la agenda."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y el treinta y uno de octubre, a las dieciséis UTC, el Community Workgroup, con novedades de la comunidad, actualizaciones del CCS e informes de los grupos de trabajo."
+        },
+        {
+          "host": "Chris",
+          "text": "Y los números de la red, rápido. El hashrate medio fue de unos seis coma cero cuatro gigahashes por segundo, frente a seis coma treinta y nueve la semana anterior."
+        },
+        {
+          "host": "Jessica",
+          "text": "Unas veintiocho mil cuatrocientas noventa y cuatro transacciones al día, contra veintisiete mil quinientas setenta y cuatro. Y la comisión media, cero coma cero cero cero doscientos cincuenta y uno XMR."
+        },
+        {
+          "host": "Chris",
+          "text": "Y hasta aquí el episodio de esta semana."
+        },
+        {
+          "host": "Jessica",
+          "text": "Todos los enlaces están en xmr punto fan barra es barra news. Gracias por escucharnos y nos oímos la semana que viene."
+        },
+        {
+          "host": "Chris",
+          "text": "¡Hasta la próxima!"
+        }
+      ]
+    }
   },
   "generated": {
     "model": "anthropic/claude-sonnet-5.5",
@@ -1181,254 +1429,6 @@
           "@Jonathan__offic によると、10月18日、暗号資産市場全体が横ばいのなか、XMR は24時間で約6%上昇しました。24時間の出来高も前日比で91%増と伝えられています。"
         ]
       }
-    }
-  },
-  "podcasts": {
-    "es": {
-      "file": "/podcast/2026-10-12.es.mp3",
-      "duration": 647,
-      "hosts": [
-        "Chris",
-        "Jessica"
-      ],
-      "transcript": [
-        {
-          "host": "Chris",
-          "text": "¡Hola a todos y bienvenidos a The xmr.fan Times! Soy Chris, y esta es la semana del doce de octubre de dos mil veintiséis."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y yo soy Jessica. Hoy tenemos una versión nueva de Monero que conviene instalar, una filtración de datos bastante incómoda, el precio con su subida del domingo y un montón de novedades del ecosistema."
-        },
-        {
-          "host": "Chris",
-          "text": "Empecemos por lo de la versión. Monero cero punto dieciocho punto cinco punto cuatro, con nombre en clave 'Fluorine Fermi'."
-        },
-        {
-          "host": "Jessica",
-          "text": "Sí, es una versión pequeñita, puntual. Arregla la validación DNSSEC en el daemon. Y para quien no lo tenga fresco, DNSSEC es la extensión de seguridad del sistema de nombres de dominio, la que comprueba que las respuestas de las búsquedas DNS no estén manipuladas."
-        },
-        {
-          "host": "Chris",
-          "text": "Vale, ¿y eso a quién le afecta en la práctica? Porque suena muy de fontanería."
-        },
-        {
-          "host": "Jessica",
-          "text": "Lo es, [laughs] pero afecta a cómo el daemon verifica los puntos de control, las listas de bloqueo y las comprobaciones de actualización. Además, la cartera GUI recibe una corrección para poder reabrir carteras de testnet y stagenet."
-        },
-        {
-          "host": "Chris",
-          "text": "O sea que, si ejecutas un nodo, merece la pena actualizar."
-        },
-        {
-          "host": "Jessica",
-          "text": "Exacto. Sin dramas, pero actualiza."
-        },
-        {
-          "host": "Chris",
-          "text": "Pasemos al precio. [excited] Semana buena. XMR abrió en unos quinientos treinta y siete dólares y cerró en unos quinientos noventa y tres. Eso es un diez coma cuatro por ciento arriba."
-        },
-        {
-          "host": "Jessica",
-          "text": "Mientras Bitcoin bajaba un dos coma cuatro por ciento, ojo. Y casi toda la subida llegó el domingo: ese día XMR avanzó un cuatro coma ocho por ciento, tras un ascenso gradual a principios de semana."
-        },
-        {
-          "host": "Chris",
-          "text": "El rango de la semana fue de unos quinientos veintidós a unos seiscientos cinco dólares. Y el cierre queda justo por debajo del máximo de treinta días, que era de seiscientos catorce coma ocho, y muy por encima del mínimo de treinta días, quinientos quince coma veintitrés."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y hay un comentario que lo ilustra. Según @Jonathan__offic, XMR subía cerca de un seis por ciento en veinticuatro horas el dieciocho de octubre, mientras el resto del mercado cripto seguía plano, con un volumen en veinticuatro horas que se reportaba un noventa y uno por ciento mayor que el día anterior."
-        },
-        {
-          "host": "Chris",
-          "text": "Dato curioso, nada más. Aquí no damos predicciones."
-        },
-        {
-          "host": "Jessica",
-          "text": "Cero. [laughs] Describimos lo que pasó y ya está."
-        },
-        {
-          "host": "Chris",
-          "text": "Bien, ahora el tema de fondo de la semana. ShopInBit."
-        },
-        {
-          "host": "Jessica",
-          "text": "Sí, el servicio de conserjería que mucha gente de Monero conoce para comprar cosas con cripto. Ha estado enviando correos a sus clientes sobre una filtración de datos."
-        },
-        {
-          "host": "Chris",
-          "text": "Y la historia es más fea de lo normal, porque, según una publicación de Reddit recogida por Monero Observer, la empresa había dicho que guardaba las facturas sin conexión."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y resulta que, desde octubre de dos mil veinticinco, las facturas se estaban subiendo al sistema polaco de facturación electrónica. [sighs] Esa plataforma fue hackeada, y se copiaron datos de clientes y facturas."
-        },
-        {
-          "host": "Chris",
-          "text": "Quien publica lo describe como uno de los mayores hackeos de Polonia. Pero ojo, que solo sabemos lo que dice esa publicación. Qué quedó expuesto exactamente, todavía no está claro."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y ahí está la lección, que es vieja con un ejemplo nuevo. El eslabón débil a menudo no es la moneda, sino el papeleo que la rodea."
-        },
-        {
-          "host": "Chris",
-          "text": "Wait, entonces, ¿qué hago yo si compro con Monero? Porque pagar en XMR no me protege de esto."
-        },
-        {
-          "host": "Jessica",
-          "text": "Justo eso. Conviene preguntarse dónde acaban los detalles de tu pedido, y no solo cómo pagas. La promesa de un comercio sobre cómo trata tus datos solo vale tanto como los sistemas que toca."
-        },
-        {
-          "host": "Chris",
-          "text": "Ahora sí, un par de citas de lo que se oyó por ahí esta semana, ¿no?"
-        },
-        {
-          "host": "Jessica",
-          "text": "Sí, aunque esta semana la sección de lo que se oyó la tenemos casi vacía, y solo contamos con lo de @Jonathan__offic que ya comentamos. Así que seguimos con las noticias."
-        },
-        {
-          "host": "Chris",
-          "text": "Vamos con desarrollo. Hay una corrección en la cartera que me gusta mucho, [curious] porque es de esas que parecen técnicas pero tocan la privacidad de verdad."
-        },
-        {
-          "host": "Jessica",
-          "text": "A ver, explícalo tú, que lo hiciste mejor que yo en el borrador."
-        },
-        {
-          "host": "Chris",
-          "text": "Vale. Al reconstruir una transacción con una nueva entrada, las demás entradas recibían anillos nuevos. Y si dos anillos distintos apuntan a la misma key image, eso revelaría su salida real."
-        },
-        {
-          "host": "Jessica",
-          "text": "Es decir, el observador compara los dos anillos y la salida que aparece en ambos es la verdadera. Brutal."
-        },
-        {
-          "host": "Chris",
-          "text": "Ahora cada entrada que ya tiene un anillo guardado lo reutiliza. Problema resuelto."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y en la misma línea de DNSSEC, los nodos semilla se vuelven más estrictos. El código peer-to-peer ahora actúa según la validación DNSSEC en las búsquedas de nodos semilla. Si falla, registra una advertencia con las direcciones rechazadas y descarta los resultados."
-        },
-        {
-          "host": "Chris",
-          "text": "Además se añadió un nuevo ancla de confianza DNSSEC a las utilidades DNS. Y simplewallet incorpora una opción --seed, mientras que --electrum-seed queda obsoleta."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y las bibliotecas: woodser publicó monero-java versión cero punto ocho punto sesenta y tres y monero-cpp cero punto nueve punto diez. La de Java ahora lanza un error con direcciones base58 mal formadas."
-        },
-        {
-          "host": "Chris",
-          "text": "Y la de C++ se actualiza a Monero cero punto dieciocho punto cinco punto tres, y permite desactivar la verificación de certificados TLS."
-        },
-        {
-          "host": "Jessica",
-          "text": "Pasamos al ecosistema, que viene cargado. Haveno uno punto once punto cero, el exchange descentralizado, actualiza Tor a la cero punto cuatro punto nueve punto catorce, con correcciones de gravedad alta."
-        },
-        {
-          "host": "Chris",
-          "text": "También actualiza Jackson y Logback, corrige que los árbitros descartaran solicitudes simultáneas de firma de ofertas del mismo maker, y permite nodos de Monero IPv6 sin Tor."
-        },
-        {
-          "host": "Jessica",
-          "text": "Luego, propuestas del CCS, el Community Crowdfunding System, o sea, el sistema de crowdfunding de la comunidad. silverpill presentó una primera propuesta para migrar los paquetes de monero-rs a monero-oxide en aproximadamente un mes, y pide dos coma noventa y seis XMR."
-        },
-        {
-          "host": "Chris",
-          "text": "El objetivo es acabar con la división en el ecosistema Rust y dar a quienes usan monero-rs una biblioteca mejor mantenida."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y esta semana se publicó también una segunda propuesta para el trabajo a tiempo completo de jpk68, que cubre tres meses."
-        },
-        {
-          "host": "Chris",
-          "text": "Hay herramientas nuevas de la comunidad que pidieron opiniones. [excited] Monkstash, una cartera que funciona en el navegador."
-        },
-        {
-          "host": "Jessica",
-          "text": "monero-pay, una pasarela de pago autoalojada que mantiene wallet-rpc y las claves en una intranet aparte. Y ColdPunk, un firmware que convierte una placa ESP32-S3 en una cartera hardware."
-        },
-        {
-          "host": "Chris",
-          "text": "Una cold wallet casera, [mischievously] qué tentación. Pero, como siempre, revisa el código antes de confiarle fondos."
-        },
-        {
-          "host": "Jessica",
-          "text": "Eso. Y ahora cosas de uso real. ToriSIM, un proveedor de eSIM centrado en la privacidad, cuenta que su primer cliente pagó en XMR, usando su propio BTCPay Server y su nodo de Monero."
-        },
-        {
-          "host": "Chris",
-          "text": "Cake Wallet seis punto cinco punto cero ya está como versión preliminar, con cuentas de Bitcoin, más nodos Tor y un núcleo de Monero actualizado."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y la app monostr llegó a F-Droid. Permite dar propinas en Nostr con Monero, sin Lightning y sin custodio de por medio."
-        },
-        {
-          "host": "Chris",
-          "text": "Ahora la privacidad más allá de Monero. Los anuncios como canal de vigilancia: según informes de esta semana, empresas de spyware distribuyen malware a través de redes publicitarias, y se acusa a una firma israelí de usar anuncios en línea para espiar a personas."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y 404 Media señala que la segmentación de anuncios de ChatGPT puede usar números de teléfono y correos electrónicos."
-        },
-        {
-          "host": "Chris",
-          "text": "En matrículas, EFF pidió al Tribunal Supremo de Wisconsin que exija órdenes judiciales para las búsquedas en bases de datos de matrículas de cuatro ciudades."
-        },
-        {
-          "host": "Jessica",
-          "text": "En California, un tribunal desestimó el caso de EFF contra San Jose, algo que EFF considera erróneo en lo jurídico y que va a recurrir. Y el podcast de 404 Media cuenta que un juez declaró inconstitucional una búsqueda de Flock."
-        },
-        {
-          "host": "Chris",
-          "text": "Luego, la TSA. Un resumen de la Inspección General del DHS encontró una 'debilidad significativa' en cómo su tecnología de reconocimiento facial protege los datos de los pasajeros. Los hallazgos detallados son confidenciales."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y Telegram: unos documentos judiciales recién presentados incluyen una carta que muestra a Telegram compartiendo datos de usuarios tras una orden judicial."
-        },
-        {
-          "host": "Chris",
-          "text": "Para cerrar este bloque, actualizaciones. Tor Browser quince punto cero punto veinticinco y Tails siete punto quince traen Tor cero punto cuatro punto nueve punto catorce y correcciones de seguridad de Firefox. GrapheneOS publicó la versión dos mil veintiséis diez uno seis."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y no olvidemos lo que viene. El diecinueve de octubre a las dieciocho UTC, reunión Monero Tech sobre Seraphis, JAMTIS, FCMPs y otro desarrollo a largo plazo."
-        },
-        {
-          "host": "Chris",
-          "text": "El veinte, a las dieciocho UTC, reunión de Cuprate, la implementación alternativa de nodo de Monero. El veintiuno, a las diecisiete UTC, el Monero Research Lab, con el estado de FCMP más más y la stressnet beta de FCMP en la agenda."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y el treinta y uno de octubre, a las dieciséis UTC, el Community Workgroup, con novedades de la comunidad, actualizaciones del CCS e informes de los grupos de trabajo."
-        },
-        {
-          "host": "Chris",
-          "text": "Y los números de la red, rápido. El hashrate medio fue de unos seis coma cero cuatro gigahashes por segundo, frente a seis coma treinta y nueve la semana anterior."
-        },
-        {
-          "host": "Jessica",
-          "text": "Unas veintiocho mil cuatrocientas noventa y cuatro transacciones al día, contra veintisiete mil quinientas setenta y cuatro. Y la comisión media, cero coma cero cero cero doscientos cincuenta y uno XMR."
-        },
-        {
-          "host": "Chris",
-          "text": "Y hasta aquí el episodio de esta semana."
-        },
-        {
-          "host": "Jessica",
-          "text": "Todos los enlaces están en xmr punto fan barra es barra news. Gracias por escucharnos y nos oímos la semana que viene."
-        },
-        {
-          "host": "Chris",
-          "text": "¡Hasta la próxima!"
-        }
-      ]
     }
   }
 }
