@@ -1,0 +1,129 @@
+---
+import Disclosure from "../Disclosure.astro";
+import Field from "../Field.astro";
+import PixelIcon from "../PixelIcon.astro";
+import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const strings = pickStrings(lang, [
+  "c_hashing", "c_hash", "c_genuine", "c_genuine_detail", "c_mismatch", "c_mismatch_detail", "c_unknown", "c_unknown_detail", "c_list_t", "c_list_error", "c_how",
+]);
+const cell = "border-b-2 border-dotted border-graphite/40 py-1.5 pr-3";
+---
+<div id="checksum-tool" class="grid gap-6" data-strings={strings}>
+  <label data-drop class="grid cursor-pointer place-items-center gap-2 border-2 border-dashed border-ink bg-paper px-4 py-10 text-center hover:bg-cream [&.over]:border-solid [&.over]:bg-peach">
+    <PixelIcon name="download" size={32} />
+    <span class="font-pixel text-lg">{t("c_drop")}</span>
+    <span class="text-sm text-graphite">{t("c_drop_hint")}</span>
+    <input type="file" class="sr-only" />
+  </label>
+  <div data-progress class="grid gap-1" hidden>
+    <p data-progress-text class="text-sm" aria-live="polite"></p>
+    <div class="h-3 border-2 border-ink bg-paper"><div data-bar class="h-full w-0 bg-ink"></div></div>
+  </div>
+
+  <Field label={t("c_or_paste")}>
+    <input name="hash" spellcheck="false" autocomplete="off" maxlength="64" class="field font-mono text-[13px]" />
+  </Field>
+
+  <section data-result class="result" hidden>
+    <p class="flex items-baseline gap-2 font-pixel text-[clamp(18px,3vw,24px)]"><span data-mark aria-hidden="true"></span><span data-title></span></p>
+    <p data-detail class="text-[15px]"></p>
+    <p data-hash class="break-all font-mono text-xs text-graphite"></p>
+  </section>
+
+  <p data-how class="text-sm text-graphite"></p>
+  <Disclosure title="" data-list-box hidden>
+    <div class="overflow-x-auto">
+      <table class="w-full min-w-[560px] text-left text-xs"><tbody data-list></tbody></table>
+    </div>
+  </Disclosure>
+  <template id="hash-row"><tr><td class:list={[cell, "font-mono"]}></td><td class:list={[cell, "break-all font-mono text-graphite"]}></td></tr></template>
+</div>
+
+<script>
+  import { sha256 } from "@noble/hashes/sha2.js";
+  import { readStrings } from "../../i18n/format";
+  import { matchHash, type HashList } from "../../lib/hashes";
+
+  const root = document.getElementById("checksum-tool")!;
+  const t = readStrings(root);
+  const $ = <T extends HTMLElement = HTMLElement>(s: string) => root.querySelector<T>(s)!;
+  const drop = $("[data-drop]"), fileInput = $<HTMLInputElement>("input[type=file]"), hashInput = $<HTMLInputElement>("input[name=hash]");
+  const hex = (b: Uint8Array) => Array.from(b, (x) => x.toString(16).padStart(2, "0")).join("");
+
+  const listReady: Promise<HashList | null> = fetch("/api/hashes").then((r) => (r.ok ? r.json() : null)).catch(() => null);
+
+  listReady.then((list) => {
+    if (!list) { $("[data-how]").textContent = t("c_list_error"); return; }
+    $("[data-how]").textContent = t("c_how", { fingerprint: list.fingerprint.replace(/(.{4})/g, "$1 ").trim() });
+    $("[data-list-box] summary span:last-child").textContent = t("c_list_t", { version: list.version });
+    const row = root.querySelector<HTMLTemplateElement>("#hash-row")!;
+    $("[data-list]").replaceChildren(...list.files.map((f) => {
+      const tr = row.content.firstElementChild!.cloneNode(true) as HTMLTableRowElement;
+      tr.cells[0].textContent = f.name;
+      tr.cells[1].textContent = f.sha256;
+      return tr;
+    }));
+    $("[data-list-box]").hidden = false;
+  });
+
+  async function show(hash: string, fileName?: string) {
+    const list = await listReady;
+    if (!list) return;
+    const match = matchHash(hash, fileName, list.files);
+    const box = $("[data-result]");
+    const tone = { genuine: ["✓", "ok"], mismatch: ["×", "bad"], unknown: ["!", "warn"] }[match.kind];
+    box.className = `result ${tone[1]}`;
+    $("[data-mark]").textContent = tone[0];
+    const vars = { name: match.kind === "unknown" ? fileName ?? "" : match.entry.name, version: list.version, group: match.kind === "genuine" ? match.entry.group : "", signer: list.signer };
+    $("[data-title]").textContent = t(`c_${match.kind}`, vars);
+    $("[data-detail]").textContent = t(`c_${match.kind}_detail`, vars);
+    $("[data-hash]").textContent = t("c_hash", { hash: hash.toLowerCase() });
+    box.hidden = false;
+  }
+
+  async function hashFile(file: File) {
+    $("[data-result]").hidden = true;
+    const progress = $("[data-progress]"), bar = $("[data-bar]"), text = $("[data-progress-text]");
+    progress.hidden = false;
+    const hasher = sha256.create();
+    const reader = file.stream().getReader();
+    let done = 0, lastPaint = 0;
+    for (;;) {
+      const { value, done: end } = await reader.read();
+      if (end) break;
+      hasher.update(value);
+      done += value.length;
+      if (performance.now() - lastPaint > 100) {
+        const pct = file.size ? Math.floor((done / file.size) * 100) : 100;
+        bar.style.width = `${pct}%`;
+        text.textContent = t("c_hashing", { name: file.name, pct });
+        lastPaint = performance.now();
+        await new Promise((r) => setTimeout(r));
+      }
+    }
+    progress.hidden = true;
+    const hash = hex(hasher.digest());
+    hashInput.value = hash;
+    show(hash, file.name);
+  }
+
+  fileInput.addEventListener("change", () => { const f = fileInput.files?.[0]; if (f) hashFile(f); });
+  drop.addEventListener("dragover", (e) => { e.preventDefault(); drop.classList.add("over"); });
+  drop.addEventListener("dragleave", () => drop.classList.remove("over"));
+  drop.addEventListener("drop", (e) => {
+    e.preventDefault();
+    drop.classList.remove("over");
+    const f = e.dataTransfer?.files[0];
+    if (f) hashFile(f);
+  });
+  hashInput.addEventListener("input", () => {
+    const value = hashInput.value.trim();
+    hashInput.setAttribute("aria-invalid", String(!!value && !/^[0-9a-fA-F]{64}$/.test(value)));
+    if (/^[0-9a-fA-F]{64}$/.test(value)) show(value);
+    else $("[data-result]").hidden = true;
+  });
+</script>
