@@ -129,7 +129,13 @@ export const editionSchema = editorialSchema.extend({
   network: networkSchema.optional(),
   market: marketSchema.optional(),
   podcast: podcastSchema.optional(),
-  generated: z.object({ model: z.string(), at: z.string(), items: z.number() }).optional(),
+  /** `sources`: every outlet the pipeline read that week, with how many items it had. */
+  generated: z.object({
+    model: z.string(),
+    at: z.string(),
+    items: z.number(),
+    sources: z.array(z.object({ name: z.string(), count: z.number().int() })).optional(),
+  }).optional(),
   /** Translated text by locale code ("es", "ja", …). English is the edition itself. */
   translations: z.record(z.string(), translationSchema).optional(),
 });

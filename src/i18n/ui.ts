@@ -10,6 +10,10 @@ export const LOCALE_NAMES: Record<Locale, string> = {
 };
 
 const en = {
+  g_read_t: "What we read this week",
+  g_read_summary: "{items} items from {sources} sources. {links} links made it into this issue.",
+  g_read_sources: "Sources checked",
+  g_read_links: "Links in this issue",
   feeds: "Feeds",
   feeds_intro: "Follow xmr.fan in your feed reader or podcast app. No account needed.",
   feed_news_desc: "Every new issue of the Times, in your language.",
@@ -193,6 +197,10 @@ type BaseDict = Record<BaseKey, string>;
 type Dict = Record<Key, string>;
 
 const es: BaseDict = {
+  g_read_t: "Lo que leímos esta semana",
+  g_read_summary: "{items} elementos de {sources} fuentes. {links} enlaces llegaron a este número.",
+  g_read_sources: "Fuentes consultadas",
+  g_read_links: "Enlaces de este número",
   feeds: "Feeds",
   feeds_intro: "Sigue xmr.fan en tu lector de feeds o app de podcasts. Sin cuenta.",
   feed_news_desc: "Cada número nuevo del Times, en tu idioma.",
@@ -368,6 +376,10 @@ const es: BaseDict = {
 };
 
 const ru: BaseDict = {
+  g_read_t: "Что мы прочитали за неделю",
+  g_read_summary: "Материалов: {items}, источников: {sources}. В выпуск попало ссылок: {links}.",
+  g_read_sources: "Проверенные источники",
+  g_read_links: "Ссылки в выпуске",
   feeds: "Ленты",
   feeds_intro: "Следите за xmr.fan в RSS-ридере или приложении для подкастов. Без регистрации.",
   feed_news_desc: "Каждый новый выпуск Times на вашем языке.",
@@ -543,6 +555,10 @@ const ru: BaseDict = {
 };
 
 const fr: BaseDict = {
+  g_read_t: "Ce que nous avons lu cette semaine",
+  g_read_summary: "{items} éléments venant de {sources} sources. {links} liens figurent dans ce numéro.",
+  g_read_sources: "Sources consultées",
+  g_read_links: "Liens de ce numéro",
   feeds: "Flux",
   feeds_intro: "Suivez xmr.fan dans votre lecteur de flux ou votre appli de podcasts. Sans compte.",
   feed_news_desc: "Chaque nouveau numéro du Times, dans votre langue.",
@@ -718,6 +734,10 @@ const fr: BaseDict = {
 };
 
 const pt: BaseDict = {
+  g_read_t: "O que lemos nesta semana",
+  g_read_summary: "{items} itens de {sources} fontes. {links} links entraram nesta edição.",
+  g_read_sources: "Fontes consultadas",
+  g_read_links: "Links desta edição",
   feeds: "Feeds",
   feeds_intro: "Acompanhe o xmr.fan no seu leitor de feeds ou app de podcasts. Sem conta.",
   feed_news_desc: "Cada nova edição do Times, no seu idioma.",
@@ -893,6 +913,10 @@ const pt: BaseDict = {
 };
 
 const ja: BaseDict = {
+  g_read_t: "今週読んだもの",
+  g_read_summary: "{sources} の情報源から {items} 件。この号には {links} 件のリンクを掲載しています。",
+  g_read_sources: "確認した情報源",
+  g_read_links: "この号のリンク",
   feeds: "フィード",
   feeds_intro: "フィードリーダーやポッドキャストアプリで xmr.fan をフォロー。アカウント不要です。",
   feed_news_desc: "Times の新しい号をあなたの言語で。",

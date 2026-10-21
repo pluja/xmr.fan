@@ -299,7 +299,85 @@
   "generated": {
     "model": "anthropic/claude-sonnet-5.5",
     "at": "2026-10-20T13:15:37.331Z",
-    "items": 152
+    "items": 152,
+    "sources": [
+      {
+        "name": "github.com/monero-project/monero",
+        "count": 42
+      },
+      {
+        "name": "x.com/GrapheneOS",
+        "count": 29
+      },
+      {
+        "name": "monero.observer",
+        "count": 20
+      },
+      {
+        "name": "reddit.com/r/GrapheneOS",
+        "count": 15
+      },
+      {
+        "name": "404media.co",
+        "count": 10
+      },
+      {
+        "name": "eff.org",
+        "count": 7
+      },
+      {
+        "name": "grapheneos.social",
+        "count": 5
+      },
+      {
+        "name": "blog.torproject.org",
+        "count": 4
+      },
+      {
+        "name": "github.com/monero-project/meta",
+        "count": 3
+      },
+      {
+        "name": "reddit.com/r/privacy",
+        "count": 3
+      },
+      {
+        "name": "x.com/dyana1908",
+        "count": 3
+      },
+      {
+        "name": "CCS proposals",
+        "count": 2
+      },
+      {
+        "name": "getmonero.org",
+        "count": 2
+      },
+      {
+        "name": "reddit.com/r/Monero",
+        "count": 2
+      },
+      {
+        "name": "github.com/monero-project/monero-gui",
+        "count": 1
+      },
+      {
+        "name": "grapheneos.org",
+        "count": 1
+      },
+      {
+        "name": "x.com/Jonathan__offic",
+        "count": 1
+      },
+      {
+        "name": "x.com/cakewallet",
+        "count": 1
+      },
+      {
+        "name": "x.com/schmidt1024",
+        "count": 1
+      }
+    ]
   },
   "translations": {
     "es": {

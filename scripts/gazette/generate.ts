@@ -16,7 +16,7 @@ import { llmConfigFromEnv } from "./llm.ts";
 import { dropCovered, formatMemory, pastIssues } from "./memory.ts";
 import { marketWeek } from "./market.ts";
 import { networkStats } from "./network.ts";
-import { collectSources, type SourceItem } from "./sources.ts";
+import { collectSources, sourceCounts, type SourceItem } from "./sources.ts";
 import { lastFullWeek, weekStarting } from "./week.ts";
 
 const EDITIONS_DIR = "src/data/gazette";
@@ -110,7 +110,7 @@ const edition = editionSchema.parse({
   ...editorial,
   network,
   market: market && { ...market, analysis: price },
-  generated: { model: llm.model, at: new Date().toISOString(), items: items.length },
+  generated: { model: llm.model, at: new Date().toISOString(), items: items.length, sources: sourceCounts(items) },
 });
 writeFileSync(outFile, JSON.stringify(edition, null, 2) + "\n");
 

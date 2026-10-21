@@ -90,6 +90,7 @@ A weekly issue every Monday, covering the previous week (Monday to Sunday, UTC).
 3. **AI, in three steps:** triage scores every item; the editorial writes the lead, a feature, quotes checked word for word, and the news; a short price note cites its sources. The model cites items by id and links come from the sources, so it can't invent URLs.
 4. **Art and audio (optional):** pixel-art headline image (`scripts/gazette/art.ts`), and a two-host podcast voiced with text-to-speech and joined with ffmpeg.
 5. **Review:** everything is a draft until a person approves it. Drafts show only in `npm run dev`.
+6. **Transparency:** each issue records how many items every source had that week, and its page ends with a "What we read this week" list of the sources checked and every link cited.
 
 ```sh
 npm run gazette                          # draft for the last complete week

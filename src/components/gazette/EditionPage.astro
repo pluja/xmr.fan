@@ -14,6 +14,7 @@ import NetworkStats from "./NetworkStats.astro";
 import Overheard from "./Overheard.astro";
 import PodcastPlayer from "./PodcastPlayer.astro";
 import SourceLink from "./SourceLink.astro";
+import IssueSources from "./IssueSources.astro";
 import StoryItem from "./StoryItem.astro";
 import { localePath, useTranslations, type Locale } from "../../i18n/ui";
 import { formatDate, visibleEditions, editionPath, localize, sponsorsFor, type SectionKey } from "../../lib/gazette";
@@ -176,6 +177,7 @@ const jsonLd = d && [
       <PixelIcon name="paper" size={18} class="mt-0.5 shrink-0 text-ink" />
       <span><b class="font-pixel font-normal text-ink">{t("g_how_t")}.</b> {t("g_how")}</span>
     </p>
+    <IssueSources lang={lang} data={edition.data} />
   </Container>
 </Base>
 )}

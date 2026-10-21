@@ -1,0 +1,42 @@
+---
+import Disclosure from "../Disclosure.astro";
+import { useTranslations, type Locale } from "../../i18n/ui";
+import type { Edition } from "../../lib/gazette";
+import { linkLabel, linksBySite } from "../../lib/gazette-links";
+
+interface Props { lang: Locale; data: Edition["data"] }
+const { lang, data } = Astro.props;
+const t = useTranslations(lang);
+const sources = data.generated?.sources ?? [];
+const sites = linksBySite(data);
+const linkCount = sites.reduce((n, s) => n + s.links.length, 0);
+const num = new Intl.NumberFormat(lang);
+---
+{(sources.length > 0 || sites.length > 0) && (
+  <Disclosure title={t("g_read_t")} class="mt-4 max-w-[80ch] text-sm">
+    {data.generated && <p>{t("g_read_summary", { items: num.format(data.generated.items), sources: sources.length, links: linkCount })}</p>}
+    {sources.length > 0 && (
+      <div class="grid gap-1.5">
+        <h3 class="font-pixel">{t("g_read_sources")}</h3>
+        <ul class="flex flex-wrap gap-1.5">
+          {sources.map((s) => <li class="border border-graphite/50 px-1.5 py-0.5 font-mono text-xs [overflow-wrap:anywhere]">{s.name} <span class="text-graphite">{s.count}</span></li>)}
+        </ul>
+      </div>
+    )}
+    {sites.length > 0 && (
+      <div class="grid gap-1.5">
+        <h3 class="font-pixel">{t("g_read_links")}</h3>
+        <dl class="grid gap-x-4 gap-y-1 sm:grid-cols-[minmax(0,180px)_1fr]">
+          {sites.map((s) => (
+            <>
+              <dt class="font-mono text-xs leading-5 text-graphite">{s.site}</dt>
+              <dd class="flex flex-wrap gap-x-3 gap-y-0.5 text-xs leading-5">
+                {s.links.map((l) => <a class="text-ink [overflow-wrap:anywhere]" href={l.url} title={l.url} rel="noopener noreferrer">{linkLabel(l.url)}</a>)}
+              </dd>
+            </>
+          ))}
+        </dl>
+      </div>
+    )}
+  </Disclosure>
+)}

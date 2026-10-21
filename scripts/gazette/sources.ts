@@ -287,3 +287,10 @@ export async function collectSources(w: Week): Promise<Collected> {
   });
   return { items, report };
 }
+
+/** Items per source, most first, for the issue's "What we read" list. */
+export function sourceCounts(items: SourceItem[]): { name: string; count: number }[] {
+  const counts = new Map<string, number>();
+  for (const i of items) counts.set(i.source, (counts.get(i.source) ?? 0) + 1);
+  return [...counts].map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+}
