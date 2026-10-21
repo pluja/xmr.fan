@@ -1,0 +1,124 @@
+---
+import CopyButton from "../CopyButton.astro";
+import Field from "../Field.astro";
+import NodeSource from "../live/NodeSource.astro";
+import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
+import { SAFETY_DAYS } from "../../lib/heights";
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const strings = pickStrings(lang, ["h_note", "h_exact", "h_estimate", "h_mined", "h_future", "h_tip", "h_bad_height", "dur_s", "dur_min", "dur_h", "dur_d", "dur_y"]);
+const today = new Date().toISOString().slice(0, 10);
+---
+<div id="height-tool" class="grid gap-9" data-strings={strings} data-lang={lang} data-safety={SAFETY_DAYS}>
+  <section class="grid gap-4">
+    <Field label={t("h_created")}>
+      <input name="date" type="date" min="2014-04-18" max={today} value={today} class="field w-auto max-w-56 font-mono" />
+    </Field>
+    <div class="grid gap-2 border-2 border-ink bg-paper p-4 shadow-[4px_4px_0_var(--color-ink)]">
+      <h2 class="text-sm font-semibold">{t("h_restore")}</h2>
+      <div class="flex flex-wrap items-center gap-4">
+        <output id="restore-height" class="font-pixel text-[clamp(32px,6vw,48px)] leading-none text-flame">…</output>
+        <CopyButton lang={lang} from="#restore-height" label={t("h_copy")} class="btn-ghost" />
+      </div>
+      <p data-note class="max-w-[64ch] text-sm text-graphite"></p>
+      <p data-exact class="text-sm"></p>
+    </div>
+  </section>
+
+  <section class="grid gap-3">
+    <h2 class="font-pixel text-lg">{t("h_block_t")}</h2>
+    <Field label={t("h_block")} messageId="block-message">
+      <input name="block" inputmode="numeric" placeholder="3000000" autocomplete="off" class="field w-auto max-w-56 font-mono" aria-describedby="block-message" />
+    </Field>
+    <p data-block-result class="text-[15px] empty:hidden"></p>
+  </section>
+
+  <p data-tip class="text-sm text-graphite empty:hidden"></p>
+  <NodeSource lang={lang} />
+</div>
+
+<script>
+  import { liveTask } from "../live/live";
+  import { readStrings } from "../../i18n/format";
+  import type { Locale } from "../../i18n/ui";
+  import samples from "../../data/heights.json";
+  import { heightAt, restoreHeight, timeAt, type Sample } from "../../lib/heights";
+  import { getBlockHeader, getInfo } from "../../lib/node-client";
+  import { formatDuration } from "../../lib/duration";
+  import { BLOCK_SECONDS } from "../../lib/nodes";
+
+  const root = document.getElementById("height-tool")!;
+  const t = readStrings(root);
+  const lang = root.dataset.lang as Locale;
+  const table: Sample[] = samples;
+  const $ = <T extends HTMLElement = HTMLElement>(s: string) => root.querySelector<T>(s)!;
+  const dateInput = $<HTMLInputElement>("input[name=date]"), blockInput = $<HTMLInputElement>("input[name=block]");
+  const num = new Intl.NumberFormat(lang);
+  const longDate = new Intl.DateTimeFormat(lang, { dateStyle: "long" });
+  const dateTime = new Intl.DateTimeFormat(lang, { dateStyle: "long", timeStyle: "short" });
+
+  let tip: number | undefined;
+
+  /** Walks the estimate to the first block mined at or after `time`, reading timestamps from the node. */
+  async function firstBlockAfter(time: number, guess: number): Promise<number> {
+    let h = Math.min(guess, tip! - 1);
+    for (let i = 0; i < 8; i++) {
+      const { timestamp } = await getBlockHeader(h);
+      const step = Math.round((time - timestamp) / BLOCK_SECONDS);
+      if (step === 0) break;
+      h = Math.max(1, Math.min(tip! - 1, h + step));
+    }
+    return h;
+  }
+
+  let dateRun = 0;
+  async function renderDate() {
+    const run = ++dateRun;
+    const time = Date.parse(`${dateInput.value}T00:00:00Z`) / 1000;
+    if (!Number.isFinite(time)) return;
+    const guess = heightAt(time, table);
+    const show = (exact: number, isEstimate: boolean) => {
+      if (run !== dateRun) return;
+      $("#restore-height").textContent = String(restoreHeight(exact));
+      $("[data-note]").textContent = t("h_note", { days: root.dataset.safety!, date: longDate.format(time * 1000) });
+      $("[data-exact]").textContent = `${t("h_exact", { height: num.format(exact) })}${isEstimate ? ` ${t("h_estimate")}` : ""}`;
+    };
+    show(guess, true);
+    if (tip) show(await firstBlockAfter(time, guess), false);
+  }
+
+  let blockRun = 0;
+  async function renderBlock() {
+    const run = ++blockRun;
+    const out = $("[data-block-result]"), message = $("#block-message");
+    const raw = blockInput.value.trim().replace(/[\s,.]/g, "");
+    const valid = /^\d+$/.test(raw);
+    blockInput.setAttribute("aria-invalid", String(!!raw && !valid));
+    message.textContent = raw && !valid ? t("h_bad_height") : "";
+    if (!valid) { out.textContent = ""; return; }
+    const height = Number(raw);
+    const now = Date.now() / 1000;
+    if (tip !== undefined && height < tip) {
+      out.textContent = t("h_mined", { date: dateTime.format(timeAt(height, table) * 1000) });
+      const { timestamp } = await getBlockHeader(height);
+      if (run === blockRun) out.textContent = t("h_mined", { date: dateTime.format(timestamp * 1000) });
+      return;
+    }
+    const at = tip !== undefined ? now + (height - tip) * BLOCK_SECONDS : timeAt(height, table);
+    out.textContent = at <= now
+      ? t("h_mined", { date: dateTime.format(at * 1000) })
+      : t("h_future", { date: dateTime.format(at * 1000), when: formatDuration(at - now, t, lang) });
+  }
+
+  dateInput.addEventListener("input", renderDate);
+  blockInput.addEventListener("input", renderBlock);
+  renderDate();
+
+  liveTask(async () => {
+    tip = (await getInfo()).height;
+    $("[data-tip]").textContent = t("h_tip", { height: num.format(tip) });
+    await Promise.all([renderDate(), renderBlock()]);
+  });
+</script>
