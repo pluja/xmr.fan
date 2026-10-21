@@ -12,7 +12,7 @@ const t = useTranslations(lang);
 const list = data as Donation[];
 const descriptions = Object.fromEntries(list.map((d) => [d.id, d.description[lang]]));
 const categories = Object.fromEntries(DONATION_CATEGORIES.map((c) => [c, t(`dn_cat_${c}`)]));
-const strings = pickStrings(lang, ["dn_source", "qr_alt"]);
+const strings = pickStrings(lang, ["dn_source", "qr_alt", "dn_tx_desc"]);
 const site = (url: string) => new URL(url).hostname.replace(/^www\./, "");
 const chip = "cursor-pointer border-2 border-ink px-2.5 py-1 font-pixel text-sm has-[:checked]:bg-ink has-[:checked]:text-orange";
 ---
@@ -30,7 +30,7 @@ const chip = "cursor-pointer border-2 border-ink px-2.5 py-1 font-pixel text-sm 
       <PixelIcon name="heart" size={16} class="text-orange" />
       <span data-category class="border border-orange px-1.5 font-pixel text-xs uppercase leading-5 text-orange"></span>
     </div>
-    <div class="grid gap-5 bg-paper p-4 sm:grid-cols-[minmax(0,1fr)_170px] sm:p-5">
+    <div class="grid items-start gap-5 bg-paper p-4 sm:grid-cols-[minmax(0,1fr)_240px] sm:p-5">
       <div class="grid content-start gap-3">
         <h2 data-name class="font-pixel text-[clamp(24px,4vw,34px)] leading-tight"></h2>
         <p data-desc class="text-[15px] text-graphite"></p>
@@ -41,7 +41,7 @@ const chip = "cursor-pointer border-2 border-ink px-2.5 py-1 font-pixel text-sm 
         </div>
         <p class="text-xs text-graphite"><a data-source class="text-ink" rel="noopener noreferrer"></a></p>
       </div>
-      <div data-qr class="max-w-[170px] border-2 border-ink bg-paper"></div>
+      <div data-qr class="aspect-square w-full max-w-[240px] justify-self-center"></div>
     </div>
   </section>
 
@@ -94,7 +94,7 @@ const chip = "cursor-pointer border-2 border-ink px-2.5 py-1 font-pixel text-sm 
       span.className = `mr-[0.45em] inline-block${i === 0 || i === all.length - 1 ? " font-bold text-flame" : ""}`;
       return span;
     }));
-    const uri = buildUri({ address: d.address, name: d.name });
+    const uri = buildUri({ address: d.address, name: d.name, description: t("dn_tx_desc", { name: d.name }) });
     $<HTMLAnchorElement>("[data-open]").href = uri;
     $("[data-qr]").innerHTML = qrSvg(drawQr(uri), t("qr_alt"));
     const source = $<HTMLAnchorElement>("[data-source]");

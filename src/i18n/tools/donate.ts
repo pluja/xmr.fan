@@ -2,6 +2,7 @@ import { defineStrings } from "../define.ts";
 
 export default defineStrings({
   en: {
+    dn_tx_desc: "Donation to {name}",
     t_donate: "Donation roulette", d_donate: "Support a random project that accepts Monero.",
     dn_spin: "Spin", dn_all: "All",
     dn_cat_monero: "Monero", dn_cat_privacy: "Privacy", dn_cat_software: "Free software", dn_cat_press: "Free press", dn_cat_knowledge: "Knowledge",
@@ -10,6 +11,7 @@ export default defineStrings({
     dn_note: "Each address is copied from the project's own page and checked again regularly. Before sending a large amount, confirm it on the source page.",
   },
   es: {
+    dn_tx_desc: "Donación a {name}",
     t_donate: "Ruleta de donaciones", d_donate: "Apoya un proyecto al azar que acepta Monero.",
     dn_spin: "Girar", dn_all: "Todos",
     dn_cat_monero: "Monero", dn_cat_privacy: "Privacidad", dn_cat_software: "Software libre", dn_cat_press: "Prensa libre", dn_cat_knowledge: "Conocimiento",
@@ -18,6 +20,7 @@ export default defineStrings({
     dn_note: "Cada dirección se copia de la página del propio proyecto y se vuelve a comprobar con regularidad. Antes de enviar una cantidad grande, confírmala en la página de origen.",
   },
   ru: {
+    dn_tx_desc: "Пожертвование для {name}",
     t_donate: "Рулетка пожертвований", d_donate: "Поддержите случайный проект, который принимает Monero.",
     dn_spin: "Крутить", dn_all: "Все",
     dn_cat_monero: "Monero", dn_cat_privacy: "Приватность", dn_cat_software: "Свободное ПО", dn_cat_press: "Свободная пресса", dn_cat_knowledge: "Знания",
@@ -26,6 +29,7 @@ export default defineStrings({
     dn_note: "Каждый адрес взят со страницы самого проекта и регулярно перепроверяется. Перед крупным переводом сверьте его на исходной странице.",
   },
   fr: {
+    dn_tx_desc: "Don à {name}",
     t_donate: "Roulette des dons", d_donate: "Soutenez un projet au hasard qui accepte le Monero.",
     dn_spin: "Lancer", dn_all: "Tous",
     dn_cat_monero: "Monero", dn_cat_privacy: "Vie privée", dn_cat_software: "Logiciel libre", dn_cat_press: "Presse libre", dn_cat_knowledge: "Savoir",
@@ -34,6 +38,7 @@ export default defineStrings({
     dn_note: "Chaque adresse est copiée depuis la page du projet lui-même et revérifiée régulièrement. Avant d'envoyer une grosse somme, confirmez-la sur la page source.",
   },
   pt: {
+    dn_tx_desc: "Doação para {name}",
     t_donate: "Roleta de doações", d_donate: "Apoie um projeto aleatório que aceita Monero.",
     dn_spin: "Girar", dn_all: "Todos",
     dn_cat_monero: "Monero", dn_cat_privacy: "Privacidade", dn_cat_software: "Software livre", dn_cat_press: "Imprensa livre", dn_cat_knowledge: "Conhecimento",
@@ -42,6 +47,7 @@ export default defineStrings({
     dn_note: "Cada endereço é copiado da página do próprio projeto e verificado de novo com frequência. Antes de enviar um valor alto, confirme na página de origem.",
   },
   ja: {
+    dn_tx_desc: "{name} への寄付",
     t_donate: "寄付ルーレット", d_donate: "Monero を受け付けるプロジェクトをランダムに支援。",
     dn_spin: "回す", dn_all: "すべて",
     dn_cat_monero: "Monero", dn_cat_privacy: "プライバシー", dn_cat_software: "自由ソフトウェア", dn_cat_press: "報道の自由", dn_cat_knowledge: "知識",
