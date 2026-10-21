@@ -1,0 +1,58 @@
+---
+/* Filled in the browser, from `card` when the server has it (?c=) or else from the
+   link's #c= part, which browsers never send to the server. */
+import PixelIcon from "../PixelIcon.astro";
+import TitleBar from "../TitleBar.astro";
+import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
+import type { CardModel } from "../../lib/card";
+
+interface Props {
+  lang: Locale;
+  card?: CardModel | null;
+  /** The server was given a code: if `card` is missing, the code was damaged. */
+  expected?: boolean;
+}
+const { lang, card, expected } = Astro.props;
+const t = useTranslations(lang);
+const strings = pickStrings(lang, ["card_title", "card_made", "copied", "card_copy_address", "qr_alt"]);
+---
+<div class="payment-card grid justify-items-center gap-4" data-card={card ? JSON.stringify(card) : undefined}>
+  <article data-body class="w-full max-w-[400px] border-2 border-ink shadow-[6px_6px_0_var(--color-ink)]" data-strings={strings} hidden>
+    <TitleBar icon="qr" tone="ink">{t("card_title")}</TitleBar>
+    <div class="grid gap-4 bg-cream p-5 text-ink">
+      <div class="grid gap-1 empty:hidden">
+        <p data-name class="font-pixel text-xl leading-tight [overflow-wrap:anywhere] empty:hidden"></p>
+        <p data-amount class="font-pixel text-3xl text-flame empty:hidden"></p>
+        <p data-desc class="text-[15px] leading-snug text-graphite [overflow-wrap:anywhere] empty:hidden"></p>
+      </div>
+      <div data-qr class="aspect-square border-2 border-ink bg-paper"></div>
+      <p data-address class="break-all font-mono text-[11px] leading-relaxed"></p>
+      <div class="grid gap-2">
+        <a data-open class="btn">{t("card_open")}</a>
+        <div class="grid grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-2">
+          <button data-copy type="button" class="btn btn-ghost px-2 text-[13px]"><PixelIcon name="copy" size={14} class="shrink-0" /><span>{t("card_copy_address")}</span></button>
+          <button data-download type="button" class="btn btn-ghost px-2 text-[13px]"><PixelIcon name="download" size={14} class="shrink-0" /><span>{t("card_download")}</span></button>
+        </div>
+      </div>
+      <p class="text-xs leading-snug text-graphite">{t("card_check")}</p>
+      <a href="https://xmr.fan/uri" target="_blank" rel="noopener" class="font-pixel text-xs text-ink">{t("card_made")}</a>
+    </div>
+  </article>
+  <p data-invalid class="border-2 border-danger bg-paper px-4 py-3 font-pixel text-danger" hidden={!(expected && !card)}>{t("card_invalid")}</p>
+</div>
+
+<script>
+  import { mountCard, cardFromLocation } from "./card-client";
+  import { codeFromHash } from "../../lib/card";
+
+  for (const el of document.querySelectorAll<HTMLElement>(".payment-card")) {
+    const card = el.dataset.card ? JSON.parse(el.dataset.card) : cardFromLocation();
+    if (card) mountCard(el.querySelector("[data-body]")!, card);
+    else if (codeFromHash(location.hash) !== null) el.querySelector<HTMLElement>("[data-invalid]")!.hidden = false;
+  }
+
+  // A new card pasted into the address bar only changes the #part: start over.
+  addEventListener("hashchange", (e) => {
+    if ([e.oldURL, e.newURL].some((u) => codeFromHash(new URL(u).hash) !== null)) location.reload();
+  });
+</script>
