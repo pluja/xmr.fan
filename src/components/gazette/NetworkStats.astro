@@ -1,0 +1,25 @@
+---
+import StatTile from "./StatTile.astro";
+import { useTranslations, type Locale } from "../../i18n/ui";
+import { formatNumber, type Edition } from "../../lib/gazette";
+
+interface Props { lang: Locale; network: NonNullable<Edition["data"]["network"]>; sample?: boolean }
+const { lang, network: n, sample } = Astro.props;
+const t = useTranslations(lang);
+
+const change = (now: number, before?: number) =>
+  before ? `${formatNumber((now - before) / before, lang, { style: "percent", maximumFractionDigits: 1, signDisplay: "exceptZero" })} ${t("n_vs_last")}` : undefined;
+const stats = [
+  { label: t("n_hash"), value: `${formatNumber(n.hash, lang)} GH/s`, note: change(n.hash, n.prev?.hash) },
+  { label: t("n_txs"), value: formatNumber(n.txs, lang), note: change(n.txs, n.prev?.txs) },
+  { label: t("n_fee"), value: `${formatNumber(n.fee, lang, { maximumSignificantDigits: 2 })} XMR`, note: change(n.fee, n.prev?.fee) },
+  { label: t("n_height"), value: formatNumber(n.height, lang) },
+];
+---
+<div class="mb-5 flex flex-wrap items-baseline justify-between gap-3">
+  <h2 class="font-pixel text-[22px] text-orange">{t("g_net")}</h2>
+  {sample && <span class="border border-line px-2 font-pixel text-xs text-ash">{t("sample_data")}</span>}
+</div>
+<dl class="grid grid-cols-2 gap-px border border-line bg-line [&>:last-child:nth-child(odd)]:col-span-2 md:[&>:last-child:nth-child(odd)]:col-span-1 md:grid-cols-4">
+  {stats.map((s) => <StatTile {...s} />)}
+</dl>

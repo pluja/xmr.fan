@@ -1,0 +1,112 @@
+---
+/* One point every 4 hours. Labels, end dot and crosshair are HTML rather than SVG so
+   they keep their shape at any width. */
+import { useTranslations, type Locale } from "../../i18n/ui";
+
+interface Props { lang: Locale; series: number[]; week: string; open: number; close: number }
+const { lang, series, week, open, close } = Astro.props;
+const t = useTranslations(lang);
+
+const STEP_HOURS = 4;
+const W = 700, H = 160;
+const lo = Math.min(...series), hi = Math.max(...series);
+const pad = (hi - lo) * 0.12 || 1;
+const yMin = lo - pad, yMax = hi + pad;
+const x = (i: number) => (i / (series.length - 1)) * W;
+const y = (v: number) => H - ((v - yMin) / (yMax - yMin)) * H;
+const pctX = (i: number) => (i / (series.length - 1)) * 100;
+const pctY = (v: number) => (y(v) / H) * 100;
+
+const line = series.map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)} ${y(v).toFixed(1)}`).join("");
+const area = `${line}L${W} ${H}L0 ${H}Z`;
+
+const usd = new Intl.NumberFormat(lang, { style: "currency", currency: "USD" });
+const start = new Date(`${week}T00:00:00Z`);
+const dayFmt = new Intl.DateTimeFormat(lang, { weekday: "short", timeZone: "UTC" });
+const dateFmt = new Intl.DateTimeFormat(lang, { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" });
+const perDay = 24 / STEP_HOURS;
+const days = Array.from({ length: Math.ceil(series.length / perDay) }, (_, d) => d * perDay).filter((i) => i < series.length);
+// A day's close is its last point.
+const daily = days.map((i) => {
+  const last = Math.min(i + perDay - 1, series.length - 1);
+  return { day: dateFmt.format(new Date(start.getTime() + i * STEP_HOURS * 3_600_000)), price: usd.format(series[last]) };
+});
+const gridlines = [hi, (hi + lo) / 2, lo];
+---
+<figure class="price-chart" data-series={JSON.stringify(series)} data-start={start.toISOString()} data-step={STEP_HOURS} data-lang={lang}>
+  <div class="relative pr-20">
+    <div
+      class="chart relative h-40 cursor-crosshair outline-offset-4 sm:h-48"
+      tabindex="0"
+      role="img"
+      aria-label={t("m_chart", { open: usd.format(open), close: usd.format(close) })}
+    >
+      {gridlines.map((v) => (
+        <>
+          <div class="absolute inset-x-0 h-px bg-line" style={`top:${pctY(v)}%`}></div>
+          <span class="absolute -right-20 w-[4.5rem] -translate-y-1/2 font-pixel text-xs text-ash" style={`top:${pctY(v)}%`}>{usd.format(v)}</span>
+        </>
+      ))}
+      <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" class="absolute inset-0 h-full w-full overflow-visible" aria-hidden="true">
+        <path d={area} fill="var(--color-orange)" fill-opacity="0.1" />
+        <path d={line} fill="none" stroke="var(--color-orange)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke" />
+      </svg>
+      <span class="end-dot absolute size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange ring-2 ring-ink" style={`left:${pctX(series.length - 1)}%;top:${pctY(series.at(-1)!)}%`}></span>
+      <div class="crosshair pointer-events-none absolute inset-y-0 hidden w-px bg-ash"></div>
+      <span class="hover-dot pointer-events-none absolute hidden size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange ring-2 ring-ink"></span>
+      <div class="tooltip pointer-events-none absolute top-0 z-10 hidden -translate-x-1/2 -translate-y-[calc(100%+8px)] whitespace-nowrap border border-line bg-ink-2 px-2.5 py-1.5 text-sm text-cream" role="status"></div>
+    </div>
+    <div class="relative mt-2 h-4" aria-hidden="true">
+      {days.map((i) => (
+        <span class="absolute font-pixel text-xs text-ash" style={`left:${pctX(i)}%`}>{dayFmt.format(new Date(start.getTime() + i * STEP_HOURS * 3_600_000))}</span>
+      ))}
+    </div>
+  </div>
+  <details class="mt-4 text-sm text-ash">
+    <summary class="cursor-pointer">{t("m_table")}</summary>
+    <table class="mt-2 border-collapse">
+      <thead><tr><th class="pr-6 text-left font-normal">{t("m_day")}</th><th class="text-right font-normal">{t("m_price")}</th></tr></thead>
+      <tbody>{daily.map((d) => <tr><td class="pr-6">{d.day}</td><td class="text-right font-pixel text-cream">{d.price}</td></tr>)}</tbody>
+    </table>
+  </details>
+</figure>
+
+<script>
+  for (const fig of document.querySelectorAll<HTMLElement>(".price-chart")) {
+    const series: number[] = JSON.parse(fig.dataset.series!);
+    const start = new Date(fig.dataset.start!).getTime();
+    const step = Number(fig.dataset.step) * 3_600_000;
+    const lang = fig.dataset.lang!;
+    const chart = fig.querySelector<HTMLElement>(".chart")!;
+    const cross = fig.querySelector<HTMLElement>(".crosshair")!;
+    const dot = fig.querySelector<HTMLElement>(".hover-dot")!;
+    const tip = fig.querySelector<HTMLElement>(".tooltip")!;
+    const usd = new Intl.NumberFormat(lang, { style: "currency", currency: "USD" });
+    const when = new Intl.DateTimeFormat(lang, { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "UTC" });
+    const lo = Math.min(...series), hi = Math.max(...series), pad = (hi - lo) * 0.12 || 1;
+    const top = (v: number) => (1 - (v - (lo - pad)) / (hi - lo + 2 * pad)) * 100;
+    let index = series.length - 1;
+
+    const show = (i: number) => {
+      index = Math.max(0, Math.min(series.length - 1, i));
+      const left = (index / (series.length - 1)) * 100;
+      for (const el of [cross, dot, tip]) el.classList.remove("hidden");
+      cross.style.left = dot.style.left = tip.style.left = `${left}%`;
+      dot.style.top = `${top(series[index])}%`;
+      tip.textContent = `${when.format(start + index * step)} UTC: ${usd.format(series[index])}`;
+    };
+    const hide = () => { for (const el of [cross, dot, tip]) el.classList.add("hidden"); };
+
+    chart.addEventListener("pointermove", (e) => {
+      const r = chart.getBoundingClientRect();
+      show(Math.round(((e.clientX - r.left) / r.width) * (series.length - 1)));
+    });
+    chart.addEventListener("pointerleave", hide);
+    chart.addEventListener("focus", () => show(index));
+    chart.addEventListener("blur", hide);
+    chart.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") { show(index - 1); e.preventDefault(); }
+      if (e.key === "ArrowRight") { show(index + 1); e.preventDefault(); }
+    });
+  }
+</script>

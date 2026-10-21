@@ -1,0 +1,12 @@
+---
+import EditionPage from "../../../components/gazette/EditionPage.astro";
+import { langFromParams, localeParams } from "../../../i18n/ui";
+import { visibleEditions } from "../../../lib/gazette";
+
+// Every edition except the latest, which is served at /news.
+export async function getStaticPaths() {
+  const [, ...older] = await visibleEditions();
+  return localeParams().flatMap(({ lang }) => older.map((e) => ({ params: { lang, edition: e.id } })));
+}
+---
+<EditionPage lang={langFromParams(Astro.params)} editionId={Astro.params.edition} />

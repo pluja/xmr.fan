@@ -1,0 +1,26 @@
+---
+/* One link per label shows the label; several (e.g. three pull requests in one
+   repository) show "label 1 2 3". */
+import { useTranslations, type Locale } from "../../i18n/ui";
+
+interface Source { src: string; url: string }
+interface Props { lang: Locale; story: Source & { more?: Source[] }; tone?: "light" | "dark" }
+const { lang, story, tone = "light" } = Astro.props;
+const t = useTranslations(lang);
+
+const groups = new Map<string, string[]>();
+for (const s of [{ src: story.src, url: story.url }, ...(story.more ?? [])]) {
+  groups.set(s.src, [...(groups.get(s.src) ?? []), s.url]);
+}
+const link = tone === "dark" ? "text-cream" : "text-ink";
+---
+<p class:list={["text-sm", tone === "dark" ? "text-ash" : "text-graphite"]}>
+  {t("g_read")}:{" "}
+  {[...groups].map(([src, urls], gi) => (
+    <>{gi > 0 && ", "}{urls.length === 1 ? (
+      <a class={link} href={urls[0]} rel="noopener noreferrer">{src}</a>
+    ) : (
+      <span>{src}{urls.map((url, i) => <> <a class={`${link} font-pixel`} href={url} rel="noopener noreferrer" aria-label={`${src} (${i + 1})`}>{i + 1}</a></>)}</span>
+    )}</>
+  ))}
+</p>

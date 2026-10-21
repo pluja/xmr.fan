@@ -1,0 +1,1108 @@
+{
+  "recap": "A quiet-but-tidy week: Monero shipped point release 0.18.5.4, a small bug-fix update that mainly repairs DNSSEC checks in the daemon, while developers kept polishing wallet-privacy code. Funding proposals for Rust library work and a full-time developer appeared, and a ShopInBit customer-data leak raised questions about what a merchant promised versus what it did. Outside Monero, the news was about ad-based spyware, license-plate readers and encryption tooling.",
+  "lead": {
+    "src": "github.com/monero-project/monero",
+    "url": "https://github.com/monero-project/monero/releases/tag/v0.18.5.4",
+    "h": "Monero 0.18.5.4 'Fluorine Fermi' fixes DNSSEC checks",
+    "p": "A small point release fixes DNSSEC validation in the daemon, which affects how it verifies checkpoints, blocklists and update checks. The GUI wallet also gets a fix for reopening testnet and stagenet wallets. If you run a node, an upgrade is worth your time.",
+    "more": [
+      {
+        "src": "github.com/monero-project/monero-gui",
+        "url": "https://github.com/monero-project/monero-gui/releases/tag/v0.18.5.4"
+      }
+    ]
+  },
+  "art": {
+    "file": "/news-art/2026-10-12.webp",
+    "alt": "Pixel-art padlock and wrench on a table, suggesting a security fix.",
+    "prompt": "A chunky orange padlock with a small wrench resting beside it on a table."
+  },
+  "feature": {
+    "src": "monero.observer",
+    "url": "https://monero.observer/cowaware7731/",
+    "h": "A shop that promised offline invoices, and the leak that followed",
+    "dek": "ShopInBit customers learn their invoice data was stolen in a hack of a Polish e-invoicing platform.",
+    "body": [
+      "ShopInBit, the concierge service many Monero users know for buying things with crypto, has been emailing customers about a data leak. According to a Reddit post relayed by Monero Observer, the company had said it kept invoices offline. It turns out that since October 2025 the invoices were being uploaded to the Polish e-invoicing system instead.",
+      "That platform was hacked, and customer data and invoices were copied. The poster describes it as one of the biggest hacks in Poland. We only know what that post says, so details on exactly what was exposed are still thin.",
+      "The lesson is an old one with a fresh example. The weak link is often not the coin but the paperwork around it, and a merchant's promise about how data is handled is only as good as the systems it touches. If you shop with Monero, it is worth asking where your order details end up, not just how you pay."
+    ]
+  },
+  "upcoming": [
+    {
+      "src": "monero.observer",
+      "url": "https://monero.observer/monero-tech-meeting-19-october-2026/",
+      "date": "2026-10-19",
+      "time": "18:00 UTC",
+      "what": "Monero Tech meeting on Seraphis/JAMTIS, FCMPs and other long-term development."
+    },
+    {
+      "src": "monero.observer",
+      "url": "https://monero.observer/cuprate-meeting-scheduled-20-october-2026/",
+      "date": "2026-10-20",
+      "time": "18:00 UTC",
+      "what": "Cuprate meeting, the alternative Monero node implementation."
+    },
+    {
+      "src": "monero.observer",
+      "url": "https://monero.observer/monero-research-lab-meeting-21-october-2026/",
+      "date": "2026-10-21",
+      "time": "17:00 UTC",
+      "what": "Monero Research Lab meeting, with FCMP++ status and the FCMP beta stressnet on the agenda."
+    },
+    {
+      "src": "monero.observer",
+      "url": "https://monero.observer/monero-community-workgroup-meeting-31-october-2026/",
+      "date": "2026-10-31",
+      "time": "16:00 UTC",
+      "what": "Community Workgroup meeting on community highlights, CCS updates and workgroup reports."
+    }
+  ],
+  "sections": {
+    "dev": [
+      {
+        "src": "github.com/monero-project/monero",
+        "url": "https://github.com/monero-project/monero/pull/11459",
+        "h": "Wallet fix stops rings from leaking a real output",
+        "p": "A change to wallet ring reuse addresses a case where rebuilding a transaction with a new input gave other inputs fresh rings. Two different rings for the same key image would reveal its real output. Now each input that has a stored ring reuses it."
+      },
+      {
+        "src": "github.com/monero-project/monero",
+        "url": "https://github.com/monero-project/monero/pull/11417",
+        "h": "Seed nodes get stricter about DNSSEC",
+        "p": "The peer-to-peer code now acts on DNSSEC validation for seed node lookups. If validation fails, it logs a warning with the rejected addresses and discards the results."
+      },
+      {
+        "src": "github.com/monero-project/monero",
+        "url": "https://github.com/monero-project/monero/pull/11542",
+        "h": "New DNSSEC trust anchor and a simplewallet seed flag",
+        "p": "A new DNSSEC trust anchor was added to the DNS utilities. Separately, simplewallet gains a --seed option while --electrum-seed is deprecated.",
+        "more": [
+          {
+            "src": "github.com/monero-project/monero",
+            "url": "https://github.com/monero-project/monero/pull/11524"
+          }
+        ]
+      },
+      {
+        "src": "monero.observer",
+        "url": "https://monero.observer/woodser-releases-monero-java-v0.8.63-monero-cpp-v0.9.10/",
+        "h": "monero-java and monero-cpp libraries updated",
+        "p": "woodser released monero-java v0.8.63 and monero-cpp v0.9.10. The Java library now throws an error on malformed base58 addresses, and the C++ one updates to Monero v0.18.5.3 and can disable TLS certificate verification."
+      }
+    ],
+    "eco": [
+      {
+        "src": "monero.observer",
+        "url": "https://monero.observer/haveno-v1.11.0-released-security-updates-fixes-ui-improvements/",
+        "h": "Haveno 1.11.0 brings Tor and library security updates",
+        "p": "The decentralized exchange Haveno updated Tor to v0.4.9.14 with high-severity fixes, and updated Jackson and Logback. It also fixes arbitrators dropping simultaneous offer signing requests from the same maker, and allows IPv6 Monero nodes without Tor."
+      },
+      {
+        "src": "monero.observer",
+        "url": "https://monero.observer/silverpill-ccs-proposal-monero-rs-to-monero-oxide-migration/",
+        "h": "CCS proposal to move monero-rs packages to monero-oxide",
+        "p": "silverpill submitted a first CCS proposal to migrate monero-rs packages to monero-oxide within about a month, asking 2.96 XMR. The goal is to end the split in the Rust ecosystem and give users of monero-rs a better maintained library.",
+        "more": [
+          {
+            "src": "CCS proposals",
+            "url": "https://repo.getmonero.org/monero-project/ccs-proposals/-/merge_requests/708"
+          }
+        ]
+      },
+      {
+        "src": "CCS proposals",
+        "url": "https://repo.getmonero.org/monero-project/ccs-proposals/-/merge_requests/707",
+        "h": "jpk68 seeks funding for three more months of full-time work",
+        "p": "A second CCS proposal for jpk68's full-time work, covering three months, was listed this week."
+      },
+      {
+        "src": "monero.observer",
+        "url": "https://monero.observer/90ssolo/",
+        "h": "New tools: a browser wallet, a self-hosted payment gateway and a DIY cold wallet",
+        "p": "Three community projects asked for feedback: Monkstash, a wallet that runs in the browser; monero-pay, a self-hosted gateway that keeps wallet-rpc and keys on a separate intranet; and ColdPunk, firmware turning an ESP32-S3 board into a hardware wallet. As always, inspect code before trusting it with funds.",
+        "more": [
+          {
+            "src": "monero.observer",
+            "url": "https://monero.observer/love-life-wo/"
+          },
+          {
+            "src": "monero.observer",
+            "url": "https://monero.observer/decolorizedxmr/"
+          }
+        ]
+      },
+      {
+        "src": "monero.observer",
+        "url": "https://monero.observer/torisim/",
+        "h": "ToriSIM takes its first XMR payment; Cake Wallet 6.5.0 pre-release",
+        "p": "Privacy-focused eSIM provider ToriSIM says its first customer paid in XMR, using its own BTCPay Server and Monero node. Cake Wallet 6.5.0 is out as a pre-release, adding Bitcoin accounts, more Tor nodes and an updated Monero core. Separately, the monostr app reached F-Droid, letting people tip on Nostr with Monero, with no Lightning and no custodian involved.",
+        "more": [
+          {
+            "src": "monero.observer",
+            "url": "https://monero.observer/cake-wallet-monero.com-v6.5.0-adds-support-robinhood-chain/"
+          },
+          {
+            "src": "x.com/schmidt1024",
+            "url": "https://x.com/schmidt1024/status/2111396590464209281"
+          }
+        ]
+      }
+    ],
+    "comm": [],
+    "privacy": [
+      {
+        "src": "404media.co",
+        "url": "https://www.404media.co/chatgpt-ads-target-your-phone-number-email/",
+        "h": "Ads as a surveillance channel",
+        "p": "Reporting this week says spyware companies are delivering malware through ad networks, and one Israeli firm is accused of using online ads to spy on people. 404 Media also notes ChatGPT ad targeting can use phone numbers and emails.",
+        "more": [
+          {
+            "src": "reddit.com/r/privacy",
+            "url": "https://www.reddit.com/r/privacy/comments/1x74yly/researchers_say_an_israeli_firm_used_online_ads/"
+          }
+        ]
+      },
+      {
+        "src": "eff.org",
+        "url": "https://www.eff.org/deeplinks/2026/10/were-asking-wisconsin-supreme-court-end-warrantless-alpr-searches",
+        "h": "License-plate readers keep landing in court",
+        "p": "EFF asked the Wisconsin Supreme Court to require warrants for searches of license-plate databases in four cities. In California, a court dismissed EFF's San Jose case, which EFF says is wrong on the law and will appeal. 404 Media's podcast notes a judge ruled a Flock search unconstitutional.",
+        "more": [
+          {
+            "src": "eff.org",
+            "url": "https://www.eff.org/deeplinks/2026/10/federal-court-rules-alprs-are-mass-surveillance-eff-gets-disappointing-ruling"
+          },
+          {
+            "src": "404media.co",
+            "url": "https://www.404media.co/podcast-cops-can-use-ai-to-pinpoint-your-home-with-just-one-photo/"
+          }
+        ]
+      },
+      {
+        "src": "eff.org",
+        "url": "https://www.eff.org/deeplinks/2026/10/dhs-inspector-general-finds-tsa-not-properly-safeguarding-passenger-facial",
+        "h": "TSA facial recognition data not properly safeguarded",
+        "p": "A summary from the DHS Inspector General found a 'significant weakness' in how the TSA's facial recognition technology protects passenger data. The detailed findings are classified."
+      },
+      {
+        "src": "404media.co",
+        "url": "https://www.404media.co/heres-what-telegram-giving-data-to-the-u-s-government-looks-like/",
+        "h": "Telegram handed user data to U.S. authorities",
+        "p": "Newly filed court records include a letter showing Telegram sharing user data after a court order."
+      },
+      {
+        "src": "blog.torproject.org",
+        "url": "https://blog.torproject.org/new-release-tor-browser-15025/",
+        "h": "Tor Browser, Tails and GrapheneOS ship updates",
+        "p": "Tor Browser 15.0.25 and Tails 7.15 bring Tor 0.4.9.14 and Firefox security fixes. GrapheneOS released version 2026101600.",
+        "more": [
+          {
+            "src": "blog.torproject.org",
+            "url": "https://blog.torproject.org/new-release-tails-7_15/"
+          },
+          {
+            "src": "grapheneos.org",
+            "url": "https://grapheneos.org/releases#2026101600"
+          }
+        ]
+      }
+    ]
+  },
+  "no": 1,
+  "week": "2026-10-12",
+  "draft": true,
+  "sample": false,
+  "network": {
+    "hash": 6.04,
+    "fee": 0.000251,
+    "txs": 28494,
+    "height": 3788226,
+    "prev": {
+      "hash": 6.39,
+      "fee": 0.000245,
+      "txs": 27574
+    },
+    "history": []
+  },
+  "market": {
+    "open": 537.33,
+    "close": 593.19,
+    "high": 605.64,
+    "low": 522.33,
+    "change": 10.4,
+    "volume": 114163350,
+    "volumeChange": -2.8,
+    "mcap": 11163548608,
+    "btcChange": -2.4,
+    "series": [
+      533.64,
+      535.7,
+      531.24,
+      530.33,
+      531.1,
+      533.6,
+      531.91,
+      539.43,
+      533.98,
+      530.21,
+      533.92,
+      545.51,
+      552.52,
+      549.69,
+      552.36,
+      552.51,
+      548.88,
+      553.77,
+      543.59,
+      536.11,
+      535.96,
+      537.18,
+      543.81,
+      545.8,
+      562.21,
+      559.27,
+      561.2,
+      555.21,
+      552.52,
+      558.59,
+      557.5,
+      558.46,
+      553.57,
+      548.71,
+      559.68,
+      565.9,
+      599.56,
+      583.29,
+      583.84,
+      588.61,
+      590.13,
+      593.19
+    ],
+    "month": {
+      "change": 5,
+      "high": 614.8,
+      "low": 515.23
+    },
+    "analysis": {
+      "summary": "Most of the gain came on Sunday, when XMR rose 4.8% in a single day after a gradual climb earlier in the week. The close sits just below the 30-day high of 614.8 and well above the 30-day low of 515.23.",
+      "drivers": [
+        {
+          "src": "x.com/Jonathan__offic",
+          "url": "https://x.com/Jonathan__offic/status/2111768317170008384",
+          "text": "According to @Jonathan__offic, XMR was up about 6% over 24 hours on 18 Oct while the wider crypto market stayed flat, with 24h volume reported up 91% on the prior day."
+        }
+      ],
+      "watch": []
+    }
+  },
+  "generated": {
+    "model": "anthropic/claude-sonnet-5.5",
+    "at": "2026-10-20T13:15:37.331Z",
+    "items": 152
+  },
+  "translations": {
+    "es": {
+      "recap": "Una semana tranquila pero ordenada: Monero publicó la versión puntual 0.18.5.4, una pequeña actualización de correcciones que repara sobre todo las comprobaciones DNSSEC del daemon, mientras los desarrolladores siguieron puliendo el código de privacidad de la cartera. Aparecieron propuestas de financiación para trabajo en bibliotecas Rust y para un desarrollador a tiempo completo, y una filtración de datos de clientes de ShopInBit planteó dudas sobre lo que un comercio prometió frente a lo que hizo. Fuera de Monero, las noticias giraron en torno al spyware basado en anuncios, los lectores de matrículas y las herramientas de cifrado.",
+      "lead": {
+        "h": "Monero 0.18.5.4 'Fluorine Fermi' corrige las comprobaciones DNSSEC",
+        "p": "Una pequeña versión puntual arregla la validación DNSSEC en el daemon, lo que afecta a cómo verifica los puntos de control, las listas de bloqueo y las comprobaciones de actualización. La cartera GUI también recibe una corrección para reabrir carteras de testnet y stagenet. Si ejecutas un nodo, merece la pena actualizar."
+      },
+      "art": {
+        "alt": "Un candado y una llave inglesa en pixel art sobre una mesa, que sugieren una corrección de seguridad."
+      },
+      "feature": {
+        "h": "Una tienda que prometió facturas sin conexión, y la filtración que vino después",
+        "dek": "Los clientes de ShopInBit descubren que los datos de sus facturas fueron robados en un ataque a una plataforma polaca de facturación electrónica.",
+        "body": [
+          "ShopInBit, el servicio de conserjería que muchos usuarios de Monero conocen para comprar cosas con cripto, ha estado enviando correos a sus clientes sobre una filtración de datos. Según una publicación de Reddit recogida por Monero Observer, la empresa había dicho que guardaba las facturas sin conexión. Resulta que, desde octubre de 2025, las facturas se estaban subiendo al sistema polaco de facturación electrónica.",
+          "Esa plataforma fue hackeada y se copiaron datos de clientes y facturas. Quien publica lo describe como uno de los mayores hackeos de Polonia. Solo sabemos lo que dice esa publicación, así que los detalles sobre qué quedó expuesto exactamente siguen siendo escasos.",
+          "La lección es vieja con un ejemplo nuevo. El eslabón débil a menudo no es la moneda, sino el papeleo que la rodea, y la promesa de un comercio sobre cómo trata los datos solo vale tanto como los sistemas que toca. Si compras con Monero, conviene preguntarse dónde acaban los detalles de tu pedido, y no solo cómo pagas."
+        ]
+      },
+      "upcoming": [
+        {
+          "what": "Reunión Monero Tech sobre Seraphis/JAMTIS, FCMPs y otro desarrollo a largo plazo."
+        },
+        {
+          "what": "Reunión de Cuprate, la implementación alternativa de nodo de Monero."
+        },
+        {
+          "what": "Reunión del Monero Research Lab, con el estado de FCMP++ y la stressnet beta de FCMP en la agenda."
+        },
+        {
+          "what": "Reunión del Community Workgroup sobre novedades de la comunidad, actualizaciones del CCS e informes de los grupos de trabajo."
+        }
+      ],
+      "sections": {
+        "dev": [
+          {
+            "h": "Una corrección en la cartera evita que los anillos revelen una salida real",
+            "p": "Un cambio en la reutilización de anillos de la cartera resuelve un caso en el que, al reconstruir una transacción con una nueva entrada, las demás entradas recibían anillos nuevos. Dos anillos distintos para la misma key image revelarían su salida real. Ahora cada entrada que tiene un anillo guardado lo reutiliza."
+          },
+          {
+            "h": "Los nodos semilla se vuelven más estrictos con DNSSEC",
+            "p": "El código peer-to-peer ahora actúa según la validación DNSSEC en las búsquedas de nodos semilla. Si la validación falla, registra una advertencia con las direcciones rechazadas y descarta los resultados."
+          },
+          {
+            "h": "Nuevo ancla de confianza DNSSEC y una opción de semilla en simplewallet",
+            "p": "Se añadió un nuevo ancla de confianza DNSSEC a las utilidades DNS. Por otro lado, simplewallet incorpora una opción --seed mientras que --electrum-seed queda obsoleta."
+          },
+          {
+            "h": "Actualizadas las bibliotecas monero-java y monero-cpp",
+            "p": "woodser publicó monero-java v0.8.63 y monero-cpp v0.9.10. La biblioteca de Java ahora lanza un error con direcciones base58 mal formadas, y la de C++ se actualiza a Monero v0.18.5.3 y permite desactivar la verificación de certificados TLS."
+          }
+        ],
+        "eco": [
+          {
+            "h": "Haveno 1.11.0 trae actualizaciones de seguridad de Tor y de bibliotecas",
+            "p": "El exchange descentralizado Haveno actualizó Tor a v0.4.9.14 con correcciones de gravedad alta, y actualizó Jackson y Logback. También corrige que los árbitros descartaran solicitudes simultáneas de firma de ofertas del mismo maker, y permite nodos de Monero IPv6 sin Tor."
+          },
+          {
+            "h": "Propuesta CCS para pasar los paquetes de monero-rs a monero-oxide",
+            "p": "silverpill presentó una primera propuesta CCS para migrar los paquetes de monero-rs a monero-oxide en aproximadamente un mes, y pide 2,96 XMR. El objetivo es acabar con la división en el ecosistema Rust y ofrecer a quienes usan monero-rs una biblioteca mejor mantenida."
+          },
+          {
+            "h": "jpk68 busca financiación para tres meses más de trabajo a tiempo completo",
+            "p": "Esta semana se publicó una segunda propuesta CCS para el trabajo a tiempo completo de jpk68, que cubre tres meses."
+          },
+          {
+            "h": "Nuevas herramientas: una cartera en el navegador, una pasarela de pago autoalojada y una cold wallet casera",
+            "p": "Tres proyectos de la comunidad pidieron opiniones: Monkstash, una cartera que funciona en el navegador; monero-pay, una pasarela autoalojada que mantiene wallet-rpc y las claves en una intranet aparte; y ColdPunk, un firmware que convierte una placa ESP32-S3 en una cartera hardware. Como siempre, revisa el código antes de confiarle fondos."
+          },
+          {
+            "h": "ToriSIM recibe su primer pago en XMR; Cake Wallet 6.5.0 en versión preliminar",
+            "p": "El proveedor de eSIM centrado en la privacidad ToriSIM cuenta que su primer cliente pagó en XMR, usando su propio BTCPay Server y su nodo de Monero. Cake Wallet 6.5.0 ya está disponible como versión preliminar, con cuentas de Bitcoin, más nodos Tor y un núcleo de Monero actualizado. Por otro lado, la app monostr llegó a F-Droid y permite dar propinas en Nostr con Monero, sin Lightning y sin custodio de por medio."
+          }
+        ],
+        "comm": [],
+        "privacy": [
+          {
+            "h": "Los anuncios como canal de vigilancia",
+            "p": "Según informes de esta semana, empresas de spyware distribuyen malware a través de redes publicitarias, y se acusa a una firma israelí de usar anuncios en línea para espiar a personas. 404 Media también señala que la segmentación de anuncios de ChatGPT puede usar números de teléfono y correos electrónicos."
+          },
+          {
+            "h": "Los lectores de matrículas siguen llegando a los tribunales",
+            "p": "EFF pidió al Tribunal Supremo de Wisconsin que exija órdenes judiciales para las búsquedas en bases de datos de matrículas de cuatro ciudades. En California, un tribunal desestimó el caso de EFF contra San Jose, algo que EFF considera erróneo en lo jurídico y que va a recurrir. El podcast de 404 Media cuenta que un juez declaró inconstitucional una búsqueda de Flock."
+          },
+          {
+            "h": "Los datos de reconocimiento facial de la TSA no están bien protegidos",
+            "p": "Un resumen de la Inspección General del DHS encontró una 'debilidad significativa' en cómo la tecnología de reconocimiento facial de la TSA protege los datos de los pasajeros. Los hallazgos detallados son confidenciales."
+          },
+          {
+            "h": "Telegram entregó datos de usuarios a las autoridades de EE. UU.",
+            "p": "Unos documentos judiciales recién presentados incluyen una carta que muestra a Telegram compartiendo datos de usuarios tras una orden judicial."
+          },
+          {
+            "h": "Tor Browser, Tails y GrapheneOS publican actualizaciones",
+            "p": "Tor Browser 15.0.25 y Tails 7.15 traen Tor 0.4.9.14 y correcciones de seguridad de Firefox. GrapheneOS publicó la versión 2026101600."
+          }
+        ]
+      },
+      "price": {
+        "summary": "Casi toda la subida llegó el domingo, cuando XMR avanzó un 4,8% en un solo día tras un ascenso gradual a principios de semana. El cierre queda justo por debajo del máximo de 30 días de 614,8 y muy por encima del mínimo de 30 días de 515,23.",
+        "drivers": [
+          "Según @Jonathan__offic, XMR subía cerca de un 6% en 24 horas el 18 de oct mientras el resto del mercado cripto seguía plano, con un volumen en 24 h que se reportaba un 91% mayor que el día anterior."
+        ]
+      }
+    },
+    "ru": {
+      "recap": "Неделя тихая, но аккуратная: вышел Monero 0.18.5.4 — небольшое исправляющее обновление, которое в основном чинит проверки DNSSEC в демоне, а разработчики продолжали шлифовать код приватности кошельков. Появились заявки на финансирование работы над Rust-библиотеками и штатного разработчика, а утечка данных клиентов ShopInBit заставила задуматься о том, что магазин обещал и что на самом деле делал. За пределами Monero новости касались шпионского ПО в рекламе, считывателей номерных знаков и инструментов шифрования.",
+      "lead": {
+        "h": "Monero 0.18.5.4 «Fluorine Fermi» исправляет проверки DNSSEC",
+        "p": "Небольшой промежуточный релиз чинит проверку DNSSEC в демоне, а от неё зависит, как он сверяет контрольные точки, блок-листы и проверяет обновления. В GUI-кошельке также исправлено повторное открытие кошельков testnet и stagenet. Если вы запускаете ноду, обновиться стоит."
+      },
+      "art": {
+        "alt": "Пиксельный замок и гаечный ключ на столе — намёк на исправление безопасности."
+      },
+      "feature": {
+        "h": "Магазин обещал хранить счета офлайн — а потом случилась утечка",
+        "dek": "Клиенты ShopInBit узнали, что данные их счетов были украдены при взломе польской платформы электронных счетов.",
+        "body": [
+          "ShopInBit — консьерж-сервис, который многие пользователи Monero знают по покупкам за криптовалюту, — разослал клиентам письма об утечке данных. Согласно посту на Reddit, который пересказал Monero Observer, компания утверждала, что хранит счета офлайн. Оказалось, что с октября 2025 года счета загружались в польскую систему электронных счетов.",
+          "Эту платформу взломали, а данные клиентов и счета скопировали. Автор поста называет это одним из крупнейших взломов в Польше. Нам известно только то, что сказано в этом посте, так что подробностей о том, что именно попало в утечку, пока мало.",
+          "Урок старый, но пример свежий. Слабое звено часто не сама монета, а бумажная волокита вокруг неё, и обещание магазина о том, как обращаются с данными, стоит ровно столько, сколько надёжны системы, к которым оно относится. Если вы платите в Monero, стоит выяснять не только как вы платите, но и куда попадают детали вашего заказа."
+        ]
+      },
+      "upcoming": [
+        {
+          "what": "Встреча Monero Tech о Seraphis/JAMTIS, FCMP и другой долгосрочной разработке."
+        },
+        {
+          "what": "Встреча Cuprate — альтернативной реализации ноды Monero."
+        },
+        {
+          "what": "Встреча Monero Research Lab: на повестке статус FCMP++ и бета-стресснет FCMP."
+        },
+        {
+          "what": "Встреча Community Workgroup: главное по сообществу, новости CCS и отчёты рабочих групп."
+        }
+      ],
+      "sections": {
+        "dev": [
+          {
+            "h": "Исправление кошелька: кольца больше не раскрывают настоящий выход",
+            "p": "Изменение в повторном использовании колец кошельком устраняет случай, когда при пересборке транзакции с новым входом остальные входы получали новые кольца. Два разных кольца для одного образа ключа выдали бы его настоящий выход. Теперь каждый вход, для которого сохранено кольцо, использует его повторно."
+          },
+          {
+            "h": "Seed-ноды стали строже относиться к DNSSEC",
+            "p": "Код пиринговой сети теперь учитывает результат проверки DNSSEC при поиске seed-нод. Если проверка не пройдена, в лог пишется предупреждение с отклонёнными адресами, а результаты отбрасываются."
+          },
+          {
+            "h": "Новый якорь доверия DNSSEC и флаг seed в simplewallet",
+            "p": "В DNS-утилиты добавлен новый якорь доверия DNSSEC. Отдельно: в simplewallet появилась опция --seed, а --electrum-seed признана устаревшей."
+          },
+          {
+            "h": "Обновлены библиотеки monero-java и monero-cpp",
+            "p": "woodser выпустил monero-java v0.8.63 и monero-cpp v0.9.10. Java-библиотека теперь выдаёт ошибку при некорректных адресах base58, а C++-версия обновлена до Monero v0.18.5.3 и умеет отключать проверку TLS-сертификатов."
+          }
+        ],
+        "eco": [
+          {
+            "h": "Haveno 1.11.0: обновления Tor и безопасности библиотек",
+            "p": "Децентрализованная биржа Haveno обновила Tor до v0.4.9.14 с исправлениями высокой серьёзности, а также Jackson и Logback. Кроме того, исправлена ситуация, когда арбитры отбрасывали одновременные запросы на подпись предложения от одного мейкера, и разрешены IPv6-ноды Monero без Tor."
+          },
+          {
+            "h": "Заявка в CCS: перевести пакеты monero-rs на monero-oxide",
+            "p": "silverpill подал первую заявку в CCS на перенос пакетов monero-rs на monero-oxide примерно за месяц и просит 2,96 XMR. Цель — покончить с расколом в экосистеме Rust и дать пользователям monero-rs лучше поддерживаемую библиотеку."
+          },
+          {
+            "h": "jpk68 ищет финансирование ещё на три месяца полной занятости",
+            "p": "На этой неделе опубликована вторая заявка в CCS на работу jpk68 на полный день — на три месяца."
+          },
+          {
+            "h": "Новые инструменты: браузерный кошелёк, самостоятельно размещаемый платёжный шлюз и холодный кошелёк своими руками",
+            "p": "Три проекта сообщества попросили отзывов: Monkstash — кошелёк, работающий в браузере; monero-pay — самостоятельно размещаемый шлюз, который держит wallet-rpc и ключи в отдельной интрасети; и ColdPunk — прошивка, превращающая плату ESP32-S3 в аппаратный кошелёк. Как всегда, проверяйте код, прежде чем доверять ему средства."
+          },
+          {
+            "h": "ToriSIM принял первый платёж в XMR; предварительный релиз Cake Wallet 6.5.0",
+            "p": "Провайдер eSIM с упором на приватность ToriSIM сообщает, что его первый клиент заплатил в XMR через собственные BTCPay Server и ноду Monero. Cake Wallet 6.5.0 вышел как предварительный релиз: в нём Bitcoin-аккаунты, больше нод Tor и обновлённое ядро Monero. Отдельно: приложение monostr добралось до F-Droid и позволяет отправлять чаевые в Nostr через Monero — без Lightning и без кастодиана."
+          }
+        ],
+        "comm": [],
+        "privacy": [
+          {
+            "h": "Реклама как канал слежки",
+            "p": "По сообщениям этой недели, компании, производящие шпионское ПО, доставляют вредоносный код через рекламные сети, а одну израильскую фирму обвиняют в слежке за людьми через онлайн-рекламу. 404 Media также отмечает, что таргетинг рекламы в ChatGPT может использовать номера телефонов и адреса почты."
+          },
+          {
+            "h": "Считыватели номерных знаков продолжают попадать в суды",
+            "p": "EFF попросила Верховный суд Висконсина требовать ордера для поиска по базам номерных знаков в четырёх городах. В Калифорнии суд отклонил дело EFF в Сан-Хосе — по мнению EFF, неправомерно, и она будет подавать апелляцию. В подкасте 404 Media отмечается, что судья признал поиск по Flock неконституционным."
+          },
+          {
+            "h": "Данные распознавания лиц TSA защищены ненадлежащим образом",
+            "p": "В резюме генинспектора DHS обнаружена «существенная слабость» в том, как технология распознавания лиц TSA защищает данные пассажиров. Подробные выводы засекречены."
+          },
+          {
+            "h": "Telegram передал данные пользователей властям США",
+            "p": "В недавно поданных судебных материалах есть письмо, показывающее, что Telegram передал данные пользователей по решению суда."
+          },
+          {
+            "h": "Вышли обновления Tor Browser, Tails и GrapheneOS",
+            "p": "Tor Browser 15.0.25 и Tails 7.15 приносят Tor 0.4.9.14 и исправления безопасности Firefox. Вышла версия GrapheneOS 2026101600."
+          }
+        ]
+      },
+      "price": {
+        "summary": "Основной рост пришёлся на воскресенье, когда XMR подорожал на 4,8% за один день после постепенного подъёма в начале недели. Закрытие чуть ниже 30-дневного максимума в 614,8 и заметно выше 30-дневного минимума в 515,23.",
+        "drivers": [
+          "По словам @Jonathan__offic, 18 октября XMR вырос примерно на 6% за 24 часа, пока остальной крипторынок стоял на месте; объём за 24 часа, как сообщается, вырос на 91% по сравнению с предыдущим днём."
+        ]
+      }
+    },
+    "fr": {
+      "recap": "Une semaine calme mais bien rangée : Monero a publié la version corrective 0.18.5.4, une petite mise à jour qui répare surtout les vérifications DNSSEC du démon, pendant que les développeurs continuaient de peaufiner le code de confidentialité du portefeuille. Des propositions de financement pour du travail sur des bibliothèques Rust et pour un développeur à temps plein ont fait leur apparition, et une fuite de données clients chez ShopInBit a soulevé des questions sur ce qu'un commerçant avait promis et ce qu'il a réellement fait. En dehors de Monero, l'actualité a tourné autour des logiciels espions diffusés par la publicité, des lecteurs de plaques d'immatriculation et des outils de chiffrement.",
+      "lead": {
+        "h": "Monero 0.18.5.4 « Fluorine Fermi » corrige les vérifications DNSSEC",
+        "p": "Une petite version corrective répare la validation DNSSEC dans le démon, ce qui touche la façon dont il vérifie les points de contrôle, les listes de blocage et les mises à jour. Le portefeuille GUI reçoit aussi un correctif pour rouvrir les portefeuilles testnet et stagenet. Si vous faites tourner un nœud, une mise à jour vaut le coup."
+      },
+      "art": {
+        "alt": "Cadenas et clé à molette en pixel art posés sur une table, évoquant un correctif de sécurité."
+      },
+      "feature": {
+        "h": "Une boutique qui promettait des factures hors ligne, et la fuite qui a suivi",
+        "dek": "Les clients de ShopInBit apprennent que les données de leurs factures ont été volées lors du piratage d'une plateforme polonaise de facturation électronique.",
+        "body": [
+          "ShopInBit, le service de conciergerie que beaucoup d'utilisateurs de Monero connaissent pour acheter des choses en crypto, envoie des e-mails à ses clients au sujet d'une fuite de données. D'après un message Reddit relayé par Monero Observer, l'entreprise affirmait conserver les factures hors ligne. Il s'avère que depuis octobre 2025, les factures étaient en fait envoyées au système polonais de facturation électronique.",
+          "Cette plateforme a été piratée, et des données clients ainsi que des factures ont été copiées. L'auteur du message parle de l'un des plus gros piratages en Pologne. Nous ne savons que ce que dit ce message, donc les détails sur ce qui a exactement été exposé restent minces.",
+          "La leçon est ancienne, mais l'exemple est tout frais. Le maillon faible n'est souvent pas la pièce, mais la paperasse qui l'entoure, et la promesse d'un commerçant sur le traitement des données ne vaut que ce que valent les systèmes qu'elle implique. Si vous achetez avec Monero, mieux vaut se demander où atterrissent les détails de votre commande, pas seulement comment vous payez."
+        ]
+      },
+      "upcoming": [
+        {
+          "what": "Réunion Monero Tech sur Seraphis/JAMTIS, les FCMP et d'autres développements à long terme."
+        },
+        {
+          "what": "Réunion Cuprate, l'implémentation alternative de nœud Monero."
+        },
+        {
+          "what": "Réunion du Monero Research Lab, avec à l'ordre du jour l'état de FCMP++ et le stressnet bêta FCMP."
+        },
+        {
+          "what": "Réunion du groupe de travail Communauté : temps forts de la communauté, nouvelles des CCS et rapports des groupes de travail."
+        }
+      ],
+      "sections": {
+        "dev": [
+          {
+            "h": "Un correctif du portefeuille empêche les anneaux de révéler une vraie sortie",
+            "p": "Une modification de la réutilisation des anneaux dans le portefeuille règle un cas où la reconstruction d'une transaction avec une nouvelle entrée donnait de nouveaux anneaux aux autres entrées. Deux anneaux différents pour la même image de clé révéleraient sa vraie sortie. Désormais, chaque entrée qui a un anneau enregistré le réutilise."
+          },
+          {
+            "h": "Les nœuds seed deviennent plus stricts avec DNSSEC",
+            "p": "Le code pair-à-pair tient désormais compte de la validation DNSSEC pour les requêtes vers les nœuds seed. Si la validation échoue, il consigne un avertissement avec les adresses rejetées et écarte les résultats."
+          },
+          {
+            "h": "Nouvelle ancre de confiance DNSSEC et option de phrase mnémonique dans simplewallet",
+            "p": "Une nouvelle ancre de confiance DNSSEC a été ajoutée aux utilitaires DNS. Par ailleurs, simplewallet gagne une option --seed, tandis que --electrum-seed devient obsolète."
+          },
+          {
+            "h": "Les bibliothèques monero-java et monero-cpp mises à jour",
+            "p": "woodser a publié monero-java v0.8.63 et monero-cpp v0.9.10. La bibliothèque Java renvoie désormais une erreur pour les adresses base58 mal formées, et celle en C++ passe à Monero v0.18.5.3 et permet de désactiver la vérification des certificats TLS."
+          }
+        ],
+        "eco": [
+          {
+            "h": "Haveno 1.11.0 apporte des mises à jour de sécurité pour Tor et les bibliothèques",
+            "p": "L'échange décentralisé Haveno a mis à jour Tor en v0.4.9.14 avec des correctifs de gravité élevée, ainsi que Jackson et Logback. Il corrige aussi le cas où les arbitres ignoraient des demandes de signature d'offre simultanées venant du même créateur, et autorise les nœuds Monero IPv6 sans Tor."
+          },
+          {
+            "h": "Proposition CCS pour migrer les paquets monero-rs vers monero-oxide",
+            "p": "silverpill a soumis une première proposition CCS pour migrer les paquets monero-rs vers monero-oxide en un mois environ, pour 2,96 XMR. L'objectif est de mettre fin à la division de l'écosystème Rust et d'offrir aux utilisateurs de monero-rs une bibliothèque mieux maintenue."
+          },
+          {
+            "h": "jpk68 cherche un financement pour trois mois de travail à temps plein de plus",
+            "p": "Une deuxième proposition CCS pour le travail à temps plein de jpk68, couvrant trois mois, a été publiée cette semaine."
+          },
+          {
+            "h": "Nouveaux outils : un portefeuille dans le navigateur, une passerelle de paiement auto-hébergée et un portefeuille froid à fabriquer soi-même",
+            "p": "Trois projets communautaires ont demandé des retours : Monkstash, un portefeuille qui tourne dans le navigateur ; monero-pay, une passerelle auto-hébergée qui garde wallet-rpc et les clés sur un intranet séparé ; et ColdPunk, un firmware qui transforme une carte ESP32-S3 en portefeuille matériel. Comme toujours, inspectez le code avant de lui confier des fonds."
+          },
+          {
+            "h": "ToriSIM encaisse son premier paiement en XMR ; Cake Wallet 6.5.0 en préversion",
+            "p": "Le fournisseur d'eSIM axé sur la confidentialité ToriSIM annonce que son premier client a payé en XMR, avec son propre BTCPay Server et son propre nœud Monero. Cake Wallet 6.5.0 est disponible en préversion, avec des comptes Bitcoin, davantage de nœuds Tor et un cœur Monero mis à jour. Par ailleurs, l'application monostr est arrivée sur F-Droid, ce qui permet de faire des pourboires sur Nostr avec Monero, sans Lightning ni dépositaire."
+          }
+        ],
+        "comm": [],
+        "privacy": [
+          {
+            "h": "La publicité comme canal de surveillance",
+            "p": "Des enquêtes de la semaine affirment que des entreprises de logiciels espions diffusent des malwares via des réseaux publicitaires, et qu'une société israélienne est accusée d'utiliser des publicités en ligne pour espionner des personnes. 404 Media note aussi que le ciblage publicitaire de ChatGPT peut s'appuyer sur des numéros de téléphone et des e-mails."
+          },
+          {
+            "h": "Les lecteurs de plaques d'immatriculation continuent d'atterrir devant les tribunaux",
+            "p": "L'EFF a demandé à la Cour suprême du Wisconsin d'exiger des mandats pour les recherches dans les bases de données de plaques d'immatriculation de quatre villes. En Californie, un tribunal a rejeté l'affaire de l'EFF concernant San José, ce que l'EFF juge erroné en droit et dont elle fera appel. Le podcast de 404 Media rapporte qu'un juge a déclaré inconstitutionnelle une recherche via Flock."
+          },
+          {
+            "h": "Les données de reconnaissance faciale de la TSA ne sont pas correctement protégées",
+            "p": "Un résumé de l'inspecteur général du DHS a relevé une « faiblesse importante » dans la façon dont la technologie de reconnaissance faciale de la TSA protège les données des passagers. Les conclusions détaillées sont classifiées."
+          },
+          {
+            "h": "Telegram a remis des données d'utilisateurs aux autorités américaines",
+            "p": "Des documents judiciaires récemment déposés incluent une lettre montrant Telegram partageant des données d'utilisateurs après une ordonnance du tribunal."
+          },
+          {
+            "h": "Tor Browser, Tails et GrapheneOS publient des mises à jour",
+            "p": "Tor Browser 15.0.25 et Tails 7.15 apportent Tor 0.4.9.14 et des correctifs de sécurité de Firefox. GrapheneOS a publié la version 2026101600."
+          }
+        ]
+      },
+      "price": {
+        "summary": "L'essentiel de la hausse est venu dimanche, quand le XMR a gagné 4,8 % en une seule journée après une montée progressive en début de semaine. La clôture se situe juste sous le plus haut sur 30 jours, à 614,8, et nettement au-dessus du plus bas sur 30 jours, à 515,23.",
+        "drivers": [
+          "Selon @Jonathan__offic, le XMR gagnait environ 6 % sur 24 heures le 18 octobre alors que le marché crypto au sens large restait stable, avec un volume sur 24 h annoncé en hausse de 91 % par rapport à la veille."
+        ]
+      }
+    },
+    "pt": {
+      "recap": "Uma semana quieta, mas organizada: o Monero lançou a versão pontual 0.18.5.4, uma pequena atualização de correção de bugs que conserta principalmente as verificações de DNSSEC no daemon, enquanto os desenvolvedores continuaram polindo o código de privacidade das carteiras. Surgiram propostas de financiamento para trabalho em bibliotecas Rust e para um desenvolvedor em tempo integral, e um vazamento de dados de clientes da ShopInBit levantou dúvidas sobre o que o comerciante prometeu e o que de fato fez. Fora do Monero, as notícias foram sobre spyware via anúncios, leitores de placas de veículos e ferramentas de criptografia.",
+      "lead": {
+        "h": "Monero 0.18.5.4 'Fluorine Fermi' corrige as verificações de DNSSEC",
+        "p": "Uma pequena versão pontual corrige a validação de DNSSEC no daemon, o que afeta a forma como ele verifica checkpoints, listas de bloqueio e checagens de atualização. A carteira GUI também recebe uma correção para reabrir carteiras de testnet e stagenet. Se você roda um nó, vale a pena atualizar."
+      },
+      "art": {
+        "alt": "Cadeado e chave inglesa em pixel art sobre uma mesa, sugerindo uma correção de segurança."
+      },
+      "feature": {
+        "h": "Uma loja que prometeu faturas offline, e o vazamento que veio depois",
+        "dek": "Clientes da ShopInBit descobrem que os dados de suas faturas foram roubados na invasão de uma plataforma polonesa de faturamento eletrônico.",
+        "body": [
+          "A ShopInBit, o serviço de concierge que muitos usuários de Monero conhecem para comprar coisas com cripto, tem enviado e-mails aos clientes sobre um vazamento de dados. Segundo um post no Reddit repassado pelo Monero Observer, a empresa tinha dito que mantinha as faturas offline. Acontece que, desde outubro de 2025, as faturas estavam sendo enviadas ao sistema polonês de faturamento eletrônico.",
+          "Essa plataforma foi invadida, e dados de clientes e faturas foram copiados. O autor do post descreve o caso como uma das maiores invasões já ocorridas na Polônia. Só sabemos o que esse post diz, então os detalhes sobre exatamente o que foi exposto ainda são escassos.",
+          "A lição é antiga, mas agora com um exemplo fresquinho. O elo fraco muitas vezes não é a moeda, e sim a papelada em volta dela, e a promessa de um comerciante sobre como trata os dados só vale tanto quanto os sistemas que ela envolve. Se você compra com Monero, vale perguntar onde os detalhes do seu pedido vão parar, e não só como você paga."
+        ]
+      },
+      "upcoming": [
+        {
+          "what": "Reunião Monero Tech sobre Seraphis/JAMTIS, FCMPs e outros desenvolvimentos de longo prazo."
+        },
+        {
+          "what": "Reunião do Cuprate, a implementação alternativa de nó Monero."
+        },
+        {
+          "what": "Reunião do Monero Research Lab, com o status do FCMP++ e a stressnet beta de FCMP na pauta."
+        },
+        {
+          "what": "Reunião do Community Workgroup sobre destaques da comunidade, atualizações do CCS e relatórios dos grupos de trabalho."
+        }
+      ],
+      "sections": {
+        "dev": [
+          {
+            "h": "Correção na carteira impede que anéis vazem uma saída real",
+            "p": "Uma mudança no reaproveitamento de anéis da carteira resolve um caso em que, ao reconstruir uma transação com uma nova entrada, as outras entradas recebiam anéis novos. Dois anéis diferentes para o mesmo key image revelariam a saída real. Agora, cada entrada que tem um anel armazenado o reutiliza."
+          },
+          {
+            "h": "Seed nodes ficam mais rigorosos com o DNSSEC",
+            "p": "O código peer-to-peer agora age conforme a validação de DNSSEC nas consultas aos seed nodes. Se a validação falhar, ele registra um aviso com os endereços rejeitados e descarta os resultados."
+          },
+          {
+            "h": "Nova âncora de confiança do DNSSEC e uma flag de seed no simplewallet",
+            "p": "Uma nova âncora de confiança do DNSSEC foi adicionada aos utilitários de DNS. Separadamente, o simplewallet ganha a opção --seed, enquanto --electrum-seed passa a ser obsoleta."
+          },
+          {
+            "h": "Bibliotecas monero-java e monero-cpp atualizadas",
+            "p": "woodser lançou o monero-java v0.8.63 e o monero-cpp v0.9.10. A biblioteca Java agora gera um erro para endereços base58 malformados, e a C++ é atualizada para o Monero v0.18.5.3 e pode desativar a verificação de certificados TLS."
+          }
+        ],
+        "eco": [
+          {
+            "h": "Haveno 1.11.0 traz atualizações de segurança do Tor e de bibliotecas",
+            "p": "A exchange descentralizada Haveno atualizou o Tor para a v0.4.9.14 com correções de alta gravidade, e atualizou o Jackson e o Logback. Também corrige o descarte, por parte dos árbitros, de pedidos simultâneos de assinatura de oferta vindos do mesmo maker, e permite nós Monero IPv6 sem Tor."
+          },
+          {
+            "h": "Proposta no CCS para migrar pacotes do monero-rs para o monero-oxide",
+            "p": "silverpill enviou uma primeira proposta ao CCS para migrar os pacotes do monero-rs para o monero-oxide em cerca de um mês, pedindo 2,96 XMR. O objetivo é acabar com a divisão no ecossistema Rust e dar aos usuários do monero-rs uma biblioteca mais bem mantida."
+          },
+          {
+            "h": "jpk68 busca financiamento para mais três meses de trabalho em tempo integral",
+            "p": "Uma segunda proposta no CCS para o trabalho em tempo integral de jpk68, cobrindo três meses, foi listada esta semana."
+          },
+          {
+            "h": "Novas ferramentas: carteira no navegador, gateway de pagamento auto-hospedado e carteira fria faça-você-mesmo",
+            "p": "Três projetos da comunidade pediram feedback: o Monkstash, uma carteira que roda no navegador; o monero-pay, um gateway auto-hospedado que mantém o wallet-rpc e as chaves numa intranet separada; e o ColdPunk, um firmware que transforma uma placa ESP32-S3 em carteira de hardware. Como sempre, inspecione o código antes de confiar fundos a ele."
+          },
+          {
+            "h": "ToriSIM recebe o primeiro pagamento em XMR; Cake Wallet 6.5.0 em pré-lançamento",
+            "p": "A provedora de eSIM focada em privacidade ToriSIM diz que seu primeiro cliente pagou em XMR, usando seu próprio BTCPay Server e nó Monero. O Cake Wallet 6.5.0 saiu como pré-lançamento, trazendo contas Bitcoin, mais nós Tor e um núcleo Monero atualizado. Separadamente, o app monostr chegou ao F-Droid, permitindo dar gorjetas no Nostr com Monero, sem Lightning e sem custodiante."
+          }
+        ],
+        "comm": [],
+        "privacy": [
+          {
+            "h": "Anúncios como canal de vigilância",
+            "p": "Reportagens desta semana dizem que empresas de spyware estão entregando malware por redes de anúncios, e uma empresa israelense é acusada de usar anúncios online para espionar pessoas. O 404 Media também observa que a segmentação de anúncios do ChatGPT pode usar números de telefone e e-mails."
+          },
+          {
+            "h": "Leitores de placas de veículos continuam chegando aos tribunais",
+            "p": "A EFF pediu à Suprema Corte de Wisconsin que exija mandados para buscas em bancos de dados de placas de veículos em quatro cidades. Na Califórnia, um tribunal arquivou o caso de San Jose da EFF, que diz que a decisão está errada do ponto de vista jurídico e vai recorrer. O podcast do 404 Media menciona que um juiz considerou inconstitucional uma busca na Flock."
+          },
+          {
+            "h": "Dados de reconhecimento facial da TSA não estão devidamente protegidos",
+            "p": "Um resumo da Inspetoria-Geral do DHS encontrou uma 'fraqueza significativa' na forma como a tecnologia de reconhecimento facial da TSA protege os dados dos passageiros. Os achados detalhados são sigilosos."
+          },
+          {
+            "h": "Telegram entregou dados de usuários às autoridades dos EUA",
+            "p": "Registros judiciais recém-divulgados incluem uma carta que mostra o Telegram compartilhando dados de usuários após uma ordem judicial."
+          },
+          {
+            "h": "Tor Browser, Tails e GrapheneOS lançam atualizações",
+            "p": "O Tor Browser 15.0.25 e o Tails 7.15 trazem o Tor 0.4.9.14 e correções de segurança do Firefox. O GrapheneOS lançou a versão 2026101600."
+          }
+        ]
+      },
+      "price": {
+        "summary": "A maior parte da alta veio no domingo, quando o XMR subiu 4,8% em um único dia após uma escalada gradual no início da semana. O fechamento fica logo abaixo da máxima de 30 dias, de 614,8, e bem acima da mínima de 30 dias, de 515,23.",
+        "drivers": [
+          "Segundo @Jonathan__offic, o XMR subiu cerca de 6% em 24 horas em 18 de outubro, enquanto o mercado cripto em geral ficou estável, com o volume de 24h reportado 91% acima do dia anterior."
+        ]
+      }
+    },
+    "ja": {
+      "recap": "静かながらもきちんとした一週間でした。Monero はポイントリリース 0.18.5.4 を公開。主にデーモンの DNSSEC チェックを直す小さなバグ修正アップデートで、開発者たちはウォレットのプライバシー関連コードの磨き込みを続けています。Rust ライブラリの作業やフルタイム開発者への資金提案が登場し、ShopInBit の顧客データ流出では、加盟店が約束したことと実際にやったことの食い違いが問われています。Monero の外では、広告経由のスパイウェア、ナンバープレート読み取り装置、暗号化ツールがニュースになりました。",
+      "lead": {
+        "h": "Monero 0.18.5.4「Fluorine Fermi」が DNSSEC チェックを修正",
+        "p": "小規模なポイントリリースで、デーモンの DNSSEC 検証が修正されました。チェックポイント、ブロックリスト、アップデート確認の検証方法に影響する部分です。GUI ウォレットでも、testnet と stagenet のウォレットを開き直せない問題が直りました。ノードを運用している方は、アップグレードしておく価値がありそうです。"
+      },
+      "art": {
+        "alt": "テーブルの上に置かれたドット絵の南京錠とレンチ。セキュリティ修正を思わせる一枚。"
+      },
+      "feature": {
+        "h": "オフライン請求書を約束したショップと、その後に起きた流出",
+        "dek": "ShopInBit の顧客は、ポーランドの電子請求書プラットフォームへのハッキングで、自分の請求書データが盗まれたことを知らされました。",
+        "body": [
+          "暗号資産で買い物ができるコンシェルジュサービスとして Monero ユーザーにもおなじみの ShopInBit が、データ流出について顧客にメールを送っています。Monero Observer が紹介した Reddit の投稿によると、同社は請求書をオフラインで保管していると説明していました。ところが実際には、2025年10月以降、請求書はポーランドの電子請求書システムにアップロードされていたそうです。",
+          "そのプラットフォームがハッキングされ、顧客データと請求書がコピーされました。投稿者はこれをポーランド最大級のハッキングの一つと表現しています。ただ、私たちが知っているのはこの投稿に書かれていることだけで、具体的に何が流出したのかという詳細はまだ乏しい状況です。",
+          "教訓は昔からのものですが、今回は新しい実例になりました。弱点になりやすいのはコインそのものではなく、その周りの書類手続きです。データの扱いに関する加盟店の約束は、それが接続するシステムの強さまでしか保証されません。Monero で買い物をするなら、支払い方法だけでなく、注文情報がどこに行き着くのかも確かめておく価値があります。"
+        ]
+      },
+      "upcoming": [
+        {
+          "what": "Monero Tech ミーティング。Seraphis/JAMTIS、FCMP、その他の長期的な開発がテーマ。"
+        },
+        {
+          "what": "Cuprate ミーティング。Monero ノードの代替実装です。"
+        },
+        {
+          "what": "Monero Research Lab ミーティング。FCMP++ の進捗と FCMP ベータ版 stressnet が議題。"
+        },
+        {
+          "what": "Community Workgroup ミーティング。コミュニティのハイライト、CCS の更新、ワークグループの報告を扱います。"
+        }
+      ],
+      "sections": {
+        "dev": [
+          {
+            "h": "ウォレットの修正で、リングから本物の出力が漏れるのを防止",
+            "p": "ウォレットのリング再利用に関する変更で、ある問題に対処しました。新しい入力を加えてトランザクションを作り直すと、他の入力に新しいリングが割り当てられてしまうケースです。同じキーイメージに異なる二つのリングがあると、本物の出力が明らかになってしまいます。今後は、リングが保存されているすべての入力でそのリングを再利用します。"
+          },
+          {
+            "h": "シードノードの DNSSEC 対応がより厳格に",
+            "p": "ピアツーピアのコードが、シードノードの名前解決で DNSSEC 検証の結果に従うようになりました。検証に失敗すると、拒否したアドレスとともに警告をログに残し、結果を破棄します。"
+          },
+          {
+            "h": "新しい DNSSEC トラストアンカーと simplewallet の seed フラグ",
+            "p": "DNS ユーティリティに新しい DNSSEC トラストアンカーが追加されました。また simplewallet には --seed オプションが加わり、--electrum-seed は非推奨になります。"
+          },
+          {
+            "h": "monero-java と monero-cpp ライブラリが更新",
+            "p": "woodser が monero-java v0.8.63 と monero-cpp v0.9.10 を公開しました。Java ライブラリは不正な形式の base58 アドレスでエラーを投げるようになり、C++ 版は Monero v0.18.5.3 に更新されて、TLS 証明書の検証を無効にできるようになりました。"
+          }
+        ],
+        "eco": [
+          {
+            "h": "Haveno 1.11.0 で Tor とライブラリのセキュリティを更新",
+            "p": "分散型取引所 Haveno は、Tor を重大度の高い修正を含む v0.4.9.14 に更新し、Jackson と Logback も更新しました。また、同じメイカーからの同時のオファー署名リクエストを仲裁人が取りこぼす問題を修正し、Tor なしでの IPv6 Monero ノードにも対応しました。"
+          },
+          {
+            "h": "monero-rs パッケージを monero-oxide へ移行する CCS 提案",
+            "p": "silverpill が、約1か月で monero-rs パッケージを monero-oxide に移行する最初の CCS 提案を出しました。金額は 2.96 XMR。Rust エコシステムの分裂を解消し、monero-rs の利用者により良く保守されたライブラリを提供するのが狙いです。"
+          },
+          {
+            "h": "jpk68 がさらに3か月分のフルタイム作業の資金を募集",
+            "p": "jpk68 のフルタイム作業(3か月分)に対する2件目の CCS 提案が、今週掲載されました。"
+          },
+          {
+            "h": "新ツール:ブラウザウォレット、セルフホスト型決済ゲートウェイ、自作コールドウォレット",
+            "p": "コミュニティの三つのプロジェクトがフィードバックを求めています。ブラウザ上で動くウォレット Monkstash、wallet-rpc と鍵を別のイントラネットに置くセルフホスト型ゲートウェイ monero-pay、ESP32-S3 ボードをハードウェアウォレットにするファームウェア ColdPunk です。いつものことですが、資金を預ける前にコードを確認しましょう。"
+          },
+          {
+            "h": "ToriSIM が初の XMR 決済を受領、Cake Wallet 6.5.0 がプレリリース",
+            "p": "プライバシー重視の eSIM プロバイダー ToriSIM によると、最初の顧客が XMR で支払ったとのこと。自前の BTCPay Server と Monero ノードを使っています。Cake Wallet 6.5.0 はプレリリースとして公開され、Bitcoin アカウント、Tor ノードの追加、Monero コアの更新が加わりました。さらに、monostr アプリが F-Droid に登場しました。Lightning もカストディアンも使わず、Nostr 上で Monero によるチップが送れます。"
+          }
+        ],
+        "comm": [],
+        "privacy": [
+          {
+            "h": "監視チャネルとしての広告",
+            "p": "今週の報道によると、スパイウェア企業が広告ネットワーク経由でマルウェアを配信しています。イスラエルのある企業は、オンライン広告で人々を監視したと非難されています。また 404 Media は、ChatGPT の広告ターゲティングが電話番号やメールアドレスを使える可能性にも触れています。"
+          },
+          {
+            "h": "ナンバープレート読み取り装置、法廷での争いが続く",
+            "p": "EFF は、ウィスコンシン州最高裁に対し、4都市のナンバープレートデータベース検索に令状を求めるよう要請しました。カリフォルニアでは、EFF のサンノゼの訴訟が棄却されました。EFF は法的に誤りだとして控訴する方針です。404 Media のポッドキャストでは、Flock の検索を違憲とした判決が出たことも取り上げています。"
+          },
+          {
+            "h": "TSA の顔認証データ、適切に保護されていなかった",
+            "p": "DHS 監察総監の要約によると、TSA の顔認証技術が乗客データを守る仕組みに「重大な弱点」があることがわかりました。詳細な調査結果は機密扱いです。"
+          },
+          {
+            "h": "Telegram が米当局にユーザーデータを提供",
+            "p": "新たに提出された裁判記録に、裁判所命令を受けて Telegram がユーザーデータを共有したことを示す書簡が含まれています。"
+          },
+          {
+            "h": "Tor Browser、Tails、GrapheneOS がアップデートを公開",
+            "p": "Tor Browser 15.0.25 と Tails 7.15 は、Tor 0.4.9.14 と Firefox のセキュリティ修正を取り込みました。GrapheneOS はバージョン 2026101600 を公開しています。"
+          }
+        ]
+      },
+      "price": {
+        "summary": "上昇の大半は日曜日に起きました。週前半にじわじわと上げたあと、XMR は1日で 4.8% 上昇しています。終値は30日高値の 614.8 をわずかに下回り、30日安値の 515.23 を大きく上回る水準です。",
+        "drivers": [
+          "@Jonathan__offic によると、10月18日、暗号資産市場全体が横ばいのなか、XMR は24時間で約6%上昇しました。24時間の出来高も前日比で91%増と伝えられています。"
+        ]
+      }
+    }
+  },
+  "podcast": {
+    "file": "/podcast/2026-10-12.mp3",
+    "duration": 639,
+    "hosts": [
+      "Chris",
+      "Jessica"
+    ],
+    "transcript": [
+      {
+        "host": "Chris",
+        "text": "Hello and welcome to The xmr.fan Times. I'm Chris, and this is issue number one, covering the week of October twelfth."
+      },
+      {
+        "host": "Jessica",
+        "text": "And I'm Jessica. Issue number one! [excited] We should have brought confetti or something."
+      },
+      {
+        "host": "Chris",
+        "text": "We'll settle for good news. This week we have a point release for the Monero daemon, a price run, and a story about a shop that said one thing about invoices and did another."
+      },
+      {
+        "host": "Jessica",
+        "text": "Plus some community quotes, a pile of ecosystem news, and a quick look at the network. Let's start with the release."
+      },
+      {
+        "host": "Chris",
+        "text": "Monero zero point eighteen point five point four, codename Fluorine Fermi. It's a small point release, and the headline is a fix to DNSSEC validation in the daemon."
+      },
+      {
+        "host": "Jessica",
+        "text": "Okay, DNSSEC. For anyone who doesn't live in this stuff, that's the extension that lets DNS answers be cryptographically checked, so you know they weren't tampered with. Right?"
+      },
+      {
+        "host": "Chris",
+        "text": "Right. And the daemon leans on it when it verifies checkpoints, blocklists and update checks. So if that validation is broken, a bunch of little trust decisions get shakier."
+      },
+      {
+        "host": "Jessica",
+        "text": "There's a GUI wallet fix in there too, for reopening testnet and stagenet wallets. That one's more for the tinkerers."
+      },
+      {
+        "host": "Chris",
+        "text": "Yeah. The takeaway is simple: if you run a node, the upgrade is worth your time."
+      },
+      {
+        "host": "Jessica",
+        "text": "Short and sweet. Okay, price. [curious] I looked at the chart and it was a good week."
+      },
+      {
+        "host": "Chris",
+        "text": "It was. XMR opened the week around five hundred thirty-seven dollars and closed near five hundred ninety-three, which is up ten point four percent."
+      },
+      {
+        "host": "Jessica",
+        "text": "While Bitcoin was down two point four percent over the same stretch. So not exactly a rising tide."
+      },
+      {
+        "host": "Chris",
+        "text": "No. And the range was about five hundred twenty-two to six hundred five. Most of the gain came on Sunday, when XMR jumped four point eight percent in a single day, after a more gradual climb earlier in the week."
+      },
+      {
+        "host": "Jessica",
+        "text": "The close sits just under the thirty-day high of around six hundred fifteen, and well above the thirty-day low of about five hundred fifteen."
+      },
+      {
+        "host": "Chris",
+        "text": "There was also a post from an account called Jonathan underscore underscore offic, saying XMR was up about six percent over twenty-four hours on the eighteenth, while the wider crypto market stayed flat. And twenty-four hour volume was reported up ninety-one percent on the day before."
+      },
+      {
+        "host": "Jessica",
+        "text": "So, a nice week. And no, we're not predicting anything from it. [laughs]"
+      },
+      {
+        "host": "Chris",
+        "text": "Never. We just report the numbers. Okay, the feature, because this one's worth slowing down for."
+      },
+      {
+        "host": "Jessica",
+        "text": "This is the ShopInBit story. ShopInBit is the concierge service a lot of Monero users know for buying things with crypto."
+      },
+      {
+        "host": "Chris",
+        "text": "Right. They've been emailing customers about a data leak. According to a Reddit post relayed by Monero Observer, the company had said it kept invoices offline."
+      },
+      {
+        "host": "Jessica",
+        "text": "And that turned out not to be the whole picture."
+      },
+      {
+        "host": "Chris",
+        "text": "Not even close. Since October twenty twenty-five, the invoices were being uploaded to the Polish e-invoicing system instead. And that platform was hacked, with customer data and invoices copied."
+      },
+      {
+        "host": "Jessica",
+        "text": "Wow. [sighs] And the poster describes it as one of the biggest hacks in Poland."
+      },
+      {
+        "host": "Chris",
+        "text": "Which is a big claim, and I want to be careful here. We only know what that post says. Details on exactly what was exposed are still thin."
+      },
+      {
+        "host": "Jessica",
+        "text": "So what's the lesson? Because I don't think it's the coin."
+      },
+      {
+        "host": "Chris",
+        "text": "That's the point. The coin did its job. The weak link was the paperwork around it. A merchant's promise about how data is handled is only as good as the systems it touches."
+      },
+      {
+        "host": "Jessica",
+        "text": "Which is an old lesson with a fresh example. So if you shop with Monero, ask where your order details end up, not just how you pay."
+      },
+      {
+        "host": "Chris",
+        "text": "Exactly. Payment privacy is one layer. Where the invoice goes is another."
+      },
+      {
+        "host": "Jessica",
+        "text": "Okay, let's hear from the community."
+      },
+      {
+        "host": "Chris",
+        "text": "Funny thing, this week's OVERHEARD section only has one entry, and it's that Jonathan underscore underscore offic post I mentioned in the price segment."
+      },
+      {
+        "host": "Jessica",
+        "text": "So the quote is the price note: according to Jonathan underscore underscore offic, XMR was up about six percent over twenty-four hours on the eighteenth, while the wider crypto market stayed flat."
+      },
+      {
+        "host": "Chris",
+        "text": "Short but sweet. Moving on to the other news. Let's start with development, since there's a good one."
+      },
+      {
+        "host": "Jessica",
+        "text": "Yes, the wallet ring fix. [curious] This one's subtle. It's about what happens when you rebuild a transaction with a new input."
+      },
+      {
+        "host": "Chris",
+        "text": "Right. Before, rebuilding like that could give the other inputs fresh rings. And two different rings for the same key image would reveal its real output."
+      },
+      {
+        "host": "Jessica",
+        "text": "Wait, so by trying to be fresh, the wallet could accidentally leak which output was the real one?"
+      },
+      {
+        "host": "Chris",
+        "text": "That's the case being addressed. Now each input that has a stored ring reuses it. Consistency instead of reshuffling."
+      },
+      {
+        "host": "Jessica",
+        "text": "Nice catch. Also on the DNSSEC theme, seed nodes get stricter. The peer-to-peer code now acts on DNSSEC validation for seed node lookups."
+      },
+      {
+        "host": "Chris",
+        "text": "If validation fails, it logs a warning with the rejected addresses and discards the results. So it's not just checking, it's actually refusing bad answers."
+      },
+      {
+        "host": "Jessica",
+        "text": "There's also a new DNSSEC trust anchor in the DNS utilities. And simplewallet gains a dash dash seed option, while dash dash electrum dash seed is deprecated."
+      },
+      {
+        "host": "Chris",
+        "text": "Quick housekeeping for anyone with scripts. And on the library side, woodser released monero-java version zero point eight point sixty-three and monero-cpp zero point nine point ten."
+      },
+      {
+        "host": "Jessica",
+        "text": "The Java one now throws an error on malformed base58 addresses. The C++ one updates to Monero zero point eighteen point five point three and can disable TLS certificate verification."
+      },
+      {
+        "host": "Chris",
+        "text": "Okay, ecosystem. Haveno one point eleven point zero, the decentralized exchange. It updated Tor to zero point four point nine point fourteen, which carries high-severity fixes, plus updates to Jackson and Logback."
+      },
+      {
+        "host": "Jessica",
+        "text": "And it fixes arbitrators dropping simultaneous offer signing requests from the same maker. Plus it allows IPv6 Monero nodes without Tor."
+      },
+      {
+        "host": "Chris",
+        "text": "Now the funding side. The CCS, that's the Community Crowdfunding System, where people propose work and the community funds it with XMR."
+      },
+      {
+        "host": "Jessica",
+        "text": "Two new proposals. First, silverpill wants to migrate monero-rs packages to monero-oxide within about a month, asking two point nine six XMR."
+      },
+      {
+        "host": "Chris",
+        "text": "The goal is to end the split in the Rust ecosystem and give monero-rs users a better maintained library."
+      },
+      {
+        "host": "Jessica",
+        "text": "And the second is jpk68 seeking funding for three more months of full-time work."
+      },
+      {
+        "host": "Chris",
+        "text": "Then three community tools asking for feedback. Monkstash, a wallet that runs in the browser."
+      },
+      {
+        "host": "Jessica",
+        "text": "Monero-pay, a self-hosted payment gateway that keeps wallet-rpc and keys on a separate intranet. I like that design."
+      },
+      {
+        "host": "Chris",
+        "text": "And ColdPunk, firmware that turns an ESP32-S3 board into a hardware wallet. A do-it-yourself cold wallet."
+      },
+      {
+        "host": "Jessica",
+        "text": "Same warning as always, though. Inspect the code before trusting it with funds."
+      },
+      {
+        "host": "Chris",
+        "text": "Always. A couple of adoption notes: ToriSIM, a privacy-focused eSIM provider, says its first customer paid in XMR, using its own BTCPay Server and Monero node."
+      },
+      {
+        "host": "Jessica",
+        "text": "And Cake Wallet six point five point zero is out as a pre-release, with Bitcoin accounts, more Tor nodes and an updated Monero core."
+      },
+      {
+        "host": "Chris",
+        "text": "Also, the monostr app reached F-Droid, letting people tip on Nostr with Monero. No Lightning, no custodian involved."
+      },
+      {
+        "host": "Jessica",
+        "text": "Okay, privacy beyond Monero, because it was a busy week out there. [sighs]"
+      },
+      {
+        "host": "Chris",
+        "text": "Ads as a surveillance channel, first. Reporting says spyware companies are delivering malware through ad networks, and one Israeli firm is accused of using online ads to spy on people."
+      },
+      {
+        "host": "Jessica",
+        "text": "And 404 Media notes ChatGPT ad targeting can use phone numbers and emails."
+      },
+      {
+        "host": "Chris",
+        "text": "License-plate readers keep landing in court. EFF asked the Wisconsin Supreme Court to require warrants for searches of license-plate databases in four cities."
+      },
+      {
+        "host": "Jessica",
+        "text": "In California, a court dismissed EFF's San Jose case, which EFF says is wrong on the law, so they'll appeal. And the 404 Media podcast notes a judge ruled a Flock search unconstitutional."
+      },
+      {
+        "host": "Chris",
+        "text": "Also, a DHS Inspector General summary found a significant weakness in how the TSA's facial recognition technology protects passenger data. The detailed findings are classified."
+      },
+      {
+        "host": "Jessica",
+        "text": "Which is a little ironic. And newly filed court records include a letter showing Telegram sharing user data after a court order."
+      },
+      {
+        "host": "Chris",
+        "text": "On the defensive side, Tor Browser fifteen point zero point twenty-five and Tails seven point fifteen both ship with Tor zero point four point nine point fourteen and Firefox security fixes. And GrapheneOS released version twenty twenty-six one zero one six zero zero."
+      },
+      {
+        "host": "Jessica",
+        "text": "Last piece, the network. Weekly average hashrate was about six point oh four gigahashes per second, down from six point three nine."
+      },
+      {
+        "host": "Chris",
+        "text": "Transactions rose to about twenty-eight thousand four hundred ninety-four per day, from twenty-seven thousand five hundred seventy-four. And the average fee was point zero zero zero two five one XMR, up slightly from point zero zero zero two four five."
+      },
+      {
+        "host": "Jessica",
+        "text": "Meetings coming up, too. October nineteenth at eighteen hundred UTC, Monero Tech on Seraphis and JAMTIS, FCMPs and other long-term development."
+      },
+      {
+        "host": "Chris",
+        "text": "October twentieth, Cuprate, the alternative node implementation. October twenty-first at seventeen hundred UTC, Monero Research Lab, with FCMP plus plus status and the FCMP beta stressnet on the agenda."
+      },
+      {
+        "host": "Jessica",
+        "text": "And October thirty-first at sixteen hundred UTC, the Community Workgroup, covering community highlights, CCS updates and workgroup reports."
+      },
+      {
+        "host": "Chris",
+        "text": "That's issue number one. Thanks for listening. Every link from this week is at xmr.fan slash news."
+      },
+      {
+        "host": "Jessica",
+        "text": "Update your node, ask where your invoices go, and we'll see you next week."
+      }
+    ]
+  }
+}

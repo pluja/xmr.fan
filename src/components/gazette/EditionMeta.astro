@@ -1,0 +1,10 @@
+---
+import { useTranslations, type Locale } from "../../i18n/ui";
+import { formatDate, type Edition } from "../../lib/gazette";
+
+interface Props { lang: Locale; edition: Edition }
+const { lang, edition } = Astro.props;
+const t = useTranslations(lang);
+---
+<span>{t("g_no", { n: edition.data.no })}</span>
+<span>{t("g_week", { d: formatDate(edition.data.week, lang) })}</span>

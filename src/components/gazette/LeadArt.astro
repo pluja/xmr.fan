@@ -1,0 +1,11 @@
+---
+import type { Edition } from "../../lib/gazette";
+
+interface Props { art: NonNullable<Edition["data"]["art"]> }
+const { art } = Astro.props;
+---
+{art.file && (
+  <figure class="border-y-2 border-ink md:border-2 md:shadow-[6px_6px_0_var(--color-ink)]">
+    <img src={art.file} alt={art.alt} width="1536" height="864" loading="eager" decoding="async" class="block aspect-video h-auto w-full object-cover [image-rendering:pixelated]" />
+  </figure>
+)}

@@ -1,0 +1,21 @@
+---
+import SourceLink from "./SourceLink.astro";
+import type { Locale } from "../../i18n/ui";
+import type { Story } from "../../lib/gazette";
+
+interface Props { lang: Locale; story: Story; compact?: boolean }
+const { lang, story, compact } = Astro.props;
+---
+<li class="border-b-2 border-dotted border-graphite py-3.5">
+  <article>
+    <h3 class="text-lg font-bold leading-snug">{story.h}</h3>
+    {compact ? (
+      <small class="text-graphite">{story.src}</small>
+    ) : (
+      <>
+        <p class="mb-2 mt-1.5 text-[15px]">{story.p}</p>
+        <SourceLink lang={lang} story={story} />
+      </>
+    )}
+  </article>
+</li>

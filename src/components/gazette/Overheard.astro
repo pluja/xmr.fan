@@ -1,0 +1,25 @@
+---
+import PixelIcon from "../PixelIcon.astro";
+import { useTranslations, type Locale } from "../../i18n/ui";
+import type { LocalizedData } from "../../lib/gazette";
+
+interface Props { lang: Locale; quotes: NonNullable<LocalizedData["quotes"]> }
+const { lang, quotes } = Astro.props;
+const t = useTranslations(lang);
+const where = (src: string) => (src.startsWith("x.com/") ? t("on_x") : src.startsWith("reddit.com") ? t("on_reddit") : "");
+---
+<h2 class="mb-5 font-pixel text-[22px]">{t("g_overheard")}</h2>
+<div class:list={["grid gap-6", quotes.length > 1 && "md:grid-cols-2", quotes.length > 2 && "lg:grid-cols-3"]}>
+  {quotes.map((q) => (
+    <figure class="flex flex-col border-2 border-ink bg-cream p-5 shadow-[6px_6px_0_var(--color-ink)]">
+      <PixelIcon name="quote" size={28} class="mb-2 text-orange" />
+      <blockquote class="flex-1 text-[18px] leading-relaxed">
+        {q.text}
+        {q.gloss && <p class="mt-2 text-[15px] text-graphite">{q.gloss}</p>}
+      </blockquote>
+      <figcaption class="mt-4 font-pixel text-sm">
+        <a class="text-ink" href={q.url} rel="noopener noreferrer">{q.who}</a>{where(q.src) && <span class="text-graphite"> {where(q.src)}</span>}
+      </figcaption>
+    </figure>
+  ))}
+</div>

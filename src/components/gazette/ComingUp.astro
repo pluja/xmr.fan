@@ -1,0 +1,32 @@
+---
+import TitleBar from "../TitleBar.astro";
+import { useTranslations, type Locale } from "../../i18n/ui";
+import type { LocalizedData } from "../../lib/gazette";
+
+interface Props { lang: Locale; events: NonNullable<LocalizedData["upcoming"]> }
+const { lang, events } = Astro.props;
+const t = useTranslations(lang);
+const at = (iso: string) => new Date(`${iso}T12:00:00Z`);
+const fmt = (opts: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat(lang, { timeZone: "UTC", ...opts });
+const month = fmt({ month: "short" }), day = fmt({ day: "numeric" }), weekday = fmt({ weekday: "short" });
+---
+<aside aria-label={t("g_coming_up")}>
+  <TitleBar icon="calendar" tone="ink">{t("g_coming_up")}</TitleBar>
+  <ol class="grid sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4">
+    {events.map((e) => (
+      <li class="flex gap-3 border-b-2 border-dotted border-graphite py-4 lg:border-b-0 lg:border-l-2 lg:pl-4 lg:first:border-l-0 lg:first:pl-0">
+        <time datetime={e.date} class="flex h-fit w-11 shrink-0 flex-col border-2 border-ink bg-paper text-center shadow-[3px_3px_0_var(--color-ink)]">
+          <span class="bg-ink font-pixel text-[10px] uppercase leading-4 text-orange">{month.format(at(e.date))}</span>
+          <span class="font-pixel text-lg leading-6">{day.format(at(e.date))}</span>
+          <span class="font-pixel text-[10px] leading-4 text-graphite">{weekday.format(at(e.date))}</span>
+        </time>
+        <div class="min-w-0">
+          {e.time && <p class="font-pixel text-xs">{e.time}</p>}
+          <p class="text-[15px] leading-snug">
+            <a class="text-ink no-underline hover:underline" href={e.url} rel="noopener noreferrer">{e.what}</a>
+          </p>
+        </div>
+      </li>
+    ))}
+  </ol>
+</aside>

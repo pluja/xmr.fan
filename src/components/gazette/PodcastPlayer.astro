@@ -1,0 +1,87 @@
+---
+/* Audio tags in the transcript ([laughs]) are shown quietly, as "(laughs)". */
+import PixelIcon from "../PixelIcon.astro";
+import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
+import type { Edition } from "../../lib/gazette";
+
+interface Props { lang: Locale; podcast: NonNullable<Edition["data"]["podcast"]> }
+const { lang, podcast } = Astro.props;
+const t = useTranslations(lang);
+const minutes = Math.max(1, Math.round(podcast.duration / 60));
+const clock = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+const parts = (text: string) => text.split(/(\[[^\]]+\])/).filter(Boolean);
+---
+<section class="podcast on-ink border-2 border-ink bg-ink px-3 py-2.5 text-cream shadow-[4px_4px_0_var(--color-graphite)]" aria-labelledby="listen-title" data-strings={pickStrings(lang, ["play", "pause"])}>
+  <audio preload="metadata" src={podcast.file}></audio>
+  <div class="flex items-center gap-3">
+    <button type="button" class="play grid size-10 shrink-0 cursor-pointer place-items-center bg-orange text-ink active:translate-x-0.5 active:translate-y-0.5" aria-label={t("play")}>
+      <PixelIcon name="play" size={20} class="icon-play" />
+      <PixelIcon name="pause" size={20} class="icon-pause hidden" />
+    </button>
+    <div class="grid min-w-0 flex-1 gap-1">
+      <div class="flex flex-wrap items-baseline justify-between gap-x-3">
+        <h2 id="listen-title" class="font-pixel text-sm text-orange">{t("g_listen")}</h2>
+        <span class="flex gap-3 font-pixel text-xs text-ash"><span>{t("g_minutes", { n: minutes })}</span>{t("g_audio_lang") && <span>{t("g_audio_lang")}</span>}</span>
+      </div>
+      <div class="flex items-center gap-3 font-pixel text-xs text-ash">
+        <input type="range" class="seek min-w-0 flex-1" min="0" max={Math.round(podcast.duration)} value="0" step="1" aria-label={t("seek")} />
+        <span class="shrink-0 whitespace-nowrap"><span class="now">0:00</span> / {clock(podcast.duration)}</span>
+        <button type="button" class="speed shrink-0 cursor-pointer border border-line px-1.5 text-cream hover:border-orange" aria-label={t("speed")}>1×</button>
+      </div>
+    </div>
+  </div>
+  <details class="mt-2 text-sm">
+    <summary class="cursor-pointer text-ash hover:text-cream">{t("g_transcript")}</summary>
+    <div class="mt-3 grid max-h-96 gap-2 overflow-y-auto pr-2">
+      {podcast.transcript.map((turn) => (
+        <p>
+          <b class="font-pixel font-normal text-orange">{turn.host}:</b>{" "}
+          {parts(turn.text).map((part) => (part.startsWith("[") ? <i class="text-ash not-italic">({part.slice(1, -1)})</i> : part))}
+        </p>
+      ))}
+    </div>
+  </details>
+</section>
+
+<style>
+  .seek { appearance: none; height: 10px; cursor: pointer; background: linear-gradient(to right, var(--color-orange) var(--p, 0%), var(--color-line) var(--p, 0%)); }
+  .seek::-webkit-slider-thumb { appearance: none; width: 10px; height: 14px; background: var(--color-cream); border: 2px solid var(--color-ink); }
+  .seek::-moz-range-thumb { width: 10px; height: 14px; background: var(--color-cream); border: 2px solid var(--color-ink); border-radius: 0; }
+  .seek::-moz-range-track { background: transparent; }
+</style>
+
+<script>
+  import { readStrings } from "../../i18n/format";
+
+  for (const box of document.querySelectorAll<HTMLElement>(".podcast")) {
+    const t = readStrings(box);
+    const audio = box.querySelector("audio")!;
+    const play = box.querySelector<HTMLButtonElement>(".play")!;
+    const seek = box.querySelector<HTMLInputElement>(".seek")!;
+    const now = box.querySelector<HTMLElement>(".now")!;
+    const speed = box.querySelector<HTMLButtonElement>(".speed")!;
+    const SPEEDS = [1, 1.25, 1.5, 2];
+    const clock = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+
+    const paint = () => {
+      seek.value = String(Math.floor(audio.currentTime));
+      seek.style.setProperty("--p", `${(audio.currentTime / Number(seek.max)) * 100}%`);
+      now.textContent = clock(audio.currentTime);
+    };
+    const playing = (on: boolean) => {
+      box.querySelector(".icon-play")!.classList.toggle("hidden", on);
+      box.querySelector(".icon-pause")!.classList.toggle("hidden", !on);
+      play.setAttribute("aria-label", on ? t("pause") : t("play"));
+    };
+
+    play.addEventListener("click", () => (audio.paused ? audio.play() : audio.pause()));
+    audio.addEventListener("play", () => playing(true));
+    audio.addEventListener("pause", () => playing(false));
+    audio.addEventListener("timeupdate", paint);
+    seek.addEventListener("input", () => { audio.currentTime = Number(seek.value); paint(); });
+    speed.addEventListener("click", () => {
+      audio.playbackRate = SPEEDS[(SPEEDS.indexOf(audio.playbackRate) + 1) % SPEEDS.length];
+      speed.textContent = `${audio.playbackRate}×`;
+    });
+  }
+</script>

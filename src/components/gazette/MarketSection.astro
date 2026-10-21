@@ -1,0 +1,43 @@
+---
+import PriceChart from "./PriceChart.astro";
+import SourceLink from "./SourceLink.astro";
+import StatTile from "./StatTile.astro";
+import { useTranslations, type Locale } from "../../i18n/ui";
+import { formatNumber, type Edition } from "../../lib/gazette";
+
+interface Props { lang: Locale; market: NonNullable<Edition["data"]["market"]>; week: string }
+const { lang, market: m, week } = Astro.props;
+const t = useTranslations(lang);
+const usd = (n: number, opts: Intl.NumberFormatOptions = {}) => formatNumber(n, lang, { style: "currency", currency: "USD", ...opts });
+const pct = (n: number) => formatNumber(n / 100, lang, { style: "percent", maximumFractionDigits: 1, signDisplay: "exceptZero" });
+const compact = { notation: "compact", maximumFractionDigits: 1 } as const;
+const stats = [
+  { label: t("m_close"), value: usd(m.close) },
+  { label: t("m_change"), value: pct(m.change) },
+  { label: t("m_range"), value: `${usd(m.low, { maximumFractionDigits: 0 })}–${usd(m.high, { maximumFractionDigits: 0 })}` },
+  { label: t("m_volume"), value: usd(m.volume, compact), note: `${pct(m.volumeChange)} ${t("n_vs_last")}` },
+  { label: t("m_vs_btc"), value: pct(m.btcChange) },
+];
+const subhead = "mb-2 mt-7 font-pixel text-lg text-orange";
+---
+<h2 class="mb-5 font-pixel text-[22px] text-orange">{t("g_price")}</h2>
+<dl class="mb-7 grid grid-cols-2 gap-px border border-line bg-line [&>:last-child:nth-child(odd)]:col-span-2 md:[&>:last-child:nth-child(odd)]:col-span-1 md:grid-cols-5">
+  {stats.map((s) => <StatTile {...s} />)}
+</dl>
+{m.series.length > 1 && <PriceChart lang={lang} series={m.series} week={week} open={m.open} close={m.close} />}
+{m.analysis && (
+  <div class="max-w-[68ch]">
+    {m.analysis.summary && <p class="mt-6 text-[17px] leading-relaxed">{m.analysis.summary}</p>}
+    {m.analysis.drivers.length > 0 && (
+      <>
+        <h3 class={subhead}>{t("m_drivers")}</h3>
+        <ul class="grid gap-3">
+          {m.analysis.drivers.map((d) => (
+            <li class="border-l-2 border-orange pl-3"><p class="text-[15px]">{d.text}</p><SourceLink lang={lang} story={d} tone="dark" /></li>
+          ))}
+        </ul>
+      </>
+    )}
+  </div>
+)}
+<p class="mt-6 text-sm text-ash">{t("m_disclaimer")}</p>

@@ -1,0 +1,7 @@
+---
+import EditionPage from "../../../components/gazette/EditionPage.astro";
+import { langFromParams, localeParams } from "../../../i18n/ui";
+
+export const getStaticPaths = () => localeParams().map((params) => ({ params }));
+---
+<EditionPage lang={langFromParams(Astro.params)} />

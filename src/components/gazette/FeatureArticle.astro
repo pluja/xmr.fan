@@ -1,0 +1,18 @@
+---
+import SourceLink from "./SourceLink.astro";
+import { useTranslations, type Locale } from "../../i18n/ui";
+import type { Edition } from "../../lib/gazette";
+
+interface Props { lang: Locale; feature: NonNullable<Edition["data"]["feature"]> }
+const { lang, feature } = Astro.props;
+const t = useTranslations(lang);
+---
+<article class="max-w-[68ch]">
+  <p class="mb-3 inline-block bg-ink px-2 py-0.5 font-pixel text-sm text-orange">{t("g_feature")}</p>
+  <h2 class="mb-3 font-pixel text-[clamp(26px,3.6vw,40px)] leading-tight">{feature.h}</h2>
+  {feature.dek && <p class="mb-6 text-xl leading-snug text-graphite">{feature.dek}</p>}
+  <div class="grid gap-4 text-[18px] leading-[1.7]">
+    {feature.body.map((p) => <p>{p}</p>)}
+  </div>
+  <div class="mt-5"><SourceLink lang={lang} story={feature} /></div>
+</article>

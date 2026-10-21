@@ -1,0 +1,181 @@
+---
+import Base from "../../layouts/Base.astro";
+import Container from "../Container.astro";
+import InkBand from "../InkBand.astro";
+import PixelIcon from "../PixelIcon.astro";
+import TitleBar from "../TitleBar.astro";
+import GazetteWordmark from "../GazetteWordmark.astro";
+import ComingUp from "./ComingUp.astro";
+import EditionMeta from "./EditionMeta.astro";
+import FeatureArticle from "./FeatureArticle.astro";
+import LeadArt from "./LeadArt.astro";
+import MarketSection from "./MarketSection.astro";
+import NetworkStats from "./NetworkStats.astro";
+import Overheard from "./Overheard.astro";
+import PodcastPlayer from "./PodcastPlayer.astro";
+import SourceLink from "./SourceLink.astro";
+import StoryItem from "./StoryItem.astro";
+import { localePath, useTranslations, type Locale } from "../../i18n/ui";
+import { formatDate, visibleEditions, editionPath, localize, sponsorsFor, type SectionKey } from "../../lib/gazette";
+import SponsorCard from "../sponsor/SponsorCard.astro";
+import Subscribe from "../Subscribe.astro";
+import type { IconName } from "../../lib/pixel";
+import { articleLd, breadcrumbLd, excerpt } from "../../lib/seo";
+
+interface Props { lang: Locale; editionId?: string }
+const { lang, editionId } = Astro.props;
+const t = useTranslations(lang);
+
+const editions = await visibleEditions();
+const edition = editions.find((e) => e.id === editionId) ?? editions[0];
+const others = editions.filter((e) => e !== edition);
+const d = edition && localize(edition.data, lang);
+const sponsors = edition ? await sponsorsFor(edition.data.week) : [];
+
+const SECTIONS: { key: SectionKey; icon: IconName }[] = [
+  { key: "dev", icon: "node" },
+  { key: "eco", icon: "coin" },
+  { key: "comm", icon: "lens" },
+  { key: "privacy", icon: "shield" },
+];
+// Quiet weeks can leave a section empty; hide it and let the others share the row.
+// (`?? []` also covers issues written before a section existed.)
+const storiesIn = (key: SectionKey) => d?.sections[key] ?? [];
+const sections = SECTIONS.filter(({ key }) => storiesIn(key).length > 0);
+
+const isLatest = edition === editions[0];
+const path = edition ? editionPath(edition, editions) : "/news";
+const pageUrl = new URL(localePath(lang, path), Astro.site).href;
+const seoTitle = !d ? t("seo_title_gazette") : isLatest ? `${t("seo_title_gazette")} · ${d.lead.h}` : `${d.lead.h} · ${t("g_title")} ${t("g_no", { n: d.no })}`;
+const seoDesc = d ? excerpt(d.recap ?? d.lead.p) : t("seo_desc_gazette");
+const jsonLd = d && [
+  articleLd({
+    url: pageUrl,
+    headline: d.lead.h,
+    description: seoDesc,
+    image: d.art?.file && new URL(d.art.file, Astro.site).href,
+    published: d.generated?.at ?? d.week,
+    lang,
+    section: t("g_title"),
+  }),
+  breadcrumbLd([
+    { name: "xmr.fan", url: new URL(localePath(lang, "/"), Astro.site).href },
+    { name: t("g_title"), url: new URL(localePath(lang, "/news"), Astro.site).href },
+    ...(isLatest ? [] : [{ name: t("g_no", { n: d.no }), url: pageUrl }]),
+  ]),
+];
+---
+{!edition || !d ? (
+<Base lang={lang} path="/news" title={t("seo_title_gazette")} fullTitle description={t("seo_desc_gazette")} active="gazette">
+  <Container as="section" class="pb-24 pt-2">
+    <h1 class="my-7"><GazetteWordmark label={t("g_title")} /></h1>
+    <div class="mb-8 h-1.5 bg-ink"></div>
+    <p class="font-pixel text-xl">{t("g_empty")}</p>
+  </Container>
+</Base>
+) : (
+<Base
+  lang={lang}
+  path={path}
+  title={seoTitle}
+  fullTitle
+  description={seoDesc}
+  image={d.art?.file}
+  imageAlt={d.art?.alt}
+  type="article"
+  noindex={d.draft}
+  jsonLd={jsonLd}
+  active="gazette"
+>
+  {d.draft && (
+    <p class="bg-ink px-4 py-2 text-center font-pixel text-sm text-orange">Draft: visible only in development until approved with npm run gazette:publish -- {edition.id}</p>
+  )}
+
+  <Container as="section" class="pb-7 pt-2">
+    <p class="grid grid-cols-2 items-center gap-x-4 gap-y-1 border-y-2 border-ink px-0.5 py-2 font-pixel text-[15px] md:grid-cols-[1fr_auto_1fr] [&>:nth-child(2)]:text-right md:[&>:nth-child(2)]:text-center">
+      <EditionMeta lang={lang} edition={edition} />
+      <span class="col-span-2 md:col-span-1 md:text-right">
+        {d.sample ? t("g_sample") : t("g_cadence")}
+        {!d.sample && lang !== "en" && !d.translated && <span class="block text-xs">{t("g_lang_note")}</span>}
+      </span>
+    </p>
+    <h1 class="my-7"><GazetteWordmark label={t("g_title")} /></h1>
+    <div class="h-1.5 bg-ink"></div>
+  </Container>
+
+  <Container as="section" class="pb-14 pt-8">
+    <div class:list={["grid items-center gap-6", d.art?.file && "md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] md:gap-10"]}>
+      <article>
+        <h2 class="mb-6 max-w-[30ch] font-pixel text-[clamp(28px,3.6vw,46px)] leading-[1.15]">{d.lead.h}</h2>
+        <p class="mb-4 max-w-[60ch] text-[18px] leading-[1.65] md:text-[19px]">{d.lead.p}</p>
+        <SourceLink lang={lang} story={d.lead} />
+      </article>
+      {d.art && <div class="-mx-6 md:mx-0"><LeadArt art={d.art} /></div>}
+    </div>
+    {d.podcast && <div class="mx-auto mt-10 max-w-2xl"><PodcastPlayer lang={lang} podcast={d.podcast} /></div>}
+    <Subscribe lang={lang} class="mt-5 justify-center" />
+  </Container>
+
+  {d.market && (
+    <InkBand>
+      <Container class="py-12"><MarketSection lang={lang} market={d.market} week={d.week} /></Container>
+    </InkBand>
+  )}
+
+  {sponsors.length > 0 && <Container as="section" class="pt-10"><SponsorCard lang={lang} sponsors={sponsors} /></Container>}
+
+  {d.feature && (
+    <Container as="section" class="py-14"><FeatureArticle lang={lang} feature={d.feature} /></Container>
+  )}
+
+  {d.network && (
+    <InkBand>
+      <Container class="py-10"><NetworkStats lang={lang} network={d.network} sample={d.sample} /></Container>
+    </InkBand>
+  )}
+
+  {d.quotes && d.quotes.length > 0 && (
+    <Container as="section" class="pt-14"><Overheard lang={lang} quotes={d.quotes} /></Container>
+  )}
+
+  {(sections.length > 0 || d.upcoming?.length) && (
+    <Container as="section" class="pb-14 pt-14">
+      <h2 class="mb-6 font-pixel text-[22px]">{t("g_all_news")}</h2>
+      {d.upcoming && d.upcoming.length > 0 && <div class="mb-12"><ComingUp lang={lang} events={d.upcoming} /></div>}
+      <div class="grid gap-12">
+        {sections.map(({ key, icon }) => (
+          <section>
+            <TitleBar icon={icon} tone="ink">{t(`g_${key}`)}</TitleBar>
+            <ul class="grid gap-x-8 md:grid-cols-2">{storiesIn(key).map((story) => <StoryItem lang={lang} story={story} />)}</ul>
+          </section>
+        ))}
+      </div>
+    </Container>
+  )}
+
+  {others.length > 0 && (
+    <Container as="section" class="pb-16">
+      <h2 class="mb-2 font-pixel text-[22px]">{t("g_archive")}</h2>
+      <ol class="border-t-[3px] border-ink">
+        {others.map((e) => localize(e.data, lang)).map((od, i) => [others[i], od] as const).map(([e, od]) => (
+          <li class="grid gap-0.5 border-b-2 border-dotted border-graphite py-3 md:grid-cols-[90px_220px_1fr] md:gap-4">
+            <span class="font-pixel">{t("g_no", { n: od.no })}</span>
+            <span class="font-pixel">{formatDate(od.week, lang)}</span>
+            <span>
+              <a class="text-ink" href={localePath(lang, editionPath(e, editions))}>{od.lead.h}</a>
+              {od.recap && <span class="mt-1 block text-sm text-graphite">{od.recap}</span>}
+            </span>
+          </li>
+        ))}
+      </ol>
+    </Container>
+  )}
+
+  <Container as="section" class="pb-12">
+    <p class="flex max-w-[80ch] gap-3 border-t-2 border-ink pt-4 text-sm text-graphite">
+      <PixelIcon name="paper" size={18} class="mt-0.5 shrink-0 text-ink" />
+      <span><b class="font-pixel font-normal text-ink">{t("g_how_t")}.</b> {t("g_how")}</span>
+    </p>
+  </Container>
+</Base>
+)}
