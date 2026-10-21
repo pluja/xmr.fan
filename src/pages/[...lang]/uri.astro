@@ -1,0 +1,104 @@
+---
+/* Payment link tool. Rendered per request so the same URL also works as an API:
+     ?raw    -> the monero: URI as text/plain
+     ?rawqr  -> the QR code as image/png (&style=plain for black and white)
+     ?embed  -> just the payment card, for an <iframe> on another site
+   Parameters: address, tx_amount, tx_payment_id, recipient_name, tx_description,
+   or c (a share code from the Share button) instead of all of them.
+   Without raw/rawqr, the page opens with the form prefilled from the same parameters.
+   Share links put the code after # (/uri#c=…): the browser shows the card and the
+   server never sees it. */
+export const prerender = false;
+
+import Bare from "../../layouts/Bare.astro";
+import Base from "../../layouts/Base.astro";
+import Container from "../../components/Container.astro";
+import ToolFrame from "../../components/ToolFrame.astro";
+import PaymentCard from "../../components/pay/PaymentCard.astro";
+import PaymentLink from "../../components/tools/PaymentLink.astro";
+import UriApiDocs from "../../components/tools/UriApiDocs.astro";
+import { isLocale, langFromParams, localePath, useTranslations } from "../../i18n/ui";
+import { cardModel } from "../../lib/card";
+import { validatePayment, type PaymentInput } from "../../lib/payment";
+import { drawQr, qrPng } from "../../lib/qr";
+import { decodeShare } from "../../lib/share";
+import { breadcrumbLd, toolLd } from "../../lib/seo";
+import { getTool, seoDescKey, seoTitleKey, titleKey, toolPath } from "../../lib/tools";
+
+if (Astro.params.lang !== undefined && !isLocale(Astro.params.lang)) {
+  return new Response("Not found", { status: 404 });
+}
+const lang = langFromParams(Astro.params);
+const t = useTranslations(lang);
+const q = Astro.url.searchParams;
+const code = q.get("c");
+const shared = code === null ? null : decodeShare(code);
+const input: PaymentInput = shared ?? {
+  address: q.get("address") ?? "",
+  amount: q.get("tx_amount") ?? "",
+  paymentId: q.get("tx_payment_id") ?? "",
+  name: q.get("recipient_name") ?? "",
+  description: q.get("tx_description") ?? "",
+};
+
+if (q.has("raw") || q.has("rawqr")) {
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Cache-Control": "public, max-age=86400",
+    "X-Content-Type-Options": "nosniff",
+  };
+  if (code !== null && !shared) {
+    return new Response(t("card_invalid") + "\n", { status: 400, headers: { ...headers, "Content-Type": "text/plain; charset=utf-8" } });
+  }
+  const result = validatePayment(input);
+  if (!result.ok) {
+    const body = result.errors.map((e) => `${e.field}: ${t(e.key, e.vars)}`).join("\n");
+    return new Response(body + "\n", { status: 400, headers: { ...headers, "Content-Type": "text/plain; charset=utf-8" } });
+  }
+  if (q.has("raw")) {
+    return new Response(result.uri, { headers: { ...headers, "Content-Type": "text/plain; charset=utf-8" } });
+  }
+  const png = await qrPng(drawQr(result.uri, q.get("style") === "plain" ? "plain" : "pixel"));
+  return new Response(png as BodyInit, {
+    headers: { ...headers, "Content-Type": "image/png", "Content-Disposition": 'inline; filename="monero-payment.png"' },
+  });
+}
+// A card from ?c= comes filled from the server; one from #c= is read by the browser.
+const card = cardModel(shared);
+const fromServer = code !== null;
+const tool = getTool("uri");
+const pageUrl = new URL(localePath(lang, toolPath(tool)), Astro.site).href;
+---
+{q.has("embed") ? (
+  <Bare lang={lang} title={t("card_title")}>
+    <PaymentCard lang={lang} card={card} expected={fromServer} />
+  </Bare>
+) : (
+  <Base
+    lang={lang}
+    path={toolPath(tool)}
+    title={fromServer ? t("card_title") : t(seoTitleKey(tool))}
+    description={t(seoDescKey(tool))}
+    noindex={fromServer}
+    jsonLd={[toolLd(pageUrl, t(seoTitleKey(tool)), t(seoDescKey(tool)), lang), breadcrumbLd([{ name: "xmr.fan", url: new URL(localePath(lang, "/"), Astro.site).href }, { name: t(titleKey(tool)), url: pageUrl }])]}
+    active="tools"
+  >
+    {!fromServer && <script is:inline>if (/(^#|&)c=/.test(location.hash)) document.documentElement.classList.add("card-view")</script>}
+    <Container as="section" class:list={["grid flex-1 content-center justify-items-center gap-8 py-12", !fromServer && "uri-card"]}>
+      <PaymentCard lang={lang} card={card} expected={fromServer} />
+      <a href={localePath(lang, "/uri")} class="font-pixel text-ink">{t("card_make_own")}</a>
+    </Container>
+    {!fromServer && (
+      <div class="uri-form flex flex-1 flex-col">
+        <ToolFrame lang={lang} tool={tool}>
+          <PaymentLink lang={lang} initial={input} />
+          <UriApiDocs slot="after" lang={lang} />
+        </ToolFrame>
+      </div>
+    )}
+  </Base>
+)}
+
+<style>
+  :global(html:not(.card-view)) .uri-card, :global(html.card-view) .uri-form { display: none; }
+</style>

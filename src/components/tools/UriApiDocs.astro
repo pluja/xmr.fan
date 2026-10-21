@@ -1,0 +1,83 @@
+---
+import { useTranslations, type Locale } from "../../i18n/ui";
+import { EXAMPLE_ADDRESS } from "../../lib/monero";
+import { encodeShare } from "../../lib/share";
+
+interface Props { lang: Locale }
+const t = useTranslations(Astro.props.lang);
+
+// In the order they appear in URLs.
+const PARAMS = [
+  { param: "address", field: "address", label: t("f_address"), required: true },
+  { param: "tx_amount", field: "amount", label: t("f_amount") },
+  { param: "tx_payment_id", field: "paymentId", label: t("f_payment_id") },
+  { param: "recipient_name", field: "name", label: t("f_name") },
+  { param: "tx_description", field: "description", label: t("f_desc") },
+];
+const MODES = [
+  { flag: "?raw", text: t("api_raw") },
+  { flag: "?rawqr", text: t("api_rawqr") },
+  { flag: "&style=plain", text: t("api_plain") },
+  { flag: "?embed", text: t("api_embed") },
+];
+const base = `${Astro.url.origin}/uri`;
+const example = `${base}?address=${EXAMPLE_ADDRESS}&tx_amount=1.5`;
+const exampleCode = encodeShare({ address: EXAMPLE_ADDRESS, amount: "1.5" });
+const code = "font-mono text-[13px] text-mint";
+---
+<section id="api" class="mt-12 max-w-[920px]" aria-labelledby="api-title" data-base={base} data-params={JSON.stringify(PARAMS.map(({ param, field }) => [param, field]))}>
+  <h2 id="api-title" class="mb-2 font-pixel text-2xl text-orange">{t("api_title")}</h2>
+  <p class="mb-6 max-w-[60ch]">{t("api_intro")}</p>
+
+  <dl class="mb-8 grid gap-x-6 gap-y-2 border-l-2 border-orange pl-4 sm:grid-cols-[auto_1fr]">
+    {MODES.map((m) => (<><dt class={code}>{m.flag}</dt><dd class="text-[15px]">{m.text}</dd></>))}
+  </dl>
+
+  <h3 class="mb-3 font-pixel text-lg text-orange">{t("api_params")}</h3>
+  <dl class="mb-8 grid gap-x-6 gap-y-2 sm:grid-cols-[auto_1fr]">
+    <dt class={code}>c</dt>
+    <dd class="text-[15px]">{t("api_c")}</dd>
+    {PARAMS.map((p) => (
+      <>
+        <dt class={code}>{p.param}</dt>
+        <dd class="text-[15px]">{p.label}{p.required && <span class="ml-2 border border-orange px-1.5 font-pixel text-xs text-orange">{t("api_required")}</span>}</dd>
+      </>
+    ))}
+  </dl>
+
+  <h3 class="mb-3 font-pixel text-lg text-orange">{t("api_example")}</h3>
+  <div class="grid gap-2 bg-ink-2 p-4 font-mono text-[13px] leading-relaxed [word-break:break-all]">
+    <a id="api-raw" class="text-mint" href={`${example}&raw`} target="_blank" rel="noopener">{`${example}&raw`}</a>
+    <a id="api-rawqr" class="text-mint" href={`${example}&rawqr`} target="_blank" rel="noopener">{`${example}&rawqr`}</a>
+    <a id="api-embed" class="text-mint" href={`${base}?embed#c=${exampleCode}`} target="_blank" rel="noopener">{`${base}?embed#c=${exampleCode}`}</a>
+  </div>
+  <p class="mt-4 text-sm text-ash">{t("api_privacy")}</p>
+</section>
+
+<script>
+  import type { PaymentInput } from "../../lib/payment";
+  import { subscribePayment } from "../../lib/payment-store";
+  import { encodeShare } from "../../lib/share";
+
+  const section = document.getElementById("api")!;
+  const base = section.dataset.base!;
+  const params: [string, keyof PaymentInput][] = JSON.parse(section.dataset.params!);
+  const links = { raw: document.getElementById("api-raw") as HTMLAnchorElement, rawqr: document.getElementById("api-rawqr") as HTMLAnchorElement };
+  const embed = document.getElementById("api-embed") as HTMLAnchorElement;
+  const initial = { raw: links.raw.href, rawqr: links.rawqr.href, embed: embed.href };
+
+  // Show the user's own request once the form is valid; otherwise keep the example.
+  subscribePayment(({ input, ok }) => {
+    for (const mode of ["raw", "rawqr"] as const) {
+      let url = initial[mode];
+      if (ok) {
+        const q = new URLSearchParams();
+        for (const [param, field] of params) if (input[field]?.trim()) q.set(param, input[field]!.trim());
+        url = `${base}?${q}&${mode}`;
+      }
+      links[mode].href = links[mode].textContent = url;
+    }
+    const code = ok && encodeShare(input);
+    embed.href = embed.textContent = code ? `${base}?embed#c=${code}` : initial.embed;
+  });
+</script>
