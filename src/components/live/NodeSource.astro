@@ -1,0 +1,34 @@
+---
+/* Drive it with liveTask() from live.ts. */
+import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
+
+interface Props { lang: Locale; prices?: boolean }
+const { lang, prices } = Astro.props;
+const t = useTranslations(lang);
+---
+<div class="node-source grid gap-2 text-sm text-graphite" data-strings={pickStrings(lang, ["live_from", "live_connecting", "live_own_bad"])}>
+  <p data-error class="flex flex-wrap items-center gap-3 border-2 border-danger bg-paper px-3 py-2 text-danger" hidden>
+    <span>{t("live_error")}</span>
+    <button type="button" data-retry class="cursor-pointer font-pixel underline">{t("live_retry")}</button>
+  </p>
+  <p class="flex flex-wrap items-center gap-x-3 gap-y-1">
+    <span class="inline-flex items-center gap-2">
+      <i data-dot class="inline-block size-2 bg-ash" aria-hidden="true"></i>
+      <span data-status aria-live="polite">{t("live_connecting")}</span>
+    </span>
+    {prices && <span>· {t("price_from")}</span>}
+    <button type="button" data-own-toggle class="cursor-pointer underline" aria-expanded="false">{t("live_own")}</button>
+  </p>
+  <form data-own class="grid gap-2 border-2 border-ink bg-paper p-3" hidden novalidate>
+    <label class="grid gap-1 font-semibold text-ink">
+      <span>{t("live_own_label")}</span>
+      <input name="node" class="field font-mono text-[13px]" placeholder="https://node.example.com:18089" autocomplete="off" spellcheck="false" />
+    </label>
+    <p data-own-message class="text-danger empty:hidden" aria-live="polite"></p>
+    <div class="flex flex-wrap gap-2">
+      <button class="btn" type="submit">{t("live_own_save")}</button>
+      <button class="btn btn-ghost" type="button" data-own-reset>{t("live_own_reset")}</button>
+    </div>
+    <p>{t("live_own_note")}</p>
+  </form>
+</div>
