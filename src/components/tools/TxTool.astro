@@ -1,0 +1,198 @@
+---
+import Field from "../Field.astro";
+import PixelIcon from "../PixelIcon.astro";
+import TryExample from "../TryExample.astro";
+import NodeSource from "../live/NodeSource.astro";
+import { localePath, pickStrings, useTranslations, type Locale } from "../../i18n/ui";
+import { UNLOCK_BLOCKS } from "../../lib/tx";
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const strings = pickStrings(lang, [
+  "tx_pool", "tx_pool_note", "tx_confirming", "tx_confirming_note", "tx_spendable", "tx_spendable_note", "tx_coinbase", "tx_locked", "tx_locked_time",
+  "tx_not_found", "v_err_txid", "tx_n_notify", "tx_n_note", "tx_n_on", "tx_n_off", "tx_n_denied", "tx_n_mined", "tx_n_spendable", "tx_n_double", "tx_confirming", "live_error", "dur_s", "dur_min", "dur_h", "dur_d", "dur_y",
+]);
+const row = "grid grid-cols-[140px_1fr] gap-4 border-b-2 border-dotted border-graphite/40 py-2";
+---
+<div id="tx-tool" class="grid gap-6" data-strings={strings} data-lang={lang} data-verify={localePath(lang, "/verify")}>
+  <form data-form class="flex flex-wrap items-end gap-2" novalidate>
+    <Field label={t("tx_id")} messageId="tx-message" class="min-w-0 flex-1 basis-80">
+      <input name="txid" spellcheck="false" autocomplete="off" autocapitalize="off" class="field font-mono text-[13px]" aria-describedby="tx-message" autofocus />
+    </Field>
+    <button class="btn mb-px" type="submit">{t("tx_track")}</button>
+    <TryExample lang={lang} class="basis-full" />
+  </form>
+
+  <p data-failure class="result bad" hidden></p>
+
+  <section data-result class="grid gap-5" hidden>
+    <div class="grid gap-3 border-2 border-ink bg-paper p-4 shadow-[4px_4px_0_var(--color-ink)]">
+      <p data-stage class="font-pixel text-[clamp(20px,3.4vw,28px)]"></p>
+      <ol data-pips class="flex gap-1.5" aria-hidden="true">
+        {Array.from({ length: UNLOCK_BLOCKS }, () => <li class="h-4 flex-1 border-2 border-ink"></li>)}
+      </ol>
+      <p data-stage-note class="text-[15px]"></p>
+      <p data-warning class="text-[15px] text-danger" hidden>{t("tx_double")}</p>
+    </div>
+    <dl class="border-t-[3px] border-ink text-[15px]">
+      <div class={row} data-row="mined"><dt class="font-semibold">{t("tx_mined")}</dt><dd data-mined></dd></div>
+      <div class={row}><dt class="font-semibold">{t("tx_fee")}</dt><dd data-fee class="font-mono"></dd></div>
+      <div class={row}><dt class="font-semibold">{t("tx_size")}</dt><dd data-size class="font-mono"></dd></div>
+      <div class={row}><dt class="font-semibold">{t("tx_io")}</dt><dd data-io class="font-mono"></dd></div>
+      <div class={row} data-row="ring"><dt class="font-semibold">{t("tx_ring")}</dt><dd data-ring class="font-mono"></dd></div>
+      <div class={row} data-row="extra" hidden><dt></dt><dd data-extra></dd></div>
+    </dl>
+    <div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm">
+      <button type="button" data-notify class="btn" aria-pressed="false"><PixelIcon name="sound" size={16} /><span>{t("tx_n_notify")}</span></button>
+      <a data-verify-link class="btn btn-ghost">{t("tx_check")}</a>
+      <span data-live class="text-graphite">{t("tx_live")}</span>
+    </div>
+    <p data-notify-note class="-mt-2 text-sm text-graphite" hidden></p>
+  </section>
+
+  <p class="text-sm text-graphite">{t("tx_privacy")}</p>
+  <NodeSource lang={lang} />
+</div>
+
+<script>
+  import { liveTask } from "../live/live";
+  import { readStrings } from "../../i18n/format";
+  import type { Locale } from "../../i18n/ui";
+  import { playChime, unlockChime } from "../../lib/chime";
+  import { formatDuration } from "../../lib/duration";
+  import { EXAMPLE_PAYMENT } from "../../lib/examples";
+  import { picoToXmr } from "../../lib/monero";
+  import { call, getInfo } from "../../lib/node-client";
+  import { BLOCK_SECONDS } from "../../lib/nodes";
+  import { isTxid } from "../../lib/txproof";
+  import { txStage, txSummary, UNLOCK_BLOCKS } from "../../lib/tx";
+
+  const root = document.getElementById("tx-tool")!;
+  const t = readStrings(root);
+  const lang = root.dataset.lang as Locale;
+  const form = root.querySelector<HTMLFormElement>("[data-form]")!;
+  const input = form.elements.namedItem("txid") as HTMLInputElement;
+  const $ = <T extends HTMLElement = HTMLElement>(s: string) => root.querySelector<T>(s)!;
+  const num = new Intl.NumberFormat(lang);
+  const dateTime = new Intl.DateTimeFormat(lang, { dateStyle: "long", timeStyle: "short" });
+  const REFRESH_MS = 30_000;
+
+  interface Found { as_json: string; as_hex: string; in_pool: boolean; block_height: number; block_timestamp: number; double_spend_seen: boolean }
+
+  let current = "", timer: ReturnType<typeof setTimeout> | undefined;
+  const baseTitle = document.title;
+
+  /* Alerts fire when the transaction is mined, when it becomes spendable, and if a
+     conflicting transaction shows up. */
+  let notify = false, lastStage: string | undefined, lastDouble = false;
+  const notifyBtn = $<HTMLButtonElement>("[data-notify]"), notifyNote = $("[data-notify-note]");
+
+  notifyBtn.addEventListener("click", async () => {
+    notify = !notify;
+    notifyBtn.setAttribute("aria-pressed", String(notify));
+    notifyBtn.querySelector("span")!.textContent = t(notify ? "tx_n_off" : "tx_n_notify");
+    notifyBtn.classList.toggle("btn-ghost", notify);
+    notifyNote.hidden = !notify;
+    if (!notify) return;
+    unlockChime();
+    playChime();
+    notifyNote.textContent = t("tx_n_note");
+    if ("Notification" in window && Notification.permission === "default") await Notification.requestPermission();
+    if (!("Notification" in window) || Notification.permission === "denied") notifyNote.textContent = `${t("tx_n_note")} ${t("tx_n_denied")}`;
+  });
+
+  function alertUser(title: string, body: string, success: boolean) {
+    if (!notify) return;
+    playChime(success);
+    if ("Notification" in window && Notification.permission === "granted") {
+      const n = new Notification(title, { body, icon: "/icon-192.png", tag: current });
+      n.onclick = () => { window.focus(); n.close(); };
+    }
+  }
+
+  function fail(text: string) {
+    $("[data-result]").hidden = true;
+    $("[data-failure]").textContent = text;
+    $("[data-failure]").hidden = false;
+  }
+
+  async function load(txid: string) {
+    clearTimeout(timer);
+    let found: Found | undefined, height: number;
+    try {
+      const [r, info] = await Promise.all([call<{ txs?: Found[] }>("/get_transactions", { txs_hashes: [txid], decode_as_json: true }), getInfo()]);
+      found = r.txs?.[0]; height = info.height;
+    } catch {
+      return fail(t("live_error"));
+    }
+    if (txid !== current) return;
+    if (!found) return fail(t("tx_not_found"));
+    const summary = txSummary(found.as_json);
+    if (!summary) return fail(t("tx_not_found"));
+    $("[data-failure]").hidden = true;
+
+    const confirmations = found.in_pool ? 0 : height - found.block_height;
+    const stage = txStage(found.in_pool, confirmations);
+    $("[data-stage]").textContent = stage === "pool" ? t("tx_pool") : stage === "confirming" ? t("tx_confirming", { n: confirmations }) : t("tx_spendable");
+    $("[data-stage]").className = `font-pixel text-[clamp(20px,3.4vw,28px)] ${stage === "spendable" ? "text-ok" : "text-ink"}`;
+    $("[data-stage-note]").textContent = stage === "pool" ? t("tx_pool_note")
+      : stage === "confirming" ? t("tx_confirming_note", { time: formatDuration((UNLOCK_BLOCKS - confirmations) * BLOCK_SECONDS, t, lang) })
+      : t("tx_spendable_note", { n: num.format(confirmations) });
+    [...$("[data-pips]").children].forEach((pip, i) => {
+      pip.classList.toggle("bg-ink", stage !== "spendable" && i < confirmations);
+      pip.classList.toggle("bg-ok", stage === "spendable");
+    });
+    $("[data-live]").hidden = notifyBtn.hidden = stage === "spendable";
+    if (stage === "spendable") notifyNote.hidden = true;
+    document.title = stage === "spendable" ? `✓ ${baseTitle}` : `(${Math.min(confirmations, UNLOCK_BLOCKS)}/${UNLOCK_BLOCKS}) ${baseTitle}`;
+    if (lastStage && stage !== lastStage) {
+      const body = t("tx_confirming", { n: Math.min(confirmations, UNLOCK_BLOCKS) });
+      if (stage === "spendable") alertUser(t("tx_n_spendable"), body, true);
+      else if (lastStage === "pool") alertUser(t("tx_n_mined"), body, false);
+    }
+    if (found.double_spend_seen && !lastDouble) alertUser(t("tx_n_double"), txid.slice(0, 16), false);
+    lastStage = stage;
+    lastDouble = found.double_spend_seen;
+    $("[data-warning]").hidden = !found.double_spend_seen;
+
+    $("[data-row=mined]").hidden = found.in_pool;
+    $("[data-mined]").textContent = found.in_pool ? "" : `${dateTime.format(found.block_timestamp * 1000)} · #${num.format(found.block_height)}`;
+    const bytes = found.as_hex.length / 2;
+    $("[data-fee]").textContent = summary.coinbase ? "–" : `${picoToXmr(String(summary.fee))} XMR (${num.format(Math.round(summary.fee / bytes))} pico/B)`;
+    $("[data-size]").textContent = `${num.format(bytes)} B`;
+    $("[data-io]").textContent = `${summary.inputs} / ${summary.outputs}`;
+    $("[data-row=ring]").hidden = !summary.ringSize;
+    $("[data-ring]").textContent = String(summary.ringSize ?? "");
+    const extra = summary.coinbase ? t("tx_coinbase")
+      : summary.unlockTime > 500_000_000 ? t("tx_locked_time", { date: dateTime.format(summary.unlockTime * 1000) })
+      : summary.unlockTime > 0 ? t("tx_locked", { height: num.format(summary.unlockTime) }) : "";
+    $("[data-row=extra]").hidden = !extra;
+    $("[data-extra]").textContent = extra;
+    $<HTMLAnchorElement>("[data-verify-link]").href = `${root.dataset.verify}#tx=${txid}`;
+    $("[data-result]").hidden = false;
+
+    if (stage !== "spendable") timer = setTimeout(() => load(txid), REFRESH_MS);
+  }
+
+  function track() {
+    const txid = input.value.trim().toLowerCase();
+    const ok = isTxid(txid);
+    input.setAttribute("aria-invalid", String(!!txid && !ok));
+    $("#tx-message").textContent = txid && !ok ? t("v_err_txid") : "";
+    if (!ok) return;
+    if (txid !== current) { lastStage = undefined; lastDouble = false; }
+    current = txid;
+    history.replaceState(null, "", `#${txid}`);
+    return load(txid);
+  }
+
+  form.addEventListener("submit", (e) => { e.preventDefault(); track(); });
+  $("[data-example]").addEventListener("click", () => { input.value = EXAMPLE_PAYMENT.txid; track(); });
+  input.value = location.hash.slice(1);
+  addEventListener("hashchange", () => {
+    const txid = location.hash.slice(1);
+    if (txid && txid !== current) { input.value = txid; track(); }
+  });
+  liveTask(async () => { if (input.value) await track(); });
+</script>
