@@ -1,17 +1,16 @@
 /* The stage for an address beat, drawn on a tiny canvas and scaled up so every pixel is chunky:
-   the Monero logo pulsing in the middle, a ring sequencer of the 32 steps around it, pixel rain,
+   a ring sequencer of the 32 steps around the address's QR code, sparks on the kick, pixel rain,
    spectrum bars and the address bytes. The address ticker and the QR code are drawn on top at full
    resolution, so the text stays readable and the code scannable (also in recorded videos).
    It keeps idling gently when the music is stopped. */
 import { STEPS, type Song } from "../../lib/beat";
 import { buildUri } from "../../lib/monero";
-import { drawQr, MONERO_LOGO, type QrDrawing } from "../../lib/qr";
+import { drawQr, type QrDrawing } from "../../lib/qr";
 
 const C = {
   bg: "#2b282d", dim: "#36323a", graphite: "#45404a", line: "#5a5460",
   orange: "#fb8c3c", flame: "#ff6600", cream: "#fff1e4", mint: "#a8e6c1", peach: "#ffd2ad",
 };
-const LOGO_COLORS: Record<string, string> = { o: C.flame, k: "#4c4c4c", w: C.cream };
 
 interface Spark { x: number; y: number; vx: number; vy: number; life: number }
 interface Drop { x: number; y: number; speed: number }
@@ -26,7 +25,6 @@ export class BeatVisuals {
   private drops: Drop[] = [];
   private peaks: number[] = [];
   private pulse = 0;
-  private flash = 0;
   private trail: number[] = [];
   private last = performance.now();
   private raf = 0;
@@ -61,7 +59,6 @@ export class BeatVisuals {
       this.pulse = 1;
       this.burst(14);
     }
-    if (this.song?.snare[step]) this.flash = 1;
   }
 
   private get W() { return this.buffer.width; }
@@ -72,10 +69,10 @@ export class BeatVisuals {
     const rect = this.canvas.getBoundingClientRect();
     const portrait = rect.width < 560;
     this.buffer.width = portrait ? 72 : 128;
-    this.buffer.height = portrait ? 132 : 80;
+    this.buffer.height = portrait ? 120 : 80;
     this.layout = portrait
-      ? { tickerY: 2, bytesY: 12, cx: 36, cy: 44, r: 26, qr: { x: 20, y: 78, size: 32 }, specH: 14 }
-      : { tickerY: 2, bytesY: 12, cx: 64, cy: 44, r: 26, qr: { x: 98, y: 30, size: 26 }, specH: 9 };
+      ? { tickerY: 2, bytesY: 12, cx: 36, cy: 46, r: 27, qr: { x: 24, y: 34, size: 24 }, specH: 16 }
+      : { tickerY: 2, bytesY: 12, cx: 64, cy: 45, r: 27, qr: { x: 52, y: 33, size: 24 }, specH: 7 };
     const dpr = devicePixelRatio || 1;
     this.canvas.width = Math.round(rect.width * dpr);
     this.canvas.height = Math.round(rect.width * dpr * (this.H / this.W));
@@ -110,16 +107,14 @@ export class BeatVisuals {
 
   private draw(dt: number) {
     const g = this.g, { W, H } = this;
-    g.fillStyle = this.flash > 0 ? C.dim : C.bg;
+    g.fillStyle = C.bg;
     g.fillRect(0, 0, W, H);
     this.rain(dt);
     this.bytes();
     this.ring();
-    this.logo();
     this.spectrum(dt);
     this.updateSparks(dt);
     this.pulse = Math.max(0, this.pulse - dt * 4);
-    this.flash = Math.max(0, this.flash - dt * 6);
   }
 
   private rain(dt: number) {
@@ -145,7 +140,7 @@ export class BeatVisuals {
     });
   }
 
-  /** Three rings around the logo: melody outside, bass in the middle, drums inside. */
+  /** Three rings around the QR code: melody outside, bass in the middle, drums inside. */
   private ring() {
     const song = this.song;
     if (!song) return;
@@ -158,32 +153,13 @@ export class BeatVisuals {
       const head = this.playing && age === 0;
       const glow = this.playing && age > 0 ? 1 - age / 5 : 0;
       const lead = song.lead[i] !== null, bass = song.bass[i] !== null, drum = song.kick[i] || song.snare[i];
-      const [lx, ly] = at(r), [bx, by] = at(r - 5), [dx, dy] = at(r - 9);
+      const [lx, ly] = at(r), [bx, by] = at(r - 4), [dx, dy] = at(r - 8);
       this.px(lx - 1, ly - 1, head ? C.cream : lead ? (glow ? C.peach : C.orange) : C.graphite, 2, 2);
       if (bass) this.px(bx - 1, by - 1, head ? C.cream : glow ? C.cream : C.mint, 2, 2);
       if (drum) this.px(dx, dy, head || glow > 0.5 ? C.cream : song.snare[i] ? C.flame : C.line);
     }
   }
 
-  private logo() {
-    const { cx, cy } = this.center();
-    const size = MONERO_LOGO.length;
-    const scale = 2;
-    const grow = Math.round(this.pulse * 2);
-    const s = scale * size + grow * 2;
-    const x0 = cx - s / 2, y0 = cy - s / 2;
-    if (this.pulse > 0) {
-      const ring = s + 4 + Math.round((1 - this.pulse) * 10);
-      this.g.strokeStyle = this.pulse > 0.5 ? C.orange : C.flame;
-      this.g.lineWidth = 1;
-      this.g.strokeRect(Math.round(cx - ring / 2) + 0.5, Math.round(cy - ring / 2) + 0.5, ring, ring);
-    }
-    const cell = s / size;
-    MONERO_LOGO.forEach((row, y) => [...row].forEach((ch, x) => {
-      const color = LOGO_COLORS[ch];
-      if (color) this.px(x0 + x * cell, y0 + y * cell, color, Math.ceil(cell), Math.ceil(cell));
-    }));
-  }
 
   private spectrum(dt: number) {
     const bins = this.playing ? this.bins?.() : undefined;
@@ -233,29 +209,45 @@ export class BeatVisuals {
     o.textAlign = "start";
   }
 
-  /** A scannable code for sending to the address, on a cream tile. */
+  /** A scannable code for sending to the address. Orange finder eyes, and while the music plays an
+      orange wave sweeps diagonally over the dark modules with the playhead. Orange stays dark enough
+      for scanners, so the code reads at any moment. */
   private qrCode() {
     const qr = this.qr;
     if (!qr) return;
     const k = this.canvas.width / this.W, { x, y, size } = this.layout.qr, o = this.out;
-    const pad = Math.round(k), x0 = Math.round(x * k), y0 = Math.round(y * k), s = Math.round(size * k);
-    o.fillStyle = this.pulse > 0.6 ? C.orange : C.graphite;
-    o.fillRect(x0 - pad * 2, y0 - pad * 2, s + pad * 4, s + pad * 4);
+    const pad = Math.round(k * 1.2), x0 = Math.round(x * k), y0 = Math.round(y * k), s = Math.round(size * k);
+    o.fillStyle = C.graphite;
+    o.fillRect(x0 - pad - Math.round(k * 0.6), y0 - pad - Math.round(k * 0.6), s + 2 * pad + Math.round(k * 1.2), s + 2 * pad + Math.round(k * 1.2));
     o.fillStyle = qr.palette[0];
     o.fillRect(x0 - pad, y0 - pad, s + pad * 2, s + pad * 2);
     const m = s / qr.size;
+    const phase = this.playing && this.step >= 0 ? ((this.step + 1) / STEPS) * 1.2 - 0.1 : -1;
     for (const sh of qr.shapes) {
-      o.fillStyle = qr.palette[sh.c];
+      const finder = sh.c === 1 && !sh.gap;
+      const wave = sh.gap && phase >= 0 && Math.abs((sh.x + sh.y) / (2 * qr.size) - phase) < 0.05;
+      o.fillStyle = finder || wave ? C.flame : qr.palette[sh.c];
       const g = sh.gap && m >= 5 ? m * 0.1 : 0;
       o.fillRect(x0 + sh.x * m + g, y0 + sh.y * m + g, sh.w * m - 2 * g, sh.h * m - 2 * g);
     }
   }
 
-  /** In the wide layout, the empty left side carries where the beat came from, for shared videos. */
+  /** Where the beat came from, for shared videos: left of the ring when wide, under it when tall. */
   private signature() {
-    if (this.H > this.W || !this.song) return;
+    if (!this.song) return;
     const k = this.canvas.width / this.W, o = this.out;
     o.textBaseline = "top";
+    if (this.H > this.W) {
+      o.textAlign = "center";
+      o.font = `${Math.round(5 * k)}px 'DotGothic16', ui-monospace, monospace`;
+      o.fillStyle = C.orange;
+      o.fillText("xmr.fan/beat", (this.W / 2) * k, 80 * k);
+      o.font = `${Math.round(4 * k)}px 'DotGothic16', ui-monospace, monospace`;
+      o.fillStyle = "#a39ca8";
+      o.fillText(`${this.song.bpm} BPM · ${this.song.key}`, (this.W / 2) * k, 87 * k);
+      o.textAlign = "start";
+      return;
+    }
     o.font = `${Math.round(4 * k)}px 'DotGothic16', ui-monospace, monospace`;
     o.fillStyle = C.orange;
     o.fillText("xmr.fan/beat", 5 * k, 40 * k);
