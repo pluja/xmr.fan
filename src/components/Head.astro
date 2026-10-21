@@ -1,0 +1,22 @@
+---
+/* Page-specific tags go in the slot. */
+import "@fontsource/dotgothic16";
+import "@fontsource/pixelify-sans/400.css";
+import "@fontsource-variable/manrope";
+import "../styles/global.css";
+
+interface Props { title: string; description?: string }
+const { title, description } = Astro.props;
+---
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  {description && <meta name="description" content={description} />}
+  <meta name="theme-color" content="#fb8c3c" />
+  <meta name="referrer" content="no-referrer" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <slot />
+</head>

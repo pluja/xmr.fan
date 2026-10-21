@@ -1,0 +1,9 @@
+---
+import { iconPath, type IconName } from "../lib/pixel";
+
+interface Props { name: IconName; size?: number; class?: string }
+const { name, size = 32, class: cls = "" } = Astro.props;
+---
+<svg viewBox="0 0 8 8" width={size} height={size} class={cls} aria-hidden="true" shape-rendering="crispEdges">
+  <path d={iconPath(name)} fill="currentColor" />
+</svg>

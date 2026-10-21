@@ -1,0 +1,20 @@
+---
+import Container from "./Container.astro";
+import PixelIcon from "./PixelIcon.astro";
+import { localePath, useTranslations, type Locale } from "../i18n/ui";
+const lang = Astro.props.lang as Locale;
+const t = useTranslations(lang);
+---
+<footer class="on-ink bg-ink py-6 font-pixel text-sm text-orange">
+  <Container class="flex flex-wrap justify-between gap-4">
+    <p class="flex flex-wrap gap-x-4 gap-y-1">
+      <span>{t("footer")}</span>
+      <span set:html={t("footer_by", { name: '<a class="text-orange" href="https://kycnot.me" rel="noopener">KYCnot.me</a>' })} />
+    </p>
+    <nav class="flex flex-wrap gap-x-5 gap-y-2">
+      <a class="text-orange" href={localePath(lang, "/sponsor")}>{t("sp_become")}</a>
+      <a class="text-orange" href={localePath(lang, "/sponsors")}>{t("sp_all_t")}</a>
+      <a class="inline-flex items-center gap-1.5 text-orange" href={localePath(lang, "/feeds")}><PixelIcon name="rss" size={14} />{t("feeds")}</a>
+    </nav>
+  </Container>
+</footer>

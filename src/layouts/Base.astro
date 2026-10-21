@@ -1,0 +1,65 @@
+---
+import Head from "../components/Head.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { LOCALES, DEFAULT_LOCALE, localePath, useTranslations, type Locale } from "../i18n/ui";
+import { OG_LOCALE, ldJson, type JsonLd } from "../lib/seo";
+
+interface Props {
+  lang: Locale;
+  /** Path without locale prefix, e.g. "/units". */
+  path: string;
+  /** Page title; " · xmr.fan" is added unless `fullTitle` is set. */
+  title?: string;
+  fullTitle?: boolean;
+  description?: string;
+  /** Social preview image, a path under public/ or an absolute URL. */
+  image?: string;
+  imageAlt?: string;
+  type?: "website" | "article";
+  noindex?: boolean;
+  jsonLd?: JsonLd | JsonLd[];
+  active?: "tools" | "gazette";
+}
+const { lang, path, title, fullTitle, description, image = "/og.png", imageAlt, type = "website", noindex, jsonLd, active } = Astro.props;
+const t = useTranslations(lang);
+const pageTitle = !title ? `xmr.fan · ${t("tagline")}` : fullTitle ? title : `${title} · xmr.fan`;
+const desc = description ?? t("meta_desc");
+const site = Astro.site!;
+const url = new URL(localePath(lang, path), site).href;
+const imageUrl = new URL(image, site).href;
+---
+<!doctype html>
+<html lang={lang}>
+  <Head title={pageTitle} description={desc}>
+    <link rel="canonical" href={url} />
+    {LOCALES.map((l) => <link rel="alternate" hreflang={l} href={new URL(localePath(l, path), site)} />)}
+    <link rel="alternate" hreflang="x-default" href={new URL(localePath(DEFAULT_LOCALE, path), site)} />
+    <link rel="alternate" type="application/rss+xml" title={t("g_title")} href={new URL(localePath(lang, "/feed/news.xml"), site)} />
+    <link rel="alternate" type="application/rss+xml" title={`xmr.fan · ${t("feed_tools")}`} href={new URL(localePath(lang, "/feed/tools.xml"), site)} />
+    <link rel="alternate" type="application/rss+xml" title={`${t("g_title")} · ${t("feed_podcast")}`} href={new URL("/feed/podcast.xml", site)} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta property="og:site_name" content="xmr.fan" />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:url" content={url} />
+    <meta property="og:image" content={imageUrl} />
+    {imageAlt && <meta property="og:image:alt" content={imageAlt} />}
+    <meta property="og:locale" content={OG_LOCALE[lang]} />
+    {LOCALES.filter((l) => l !== lang).map((l) => <meta property="og:locale:alternate" content={OG_LOCALE[l]} />)}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={desc} />
+    <meta name="twitter:image" content={imageUrl} />
+    {jsonLd && <script type="application/ld+json" set:html={ldJson(jsonLd)} />}
+  </Head>
+  <body class="flex min-h-screen flex-col">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-10 focus:bg-ink focus:px-3 focus:py-2 focus:text-orange">{t("skip")}</a>
+    <Header lang={lang} path={path} active={active} />
+    <main id="main" class="flex flex-1 flex-col">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+  </body>
+</html>

@@ -1,0 +1,10 @@
+---
+import { layoutText } from "../lib/pixel";
+
+interface Props { text: string; class?: string; label?: string; seed?: number }
+const { text, class: cls = "", label = text, seed } = Astro.props;
+const { width, height, rects } = layoutText(text, seed);
+---
+<svg viewBox={`0 0 ${width} ${height}`} class={cls} role="img" aria-label={label} shape-rendering="crispEdges" fill="currentColor">
+  {rects.map((r) => <rect class="px" x={r.x} y={r.y} width="1" height="1" style={`--d:${r.delay}ms`} />)}
+</svg>

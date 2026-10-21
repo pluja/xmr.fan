@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #2b282d;
+  --color-ink-2: #36323a;
+  --color-graphite: #45404a;
+  --color-line: #5a5460;
+  --color-ash: #a39ca8;
+  --color-orange: #fb8c3c;   /* page background: darker, Monero-like */
+  --color-flame: #ff6600;    /* Monero orange, for small accents */
+  --color-peach: #ffd2ad;
+  --color-cream: #fff1e4;
+  --color-paper: #fffaf5;
+  --color-mint: #a8e6c1;
+  --color-ok: #1d6b3a;
+  --color-danger: #9e2a14;
+
+  --font-pixel: "DotGothic16", ui-monospace, monospace;
+  --font-sans: "Manrope Variable", system-ui, "Hiragino Sans", "Noto Sans JP", sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+
+@layer base {
+  /* DotGothic16 draws Cyrillic full-width; Pixelify Sans has proper Cyrillic. */
+  :root:lang(ru) { --font-pixel: "Pixelify Sans", "DotGothic16", monospace; }
+
+  html { -webkit-text-size-adjust: 100%; }
+  body { @apply bg-orange text-ink font-sans antialiased; font-size: 17px; line-height: 1.55; }
+  :focus-visible { outline: 3px solid var(--color-ink); outline-offset: 3px; }
+  .on-ink :focus-visible { outline-color: var(--color-orange); }
+  ::selection { background: var(--color-ink); color: var(--color-orange); }
+}
+
+@layer components {
+  /* Dither bands: the edge between orange and ink is drawn in pixels */
+  .dither { height: 24px; display: grid; grid-template-rows: repeat(3, 1fr); image-rendering: pixelated; }
+  .dither > i { display: block; background-size: 8px 8px; }
+  .dither.flip { transform: scaleY(-1); }
+  .d25 { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2 2'%3E%3Crect width='1' height='1' fill='%232b282d'/%3E%3C/svg%3E"); }
+  .d50 { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2 2'%3E%3Cpath d='M0 0h1v1H0zM1 1h1v1H1z' fill='%232b282d'/%3E%3C/svg%3E"); }
+  .d75 { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2 2'%3E%3Cpath d='M0 0h2v1H0zM1 1h1v1H1z' fill='%232b282d'/%3E%3C/svg%3E"); }
+
+  .field {
+    @apply w-full rounded-none border-2 border-ink bg-paper px-3 py-2.5 text-base text-ink;
+  }
+  .field:focus { outline: none; box-shadow: 3px 3px 0 var(--color-ink); }
+  .field[aria-invalid="true"] { border-color: var(--color-danger); }
+
+  .btn {
+    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-none border-2 border-ink bg-ink px-4 py-2.5 font-pixel text-[15px] text-orange no-underline;
+  }
+  /* Outcome of a check: .result plus .ok, .warn or .bad. */
+  .result { @apply grid gap-1.5 border-2 bg-paper p-4; }
+  .result.ok { @apply border-ok text-ok shadow-[4px_4px_0_var(--color-ok)]; }
+  .result.warn { @apply border-flame text-flame; }
+  .result.bad { @apply border-danger text-danger; }
+  .result > :not(:first-child) { @apply text-ink; }
+
+  .btn-ghost { @apply bg-transparent text-ink; }
+  .btn:disabled { @apply cursor-not-allowed opacity-40; }
+  .btn:not(:disabled):active { transform: translate(2px, 2px); }
+}
+
+/* Legend tier: pixel sparkles twinkle in the corners on hover, like rare loot. */
+.legend { position: relative; }
+.legend::before, .legend::after {
+  content: ""; position: absolute; width: 6px; height: 6px; background: var(--color-peach);
+  box-shadow: 6px 0 0 var(--color-orange), -6px 0 0 var(--color-orange), 0 6px 0 var(--color-orange), 0 -6px 0 var(--color-orange);
+  opacity: 0;
+}
+.legend::before { top: 10px; right: 14px; }
+.legend::after { bottom: 12px; left: 14px; }
+@media (prefers-reduced-motion: no-preference) {
+  .legend:hover::before { animation: twinkle 900ms steps(2) infinite; }
+  .legend:hover::after { animation: twinkle 900ms steps(2) 450ms infinite; }
+  @keyframes twinkle { 50% { opacity: 1; } }
+}
+
+/* One orchestrated moment per page: pixel lettering dissolves in */
+@media (prefers-reduced-motion: no-preference) {
+  .px { animation: px-in 260ms steps(2) both; animation-delay: var(--d); }
+  @keyframes px-in { from { opacity: 0; } to { opacity: 1; } }
+}

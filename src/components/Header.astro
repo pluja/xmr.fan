@@ -1,0 +1,33 @@
+---
+import Container from "./Container.astro";
+import PixelText from "./PixelText.astro";
+import { LOCALES, LOCALE_NAMES, localePath, useTranslations, type Locale } from "../i18n/ui";
+
+interface Props { lang: Locale; path: string; active?: "tools" | "gazette" }
+const { lang, path, active } = Astro.props;
+const t = useTranslations(lang);
+const navLink = "border-b-2 py-0.5 no-underline";
+---
+<header>
+  <Container class="flex flex-wrap items-center gap-x-7 gap-y-2.5 py-4">
+    <a href={localePath(lang, "/")} class="text-ink" aria-label="xmr.fan">
+      <PixelText text="xmr.fan" class="block h-[26px] w-auto sm:h-9" />
+    </a>
+    <nav class="order-3 flex w-full gap-5 font-pixel sm:order-none sm:w-auto">
+      <a href={localePath(lang, "/")} class:list={[navLink, active === "tools" ? "border-ink" : "border-transparent hover:border-ink"]} aria-current={active === "tools" ? "page" : undefined}>{t("nav_tools")}</a>
+      <a href={localePath(lang, "/news")} class:list={[navLink, active === "gazette" ? "border-ink" : "border-transparent hover:border-ink"]} aria-current={active === "gazette" ? "page" : undefined}>{t("nav_gazette")}</a>
+    </nav>
+    <nav class="ml-auto flex font-pixel" aria-label={t("language")}>
+      {LOCALES.map((l) => (
+        <a
+          href={localePath(l, path)}
+          hreflang={l}
+          lang={l}
+          title={LOCALE_NAMES[l]}
+          aria-current={l === lang ? "true" : undefined}
+          class:list={["px-1 py-0.5 text-xs uppercase no-underline sm:px-2 sm:py-1 sm:text-sm", l === lang ? "bg-ink text-orange" : "text-ink hover:outline-2 hover:outline-ink"]}
+        >{l}</a>
+      ))}
+    </nav>
+  </Container>
+</header>

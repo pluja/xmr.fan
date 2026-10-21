@@ -1,0 +1,6 @@
+---
+import PixelText from "./PixelText.astro";
+
+interface Props { label: string }
+---
+<PixelText text="the xmr.fan times" label={Astro.props.label} class="block h-auto w-full" seed={3} />

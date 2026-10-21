@@ -1,0 +1,15 @@
+---
+/* For embedding in an <iframe> on other sites. */
+import Head from "../components/Head.astro";
+import type { Locale } from "../i18n/ui";
+
+interface Props { lang: Locale; title: string }
+const { lang, title } = Astro.props;
+---
+<!doctype html>
+<html lang={lang} class="bg-transparent">
+  <Head title={`${title} · xmr.fan`}><meta name="robots" content="noindex" /></Head>
+  <body class="bg-transparent p-1 pb-3 pr-3">
+    <slot />
+  </body>
+</html>

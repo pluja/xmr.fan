@@ -1,0 +1,31 @@
+---
+import PixelIcon from "./PixelIcon.astro";
+import { useTranslations, type Locale } from "../i18n/ui";
+
+interface Props { lang: Locale; from?: string; text?: string; label?: string; class?: string }
+const { lang, from, text, label, class: cls } = Astro.props;
+const t = useTranslations(lang);
+const idle = label ?? t("share_copy");
+---
+<button type="button" class:list={["btn", cls]} data-copy-from={from} data-copy-text={text} data-idle={idle} data-done={t("copied")}>
+  <PixelIcon name="copy" size={14} class="shrink-0" /><span>{idle}</span>
+</button>
+
+<script>
+  document.addEventListener("click", async (e) => {
+    const btn = (e.target as Element).closest<HTMLButtonElement>("button[data-idle]");
+    if (!btn) return;
+    const source = btn.dataset.copyFrom ? document.querySelector<HTMLElement>(btn.dataset.copyFrom) : null;
+    const text = btn.dataset.copyText ?? (source instanceof HTMLInputElement || source instanceof HTMLTextAreaElement ? source.value : source?.textContent) ?? "";
+    if (!text) return;
+    const label = btn.querySelector("span")!;
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      if (source) getSelection()?.selectAllChildren(source);
+      return;
+    }
+    label.textContent = btn.dataset.done!;
+    setTimeout(() => (label.textContent = btn.dataset.idle!), 1400);
+  });
+</script>

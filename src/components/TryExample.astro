@@ -1,0 +1,9 @@
+---
+/* The tool's script handles the click. */
+import { useTranslations, type Locale } from "../i18n/ui";
+
+interface Props { lang: Locale; class?: string }
+const { lang, class: cls } = Astro.props;
+const t = useTranslations(lang);
+---
+<button type="button" data-example class:list={["-my-1 cursor-pointer justify-self-start py-1 text-sm text-graphite underline", cls]}>{t("try_example")}</button>

@@ -1,0 +1,7 @@
+---
+import type { HTMLTag } from "astro/types";
+
+interface Props { as?: HTMLTag; class?: string; [attr: string]: unknown }
+const { as: Tag = "div", class: cls, ...attrs } = Astro.props;
+---
+<Tag class:list={["mx-auto w-full max-w-[1080px] px-6", cls]} {...attrs}><slot /></Tag>

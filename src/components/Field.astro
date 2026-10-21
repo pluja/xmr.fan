@@ -1,0 +1,14 @@
+---
+interface Props {
+  label: string;
+  /** id of the message element, for the control's aria-describedby. */
+  messageId?: string;
+  class?: string;
+}
+const { label, messageId, class: cls } = Astro.props;
+---
+<label class:list={["grid content-start gap-1.5 text-sm font-semibold", cls]}>
+  <span>{label}</span>
+  <slot />
+  {messageId && <span id={messageId} class="text-sm font-normal text-danger empty:hidden" aria-live="polite"></span>}
+</label>
