@@ -5,8 +5,6 @@ export default defineStrings({
   en: {
     seo_title_beat: "Monero address beat: hear your address as music",
     seo_desc_beat: "Turn any Monero address into a looping 8-bit chiptune with a pixel visualizer. Every address plays its own song, generated in your browser.",
-    seo_title_fan: "Monero fan card: your pixel avatar and rarity",
-    seo_desc_fan: "Type your nickname and get a Monero fan card: a pixel avatar, a rarity from Common to Mythic, a class, stats and a special move. Share it and compare.",
     seo_title_donate: "Monero donation roulette: support privacy projects",
     seo_desc_donate: "Support a random project that accepts Monero: privacy tools, free software, Monero itself. Every address comes from the project's own page and is checked regularly.",
     seo_home_title: "xmr.fan: free Monero tools for payments, proofs and fees",
@@ -37,8 +35,6 @@ export default defineStrings({
   es: {
     seo_title_beat: "Ritmo de dirección Monero: escucha tu dirección",
     seo_desc_beat: "Convierte cualquier dirección de Monero en un chiptune de 8 bits con visualizador pixelado. Cada dirección suena distinta, generada en tu navegador.",
-    seo_title_fan: "Tarjeta de fan de Monero: tu avatar pixelado y tu rareza",
-    seo_desc_fan: "Escribe tu apodo y consigue una tarjeta de fan de Monero: avatar pixelado, rareza de Común a Mítica, clase, estadísticas y movimiento especial. Compártela.",
     seo_title_donate: "Ruleta de donaciones en Monero: apoya proyectos de privacidad",
     seo_desc_donate: "Apoya un proyecto al azar que acepta Monero: privacidad, software libre y el propio Monero. Cada dirección viene de la web del proyecto y se comprueba a menudo.",
     seo_home_title: "xmr.fan: herramientas gratis de Monero",
@@ -69,8 +65,6 @@ export default defineStrings({
   ru: {
     seo_title_beat: "Бит адреса Monero: услышьте свой адрес",
     seo_desc_beat: "Превратите любой адрес Monero в 8-битный чиптюн с пиксельной визуализацией. У каждого адреса своя мелодия, созданная в вашем браузере.",
-    seo_title_fan: "Карточка фаната Monero: пиксельный аватар и редкость",
-    seo_desc_fan: "Введите ник и получите карточку фаната Monero: пиксельный аватар, редкость от обычной до мифической, класс, характеристики и суперприём. Делитесь ей.",
     seo_title_donate: "Рулетка пожертвований в Monero: поддержите проекты приватности",
     seo_desc_donate: "Поддержите случайный проект, который принимает Monero: приватность, свободное ПО и сам Monero. Каждый адрес взят с сайта проекта и регулярно проверяется.",
     seo_home_title: "xmr.fan: бесплатные инструменты Monero",
@@ -101,8 +95,6 @@ export default defineStrings({
   fr: {
     seo_title_beat: "Beat d'adresse Monero : écoute ton adresse",
     seo_desc_beat: "Transforme n'importe quelle adresse Monero en chiptune 8 bits avec visualiseur pixel. Chaque adresse a sa musique, générée dans ton navigateur.",
-    seo_title_fan: "Carte de fan Monero : ton avatar pixel et ta rareté",
-    seo_desc_fan: "Tape ton pseudo et obtiens une carte de fan Monero : avatar pixel, rareté de Commune à Mythique, classe, stats et coup spécial. Partage-la et compare.",
     seo_title_donate: "Roulette des dons en Monero : soutenez la vie privée",
     seo_desc_donate: "Soutenez un projet au hasard qui accepte le Monero : vie privée, logiciel libre, Monero lui-même. Chaque adresse vient du site du projet et est vérifiée souvent.",
     seo_home_title: "xmr.fan : outils Monero gratuits et privés",
@@ -133,8 +125,6 @@ export default defineStrings({
   pt: {
     seo_title_beat: "Batida de endereço Monero: ouça seu endereço",
     seo_desc_beat: "Transforme qualquer endereço Monero em um chiptune 8 bits com visualizador pixelado. Cada endereço toca sua música, gerada no seu navegador.",
-    seo_title_fan: "Cartão de fã do Monero: seu avatar pixelado e raridade",
-    seo_desc_fan: "Digite seu apelido e ganhe um cartão de fã do Monero: avatar pixelado, raridade de Comum a Mítica, classe, atributos e golpe especial. Compartilhe.",
     seo_title_donate: "Roleta de doações em Monero: apoie projetos de privacidade",
     seo_desc_donate: "Apoie um projeto aleatório que aceita Monero: privacidade, software livre e o próprio Monero. Cada endereço vem do site do projeto e é verificado com frequência.",
     seo_home_title: "xmr.fan: ferramentas grátis de Monero",
@@ -165,8 +155,6 @@ export default defineStrings({
   ja: {
     seo_title_beat: "Monero アドレスビート：アドレスを音楽で聴く",
     seo_desc_beat: "Monero アドレスをドット絵ビジュアライザー付きの 8 ビット チップチューンに変換。アドレスごとに違う曲をブラウザ内で生成します。",
-    seo_title_fan: "Monero ファンカード：ドット絵アバターとレア度",
-    seo_desc_fan: "ニックネームを入れると Monero ファンカードが手に入ります。ドット絵アバター、コモンからミシックまでのレア度、クラス、ステータス、必殺技。シェアして比べよう。",
     seo_title_donate: "Monero 寄付ルーレット：プライバシー関連プロジェクトを支援",
     seo_desc_donate: "Monero を受け付けるプロジェクトをランダムに支援。プライバシー、自由ソフトウェア、Monero 自身。アドレスは各公式ページから取得し、定期的に確認しています。",
     seo_home_title: "xmr.fan：無料の Monero ツール集",
