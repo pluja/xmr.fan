@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+.gazette/
+
+# Only whitelist what is necessary in the repo.
+*.md
+!README.md
+sponsor-requests/
+.preview-build/
+
+# Local secrets
+.env
+.env.*
+!.env.example
