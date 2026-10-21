@@ -1,0 +1,123 @@
+---
+import Field from "../Field.astro";
+import CurrencySelect from "../live/CurrencySelect.astro";
+import NodeSource from "../live/NodeSource.astro";
+import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
+import { PRIORITIES } from "../../lib/fees";
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const strings = pickStrings(lang, ["fee_next_block", "fee_blocks", "fee_size", "fee_pool"]);
+const cell = "border-b-2 border-dotted border-graphite/40 py-2.5 pr-3";
+---
+<div id="fee-tool" class="grid gap-7" data-strings={strings} data-lang={lang}>
+  <section class="grid gap-1">
+    <h2 class="text-sm font-semibold">{t("fee_typical")}</h2>
+    <p class="flex flex-wrap items-baseline gap-x-4 font-pixel">
+      <span data-typical-xmr class="text-[clamp(30px,5vw,44px)] text-flame">…</span>
+      <span data-typical-fiat class="text-xl"></span>
+    </p>
+    <p class="max-w-[60ch] text-sm text-graphite">{t("fee_typical_note")}</p>
+  </section>
+
+  <form data-shape class="flex flex-wrap items-end gap-4" novalidate>
+    <Field label={t("fee_inputs")}><input name="inputs" type="number" min="1" max="16" value="1" inputmode="numeric" class="field w-28 font-mono" /></Field>
+    <Field label={t("fee_recipients")}><input name="recipients" type="number" min="1" max="15" value="1" inputmode="numeric" class="field w-28 font-mono" /></Field>
+    <CurrencySelect lang={lang} class="mb-1" />
+  </form>
+
+  <div class="overflow-x-auto">
+    <table class="w-full border-t-[3px] border-ink text-left text-[15px]">
+      <thead class="font-pixel text-sm">
+        <tr><th class={cell}>{t("fee_priority")}</th><th class={cell}>{t("fee_cost")}</th><th class={cell}>{t("fee_wait")}</th></tr>
+      </thead>
+      <tbody>
+        {PRIORITIES.map((p) => (
+          <tr data-priority={p}>
+            <td class={cell}>{t(`fee_${p}`)}</td>
+            <td class={cell}><span class="font-mono" data-xmr>…</span> <span class="whitespace-nowrap font-mono text-sm text-graphite" data-fiat></span></td>
+            <td class={cell} data-wait></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p data-size class="mt-2 text-xs text-graphite"></p>
+  </div>
+
+  <section class="grid gap-1 border-l-2 border-ink pl-4">
+    <h2 class="font-pixel">{t("fee_pool_t")}</h2>
+    <p data-pool class="text-[15px]">…</p>
+  </section>
+
+  <p class="max-w-[64ch] text-sm text-graphite">{t("fee_why")}</p>
+  <NodeSource lang={lang} prices />
+</div>
+
+<script>
+  import { liveTask } from "../live/live";
+  import { currencyPicker } from "../live/currency";
+  import { readStrings } from "../../i18n/format";
+  import type { Locale } from "../../i18n/ui";
+  import { formatMoney, formatNumber } from "../../lib/currency";
+  import { PRIORITIES, blocksToClear, estimateTxWeight, feeFor } from "../../lib/fees";
+  import { picoToXmr } from "../../lib/monero";
+  import { call, getFeeEstimate, getInfo } from "../../lib/node-client";
+  import { BLOCK_SECONDS, PICO_PER_XMR, type FeeEstimate, type NodeInfo } from "../../lib/nodes";
+  import { getPrices, type Prices } from "../../lib/price-client";
+
+  const root = document.getElementById("fee-tool")!;
+  const t = readStrings(root);
+  const lang = root.dataset.lang as Locale;
+  const shape = root.querySelector<HTMLFormElement>("[data-shape]")!;
+  const $ = (s: string) => root.querySelector<HTMLElement>(s)!;
+  const currency = currencyPicker(lang, render);
+  const kb = (bytes: number) => formatNumber(bytes / 1000, lang, 1);
+
+  let estimate: FeeEstimate | undefined, info: NodeInfo | undefined, poolBytes = 0, prices: Prices | undefined;
+
+  const count = (name: string, min: number, max: number) => {
+    const n = Math.round(Number((shape.elements.namedItem(name) as HTMLInputElement).value));
+    return Number.isFinite(n) ? Math.min(max, Math.max(min, n)) : min;
+  };
+  const fiat = (pico: number) => (prices ? `≈ ${formatMoney((pico / PICO_PER_XMR) * prices[currency()], currency(), lang)}` : "");
+
+  function render() {
+    if (!estimate || !info) return;
+    const rates = estimate.fees?.length ? estimate.fees : [estimate.fee];
+    const typical = feeFor(estimateTxWeight(1, 2), rates[0], estimate.quantization_mask);
+    $("[data-typical-xmr]").textContent = `${picoToXmr(String(typical))} XMR`;
+    $("[data-typical-fiat]").textContent = fiat(typical);
+
+    const weight = estimateTxWeight(count("inputs", 1, 16), count("recipients", 1, 15) + 1);
+    const queue = blocksToClear(poolBytes, info.block_weight_median);
+    PRIORITIES.forEach((p, i) => {
+      const row = $(`[data-priority=${p}]`);
+      row.hidden = rates[i] === undefined;
+      if (row.hidden) return;
+      const fee = feeFor(weight, rates[i], estimate!.quantization_mask);
+      row.querySelector("[data-xmr]")!.textContent = `${picoToXmr(String(fee))} XMR`;
+      row.querySelector("[data-fiat]")!.textContent = fiat(fee);
+      const blocks = i === 0 ? queue : 1;
+      row.querySelector("[data-wait]")!.textContent = blocks === 1
+        ? t("fee_next_block")
+        : t("fee_blocks", { n: blocks, min: Math.round((blocks * BLOCK_SECONDS) / 60) });
+    });
+    $("[data-size]").textContent = t("fee_size", { kb: kb(weight) });
+    $("[data-pool]").textContent = t("fee_pool", { txs: info.tx_pool_size, kb: kb(poolBytes), cap: kb(info.block_weight_median) });
+  }
+
+  shape.addEventListener("input", render);
+  shape.addEventListener("submit", (e) => e.preventDefault());
+
+  liveTask(async () => {
+    const [e, i, pool] = await Promise.all([
+      getFeeEstimate(),
+      getInfo(),
+      call<{ pool_stats?: { bytes_total: number } }>("/get_transaction_pool_stats", {}),
+    ]);
+    estimate = e; info = i; poolBytes = pool.pool_stats?.bytes_total ?? 0;
+    render();
+  });
+  getPrices().then((p) => { prices = p; render(); }).catch(() => {});
+</script>
