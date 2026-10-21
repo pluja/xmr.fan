@@ -1,5 +1,69 @@
 [
   {
+    "id": "acceptxmr",
+    "name": "AcceptXMR",
+    "category": "monero",
+    "address": "82assiV5dy7guoxxV7vSReZTyY5rGMrWg6BsfvFqiEKRcTiDs7LGMpg5dF5gXVGUWPEXQxyt8SNYx8L8HiGAzvtBK3eJ3EY",
+    "source": "https://github.com/busyboredom/acceptxmr",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Self-hosted Monero payment gateway library.",
+      "es": "Biblioteca de pasarela de pago de Monero autoalojada.",
+      "ru": "Библиотека платёжного шлюза Monero для самостоятельного хостинга.",
+      "fr": "Bibliothèque de passerelle de paiement Monero auto-hébergée.",
+      "pt": "Biblioteca de gateway de pagamento Monero auto-hospedada.",
+      "ja": "セルフホスト型のMonero決済ゲートウェイライブラリ。"
+    }
+  },
+  {
+    "id": "eigenwallet",
+    "name": "eigenwallet (UnstoppableSwap)",
+    "category": "monero",
+    "address": "4A1tNBcsxhQA7NkswREXTD1QGz8mRyA7fGnCzPyTwqzKdDFMNje7iHUbGhCetfVUZa1PTuZCoPKj8gnJuRrFYJ2R2CEzqbJ",
+    "source": "https://github.com/UnstoppableSwap/core",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Monero wallet with BTC-to-XMR atomic swaps.",
+      "es": "Monedero de Monero con intercambios atómicos de BTC a XMR.",
+      "ru": "Кошелёк Monero с атомарными свопами BTC на XMR.",
+      "fr": "Portefeuille Monero avec échanges atomiques BTC vers XMR.",
+      "pt": "Carteira Monero com trocas atômicas de BTC para XMR.",
+      "ja": "BTCからXMRへのアトミックスワップに対応したMoneroウォレット。"
+    }
+  },
+  {
+    "id": "gupax",
+    "name": "Gupax",
+    "category": "monero",
+    "address": "4AGJScWSv45E28pmwck9YRP21KuwGx6fuMYV9kTxXFnWEij5FVEUyccBs7ExDy419DJXRPw3u57TH5BaGbsHTdnf6SvY5p5",
+    "source": "https://github.com/hinto-janai/gupax",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "GUI bundling P2Pool and XMRig for decentralized mining.",
+      "es": "Interfaz gráfica que integra P2Pool y XMRig para minería descentralizada.",
+      "ru": "Графический интерфейс с P2Pool и XMRig для децентрализованного майнинга.",
+      "fr": "Interface graphique intégrant P2Pool et XMRig pour le minage décentralisé.",
+      "pt": "Interface gráfica que reúne P2Pool e XMRig para mineração descentralizada.",
+      "ja": "分散型マイニング向けにP2PoolとXMRigをまとめたGUI。"
+    }
+  },
+  {
+    "id": "haveno",
+    "name": "Haveno",
+    "category": "monero",
+    "address": "47fo8N5m2VVW4uojadGQVJ34LFR9yXwDrZDRugjvVSjcTWV2WFSoc1XfNpHmxwmVtfNY9wMBch6259G6BXXFmhU49YG1zfB",
+    "source": "https://github.com/haveno-dex/haveno",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Decentralized peer-to-peer Monero exchange over Tor.",
+      "es": "Exchange descentralizado de Monero entre pares a través de Tor.",
+      "ru": "Децентрализованная p2p-биржа Monero через Tor.",
+      "fr": "Plateforme d'échange Monero décentralisée de pair à pair via Tor.",
+      "pt": "Exchange descentralizada de Monero entre pares via Tor.",
+      "ja": "Tor経由で使える分散型P2PのMonero取引所。"
+    }
+  },
+  {
     "id": "kycnotme",
     "name": "KYCnot.me",
     "category": "monero",
@@ -81,6 +145,118 @@
     }
   },
   {
+    "id": "monerotalk",
+    "name": "Monero Talk",
+    "category": "monero",
+    "address": "47e6GvjL4in5Zy5vVHMb9PQtGXQAcFvWSCQn2fuwDYZoZRk3oFjefr51WBNDGG9EjF1YDavg7pwGDFSAVWC5K42CBcLLv5U",
+    "source": "https://www.monerotalk.live/donate",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Long-running Monero interview show and podcast.",
+      "es": "Programa de entrevistas y podcast sobre Monero con larga trayectoria.",
+      "ru": "Давно существующее интервью-шоу и подкаст о Monero.",
+      "fr": "Émission d'entretiens et podcast sur Monero, en activité depuis longtemps.",
+      "pt": "Programa de entrevistas e podcast sobre Monero com longa trajetória.",
+      "ja": "長年続くMoneroのインタビュー番組・ポッドキャスト。"
+    }
+  },
+  {
+    "id": "monero-python",
+    "name": "monero-python",
+    "category": "monero",
+    "address": "8AWCa5moRywJcmA6jqnKLJWZMUyoEAFJXBqqDonUnR1SjS8foScqTadcXyE6oVb6Mh2JFeWZtocGxZoZZsMqLNKbNm5Wt3q",
+    "source": "https://github.com/monero-ecosystem/monero-python",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Python library for working with Monero wallets and daemons.",
+      "es": "Biblioteca de Python para trabajar con monederos y demonios de Monero.",
+      "ru": "Библиотека Python для работы с кошельками и демонами Monero.",
+      "fr": "Bibliothèque Python pour travailler avec les portefeuilles et démons Monero.",
+      "pt": "Biblioteca Python para trabalhar com carteiras e daemons do Monero.",
+      "ja": "Moneroのウォレットとデーモンを扱うPythonライブラリ。"
+    }
+  },
+  {
+    "id": "monero-ts",
+    "name": "monero-ts",
+    "category": "monero",
+    "address": "46FR1GKVqFNQnDiFkH7AuzbUBrGQwz2VdaXTDD4jcjRE8YkkoTYTmZ2Vohsz9gLSqkj5EM6ai9Q7sBoX4FPPYJdGKQQXPVz",
+    "source": "https://github.com/woodser/monero-ts",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "TypeScript library for Monero, used by Haveno.",
+      "es": "Biblioteca de TypeScript para Monero, usada por Haveno.",
+      "ru": "Библиотека TypeScript для Monero, используется в Haveno.",
+      "fr": "Bibliothèque TypeScript pour Monero, utilisée par Haveno.",
+      "pt": "Biblioteca TypeScript para Monero, usada pelo Haveno.",
+      "ja": "Havenoが使用しているMonero用TypeScriptライブラリ。"
+    }
+  },
+  {
+    "id": "monerofail",
+    "name": "monero.fail",
+    "category": "monero",
+    "address": "878ca636oEHcjZ3Zimuwx4AZTbeMtqY11eVihramcBgVciC254jpUm9AxbwAd57nxv1HRE9AGG1cXBkvmRzfsFXh1L6f2CU",
+    "source": "https://monero.fail/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Directory and health checker of public Monero nodes.",
+      "es": "Directorio y verificador de estado de nodos públicos de Monero.",
+      "ru": "Каталог и проверка работоспособности публичных узлов Monero.",
+      "fr": "Annuaire et vérificateur d'état des nœuds Monero publics.",
+      "pt": "Diretório e verificador de saúde de nós públicos de Monero.",
+      "ja": "公開Moneroノードのディレクトリ兼稼働チェッカー。"
+    }
+  },
+  {
+    "id": "monerohow",
+    "name": "monero.how",
+    "category": "monero",
+    "address": "86oPE889B4qeJn14jkhQkPFnwRUV3Upd8TZjbU89JdWpH7NbECNHXMG67vSLCKZt1nTWK4v445cndXLNtw24WzmNGYs7WeH",
+    "source": "https://www.monero.how/donate",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Beginner guides and network stats for Monero.",
+      "es": "Guías para principiantes y estadísticas de la red Monero.",
+      "ru": "Руководства для новичков и статистика сети Monero.",
+      "fr": "Guides pour débutants et statistiques du réseau Monero.",
+      "pt": "Guias para iniciantes e estatísticas da rede Monero.",
+      "ja": "初心者向けガイドとMoneroネットワークの統計。"
+    }
+  },
+  {
+    "id": "monerotown",
+    "name": "monero.town",
+    "category": "monero",
+    "address": "486kDRxeiY4YdG4iVKRv5pbqoygCMeMug2bBnWKQ58euGRsjqWngowMP82Q6DGzGVQ7StNuFqkd8VZWK4iQKF4nUEzueW8j",
+    "source": "https://monero.town/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Monero community forum on the Lemmy fediverse.",
+      "es": "Foro de la comunidad Monero en el fediverso de Lemmy.",
+      "ru": "Форум сообщества Monero в федиверсе Lemmy.",
+      "fr": "Forum de la communauté Monero sur le fédiverse Lemmy.",
+      "pt": "Fórum da comunidade Monero no fediverso Lemmy.",
+      "ja": "LemmyのフェディバースにあるMoneroコミュニティフォーラム。"
+    }
+  },
+  {
+    "id": "monerujo",
+    "name": "Monerujo",
+    "category": "monero",
+    "address": "4AdkPJoxn7JCvAby9szgnt93MSEwdnxdhaASxbTBm6x5dCwmsDep2UYN4FhStDn5i11nsJbpU7oj59ahg8gXb1Mg3viqCuk",
+    "source": "https://github.com/m2049r/xmrwallet",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "The original open-source Monero wallet for Android.",
+      "es": "El monedero Monero de código abierto original para Android.",
+      "ru": "Первый open-source кошелёк Monero для Android.",
+      "fr": "Le portefeuille Monero open source d'origine pour Android.",
+      "pt": "A carteira Monero de código aberto original para Android.",
+      "ja": "Android向けの元祖オープンソースMoneroウォレット。"
+    }
+  },
+  {
     "id": "orangefren",
     "name": "OrangeFren",
     "category": "monero",
@@ -110,6 +286,38 @@
       "fr": "Le pool de minage Monero décentralisé, sans frais.",
       "pt": "O pool de mineração descentralizado do Monero, sem taxas.",
       "ja": "手数料なしの分散型 Monero マイニングプール。"
+    }
+  },
+  {
+    "id": "pinode-xmr",
+    "name": "PiNode-XMR",
+    "category": "monero",
+    "address": "43HoAhqx9q3MR1crAjpQtYVhvzQhZgqPwSWVQMmPvYmr18qVUEjCHcsEasuCxS486rWSSg1gbGqanet67NWRsh1bQL9KkB9",
+    "source": "https://github.com/monero-ecosystem/PiNode-XMR",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Easy Monero node images for Raspberry Pi and other boards.",
+      "es": "Imágenes sencillas de nodo Monero para Raspberry Pi y otras placas.",
+      "ru": "Простые образы узла Monero для Raspberry Pi и других плат.",
+      "fr": "Images de nœud Monero faciles à installer pour Raspberry Pi et autres cartes.",
+      "pt": "Imagens simples de nó Monero para Raspberry Pi e outras placas.",
+      "ja": "Raspberry Piなどのボード向けの簡単なMoneroノードイメージ。"
+    }
+  },
+  {
+    "id": "revuo",
+    "name": "Revuo Monero",
+    "category": "monero",
+    "address": "89Esx7ZAoVcD9wiDw57gxgS7m52sFEEbQiFC4qq18YZy3CdcsXvJ67FYdcDFbmYEGK7xerxgmDptd1C2xLstCbgF3RUhSMT",
+    "source": "https://www.revuo-xmr.com/support/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Weekly Monero newsletter.",
+      "es": "Boletín semanal sobre Monero.",
+      "ru": "Еженедельная рассылка о Monero.",
+      "fr": "Lettre d'information hebdomadaire sur Monero.",
+      "pt": "Newsletter semanal sobre Monero.",
+      "ja": "Moneroの週刊ニュースレター。"
     }
   },
   {
@@ -161,6 +369,22 @@
     }
   },
   {
+    "id": "amnezia",
+    "name": "Amnezia VPN",
+    "category": "privacy",
+    "address": "48spms39jt1L2L5vyw2RQW6CXD6odUd4jFu19GZcDyKKQV9U88wsJVjSbL4CfRys37jVMdoaWVPSvezCQPhHXUW5UKLqUp3",
+    "source": "https://github.com/amnezia-vpn/amnezia-client",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Open-source self-hosted VPN built to resist censorship.",
+      "es": "VPN autoalojada de código abierto diseñada para resistir la censura.",
+      "ru": "Open-source VPN для самостоятельного хостинга, устойчивый к цензуре.",
+      "fr": "VPN open source auto-hébergé conçu pour résister à la censure.",
+      "pt": "VPN de código aberto e auto-hospedada, feita para resistir à censura.",
+      "ja": "検閲に強いセルフホスト型のオープンソースVPN。"
+    }
+  },
+  {
     "id": "decentraleyes",
     "name": "Decentraleyes",
     "category": "privacy",
@@ -193,6 +417,22 @@
     }
   },
   {
+    "id": "emeraldonion",
+    "name": "Emerald Onion",
+    "category": "privacy",
+    "address": "47arK43NTDZbTrKS8PkGZ65qzQuHMNFqw56TgGsV5R4KMzq9F9MNVimgFrdJkB2ue9DnJp4kD1G7UJqtJbo19frnJGeRnVf",
+    "source": "https://emeraldonion.org/donate/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Seattle nonprofit running Tor exit relays.",
+      "es": "Organización sin fines de lucro de Seattle que opera nodos de salida de Tor.",
+      "ru": "Некоммерческая организация из Сиэтла, поддерживающая выходные узлы Tor.",
+      "fr": "Association à but non lucratif de Seattle qui exploite des relais de sortie Tor.",
+      "pt": "Organização sem fins lucrativos de Seattle que opera relés de saída do Tor.",
+      "ja": "Torの出口リレーを運営するシアトルの非営利団体。"
+    }
+  },
+  {
     "id": "grapheneos",
     "name": "GrapheneOS",
     "category": "privacy",
@@ -206,6 +446,54 @@
       "fr": "Un système d'exploitation mobile privé et sécurisé.",
       "pt": "Um sistema operacional móvel privado e seguro.",
       "ja": "プライベートで安全なモバイル OS。"
+    }
+  },
+  {
+    "id": "i2p",
+    "name": "I2P",
+    "category": "privacy",
+    "address": "85igd4Dw6ychvi8iUYADHfgLCmdT348SA6sMnYgxE86YZxX98Au6rsF9B9DmcqEXWRZWDcPdarufHUUqwP73GVrq6BaC9dr",
+    "source": "https://i2p.net/en/financial-support/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "The Invisible Internet Project, an anonymous overlay network.",
+      "es": "El Proyecto Internet Invisible, una red superpuesta anónima.",
+      "ru": "Проект «Невидимый интернет» — анонимная оверлейная сеть.",
+      "fr": "Le projet Internet invisible, un réseau superposé anonyme.",
+      "pt": "O Projeto Internet Invisível, uma rede sobreposta anônima.",
+      "ja": "匿名のオーバーレイネットワーク、Invisible Internet Project。"
+    }
+  },
+  {
+    "id": "i2pd",
+    "name": "i2pd",
+    "category": "privacy",
+    "address": "497pJc7X4xqKvcLBLpSUtRgWqMMyo24u4btCos3cak6gbMkpobgSU6492ztUcUBghyeHpYeczB55s38NpuHoH5WGNSPDRMH",
+    "source": "https://github.com/PurpleI2P/i2pd",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Lightweight C++ router for the I2P anonymous network.",
+      "es": "Router ligero en C++ para la red anónima I2P.",
+      "ru": "Лёгкий роутер на C++ для анонимной сети I2P.",
+      "fr": "Routeur C++ léger pour le réseau anonyme I2P.",
+      "pt": "Roteador leve em C++ para a rede anônima I2P.",
+      "ja": "匿名ネットワークI2P向けの軽量C++ルーター。"
+    }
+  },
+  {
+    "id": "invizible",
+    "name": "InviZible Pro",
+    "category": "privacy",
+    "address": "82WFzofvGUdY52w9zCfrZWaHVqEDcJH7y1FujzvXdGPeU9UpuFNeCvtCKhtpC6pZmMYuCNgFjcw5mHAgEJQ4RTwV9XRhobX",
+    "source": "https://invizible.net/en/donate/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Android app combining Tor, DNSCrypt and I2P with a firewall.",
+      "es": "Aplicación de Android que combina Tor, DNSCrypt e I2P con un cortafuegos.",
+      "ru": "Приложение для Android, объединяющее Tor, DNSCrypt и I2P с файрволом.",
+      "fr": "Application Android qui combine Tor, DNSCrypt et I2P avec un pare-feu.",
+      "pt": "Aplicativo Android que combina Tor, DNSCrypt e I2P com um firewall.",
+      "ja": "Tor、DNSCrypt、I2Pとファイアウォールを組み合わせたAndroidアプリ。"
     }
   },
   {
@@ -225,6 +513,38 @@
     }
   },
   {
+    "id": "libredirect",
+    "name": "LibRedirect",
+    "category": "privacy",
+    "address": "4AM5CVfaGsnEXQQjZSzJvaWufe7pT86ubcZPr83fCjb2Hn3iwcForTWFy2Z3ugXcufUwHaGcucfPMFgPXBFSYGFvNrmV5XR",
+    "source": "https://github.com/libredirect/browser_extension",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Browser extension redirecting to privacy-friendly front-ends.",
+      "es": "Extensión de navegador que redirige a interfaces que respetan la privacidad.",
+      "ru": "Расширение для браузера, перенаправляющее на приватные альтернативные интерфейсы.",
+      "fr": "Extension de navigateur redirigeant vers des interfaces respectueuses de la vie privée.",
+      "pt": "Extensão de navegador que redireciona para interfaces que respeitam a privacidade.",
+      "ja": "プライバシーに配慮したフロントエンドへリダイレクトするブラウザ拡張機能。"
+    }
+  },
+  {
+    "id": "localcdn",
+    "name": "LocalCDN",
+    "category": "privacy",
+    "address": "46j26ggSZNT9rN7VeFYXp2PsKEMyJSSYneBVKXY4xeemdfZfCpNg6tQEXQZpWiTTuGX3SbnDPwuh3167cCoYSrqN72H9jPk",
+    "source": "https://codeberg.org/nobody/LocalCDN",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Browser extension serving CDN files locally to stop tracking.",
+      "es": "Extensión de navegador que sirve archivos de CDN localmente para evitar el rastreo.",
+      "ru": "Расширение для браузера, подгружающее файлы CDN локально, чтобы предотвратить слежку.",
+      "fr": "Extension de navigateur qui sert les fichiers CDN en local pour empêcher le pistage.",
+      "pt": "Extensão de navegador que serve arquivos de CDN localmente para impedir rastreamento.",
+      "ja": "CDNのファイルをローカルから提供し、トラッキングを防ぐブラウザ拡張機能。"
+    }
+  },
+  {
     "id": "lockdown",
     "name": "Lockdown Systems",
     "category": "privacy",
@@ -238,6 +558,54 @@
       "fr": "Une association qui crée des outils contre la surveillance.",
       "pt": "Uma organização sem fins lucrativos que cria ferramentas contra a vigilância.",
       "ja": "監視から人々を守るツールを作る非営利団体。"
+    }
+  },
+  {
+    "id": "nekobox",
+    "name": "NekoBox for Android",
+    "category": "privacy",
+    "address": "49bwESYQjoRL3xmvTcjZKHEKaiGywjLYVQJMUv79bXonGiyDCs8AzE3KiGW2ytTybBCpWJUvov8SjZZEGg66a4e59GXa6k5",
+    "source": "https://github.com/MatsuriDayo/NekoBoxForAndroid",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Open-source sing-box proxy client for censorship circumvention.",
+      "es": "Cliente proxy sing-box de código abierto para eludir la censura.",
+      "ru": "Open-source прокси-клиент sing-box для обхода цензуры.",
+      "fr": "Client proxy sing-box open source pour contourner la censure.",
+      "pt": "Cliente proxy sing-box de código aberto para contornar a censura.",
+      "ja": "検閲回避のためのオープンソースのsing-boxプロキシクライアント。"
+    }
+  },
+  {
+    "id": "onionbrowser",
+    "name": "Onion Browser",
+    "category": "privacy",
+    "address": "436sKqJM2qTAie1L5t5PAnfQFNMFkkWfjj1EgcygDvGubt3uB6p4F7xj35tkZbQfG9iuVRTTspWevjUYbfVCELWs2AJELCK",
+    "source": "https://onionbrowser.com/donate",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Open-source Tor-powered web browser for iOS.",
+      "es": "Navegador web de código abierto para iOS basado en Tor.",
+      "ru": "Open-source веб-браузер для iOS на основе Tor.",
+      "fr": "Navigateur web open source pour iOS basé sur Tor.",
+      "pt": "Navegador web de código aberto para iOS baseado em Tor.",
+      "ja": "Torを利用するiOS向けオープンソースのウェブブラウザ。"
+    }
+  },
+  {
+    "id": "openprivacy",
+    "name": "Open Privacy (Cwtch)",
+    "category": "privacy",
+    "address": "881k3fqXxgL67djvJ5oLAJNseoWqRNBvz6oWVuLhoogCYxV6aXqtoEgHTZj7ZYmFenbAPdYDsmbjgY6AYmK66SBXPg2W7rT",
+    "source": "https://openprivacy.ca/donate/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Canadian nonprofit behind the Cwtch metadata-resistant messenger.",
+      "es": "Organización canadiense sin fines de lucro creadora del mensajero Cwtch, resistente a los metadatos.",
+      "ru": "Канадская некоммерческая организация, создавшая мессенджер Cwtch, устойчивый к утечке метаданных.",
+      "fr": "Association canadienne à but non lucratif à l'origine de la messagerie Cwtch, résistante aux métadonnées.",
+      "pt": "Organização canadense sem fins lucrativos criadora do mensageiro Cwtch, resistente a metadados.",
+      "ja": "メタデータに強いメッセンジャーCwtchを開発するカナダの非営利団体。"
     }
   },
   {
@@ -257,6 +625,22 @@
     }
   },
   {
+    "id": "xray",
+    "name": "Project X (Xray)",
+    "category": "privacy",
+    "address": "4ABHQZ3yJZkBnLoqiKvb3f8eqUnX4iMPb6wdant5ZLGQELctcerceSGEfJnoCk6nnyRZm73wrwSgvZ2WmjYLng6R7sR67nq",
+    "source": "https://github.com/XTLS/Xray-core",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Open-source proxy core for bypassing internet censorship.",
+      "es": "Núcleo proxy de código abierto para eludir la censura en internet.",
+      "ru": "Open-source ядро прокси для обхода интернет-цензуры.",
+      "fr": "Noyau proxy open source pour contourner la censure d'Internet.",
+      "pt": "Núcleo de proxy de código aberto para contornar a censura na internet.",
+      "ja": "インターネット検閲を回避するオープンソースのプロキシコア。"
+    }
+  },
+  {
     "id": "qubes",
     "name": "Qubes OS",
     "category": "privacy",
@@ -270,6 +654,54 @@
       "fr": "Un système de bureau qui isole les applications dans des machines virtuelles séparées.",
       "pt": "Um sistema de desktop que isola os apps em máquinas virtuais separadas.",
       "ja": "アプリを別々の仮想マシンに分離するデスクトップ OS。"
+    }
+  },
+  {
+    "id": "reticulum",
+    "name": "Reticulum Network",
+    "category": "privacy",
+    "address": "84FpY1QbxHcgdseePYNmhTHcrgMX4nFfBYtz2GKYToqHVVhJp8Eaw1Z1EedRnKD19b3B8NiLCGVxzKV17UMmmeEsCrPyA5w",
+    "source": "https://reticulum.network/donate.html",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Encrypted mesh networking stack for resilient communication.",
+      "es": "Pila de red mesh cifrada para comunicaciones resilientes.",
+      "ru": "Стек шифрованных mesh-сетей для устойчивой связи.",
+      "fr": "Pile réseau maillé chiffrée pour des communications résilientes.",
+      "pt": "Pilha de rede mesh criptografada para comunicação resiliente.",
+      "ja": "耐障害性のある通信のための暗号化メッシュネットワークスタック。"
+    }
+  },
+  {
+    "id": "riseup",
+    "name": "Riseup",
+    "category": "privacy",
+    "address": "46qB9tcR1feVZ7xq42tx8V8sLbYdnFdGf6EndL1fCPRuUXroufYGzzCFtZwrjkthAc8C65xBpmWCYAR1KKBXykF76GADvYE",
+    "source": "https://riseup.net/en/donate",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Activist-run collective providing secure email and VPN.",
+      "es": "Colectivo activista que ofrece correo electrónico y VPN seguros.",
+      "ru": "Коллектив активистов, предоставляющий защищённую почту и VPN.",
+      "fr": "Collectif militant proposant messagerie et VPN sécurisés.",
+      "pt": "Coletivo ativista que oferece e-mail e VPN seguros.",
+      "ja": "安全なメールとVPNを提供する活動家運営の団体。"
+    }
+  },
+  {
+    "id": "secureblue",
+    "name": "secureblue",
+    "category": "privacy",
+    "address": "43fry9taGiwhAtNYEZNfssdzJ8Ra12ewAbQoVsvFzoLS6qMSgsE2FvE7xY52rAnKjPL5r2N88KYvqXpthUfSwa23K1BBMD9",
+    "source": "https://secureblue.dev/donate",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Security-hardened Fedora Atomic desktop images.",
+      "es": "Imágenes de escritorio Fedora Atomic reforzadas en seguridad.",
+      "ru": "Образы рабочего стола Fedora Atomic с усиленной безопасностью.",
+      "fr": "Images de bureau Fedora Atomic renforcées en sécurité.",
+      "pt": "Imagens de desktop Fedora Atomic com segurança reforçada.",
+      "ja": "セキュリティを強化したFedora Atomicのデスクトップイメージ。"
     }
   },
   {
@@ -302,6 +734,38 @@
       "fr": "Guides, vidéos et outils VPN pour la vie privée.",
       "pt": "Guias de privacidade, vídeos e ferramentas de VPN.",
       "ja": "プライバシーのガイド、動画、VPN ツール。"
+    }
+  },
+  {
+    "id": "techlore",
+    "name": "Techlore",
+    "category": "privacy",
+    "address": "48GEMu7ohyveS4h1dWDpzYVRtxUYYb3yV43SUadaGASkQuX7eRqJLjMUUGmtNJGTkSaijjwUN28Ed7aoq16o1rHGVgUXP7q",
+    "source": "https://techlore.tech/support/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Privacy and security education videos and courses.",
+      "es": "Videos y cursos sobre privacidad y seguridad.",
+      "ru": "Обучающие видео и курсы по приватности и безопасности.",
+      "fr": "Vidéos et cours sur la vie privée et la sécurité.",
+      "pt": "Vídeos e cursos sobre privacidade e segurança.",
+      "ja": "プライバシーとセキュリティの解説動画・講座。"
+    }
+  },
+  {
+    "id": "thenewoil",
+    "name": "The New Oil",
+    "category": "privacy",
+    "address": "86WGgZpadMze4PmDd7YAR2MjxUBaunv8oXBrkzQTLjdBAaA8onHWc5ZMNwnW6axFAC8wFSswxDoapXMHFDwydq5fHEra79W",
+    "source": "https://thenewoil.org/en/crypto/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Beginner-friendly privacy and security guides.",
+      "es": "Guías de privacidad y seguridad para principiantes.",
+      "ru": "Руководства по приватности и безопасности для новичков.",
+      "fr": "Guides de confidentialité et de sécurité pour débutants.",
+      "pt": "Guias de privacidade e segurança para iniciantes.",
+      "ja": "初心者向けのプライバシーとセキュリティのガイド。"
     }
   },
   {
@@ -369,6 +833,38 @@
     }
   },
   {
+    "id": "artix",
+    "name": "Artix Linux",
+    "category": "software",
+    "address": "49uPsfAgmRDLatMRgJsx5sX6A3DT8tsnj4hLmkcqKUhxesGVEPGrsYVW9EJkYg3uPgBFzQQnZ29pbbYZ1fQLqWByH1biGne",
+    "source": "https://artixlinux.org/donate.php",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Arch-based Linux distribution without systemd.",
+      "es": "Distribución de Linux basada en Arch y sin systemd.",
+      "ru": "Дистрибутив Linux на основе Arch без systemd.",
+      "fr": "Distribution Linux basée sur Arch, sans systemd.",
+      "pt": "Distribuição Linux baseada em Arch, sem systemd.",
+      "ja": "systemdを使わないArchベースのLinuxディストリビューション。"
+    }
+  },
+  {
+    "id": "cobalt",
+    "name": "cobalt",
+    "category": "software",
+    "address": "463y93PsQDTYGVPAHUNcjiYDsxWjn7bL2FS9GYXjetEH5XEoNKB7kCHHQXsuoebbSv8RqGspo61pxhMQQrudDky2AfTGbs3",
+    "source": "https://cobalt.tools/donate",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Ad-free, open-source media downloader.",
+      "es": "Descargador de contenido multimedia de código abierto y sin anuncios.",
+      "ru": "Open-source загрузчик медиафайлов без рекламы.",
+      "fr": "Téléchargeur de médias open source et sans publicité.",
+      "pt": "Baixador de mídia de código aberto e sem anúncios.",
+      "ja": "広告のないオープンソースのメディアダウンローダー。"
+    }
+  },
+  {
     "id": "distrowatch",
     "name": "DistroWatch",
     "category": "software",
@@ -382,6 +878,86 @@
       "fr": "Actualités et tests des systèmes Linux et BSD depuis 2001.",
       "pt": "Notícias e análises de sistemas Linux e BSD desde 2001.",
       "ja": "2001 年から続く Linux と BSD のニュースとレビュー。"
+    }
+  },
+  {
+    "id": "dyne",
+    "name": "Dyne.org",
+    "category": "software",
+    "address": "49GZLW2J65c9tNDFEjv6gVVVHFhQYwfzmZMQu4tSeYFbPXxD61nWvGU6cSkCBEyixFErrmSPxWFdN6djuQX8nXBiBS3hqWE",
+    "source": "https://dyne.org/donate/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Amsterdam free-software foundation behind Tomb and Zenroom.",
+      "es": "Fundación de software libre de Ámsterdam creadora de Tomb y Zenroom.",
+      "ru": "Фонд свободного ПО из Амстердама, создатель Tomb и Zenroom.",
+      "fr": "Fondation amstellodamoise du logiciel libre à l'origine de Tomb et Zenroom.",
+      "pt": "Fundação de software livre de Amsterdã criadora do Tomb e do Zenroom.",
+      "ja": "TombとZenroomを開発するアムステルダムのフリーソフトウェア財団。"
+    }
+  },
+  {
+    "id": "fsf",
+    "name": "Free Software Foundation",
+    "category": "software",
+    "address": "84YJvbzpW8jEbJNUqh2WmWbdEJBFdEaDAhRFZpkmQPcW7f3yY6z8NGrecjmLrd8Wz7cwzXgBprSrJ1k45SQW27phF4iodb5",
+    "source": "https://www.fsf.org/about/ways-to-donate/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Nonprofit championing free software and the GNU project.",
+      "es": "Organización sin fines de lucro que defiende el software libre y el proyecto GNU.",
+      "ru": "Некоммерческая организация, отстаивающая свободное ПО и проект GNU.",
+      "fr": "Association à but non lucratif qui défend le logiciel libre et le projet GNU.",
+      "pt": "Organização sem fins lucrativos que defende o software livre e o projeto GNU.",
+      "ja": "フリーソフトウェアとGNUプロジェクトを推進する非営利団体。"
+    }
+  },
+  {
+    "id": "invidious",
+    "name": "Invidious",
+    "category": "software",
+    "address": "41nMCtek197boJtiUvGnTFYMatrLEpnpkQDmUECqx5Es2uX3sTKKWVhSL76suXsG3LXqkEJBrCZBgPTwJrDp1FrZJfycGPR",
+    "source": "https://invidious.io/donate/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Privacy-respecting alternative front-end to YouTube.",
+      "es": "Alternativa de interfaz para YouTube que respeta la privacidad.",
+      "ru": "Альтернативный интерфейс для YouTube, уважающий приватность.",
+      "fr": "Interface alternative à YouTube respectueuse de la vie privée.",
+      "pt": "Interface alternativa ao YouTube que respeita a privacidade.",
+      "ja": "プライバシーを尊重するYouTubeの代替フロントエンド。"
+    }
+  },
+  {
+    "id": "libretorrent",
+    "name": "LibreTorrent",
+    "category": "software",
+    "address": "48j4Mo7J7t51EeBf35Lpdmehmi9chUwzSXxHrnjpRJ6fPQafPWvSCdFafw3rA5ZRWievfYEDToNso8VppbJf2RVH9cdZmHa",
+    "source": "https://github.com/proninyaroslav/libretorrent",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Free and open-source torrent client for Android.",
+      "es": "Cliente torrent libre y de código abierto para Android.",
+      "ru": "Свободный torrent-клиент с открытым кодом для Android.",
+      "fr": "Client torrent libre et open source pour Android.",
+      "pt": "Cliente torrent livre e de código aberto para Android.",
+      "ja": "Android向けの無料オープンソースのtorrentクライアント。"
+    }
+  },
+  {
+    "id": "libretube",
+    "name": "LibreTube",
+    "category": "software",
+    "address": "47jAx7jMFo5iqy9VgDH98qL1bSK4kr6Pxi7HKWcRwsxbVYJdjxJtyrwXeAUa5MutvcQUmWMBfvAKnPAutDHvWEymUgLm5v8",
+    "source": "https://github.com/libre-tube/LibreTube",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Privacy-friendly YouTube client for Android.",
+      "es": "Cliente de YouTube para Android que respeta la privacidad.",
+      "ru": "Клиент YouTube для Android, дружественный к приватности.",
+      "fr": "Client YouTube pour Android respectueux de la vie privée.",
+      "pt": "Cliente de YouTube para Android que respeita a privacidade.",
+      "ja": "プライバシーに配慮したAndroid向けYouTubeクライアント。"
     }
   },
   {
@@ -433,6 +1009,22 @@
     }
   },
   {
+    "id": "revanced",
+    "name": "ReVanced",
+    "category": "software",
+    "address": "46YwWDbZD6jVptuk5mLHsuAmh1BnUMSjSNYacozQQEraWSQ93nb2yYVRHoMR6PmFYWEHsLHg9tr1cH5M8Rtn7YaaGQPCjSh",
+    "source": "https://revanced.app/donate",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Open-source patcher for Android apps.",
+      "es": "Parcheador de código abierto para aplicaciones de Android.",
+      "ru": "Open-source патчер для приложений Android.",
+      "fr": "Outil open source de modification d'applications Android.",
+      "pt": "Patcher de código aberto para aplicativos Android.",
+      "ja": "Androidアプリ向けのオープンソースパッチツール。"
+    }
+  },
+  {
     "id": "sponsorblock",
     "name": "SponsorBlock",
     "category": "software",
@@ -465,6 +1057,38 @@
     }
   },
   {
+    "id": "fpf",
+    "name": "Freedom of the Press Foundation",
+    "category": "press",
+    "address": "44JsbshtnhZFjKnhAgZRMENsW7wNAcQFV1jrC845AspaZDSWJqr1JihgvEfiYUFjnj43GPnqX9GW2hmUntp5WQ8bSAQPSg1",
+    "source": "https://freedom.press/donate/cryptocurrency/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Nonprofit defending press freedom, makers of SecureDrop.",
+      "es": "Organización sin fines de lucro que defiende la libertad de prensa, creadora de SecureDrop.",
+      "ru": "Некоммерческая организация в защиту свободы прессы, создатель SecureDrop.",
+      "fr": "Association à but non lucratif défendant la liberté de la presse, créatrice de SecureDrop.",
+      "pt": "Organização sem fins lucrativos que defende a liberdade de imprensa, criadora do SecureDrop.",
+      "ja": "報道の自由を守る非営利団体。SecureDropの開発元。"
+    }
+  },
+  {
+    "id": "optout",
+    "name": "Opt Out Podcast",
+    "category": "press",
+    "address": "42uDZuVw13kSCf6BFFWanFcofAvCjMeatf3zzA6Gbms7UDgwB6rd6hLYAyP985YoyLdsa8NwhSgtH6dWadw7TeXiTHaMQS8",
+    "source": "https://optoutpod.com/donate/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Privacy-focused interview podcast by Seth For Privacy.",
+      "es": "Podcast de entrevistas sobre privacidad de Seth For Privacy.",
+      "ru": "Подкаст-интервью о приватности от Seth For Privacy.",
+      "fr": "Podcast d'entretiens sur la vie privée par Seth For Privacy.",
+      "pt": "Podcast de entrevistas sobre privacidade do Seth For Privacy.",
+      "ja": "Seth For Privacyによるプライバシー特化のインタビューポッドキャスト。"
+    }
+  },
+  {
     "id": "wikileaks",
     "name": "WikiLeaks",
     "category": "press",
@@ -478,6 +1102,22 @@
       "fr": "Publie des documents censurés et secrets venant de lanceurs d'alerte.",
       "pt": "Publica documentos censurados e secretos de denunciantes.",
       "ja": "内部告発者による検閲・機密文書を公開。"
+    }
+  },
+  {
+    "id": "libgen",
+    "name": "Library Genesis (libgen.li)",
+    "category": "knowledge",
+    "address": "48WhyKv4D9x53SyDFNYuMsHsDzuHXEcht4mWoFtXtE3k4KZ3A7goi3CQWBQQZ3A8PSK7CpwnAFKLnfGiZTAbEpcaCQCghvN",
+    "source": "https://libgen.li/",
+    "checked": "2026-10-21",
+    "description": {
+      "en": "Shadow library of books and scientific articles.",
+      "es": "Biblioteca en la sombra de libros y artículos científicos.",
+      "ru": "Теневая библиотека книг и научных статей.",
+      "fr": "Bibliothèque fantôme de livres et d'articles scientifiques.",
+      "pt": "Biblioteca paralela de livros e artigos científicos.",
+      "ja": "書籍と学術論文のシャドウライブラリ。"
     }
   }
 ]
