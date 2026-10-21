@@ -1,0 +1,58 @@
+import { defineStrings } from "../define";
+
+export default defineStrings({
+  en: {
+    u_fiat: "Value", u_rate: "1 XMR = {price}", u_loading: "Loading prices…",
+    u_hist_t: "Price on a past date",
+    u_hist_date: "Date",
+    u_hist_price: "Closing price: 1 XMR = {price}",
+    u_hist_amount: "{amount} XMR was worth {value}.",
+    u_hist_error: "No price for that date.",
+    u_hist_source: "Daily close from Bitfinex (USD), converted with Frankfurter exchange rates. Data from 2017.",
+  },
+  es: {
+    u_fiat: "Valor", u_rate: "1 XMR = {price}", u_loading: "Cargando precios…",
+    u_hist_t: "Precio en una fecha pasada",
+    u_hist_date: "Fecha",
+    u_hist_price: "Precio de cierre: 1 XMR = {price}",
+    u_hist_amount: "{amount} XMR valían {value}.",
+    u_hist_error: "No hay precio para esa fecha.",
+    u_hist_source: "Cierre diario de Bitfinex (USD), convertido con los tipos de cambio de Frankfurter. Datos desde 2017.",
+  },
+  ru: {
+    u_fiat: "Стоимость", u_rate: "1 XMR = {price}", u_loading: "Загружаем цены…",
+    u_hist_t: "Цена на прошедшую дату",
+    u_hist_date: "Дата",
+    u_hist_price: "Цена закрытия: 1 XMR = {price}",
+    u_hist_amount: "{amount} XMR стоили {value}.",
+    u_hist_error: "Нет цены на эту дату.",
+    u_hist_source: "Дневное закрытие на Bitfinex (USD), пересчёт по курсам Frankfurter. Данные с 2017 года.",
+  },
+  fr: {
+    u_fiat: "Valeur", u_rate: "1 XMR = {price}", u_loading: "Chargement des prix…",
+    u_hist_t: "Prix à une date passée",
+    u_hist_date: "Date",
+    u_hist_price: "Cours de clôture : 1 XMR = {price}",
+    u_hist_amount: "{amount} XMR valaient {value}.",
+    u_hist_error: "Pas de prix pour cette date.",
+    u_hist_source: "Clôture quotidienne sur Bitfinex (USD), convertie avec les taux de change de Frankfurter. Données depuis 2017.",
+  },
+  pt: {
+    u_fiat: "Valor", u_rate: "1 XMR = {price}", u_loading: "Carregando preços…",
+    u_hist_t: "Preço em uma data passada",
+    u_hist_date: "Data",
+    u_hist_price: "Preço de fechamento: 1 XMR = {price}",
+    u_hist_amount: "{amount} XMR valiam {value}.",
+    u_hist_error: "Sem preço para essa data.",
+    u_hist_source: "Fechamento diário da Bitfinex (USD), convertido com as cotações da Frankfurter. Dados desde 2017.",
+  },
+  ja: {
+    u_fiat: "金額", u_rate: "1 XMR = {price}", u_loading: "価格を読み込み中…",
+    u_hist_t: "過去の日付の価格",
+    u_hist_date: "日付",
+    u_hist_price: "終値：1 XMR = {price}",
+    u_hist_amount: "{amount} XMR の価値は {value} でした。",
+    u_hist_error: "その日の価格はありません。",
+    u_hist_source: "Bitfinex の日次終値（USD）を Frankfurter の為替レートで換算。2017 年以降のデータです。",
+  },
+});
