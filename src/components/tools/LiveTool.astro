@@ -1,0 +1,123 @@
+---
+import NodeSource from "../live/NodeSource.astro";
+import PixelIcon from "../PixelIcon.astro";
+import { localePath, pickStrings, useTranslations, type Locale } from "../../i18n/ui";
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const strings = pickStrings(lang, ["lv_listen", "lv_stop", "lv_height", "lv_waiting", "lv_ago", "lv_new_block", "lv_hint", "dur_s", "dur_min", "dur_h", "dur_d", "dur_y"]);
+---
+<div id="live-tool" class="grid gap-5" data-strings={strings} data-lang={lang} data-tx={localePath(lang, "/tx")}>
+  <section data-stage class="live-stage grid gap-3 border-2 border-ink bg-ink p-3 text-cream shadow-[6px_6px_0_var(--color-graphite)] sm:p-4">
+    <canvas data-viz class="block w-full border-2 border-graphite [image-rendering:pixelated]"></canvas>
+    <p class="font-pixel text-xs text-ash">{t("lv_hint")}</p>
+    <div class="flex flex-wrap items-center gap-x-4 gap-y-3">
+      <button type="button" data-listen class="btn min-w-32 border-orange bg-orange px-5 py-3 text-lg text-ink">
+        <PixelIcon name="sound" size={20} /><span>{t("lv_listen")}</span>
+      </button>
+      <label class="ml-auto flex items-center gap-2">
+        <PixelIcon name="sound" size={16} class="text-orange" />
+        <input type="range" name="volume" min="0" max="1" step="0.05" value="0.5" class="volume w-24" aria-label={t("bt_volume")} />
+      </label>
+      <button type="button" data-fullscreen class="btn btn-ghost border-cream px-3 py-2 text-cream" aria-label={t("bt_fullscreen")} title={t("bt_fullscreen")}><PixelIcon name="expand" size={18} /></button>
+    </div>
+  </section>
+  <p class="max-w-[66ch] text-sm text-graphite">{t("lv_note")}</p>
+  <NodeSource lang={lang} />
+</div>
+
+<style>
+  .volume { appearance: none; height: 8px; background: var(--color-graphite); cursor: pointer; }
+  .volume::-webkit-slider-thumb { appearance: none; width: 10px; height: 16px; background: var(--color-orange); }
+  .volume::-moz-range-thumb { width: 10px; height: 16px; background: var(--color-orange); border: 0; border-radius: 0; }
+  .live-stage:fullscreen { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2vh 3vw; border: 0; box-shadow: none; }
+  .live-stage:fullscreen > * { width: min(100%, calc(85vh * var(--ratio, 1.6))); }
+</style>
+
+<script>
+  import { liveTask } from "../live/live";
+  import { LiveMusic } from "./live-music";
+  import { LiveVisuals } from "./live-visuals";
+  import { readStrings } from "../../i18n/format";
+  import type { Locale } from "../../i18n/ui";
+  import { formatDuration } from "../../lib/duration";
+  import { diffPool, POLL_SECONDS } from "../../lib/live";
+  import { call, getInfo } from "../../lib/node-client";
+
+  const root = document.getElementById("live-tool")!;
+  const t = readStrings(root);
+  const lang = root.dataset.lang as Locale;
+  const $ = <T extends HTMLElement = HTMLElement>(s: string) => root.querySelector<T>(s)!;
+  const canvas = $<HTMLCanvasElement>("[data-viz]");
+  const volume = $<HTMLInputElement>("input[name=volume]");
+  const num = new Intl.NumberFormat(lang);
+  const visuals = new LiveVisuals(canvas, {
+    height: (h) => t("lv_height", { height: num.format(h) }),
+    waiting: (n) => t("lv_waiting", { n: num.format(n) }),
+    ago: (s) => t("lv_ago", { time: formatDuration(s, t, lang) }),
+    newBlock: t("lv_new_block"),
+  });
+  visuals.start();
+  if (import.meta.env.DEV) Object.assign(window, { liveVisuals: visuals });
+
+  let music: LiveMusic | undefined, pool = new Set<string>(), height = 0;
+
+  function ensureMusic() {
+    if (!music) { music = new LiveMusic(); music.synth.setVolume(Number(volume.value)); }
+    return music;
+  }
+
+  async function poll() {
+    const [info, mempool] = await Promise.all([getInfo(), call<{ tx_hashes?: string[] }>("/get_transaction_pool_hashes", {})]);
+    const hashes = mempool.tx_hashes ?? [];
+    const first = height === 0;
+    const { added, removed } = diffPool(pool, hashes);
+    if (!first && info.height > height) {
+      visuals.block(info.height - 1, removed);
+      music?.block();
+    }
+    visuals.add(added, first);
+    if (first) visuals.begin(info.height - 1);
+    else for (const { hash, delay } of music?.transactions(added) ?? []) setTimeout(() => visuals.ring(hash), delay * 1000);
+    pool = new Set(hashes);
+    height = info.height;
+  }
+
+  liveTask(async () => {
+    await poll();
+    setInterval(() => poll().catch(() => {}), POLL_SECONDS * 1000);
+  });
+
+  $("[data-listen]").addEventListener("click", () => {
+    const m = ensureMusic();
+    if (m.playing) m.stop(); else m.start(Number(volume.value));
+    $("[data-listen] span").textContent = t(m.playing ? "lv_stop" : "lv_listen");
+  });
+
+  /** Hovering a transaction plays it; browsers only allow sound once the visitor has interacted with the page. */
+  let hovered: string | undefined, armed: string | undefined;
+  const touch = (hash: string) => { visuals.poke(hash); ensureMusic().hover(hash); };
+  const open = (hash: string) => window.open(`${root.dataset.tx}#${hash}`, "_blank", "noopener");
+  canvas.addEventListener("pointermove", (e) => {
+    if (e.pointerType === "touch") return;
+    const hash = visuals.hit(e.clientX, e.clientY);
+    canvas.style.cursor = hash ? "pointer" : "";
+    if (hash === hovered) return;
+    hovered = hash;
+    if (!hash) visuals.poke(undefined);
+    else if (navigator.userActivation?.hasBeenActive ?? true) touch(hash);
+    else visuals.poke(hash);
+  });
+  canvas.addEventListener("pointerleave", () => { hovered = undefined; visuals.leave(); });
+  canvas.addEventListener("pointerdown", (e) => {
+    const hash = visuals.hit(e.clientX, e.clientY);
+    if (!hash) return;
+    if (e.pointerType !== "touch" || hash === armed) { open(hash); return; }
+    armed = hash;
+    touch(hash);
+  });
+
+  volume.addEventListener("input", () => music?.synth.setVolume(Number(volume.value)));
+  $("[data-fullscreen]").addEventListener("click", () => (document.fullscreenElement ? document.exitFullscreen() : $("[data-stage]").requestFullscreen()));
+</script>

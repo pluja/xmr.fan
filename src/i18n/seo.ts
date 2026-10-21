@@ -3,6 +3,8 @@ import { defineStrings } from "./define.ts";
 /** Search-friendly page titles and descriptions. Visible headings stay short; these name Monero and say what the page does. */
 export default defineStrings({
   en: {
+    seo_title_live: "Monero live: watch and hear the network in real time",
+    seo_desc_live: "Every new Monero transaction becomes a note and every block a beat, in a pixel animation of the mempool and the chain. Live data from public nodes.",
     seo_title_beat: "Monero address beat: hear your address as music",
     seo_desc_beat: "Turn any Monero address into a looping 8-bit chiptune with a pixel visualizer. Every address plays its own song, generated in your browser.",
     seo_title_donate: "Monero donation roulette: support privacy projects",
@@ -33,6 +35,8 @@ export default defineStrings({
     seo_desc_gazette: "The week in Monero, every Monday: development, ecosystem, community and privacy news, price and network numbers, with sources and a podcast.",
   },
   es: {
+    seo_title_live: "Monero en vivo: mira y escucha la red en tiempo real",
+    seo_desc_live: "Cada transacción nueva de Monero es una nota y cada bloque un golpe, en una animación pixelada de la mempool y la cadena. Datos en vivo de nodos públicos.",
     seo_title_beat: "Ritmo de dirección Monero: escucha tu dirección",
     seo_desc_beat: "Convierte cualquier dirección de Monero en un chiptune de 8 bits con visualizador pixelado. Cada dirección suena distinta, generada en tu navegador.",
     seo_title_donate: "Ruleta de donaciones en Monero: apoya proyectos de privacidad",
@@ -63,6 +67,8 @@ export default defineStrings({
     seo_desc_gazette: "La semana de Monero cada lunes: desarrollo, ecosistema, comunidad y privacidad, precio y red, con fuentes y un podcast.",
   },
   ru: {
+    seo_title_live: "Monero вживую: смотрите и слушайте сеть в реальном времени",
+    seo_desc_live: "Каждая новая транзакция Monero звучит нотой, а каждый блок ударом, в пиксельной анимации мемпула и цепочки. Данные с публичных узлов.",
     seo_title_beat: "Бит адреса Monero: услышьте свой адрес",
     seo_desc_beat: "Превратите любой адрес Monero в 8-битный чиптюн с пиксельной визуализацией. У каждого адреса своя мелодия, созданная в вашем браузере.",
     seo_title_donate: "Рулетка пожертвований в Monero: поддержите проекты приватности",
@@ -93,6 +99,8 @@ export default defineStrings({
     seo_desc_gazette: "Неделя Monero каждый понедельник: разработка, экосистема, сообщество и приватность, цена и сеть, с источниками и подкастом.",
   },
   fr: {
+    seo_title_live: "Monero en direct : voyez et écoutez le réseau",
+    seo_desc_live: "Chaque nouvelle transaction Monero devient une note et chaque bloc un beat, dans une animation pixel de la mempool et de la chaîne. Données en direct.",
     seo_title_beat: "Beat d'adresse Monero : écoute ton adresse",
     seo_desc_beat: "Transforme n'importe quelle adresse Monero en chiptune 8 bits avec visualiseur pixel. Chaque adresse a sa musique, générée dans ton navigateur.",
     seo_title_donate: "Roulette des dons en Monero : soutenez la vie privée",
@@ -123,6 +131,8 @@ export default defineStrings({
     seo_desc_gazette: "La semaine Monero chaque lundi : développement, écosystème, communauté et vie privée, prix et réseau, avec les sources et un podcast.",
   },
   pt: {
+    seo_title_live: "Monero ao vivo: veja e ouça a rede em tempo real",
+    seo_desc_live: "Cada nova transação Monero vira uma nota e cada bloco uma batida, numa animação pixelada da mempool e da cadeia. Dados ao vivo de nós públicos.",
     seo_title_beat: "Batida de endereço Monero: ouça seu endereço",
     seo_desc_beat: "Transforme qualquer endereço Monero em um chiptune 8 bits com visualizador pixelado. Cada endereço toca sua música, gerada no seu navegador.",
     seo_title_donate: "Roleta de doações em Monero: apoie projetos de privacidade",
@@ -153,6 +163,8 @@ export default defineStrings({
     seo_desc_gazette: "A semana do Monero toda segunda-feira: desenvolvimento, ecossistema, comunidade e privacidade, preço e rede, com fontes e podcast.",
   },
   ja: {
+    seo_title_live: "Monero ライブ：ネットワークをリアルタイムで見て聴く",
+    seo_desc_live: "Monero の新しいトランザクションは音符に、ブロックはビートに。メモリプールとチェーンのドット絵アニメーション。公開ノードのリアルタイムデータ。",
     seo_title_beat: "Monero アドレスビート：アドレスを音楽で聴く",
     seo_desc_beat: "Monero アドレスをドット絵ビジュアライザー付きの 8 ビット チップチューンに変換。アドレスごとに違う曲をブラウザ内で生成します。",
     seo_title_donate: "Monero 寄付ルーレット：プライバシー関連プロジェクトを支援",
