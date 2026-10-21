@@ -55,6 +55,16 @@ docker build -t xmr.fan .
 docker run -p 4321:4321 -v ./sponsor-requests:/app/sponsor-requests xmr.fan
 ```
 
+Put it behind a reverse proxy for HTTPS. The proxy must send the visitor's address in `X-Forwarded-For` and replace any value the visitor sent, because the node checker's rate limit is per IP. Caddy does this by default:
+
+```
+xmr.fan {
+  reverse_proxy localhost:4321
+}
+```
+
+With nginx, use `proxy_set_header X-Forwarded-For $remote_addr;` plus `Host` and `X-Forwarded-Proto`. Astro only trusts these headers for the hosts in `security.allowedDomains` in `astro.config.mjs`; add yours there if you deploy under another domain.
+
 The site URL is set in `astro.config.mjs` (`site`). The server code only uses web-standard APIs, so another Astro adapter can replace `@astrojs/node`. Environment variables are documented in [`.env.example`](.env.example); the scripts read `.env` automatically.
 
 ### Server endpoints
