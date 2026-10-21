@@ -1,0 +1,264 @@
+---
+import CopyButton from "../CopyButton.astro";
+import Disclosure from "../Disclosure.astro";
+import Field from "../Field.astro";
+import TryExample from "../TryExample.astro";
+import { localePath, pickStrings, useTranslations, type Locale } from "../../i18n/ui";
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const strings = pickStrings(lang, [
+  "a_valid", "a_type_standard", "a_type_subaddress", "a_type_integrated", "a_pid_bad",
+  "a_oa_looking", "a_oa_found", "a_oa_none", "a_oa_error", "a_oa_dnssec", "a_oa_unsigned", "a_oa_invalid",
+  "err_chars", "err_length", "err_checksum", "err_prefix", "warn_network", "a_same", "a_diff", "a_oa_step1", "qr_alt", "type_standard", "type_subaddress", "type_integrated",
+]);
+const row = "grid gap-1 border-b-2 border-dotted border-graphite/40 py-2.5 sm:grid-cols-[180px_1fr] sm:gap-4";
+const key = "break-all font-mono text-[13px]";
+---
+<div id="address-tool" class="grid gap-6" data-strings={strings} data-uri={localePath(lang, "/uri")}>
+  <div class="relative">
+  <TryExample lang={lang} class="absolute right-0 top-0 !my-0 !py-0" />
+  <Field label={t("a_input")}>
+    <textarea name="q" rows="2" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder={t("a_placeholder")} class="field min-h-14 resize-y font-mono text-[13px] [word-break:break-all]" aria-describedby="a-status" autofocus></textarea>
+  </Field>
+  </div>
+  <p id="a-status" class="-mt-4 text-sm empty:hidden" aria-live="polite"></p>
+
+  <section data-oa class="grid gap-1 border-l-2 border-ink pl-4 text-[15px]" hidden>
+    <p data-oa-message></p>
+    <p data-oa-security class="text-sm"></p>
+  </section>
+
+  <section data-details class="border-2 border-ink shadow-[6px_6px_0_var(--color-ink)]" hidden>
+    <div class="flex flex-wrap items-center gap-x-3 gap-y-1 bg-ink px-4 py-2.5">
+      <p class="font-pixel text-mint"><span aria-hidden="true">✓ </span><span data-valid></span></p>
+      <span data-type-badge class="border border-orange px-1.5 font-pixel text-xs uppercase leading-5 text-orange"></span>
+    </div>
+    <div class="grid gap-5 bg-paper p-4 sm:grid-cols-[minmax(0,1fr)_160px] sm:p-5 md:grid-cols-[minmax(0,1fr)_190px]">
+      <div class="grid content-start gap-3">
+        <p data-full class="font-mono text-[15px] leading-loose tracking-wide"></p>
+        <p data-type class="text-sm text-graphite"></p>
+        <div class="flex flex-wrap gap-2">
+          <CopyButton lang={lang} from="[data-full]" class="btn-ghost" />
+          <a data-pay class="btn">{t("a_pay_link")}</a>
+        </div>
+      </div>
+      <div data-qr class="max-w-[190px] border-2 border-ink bg-paper"></div>
+    </div>
+  </section>
+
+  <div data-extras class="grid gap-3" hidden>
+  <Disclosure title={t("a_details")} data-keys>
+    <dl class="text-[15px]">
+      <div class={row}><dt class="text-sm font-semibold">{t("a_spend")}</dt><dd data-spend class={key}></dd></div>
+      <div class={row}><dt class="text-sm font-semibold">{t("a_view")}</dt><dd data-view class={key}></dd></div>
+      <div class={row} data-pid-row hidden><dt class="text-sm font-semibold">{t("a_pid")}</dt><dd data-pid class={key}></dd></div>
+      <div class={row} data-inner-row hidden><dt class="text-sm font-semibold">{t("a_inner")}</dt><dd data-inner class={key}></dd></div>
+    </dl>
+    <p class="text-xs text-graphite">{t("a_keys_note")}</p>
+  </Disclosure>
+  <Disclosure title={t("a_integrate_t")} data-integrate hidden>
+    <p class="text-sm text-graphite">{t("a_integrate_help")}</p>
+    <div class="flex flex-wrap items-end gap-2">
+      <Field label={t("a_pid_input")} messageId="pid-message" class="min-w-0 flex-1 basis-64">
+        <input name="pid" maxlength="16" spellcheck="false" autocomplete="off" class="field font-mono" aria-describedby="pid-message" />
+      </Field>
+      <button type="button" data-random class="btn btn-ghost mb-px">{t("a_random")}</button>
+    </div>
+    <div data-integrated-box class="grid gap-2" hidden>
+      <output id="integrated" class="block break-all bg-ink p-3 font-mono text-xs leading-normal text-mint"></output>
+      <CopyButton lang={lang} from="#integrated" class="justify-self-start" />
+    </div>
+  </Disclosure>
+
+  <Disclosure title={t("a_compare_t")} data-compare>
+    <p class="text-sm text-graphite">{t("a_compare_help")}</p>
+    <textarea name="other" rows="2" spellcheck="false" autocomplete="off" autocapitalize="off" class="field min-h-14 resize-y font-mono text-[13px] [word-break:break-all]" aria-label={t("a_compare_t")}></textarea>
+    <div data-compare-result class="grid gap-2" hidden>
+      <p data-compare-verdict class="font-pixel"></p>
+      <p data-compare-a class="break-all font-mono text-[13px] leading-relaxed"></p>
+      <p data-compare-b class="break-all font-mono text-[13px] leading-relaxed"></p>
+    </div>
+  </Disclosure>
+
+  </div>
+
+  <p class="text-sm text-graphite">{t("a_privacy")}</p>
+
+  <section data-oa-tool class="grid gap-4 border-t-2 border-ink pt-6">
+    <div class="grid gap-1">
+      <h2 class="font-pixel text-lg">{t("a_oa_make_t")}</h2>
+      <p class="max-w-[64ch] text-[15px] text-graphite">{t("a_oa_make_help")}</p>
+    </div>
+    <div class="grid gap-3 sm:grid-cols-2">
+      <Field label={t("a_oa_addr")} class="sm:col-span-2"><input name="oa-address" spellcheck="false" autocomplete="off" class="field font-mono text-[13px]" /></Field>
+      <Field label={t("a_oa_host")}><input name="oa-host" placeholder="donate@example.com" autocomplete="off" spellcheck="false" class="field font-mono text-[14px]" /></Field>
+      <Field label={t("a_oa_name")}><input name="oa-name" maxlength="60" autocomplete="off" class="field" /></Field>
+    </div>
+    <ol data-oa-steps class="grid list-inside list-decimal gap-2 text-[15px] marker:font-pixel" hidden>
+      <li data-step1></li>
+      <li>{t("a_oa_step2")}
+        <output id="oa-record" class="mt-2 block break-all bg-ink p-3 font-mono text-xs leading-normal text-mint"></output>
+        <CopyButton lang={lang} from="#oa-record" class="btn-ghost mt-2 px-2 py-1 text-xs" />
+      </li>
+      <li>{t("a_oa_step3")}</li>
+    </ol>
+    <button type="button" data-oa-test class="btn btn-ghost justify-self-start" hidden>{t("a_oa_test")}</button>
+  </section>
+</div>
+
+<script>
+  import { readStrings } from "../../i18n/format";
+  import { differences, integratedAddress, openAliasDomain, openAliasRecord, randomPaymentId, resolveOpenAlias, splitIntegrated } from "../../lib/address";
+  import { EXAMPLE_OPENALIAS } from "../../lib/examples";
+  import { buildUri, parseAddress } from "../../lib/monero";
+  import { drawQr, qrSvg } from "../../lib/qr";
+
+  const root = document.getElementById("address-tool")!;
+  const t = readStrings(root);
+  const $ = <T extends HTMLElement = HTMLElement>(s: string) => root.querySelector<T>(s)!;
+  const input = $<HTMLTextAreaElement>("textarea[name=q]"), pid = $<HTMLInputElement>("input[name=pid]");
+  const status = $("#a-status");
+  let current = "";
+  let aliasName: string | undefined;
+
+  function setStatus(text: string, tone: "error" | "" = "") {
+    status.textContent = text;
+    status.classList.toggle("text-danger", tone === "error");
+  }
+
+  /** False if the address is invalid. */
+  function showAddress(address: string): boolean {
+    const parsed = parseAddress(address);
+    $("[data-details]").hidden = $("[data-extras]").hidden = !parsed.ok;
+    if (!parsed.ok) return false;
+    current = address.trim();
+    $("[data-valid]").textContent = t("a_valid", { network: parsed.network });
+    // Groups of four, with the first and last group marked: those are what people compare.
+    const groups = current.match(/.{1,4}/g)!;
+    $("[data-full]").replaceChildren(...groups.map((g, i) => {
+      const span = document.createElement("span");
+      span.textContent = g;
+      span.className = `mr-[0.45em] inline-block${i === 0 || i === groups.length - 1 ? " font-bold text-flame" : ""}`;
+      return span;
+    }));
+    $("[data-type-badge]").textContent = t(`type_${parsed.type}`);
+    $("[data-qr]").innerHTML = qrSvg(drawQr(buildUri({ address: current, name: aliasName })), t("qr_alt"));
+    $("[data-type]").textContent = t(`a_type_${parsed.type}`);
+    $("[data-spend]").textContent = parsed.publicSpendKey;
+    $("[data-view]").textContent = parsed.publicViewKey;
+    $("[data-pid-row]").hidden = !parsed.paymentId;
+    $("[data-pid]").textContent = parsed.paymentId ?? "";
+    const inner = splitIntegrated(current);
+    $("[data-inner-row]").hidden = !inner;
+    $("[data-inner]").textContent = inner?.standard ?? "";
+    $<HTMLAnchorElement>("[data-pay]").href = `${root.dataset.uri}?address=${current}${aliasName ? `&recipient_name=${encodeURIComponent(aliasName)}` : ""}`;
+    $("[data-integrate]").hidden = parsed.type !== "standard";
+    renderIntegrated();
+    renderCompare();
+    const oaAddress = $<HTMLInputElement>("input[name=oa-address]");
+    if (!oaAddress.value) { oaAddress.value = current; renderRecord(); }
+    if (parsed.network !== "mainnet") setStatus(t("warn_network", { net: parsed.network }), "error");
+    return true;
+  }
+
+  function renderIntegrated() {
+    const value = pid.value.trim();
+    const r = value ? integratedAddress(current, value) : null;
+    const bad = !!r && !r.ok;
+    pid.setAttribute("aria-invalid", String(bad));
+    $("#pid-message").textContent = bad ? t("a_pid_bad") : "";
+    $("[data-integrated-box]").hidden = !r?.ok;
+    $("#integrated").textContent = r?.ok ? r.address : "";
+  }
+
+  /** Built with text nodes only: the input is untrusted. */
+  function renderCompare() {
+    const other = $<HTMLTextAreaElement>("textarea[name=other]").value.trim();
+    $("[data-compare-result]").hidden = !other;
+    if (!other) return;
+    const diff = differences(current, other);
+    const verdict = $("[data-compare-verdict]");
+    verdict.textContent = diff.size ? `× ${t("a_diff", { n: diff.size })}` : `✓ ${t("a_same")}`;
+    verdict.className = `font-pixel ${diff.size ? "text-danger" : "text-ok"}`;
+    const marked = (text: string) => [...text].map((ch, i) => {
+      if (!diff.has(i)) return document.createTextNode(ch);
+      const mark = document.createElement("mark");
+      mark.className = "bg-danger text-paper";
+      mark.textContent = ch;
+      return mark;
+    });
+    $("[data-compare-a]").replaceChildren(...marked(current));
+    $("[data-compare-b]").replaceChildren(...marked(other));
+  }
+
+  function renderRecord() {
+    const address = $<HTMLInputElement>("input[name=oa-address]").value.trim();
+    const host = openAliasDomain($<HTMLInputElement>("input[name=oa-host]").value);
+    const ready = parseAddress(address).ok && !!host;
+    $("[data-oa-steps]").hidden = $("[data-oa-test]").hidden = !ready;
+    if (!ready) return;
+    $("[data-step1]").textContent = t("a_oa_step1", { host: host! });
+    $("#oa-record").textContent = openAliasRecord(address, $<HTMLInputElement>("input[name=oa-name]").value);
+  }
+
+  let lookup = 0;
+  async function showAlias(domain: string) {
+    const run = ++lookup;
+    const box = $("[data-oa]"), message = $("[data-oa-message]"), security = $("[data-oa-security]");
+    box.hidden = false;
+    message.textContent = t("a_oa_looking", { name: domain });
+    security.textContent = "";
+    try {
+      const { aliases, dnssec } = await resolveOpenAlias(domain);
+      if (run !== lookup) return;
+      const alias = aliases[0];
+      if (!alias) { message.textContent = t("a_oa_none", { name: domain }); return; }
+      const named = alias.name && alias.name.toLowerCase() !== domain ? `${domain} (${alias.name})` : domain;
+      message.textContent = alias.valid ? t("a_oa_found", { name: named }) : t("a_oa_invalid");
+      aliasName = alias.name;
+      security.textContent = dnssec ? t("a_oa_dnssec") : t("a_oa_unsigned");
+      security.className = `text-sm ${dnssec ? "text-ok" : "text-danger"}`;
+      if (alias.valid) showAddress(alias.address);
+    } catch {
+      if (run === lookup) message.textContent = t("a_oa_error", { name: domain });
+    }
+  }
+
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  function render() {
+    clearTimeout(timer);
+    lookup++;
+    aliasName = undefined;
+    setStatus("");
+    $("[data-oa]").hidden = true;
+    const value = input.value.trim();
+    input.setAttribute("aria-invalid", "false");
+    if (!value) { showAddress(""); return; }
+    if (showAddress(value)) return;
+    const domain = openAliasDomain(value);
+    if (domain) { timer = setTimeout(() => showAlias(domain), 500); return; }
+    const parsed = parseAddress(value);
+    if (!parsed.ok) {
+      input.setAttribute("aria-invalid", "true");
+      setStatus(t(`err_${parsed.error}`, { n: value.length }), "error");
+    }
+  }
+
+  input.addEventListener("input", render);
+  $("[data-example]").addEventListener("click", () => { input.value = EXAMPLE_OPENALIAS; render(); });
+  pid.addEventListener("input", renderIntegrated);
+  $("textarea[name=other]").addEventListener("input", renderCompare);
+  for (const name of ["oa-address", "oa-host", "oa-name"]) $(`input[name=${name}]`).addEventListener("input", renderRecord);
+  $("[data-oa-test]").addEventListener("click", () => {
+    input.value = $<HTMLInputElement>("input[name=oa-host]").value.trim();
+    render();
+    input.scrollIntoView({ block: "center" });
+  });
+  $("[data-random]").addEventListener("click", () => { pid.value = randomPaymentId(); renderIntegrated(); });
+
+  const prefill = new URLSearchParams(location.search).get("address");
+  if (prefill) input.value = prefill;
+  render();
+</script>
