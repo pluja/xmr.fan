@@ -21,7 +21,7 @@ const BG = 0, INK = 1, LOGO_ORANGE = 2, LOGO_GRAY = 3;
 // The Monero symbol at 13x13, sampled from the official press-kit image
 // (getmonero.org/press-kit), in its official colors. o = orange, k = gray,
 // w = the white M band (drawn as background, like the transparent version), . = outside.
-const LOGO = [
+export const MONERO_LOGO = [
   "....ooooo....",
   "..ooooooooo..",
   ".ooooooooooo.",
@@ -71,7 +71,7 @@ export function drawQr(text: string, style: QrStyle = "pixel"): QrDrawing {
 
   // The logo needs the redundancy of H or Q to cover modules safely.
   // It clears its own area plus a one-module margin.
-  const logo = style === "pixel" && (ecl === "H" || ecl === "Q") ? LOGO.length : 0;
+  const logo = style === "pixel" && (ecl === "H" || ecl === "Q") ? MONERO_LOGO.length : 0;
   const logoStart = Math.floor((n - logo) / 2);
   const inLogoArea = (x: number, y: number) =>
     logo > 0 && x >= logoStart - 1 && x <= logoStart + logo && y >= logoStart - 1 && y <= logoStart + logo;
@@ -98,7 +98,7 @@ export function drawQr(text: string, style: QrStyle = "pixel"): QrDrawing {
   }
 
   if (logo) {
-    LOGO.forEach((row, ly) => [...row].forEach((ch, lx) => {
+    MONERO_LOGO.forEach((row, ly) => [...row].forEach((ch, lx) => {
       if (!(ch in LOGO_COLORS)) return;
       shapes.push({ ...at(logoStart + lx, logoStart + ly), w: 1, h: 1, c: LOGO_COLORS[ch] });
     }));

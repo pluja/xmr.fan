@@ -3,39 +3,70 @@ import CopyButton from "../CopyButton.astro";
 import Field from "../Field.astro";
 import PixelIcon from "../PixelIcon.astro";
 import TryExample from "../TryExample.astro";
+import donations from "../../data/donations.json";
 import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
 
 interface Props { lang: Locale }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const strings = pickStrings(lang, ["bt_play", "bt_stop", "bt_info", "bt_error", "bt_recording", "bt_download", "bt_scale_minor", "bt_scale_major", "bt_scale_dorian", "bt_scale_phrygian", "bt_scale_lydian"]);
+const strings = pickStrings(lang, [
+  "bt_play", "bt_stop", "bt_info", "bt_error", "bt_recording", "bt_video",
+  "bt_scale_minor", "bt_scale_major", "bt_scale_dorian", "bt_scale_phrygian", "bt_scale_lydian",
+]);
+const PRESETS = ["getmonero", "torproject", "grapheneos", "privacyguides", "p2pool", "wikileaks"]
+  .map((id) => donations.find((d) => d.id === id))
+  .filter((d): d is (typeof donations)[number] => !!d);
 ---
 <div id="beat-tool" class="grid gap-5" data-strings={strings}>
-  <div class="relative">
+  <div class="relative grid gap-2">
     <TryExample lang={lang} class="absolute right-0 top-0 !my-0 !py-0" />
     <Field label={t("bt_address")} messageId="beat-message">
       <textarea name="address" rows="2" spellcheck="false" autocomplete="off" autocapitalize="off" class="field min-h-14 resize-y font-mono text-[13px] [word-break:break-all]" aria-describedby="beat-message"></textarea>
     </Field>
+    <p class="flex flex-wrap items-center gap-1.5 text-sm">
+      <span class="font-pixel text-graphite">{t("bt_try")}:</span>
+      {PRESETS.map((d) => <button type="button" data-preset={d.address} class="cursor-pointer border-2 border-ink px-2 py-0.5 font-pixel text-xs hover:bg-ink hover:text-orange">{d.name}</button>)}
+    </p>
   </div>
 
-  <section data-stage class="grid gap-3 border-2 border-ink bg-ink p-4 text-cream shadow-[6px_6px_0_var(--color-graphite)]" hidden>
-    <div class="flex flex-wrap items-center gap-3">
-      <button type="button" data-play class="btn border-orange bg-orange text-ink"><PixelIcon name="play" size={18} class="icon-play" /><PixelIcon name="pause" size={18} class="icon-pause hidden" /><span>{t("bt_play")}</span></button>
+  <section data-stage class="beat-stage grid gap-3 border-2 border-ink bg-ink p-3 text-cream shadow-[6px_6px_0_var(--color-graphite)] sm:p-4" hidden>
+    <canvas data-viz class="block w-full border-2 border-graphite [image-rendering:pixelated]"></canvas>
+
+    <div class="flex flex-wrap items-center gap-x-4 gap-y-3">
+      <button type="button" data-play class="btn min-w-32 border-orange bg-orange px-5 py-3 text-lg text-ink">
+        <PixelIcon name="play" size={20} class="icon-play" /><PixelIcon name="pause" size={20} class="icon-pause hidden" /><span>{t("bt_play")}</span>
+      </button>
       <p data-info class="font-pixel text-orange"></p>
+      <label class="ml-auto flex items-center gap-2 font-pixel text-xs text-ash">
+        <PixelIcon name="sound" size={16} class="text-orange" /><span class="sr-only">{t("bt_volume")}</span>
+        <input type="range" name="volume" min="0" max="1" step="0.05" value="0.8" class="volume w-24" aria-label={t("bt_volume")} />
+      </label>
+      <button type="button" data-fullscreen class="btn btn-ghost border-cream px-3 py-2 text-cream" aria-label={t("bt_fullscreen")} title={t("bt_fullscreen")}><PixelIcon name="expand" size={18} /></button>
     </div>
-    <canvas data-viz width="720" height="400" class="block aspect-[9/5] w-full [image-rendering:pixelated]"></canvas>
-    <p data-chars class="break-all font-mono text-[13px] leading-relaxed text-ash"></p>
+
     <div class="flex flex-wrap items-center gap-2">
-      <button type="button" data-download class="btn btn-ghost border-cream text-cream"><PixelIcon name="download" size={16} /><span>{t("bt_download")}</span></button>
+      <button type="button" data-video class="btn btn-ghost border-cream text-cream"><PixelIcon name="download" size={16} /><span>{t("bt_video")}</span></button>
       <CopyButton lang={lang} text="" label={t("bt_copy_link")} class="btn-ghost border-cream text-cream" />
+      <span class="ml-auto hidden font-pixel text-xs text-ash sm:inline">{t("bt_keys")}</span>
     </div>
   </section>
 
   <p class="max-w-[66ch] text-sm text-graphite">{t("bt_note")}</p>
 </div>
 
+<style>
+  .volume { appearance: none; height: 8px; background: var(--color-graphite); cursor: pointer; }
+  .volume::-webkit-slider-thumb { appearance: none; width: 10px; height: 16px; background: var(--color-orange); }
+  .volume::-moz-range-thumb { width: 10px; height: 16px; background: var(--color-orange); border: 0; border-radius: 0; }
+  /* Fullscreen: the canvas as large as fits, controls underneath. */
+  .beat-stage:fullscreen { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2vh 3vw; border: 0; box-shadow: none; }
+  .beat-stage:fullscreen canvas { width: min(100%, calc(80vh * var(--ratio, 1.78))); }
+  .beat-stage:fullscreen > :not(canvas) { width: min(100%, calc(80vh * var(--ratio, 1.78))); }
+</style>
+
 <script>
   import { BeatPlayer } from "./beat-player";
+  import { BeatVisuals } from "./beat-visuals";
   import { readStrings } from "../../i18n/format";
   import { songFromAddress, STEPS, type Song } from "../../lib/beat";
   import { EXAMPLE_ADDRESS, parseAddress } from "../../lib/monero";
@@ -44,113 +75,102 @@ const strings = pickStrings(lang, ["bt_play", "bt_stop", "bt_info", "bt_error", 
   const t = readStrings(root);
   const $ = <T extends HTMLElement = HTMLElement>(s: string) => root.querySelector<T>(s)!;
   const input = $<HTMLTextAreaElement>("textarea[name=address]");
+  const stage = $("[data-stage]");
   const canvas = $<HTMLCanvasElement>("[data-viz]");
-  const ctx = canvas.getContext("2d")!;
   const playBtn = $<HTMLButtonElement>("[data-play]");
-  const COLS = 12, ROWS = 6, GRID_H = 280;
-  let player: BeatPlayer | undefined, song: Song | undefined, address = "", step = -1, flash = 0, charSpans: HTMLElement[] = [];
+  const visuals = new BeatVisuals(canvas);
+  let player: BeatPlayer | undefined, song: Song | undefined, address = "";
 
-  /** Byte value -> a shade between ink and Monero orange. */
-  const shade = (v: number, lit: boolean) => {
-    const k = lit ? 1 : 0.25 + (v / 255) * 0.5;
-    const mix = (a: number, b: number) => Math.round(a + (b - a) * k);
-    return `rgb(${mix(54, 255)},${mix(50, 102)},${mix(58, 0)})`;
-  };
-
-  function draw() {
-    if (!song) return;
-    const cell = canvas.width / COLS, gap = 4;
-    ctx.fillStyle = flash > 0 ? "#3d3842" : "#2b282d";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    const lit = new Set(step < 0 ? [] : [1 + step, 33 + step]);
-    for (let i = 0; i < COLS * ROWS; i++) {
-      const v = song.bytes[i] ?? 0, x = (i % COLS) * cell, y = Math.floor(i / COLS) * (GRID_H / ROWS);
-      ctx.fillStyle = i < song.bytes.length ? shade(v, lit.has(i)) : "#2b282d";
-      ctx.fillRect(x + gap, y + gap, cell - 2 * gap, GRID_H / ROWS - 2 * gap);
-    }
-    const bins = new Uint8Array(player?.analyser.frequencyBinCount ?? 32);
-    player?.analyser.getByteFrequencyData(bins);
-    const bars = 24, w = canvas.width / bars;
-    for (let b = 0; b < bars; b++) {
-      const h = Math.round(((bins[b] ?? 0) / 255) * (canvas.height - GRID_H - 16) / 8) * 8;
-      ctx.fillStyle = b % 2 ? "#fb8c3c" : "#ff6600";
-      ctx.fillRect(b * w + 2, canvas.height - h, w - 4, h);
-    }
-    flash = Math.max(0, flash - 1);
-    if (player?.playing) requestAnimationFrame(draw);
-  }
-
-  function highlightChars() {
-    charSpans.forEach((s, i) => s.classList.toggle("text-orange", step >= 0 && Math.floor(i / 3) === step));
-  }
-
-  function load() {
-    const value = input.value.trim();
-    const parsed = parseAddress(value);
-    const next = parsed.ok ? songFromAddress(value) : null;
-    input.setAttribute("aria-invalid", String(!!value && !next));
-    $("#beat-message").textContent = value && !next ? t("bt_error") : "";
-    $("[data-stage]").hidden = !next;
-    if (!next) { player?.stop(); setPlaying(false); return; }
-    const changed = value !== address;
-    song = next; address = value;
-    $("[data-info]").textContent = t("bt_info", { bpm: song.bpm, key: song.key, scale: t(`bt_scale_${song.scale}`) });
-    charSpans = [...value].map((c) => Object.assign(document.createElement("span"), { textContent: c }));
-    $("[data-chars]").replaceChildren(...charSpans);
-    root.querySelector<HTMLButtonElement>("button[data-idle]")!.dataset.copyText = `${location.origin}${location.pathname}#${value}`;
-    history.replaceState(null, "", `#${value}`);
-    if (changed && player?.playing) player.play(song);
-    step = -1;
-    draw();
+  function ensurePlayer() {
+    if (player) return player;
+    player = new BeatPlayer();
+    player.setVolume(Number($<HTMLInputElement>("input[name=volume]").value));
+    const bins = new Uint8Array(player.analyser.frequencyBinCount);
+    visuals.bins = () => (player!.analyser.getByteFrequencyData(bins), bins);
+    player.onStep = (step) => {
+      visuals.hit(step);
+    };
+    return player;
   }
 
   function setPlaying(on: boolean) {
+    visuals.playing = on;
     playBtn.querySelector("span")!.textContent = t(on ? "bt_stop" : "bt_play");
     playBtn.querySelector(".icon-play")!.classList.toggle("hidden", on);
     playBtn.querySelector(".icon-pause")!.classList.toggle("hidden", !on);
   }
 
-  function ensurePlayer() {
-    if (player) return player;
-    player = new BeatPlayer();
-    player.onStep = (s) => {
-      step = s;
-      if (song?.kick[s]) flash = 3;
-      highlightChars();
-    };
-    return player;
+  function play() {
+    if (!song) return;
+    ensurePlayer().play(song);
+    setPlaying(true);
   }
 
-  playBtn.addEventListener("click", () => {
-    const p = ensurePlayer();
-    if (p.playing) { p.stop(); step = -1; highlightChars(); draw(); setPlaying(false); return; }
-    p.play(song!);
-    setPlaying(true);
-    draw();
-  });
+  function stop() {
+    player?.stop();
+    visuals.step = -1;
+    setPlaying(false);
+  }
 
-  $("[data-download]").addEventListener("click", async () => {
+  const toggle = () => (player?.playing ? stop() : play());
+
+  function load() {
+    const value = input.value.trim();
+    const next = parseAddress(value).ok ? songFromAddress(value) : null;
+    input.setAttribute("aria-invalid", String(!!value && !next));
+    $("#beat-message").textContent = value && !next ? t("bt_error") : "";
+    stage.hidden = !next;
+    if (!next) { stop(); visuals.stop(); return; }
+    const changed = value !== address;
+    song = next;
+    address = value;
+    visuals.setSong(song, value);
+    visuals.start();
+    $("[data-info]").textContent = t("bt_info", { bpm: song.bpm, key: song.key, scale: t(`bt_scale_${song.scale}`) });
+    root.querySelector<HTMLButtonElement>("button[data-idle]")!.dataset.copyText = `${location.origin}${location.pathname}#${value}`;
+    history.replaceState(null, "", `#${value}`);
+    if (changed && player?.playing) player.play(song);
+  }
+
+  /** Records two loops of the stage, with sound, as a video people can post. */
+  async function recordVideo() {
+    const current = song;
+    if (!current) return;
+    const btn = $<HTMLButtonElement>("[data-video]"), label = btn.querySelector("span")!;
     const p = ensurePlayer();
-    const btn = $<HTMLButtonElement>("[data-download]"), label = btn.querySelector("span")!;
-    if (!p.playing) { p.play(song!); setPlaying(true); draw(); }
-    const recorder = new MediaRecorder(p.stream.stream);
+    if (!p.playing) play();
+    const type = ["video/mp4;codecs=avc1.42E01E,mp4a.40.2", "video/mp4", "video/webm;codecs=vp9,opus", "video/webm"].find((m) => MediaRecorder.isTypeSupported(m)) ?? "";
+    const stream = new MediaStream([...canvas.captureStream(30).getVideoTracks(), ...p.stream.stream.getAudioTracks()]);
+    const recorder = new MediaRecorder(stream, type ? { mimeType: type } : undefined);
     const chunks: Blob[] = [];
     recorder.ondataavailable = (e) => chunks.push(e.data);
     btn.disabled = true;
     label.textContent = t("bt_recording");
     recorder.start();
-    await new Promise((r) => setTimeout(r, 2 * STEPS * (60 / song!.bpm / 4) * 1000));
+    await new Promise((r) => setTimeout(r, 2 * STEPS * (60 / current.bpm / 4) * 1000));
     recorder.stop();
     await new Promise((r) => (recorder.onstop = r));
-    const a = Object.assign(document.createElement("a"), { href: URL.createObjectURL(new Blob(chunks, { type: recorder.mimeType })), download: `xmr-beat-${address.slice(0, 8)}.webm` });
+    const ext = recorder.mimeType.includes("mp4") ? "mp4" : "webm";
+    const a = Object.assign(document.createElement("a"), { href: URL.createObjectURL(new Blob(chunks, { type: recorder.mimeType })), download: `xmr-beat-${address.slice(0, 8)}.${ext}` });
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 0);
     btn.disabled = false;
-    label.textContent = t("bt_download");
+    label.textContent = t("bt_video");
+  }
+
+  playBtn.addEventListener("click", toggle);
+  $("[data-video]").addEventListener("click", recordVideo);
+  $("[data-fullscreen]").addEventListener("click", () => (document.fullscreenElement ? document.exitFullscreen() : stage.requestFullscreen()));
+  $<HTMLInputElement>("input[name=volume]").addEventListener("input", (e) => player?.setVolume(Number((e.target as HTMLInputElement).value)));
+  input.addEventListener("input", load);
+  $("[data-example]").addEventListener("click", () => { input.value = EXAMPLE_ADDRESS; load(); play(); });
+  root.querySelectorAll<HTMLButtonElement>("[data-preset]").forEach((b) => b.addEventListener("click", () => { input.value = b.dataset.preset!; load(); play(); }));
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== " " || stage.hidden || /^(INPUT|TEXTAREA|SELECT|BUTTON)$/.test((e.target as HTMLElement).tagName)) return;
+    e.preventDefault();
+    toggle();
   });
 
-  input.addEventListener("input", load);
-  $("[data-example]").addEventListener("click", () => { input.value = EXAMPLE_ADDRESS; load(); });
   input.value = decodeURIComponent(location.hash.slice(1));
   load();
 </script>
