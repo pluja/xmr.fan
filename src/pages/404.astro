@@ -1,0 +1,11 @@
+---
+import Base from "../layouts/Base.astro";
+import PixelIcon from "../components/PixelIcon.astro";
+---
+<Base lang="en" path="/404" title="Page not found" noindex>
+  <section class="mx-auto max-w-[1080px] px-6 py-20">
+    <h1 class="mb-4 font-pixel text-[clamp(28px,4.4vw,48px)]">Page not found</h1>
+    <p class="mb-8 max-w-[50ch]">This page doesn't exist. All the tools are on the home page.</p>
+    <a class="btn" href="/"><PixelIcon name="back" size={16} />Go to the home page</a>
+  </section>
+</Base>

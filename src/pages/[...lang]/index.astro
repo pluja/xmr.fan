@@ -1,0 +1,105 @@
+---
+import Base from "../../layouts/Base.astro";
+import Container from "../../components/Container.astro";
+import InkBand from "../../components/InkBand.astro";
+import ToolCard from "../../components/ToolCard.astro";
+import GazetteBanner from "../../components/gazette/GazetteBanner.astro";
+import { langFromParams, localeParams, localePath, useTranslations } from "../../i18n/ui";
+import { itemListLd, websiteLd } from "../../lib/seo";
+import { TOOLS, seoTitleKey, toolPath } from "../../lib/tools";
+import { sponsorsFor, visibleEditions } from "../../lib/gazette";
+
+export const getStaticPaths = () => localeParams().map((params) => ({ params }));
+
+const lang = langFromParams(Astro.params);
+const t = useTranslations(lang);
+const url = (path: string) => new URL(localePath(lang, path), Astro.site).href;
+const jsonLd = [
+  websiteLd(url("/"), "xmr.fan", t("seo_home_desc"), lang),
+  itemListLd(TOOLS.filter((tool) => tool.live).map((tool) => ({ name: t(seoTitleKey(tool)), url: url(toolPath(tool)) }))),
+];
+const [latest] = await visibleEditions();
+const sponsor = latest ? (await sponsorsFor(latest.data.week))[0] : undefined;
+---
+<Base lang={lang} path="/" title={t("seo_home_title")} fullTitle description={t("seo_home_desc")} jsonLd={jsonLd} active="tools">
+  <Container as="section" class="pb-8 pt-4 sm:pb-10 sm:pt-8">
+    <h1 class="mb-6 font-pixel text-[clamp(28px,4.4vw,48px)] leading-[1.15]">{t("tagline")}</h1>
+    <div class="flex max-w-2xl items-center gap-3 bg-ink px-4 text-cream shadow-[6px_6px_0_var(--color-graphite)] focus-within:shadow-[6px_6px_0_var(--color-flame)]">
+      <span class="font-pixel text-[22px] text-orange" aria-hidden="true">&gt;_</span>
+      <input
+        id="q"
+        type="search"
+        enterkeyhint="go"
+        autocomplete="off"
+        spellcheck="false"
+        placeholder={t("search")}
+        aria-label={t("search_label")}
+        aria-controls="tools"
+        class="min-w-0 flex-1 bg-transparent py-4 font-pixel text-lg text-cream placeholder:text-ash focus:outline-none [&::-webkit-search-cancel-button]:hidden"
+      />
+      <kbd class="hidden border border-line px-1.5 font-pixel text-xs text-ash sm:inline" title="↑ ↓ ↵">/</kbd>
+    </div>
+    {sponsor && (
+      <p class="mt-5 text-sm">
+        <span class="font-pixel">{t("sp_supported")}</span>{" "}
+        {sponsor.url ? <a class="font-bold text-ink" href={sponsor.url} rel="sponsored noopener noreferrer">{sponsor.name}</a> : <b>{sponsor.name}</b>}: {sponsor.line}
+      </p>
+    )}
+  </Container>
+
+  <InkBand>
+    <Container class="pb-12 pt-6">
+      <GazetteBanner lang={lang} class="mb-5" />
+      <h2 class="sr-only">{t("nav_tools")}</h2>
+      <ul id="tools" class="grid grid-cols-1 gap-2 sm:grid-cols-[repeat(auto-fill,minmax(230px,1fr))] sm:gap-4">
+        {TOOLS.filter((tool) => tool.id !== "gazette").map((tool) => <ToolCard lang={lang} tool={tool} />)}
+      </ul>
+      <p id="no-results" class="mt-4 font-pixel text-ash" hidden>{t("no_results")}</p>
+    </Container>
+  </InkBand>
+
+</Base>
+
+<script>
+  const q = document.getElementById("q") as HTMLInputElement;
+  const list = document.getElementById("tools")!;
+  const none = document.getElementById("no-results")!;
+  const items = [...list.querySelectorAll<HTMLLIElement>("li")];
+  let hl = -1;
+
+  const visibleLinks = () =>
+    items.filter((li) => !li.hidden).map((li) => li.querySelector("a")).filter((a): a is HTMLAnchorElement => !!a);
+
+  function paint() {
+    const links = visibleLinks();
+    list.querySelectorAll("a").forEach((a) => a.classList.toggle("hl", links[hl] === a));
+  }
+
+  function filter() {
+    const term = q.value.trim().toLowerCase();
+    let shown = 0;
+    for (const li of items) {
+      li.hidden = !!term && !li.dataset.search!.includes(term);
+      if (!li.hidden) shown++;
+    }
+    none.hidden = shown > 0;
+    hl = term && visibleLinks().length ? 0 : -1;
+    paint();
+  }
+
+  q.addEventListener("input", filter);
+  q.addEventListener("keydown", (e) => {
+    const links = visibleLinks();
+    if (e.key === "Escape") { q.value = ""; filter(); return; }
+    if (!links.length) return;
+    if (e.key === "ArrowDown") { hl = (hl + 1) % links.length; paint(); e.preventDefault(); }
+    if (e.key === "ArrowUp") { hl = (hl - 1 + links.length) % links.length; paint(); e.preventDefault(); }
+    if (e.key === "Enter") { (links[hl] ?? links[0]).click(); e.preventDefault(); }
+  });
+  document.addEventListener("keydown", (e) => {
+    const typing = /^(INPUT|TEXTAREA|SELECT)$/.test((document.activeElement as HTMLElement)?.tagName);
+    if (e.key === "/" && !typing) { e.preventDefault(); q.focus(); }
+  });
+  // Coming back from a tool, the browser may restore the old search text.
+  if (q.value) filter();
+</script>

@@ -1,0 +1,22 @@
+---
+import PixelIcon from "./PixelIcon.astro";
+import { localePath, useTranslations, type Locale } from "../i18n/ui";
+import { TOOLS, titleKey, toolPath, type Tool } from "../lib/tools";
+
+interface Props { lang: Locale; current: Tool }
+const { lang, current } = Astro.props;
+const t = useTranslations(lang);
+const others = TOOLS.filter((tool) => tool.live && tool.id !== current.id && tool.id !== "gazette");
+---
+<nav class="mt-14 max-w-[920px]" aria-labelledby="more-tools">
+  <h2 id="more-tools" class="mb-3 font-pixel text-lg text-orange">{t("more_tools")}</h2>
+  <ul class="flex flex-wrap gap-2">
+    {others.map((tool) => (
+      <li>
+        <a href={localePath(lang, toolPath(tool))} class="inline-flex items-center gap-2 border-2 border-graphite px-3 py-1.5 font-pixel text-sm text-cream no-underline hover:border-orange hover:text-orange">
+          <PixelIcon name={tool.icon} size={14} class="text-orange" />{t(titleKey(tool))}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>

@@ -1,0 +1,27 @@
+---
+import ToolPage from "../../components/ToolPage.astro";
+import AddressTool from "../../components/tools/AddressTool.astro";
+import ChecksumTool from "../../components/tools/ChecksumTool.astro";
+import FeeTool from "../../components/tools/FeeTool.astro";
+import HeightTool from "../../components/tools/HeightTool.astro";
+import MiningTool from "../../components/tools/MiningTool.astro";
+import NodeTool from "../../components/tools/NodeTool.astro";
+import VerifyTool from "../../components/tools/VerifyTool.astro";
+import TxTool from "../../components/tools/TxTool.astro";
+import UnitConverter from "../../components/tools/UnitConverter.astro";
+import { langFromParams, localeParams } from "../../i18n/ui";
+import { TOOL_PAGES, type Tool } from "../../lib/tools";
+
+export const getStaticPaths = () =>
+  localeParams().flatMap(({ lang }) =>
+    TOOL_PAGES.map((tool) => ({ params: { lang, tool: tool.slug }, props: { tool } })));
+
+const COMPONENTS = { units: UnitConverter, addr: AddressTool, fee: FeeTool, height: HeightTool, node: NodeTool, mining: MiningTool, proof: VerifyTool, dl: ChecksumTool, tx: TxTool } as const;
+
+const { tool } = Astro.props as { tool: Tool };
+const lang = langFromParams(Astro.params);
+const Component = COMPONENTS[tool.id as keyof typeof COMPONENTS];
+---
+<ToolPage lang={lang} tool={tool}>
+  <Component lang={lang} />
+</ToolPage>

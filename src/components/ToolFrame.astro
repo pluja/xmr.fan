@@ -1,0 +1,39 @@
+---
+import Container from "./Container.astro";
+import PixelIcon from "./PixelIcon.astro";
+import MoreTools from "./MoreTools.astro";
+import TitleBar from "./TitleBar.astro";
+import { localePath, useTranslations, type Locale } from "../i18n/ui";
+import { titleKey, descKey, type Tool } from "../lib/tools";
+
+interface Props { lang: Locale; tool: Tool }
+const { lang, tool } = Astro.props;
+const t = useTranslations(lang);
+---
+<section class="on-ink flex-1 bg-ink pb-20 pt-6 text-cream sm:pt-8">
+  <Container>
+    <a id="back" href={localePath(lang, "/")} class="group mb-6 inline-flex items-center gap-2.5 py-1.5 font-pixel text-orange no-underline">
+      <PixelIcon name="back" size={18} />
+      <span class="group-hover:underline">{t("back")}</span>
+    </a>
+    <article class="max-w-[920px] border-2 border-orange">
+      <TitleBar icon={tool.icon} level={1} kbd="Esc">{t(titleKey(tool))}</TitleBar>
+      <div class="bg-cream px-5 pb-6 pt-4 text-ink sm:px-6">
+        <p class="mb-5 text-[15px]">{t(descKey(tool))}</p>
+        <slot />
+      </div>
+    </article>
+    <slot name="after" />
+    <MoreTools lang={lang} current={tool} />
+  </Container>
+</section>
+
+<script>
+  // Esc leaves a field first; a second Esc goes back to all tools.
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    const el = document.activeElement as HTMLElement | null;
+    if (el && /^(INPUT|TEXTAREA)$/.test(el.tagName)) { el.blur(); return; }
+    (document.getElementById("back") as HTMLAnchorElement).click();
+  });
+</script>

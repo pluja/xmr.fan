@@ -1,0 +1,30 @@
+---
+import PixelIcon from "./PixelIcon.astro";
+import { localePath, useTranslations, type Locale } from "../i18n/ui";
+import { titleKey, descKey, toolPath, type Tool } from "../lib/tools";
+
+interface Props { lang: Locale; tool: Tool }
+const { lang, tool } = Astro.props;
+const t = useTranslations(lang);
+const title = t(titleKey(tool));
+const desc = t(descKey(tool));
+const Tag = tool.live ? "a" : "div";
+---
+<li data-search={`${title} ${desc}`.toLowerCase()}>
+  <Tag
+    href={tool.live ? localePath(lang, toolPath(tool)) : undefined}
+    aria-disabled={tool.live ? undefined : "true"}
+    class:list={[
+      "group relative grid h-full grid-cols-[28px_1fr] gap-x-3.5 gap-y-0.5 border-2 border-graphite bg-graphite px-4 py-3.5 text-left text-cream no-underline",
+      "sm:flex sm:flex-col sm:gap-2.5 sm:p-[18px] sm:pb-5",
+      tool.live ? "hover:border-orange [&.hl]:border-orange [&.hl]:bg-orange [&.hl]:text-ink" : "opacity-70",
+    ]}
+  >
+    <PixelIcon name={tool.icon} class="row-span-2 mt-0.5 size-7 text-orange group-[.hl]:text-ink sm:size-8" />
+    <b class:list={["font-pixel text-[17px] font-normal leading-snug sm:text-[19px]", { "pr-16 sm:pr-0": !tool.live }]}>{title}</b>
+    <span class="text-sm leading-normal opacity-85 sm:text-[15px]">{desc}</span>
+    {!tool.live && (
+      <em class="absolute right-3.5 top-3.5 border border-ash px-1.5 font-pixel text-xs not-italic text-ash sm:right-4 sm:top-4">{t("soon")}</em>
+    )}
+  </Tag>
+</li>
