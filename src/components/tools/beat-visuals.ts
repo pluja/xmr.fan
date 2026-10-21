@@ -1,16 +1,17 @@
 /* The stage for an address beat, drawn on a tiny canvas and scaled up so every pixel is chunky:
-   a ring of the 32 steps around the address's QR code, with a ripple on each kick. The address ticker
+   a ring of the 32 steps around the address's QR code, with confetti on each kick. The address ticker
    and the QR code are drawn on top at full resolution, so the text stays readable and the code
    scannable (also in recorded videos). */
 import { STEPS, type Song } from "../../lib/beat";
 import { buildUri } from "../../lib/monero";
-import { drawQr, type QrDrawing } from "../../lib/qr";
+import { drawQr, MONERO_LOGO, type QrDrawing } from "../../lib/qr";
 
 const C = {
   bg: "#2b282d", dim: "#36323a", graphite: "#45404a", line: "#5a5460",
   orange: "#fb8c3c", flame: "#ff6600", cream: "#fff1e4", peach: "#ffd2ad", ash: "#a39ca8",
 };
 
+interface Spark { x: number; y: number; vx: number; vy: number; life: number }
 /** Positions in virtual pixels. */
 interface Layout { tickerY: number; cx: number; cy: number; r: number; qr: { x: number; y: number; size: number }; signatureY: number }
 
@@ -18,7 +19,7 @@ export class BeatVisuals {
   private buffer = document.createElement("canvas");
   private g = this.buffer.getContext("2d")!;
   private out: CanvasRenderingContext2D;
-  private ripples: number[] = [];
+  private sparks: Spark[] = [];
   private trail: number[] = [];
   private last = performance.now();
   private raf = 0;
@@ -48,7 +49,7 @@ export class BeatVisuals {
   hit(step: number) {
     this.step = step;
     this.trail = [step, ...this.trail].slice(0, 5);
-    if (this.song?.kick[step]) this.ripples.push(0);
+    if (this.song?.kick[step]) this.burst(14);
   }
 
   private get W() { return this.buffer.width; }
@@ -61,8 +62,8 @@ export class BeatVisuals {
     this.buffer.width = portrait ? 72 : 128;
     this.buffer.height = portrait ? 100 : 80;
     this.layout = portrait
-      ? { tickerY: 2, cx: 36, cy: 46, r: 27, qr: { x: 24, y: 34, size: 24 }, signatureY: 82 }
-      : { tickerY: 2, cx: 64, cy: 44, r: 27, qr: { x: 52, y: 32, size: 24 }, signatureY: 73 };
+      ? { tickerY: 2, cx: 36, cy: 46, r: 27, qr: { x: 21, y: 31, size: 30 }, signatureY: 82 }
+      : { tickerY: 2, cx: 64, cy: 44, r: 27, qr: { x: 49, y: 29, size: 30 }, signatureY: 73 };
     const dpr = devicePixelRatio || 1;
     this.canvas.width = Math.round(rect.width * dpr);
     this.canvas.height = Math.round(rect.width * dpr * (this.H / this.W));
@@ -87,18 +88,25 @@ export class BeatVisuals {
 
   private draw(dt: number) {
     this.px(0, 0, C.bg, this.W, this.H);
-    this.ripple(dt);
     this.ring();
+    this.confetti(dt);
   }
 
-  /** Each kick sends a faint circle out from the code to the ring. */
-  private ripple(dt: number) {
-    const { cx, cy } = this.center(), from = this.layout.qr.size / 2 + 3, to = this.layout.r - 2;
-    this.ripples = this.ripples.map((p) => p + dt * 3).filter((p) => p < 1);
-    for (const p of this.ripples) {
-      const r = from + (to - from) * p, n = Math.round(r * 5);
-      const color = p < 0.4 ? C.line : p < 0.75 ? C.graphite : C.dim;
-      for (let i = 0; i < n; i++) this.px(cx + Math.cos((i / n) * Math.PI * 2) * r, cy + Math.sin((i / n) * Math.PI * 2) * r, color);
+  /** Confetti from the code; it starts hidden under the code, so it seems to burst out of it. */
+  private burst(n: number) {
+    const { cx, cy } = this.center();
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * Math.PI * 2 + Math.random() * 0.3, v = 18 + Math.random() * 22;
+      this.sparks.push({ x: cx, y: cy, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 0.5 });
+    }
+  }
+
+  private confetti(dt: number) {
+    this.sparks = this.sparks.filter((s) => (s.life -= dt) > 0);
+    for (const s of this.sparks) {
+      s.x += s.vx * dt;
+      s.y += s.vy * dt;
+      this.px(s.x, s.y, s.life > 0.3 ? C.peach : C.orange);
     }
   }
 
@@ -144,25 +152,31 @@ export class BeatVisuals {
     o.textAlign = "start";
   }
 
-  /** A scannable code for sending to the address. Orange finder eyes, and while the music plays an
-      orange wave sweeps diagonally over the dark modules with the playhead. Orange stays dark enough
-      for scanners, so the code reads at any moment. */
+  /** A scannable code for sending to the address, drawn light on the dark stage with orange finder
+      eyes. While the music plays an orange wave sweeps diagonally over the modules with the playhead.
+      The area under it is filled with the stage color so confetti never shows between modules. */
   private qrCode() {
     const qr = this.qr;
     if (!qr) return;
     const k = this.canvas.width / this.W, { x, y, size } = this.layout.qr, o = this.out;
-    const pad = Math.round(k * 1.2), x0 = Math.round(x * k), y0 = Math.round(y * k), s = Math.round(size * k);
-    o.fillStyle = qr.palette[0];
-    o.fillRect(x0 - pad, y0 - pad, s + pad * 2, s + pad * 2);
-    const m = s / qr.size;
+    const x0 = Math.round(x * k), y0 = Math.round(y * k), s = Math.round(size * k), m = s / qr.size;
+    o.fillStyle = C.bg;
+    o.fillRect(x0, y0, s, s);
     const phase = this.playing && this.step >= 0 ? ((this.step + 1) / STEPS) * 1.2 - 0.1 : -1;
+    const logo = qr.shapes.filter((sh) => sh.c > 1);
     for (const sh of qr.shapes) {
       const finder = sh.c === 1 && !sh.gap;
       const wave = sh.gap && phase >= 0 && Math.abs((sh.x + sh.y) / (2 * qr.size) - phase) < 0.05;
-      o.fillStyle = finder || wave ? C.flame : qr.palette[sh.c];
+      o.fillStyle = finder || wave ? C.flame : sh.c === 1 ? C.cream : qr.palette[sh.c];
       const g = sh.gap && m >= 5 ? m * 0.1 : 0;
       o.fillRect(x0 + sh.x * m + g, y0 + sh.y * m + g, sh.w * m - 2 * g, sh.h * m - 2 * g);
     }
+    if (!logo.length) return;
+    const lx = Math.min(...logo.map((sh) => sh.x)), ly = Math.min(...logo.map((sh) => sh.y));
+    o.fillStyle = C.cream;
+    MONERO_LOGO.forEach((row, r) => [...row].forEach((ch, c) => {
+      if (ch === "w") o.fillRect(x0 + (lx + c) * m, y0 + (ly + r) * m, m, m);
+    }));
   }
 
   /** Where the beat came from, for shared videos. */
