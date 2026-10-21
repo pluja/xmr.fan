@@ -15,17 +15,17 @@ export interface Tool {
 export const TOOLS: Tool[] = [
   { id: "uri", slug: "uri", icon: "qr", live: true, added: "2026-10-19" },
   { id: "proof", slug: "verify", icon: "check", live: true, added: "2026-10-20" },
-  { id: "tx", slug: "tx", icon: "swap", live: true, added: "2026-10-20" },
+  { id: "tx", slug: "tx", icon: "hourglass", live: true, added: "2026-10-20" },
   { id: "addr", slug: "address", icon: "lens", live: true, added: "2026-10-20" },
-  { id: "units", slug: "units", icon: "scale", live: true, added: "2026-10-19" },
-  { id: "fee", slug: "fee", icon: "coin", live: true, added: "2026-10-20" },
+  { id: "units", slug: "units", icon: "swap", live: true, added: "2026-10-19" },
+  { id: "fee", slug: "fee", icon: "tag", live: true, added: "2026-10-20" },
   { id: "height", slug: "height", icon: "calendar", live: true, added: "2026-10-20" },
   { id: "dl", slug: "checksum", icon: "shield", live: true, added: "2026-10-20" },
-  { id: "node", slug: "node", icon: "node", live: true, added: "2026-10-20" },
-  { id: "mining", slug: "mining", icon: "trophy", live: true, added: "2026-10-20" },
+  { id: "node", slug: "node", icon: "server", live: true, added: "2026-10-20" },
+  { id: "mining", slug: "mining", icon: "pickaxe", live: true, added: "2026-10-20" },
   { id: "donate", slug: "donate", icon: "heart", live: true, added: "2026-10-21" },
   { id: "beat", slug: "beat", icon: "sound", live: true, added: "2026-10-21" },
-  { id: "live", slug: "live", icon: "node", live: true, added: "2026-10-21" },
+  { id: "live", slug: "live", icon: "notes", live: true, added: "2026-10-21" },
   { id: "gazette", slug: "news", icon: "paper", live: true, added: "2026-10-19" },
 ];
 

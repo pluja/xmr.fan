@@ -37,7 +37,7 @@ async function socialImage() {
     }
   });
   c.rect(0, top + 48, 1200, 630 - top - 48, INK);
-  const icons: IconName[] = ["qr", "check", "swap", "lens", "scale", "coin", "calendar", "shield", "node", "trophy", "paper"];
+  const icons: IconName[] = ["qr", "check", "hourglass", "lens", "swap", "tag", "calendar", "shield", "server", "pickaxe", "paper"];
   const size = 8 * 7, gap = (1200 - 2 * 72 - icons.length * size) / (icons.length - 1);
   icons.forEach((name, i) => c.bitmap(iconBitmap(name), Math.round(72 + i * (size + gap)), 508, 7, ORANGE));
   return c.png();
