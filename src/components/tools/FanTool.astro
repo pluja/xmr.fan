@@ -1,0 +1,188 @@
+---
+import CopyButton from "../CopyButton.astro";
+import Field from "../Field.astro";
+import PixelIcon from "../PixelIcon.astro";
+import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
+import { CLASSES, MOVES, RARITIES, STATS } from "../../lib/fancard";
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const strings = pickStrings(lang, [
+  "fc_card", "fc_move", "fc_share_text", "fc_get",
+  ...RARITIES.map((r) => `fc_rarity_${r}`), ...CLASSES.map((c) => `fc_class_${c}`), ...MOVES.map((m) => `fc_move_${m}`), ...STATS.map((s) => `fc_stat_${s}`),
+] as never);
+---
+<div id="fan-tool" class="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] md:items-start" data-strings={strings} data-lang={lang}>
+  <div class="grid content-start gap-4">
+    <Field label={t("fc_name")}>
+      <input name="name" maxlength="24" autocomplete="off" spellcheck="false" placeholder="anon" class="field font-pixel text-lg" autofocus />
+    </Field>
+    <p class="-mt-2 text-sm text-graphite">{t("fc_hint")}</p>
+    <div class="flex flex-wrap gap-2">
+      <button type="button" data-share class="btn"><PixelIcon name="share" size={16} />{t("fc_share")}</button>
+      <button type="button" data-download class="btn btn-ghost"><PixelIcon name="download" size={16} />{t("fc_download")}</button>
+      <button type="button" data-avatar class="btn btn-ghost"><PixelIcon name="download" size={16} />{t("fc_avatar")}</button>
+      <CopyButton lang={lang} text="" label={t("fc_copy_link")} class="btn-ghost" />
+    </div>
+  </div>
+
+  <article data-card class="fan-card border-4 bg-ink text-cream shadow-[6px_6px_0_var(--color-ink)]">
+    <header class="flex items-center justify-between px-4 py-2 font-pixel text-ink" data-bar>
+      <span>{t("fc_card")}</span><span data-number></span>
+    </header>
+    <div class="grid gap-4 p-4 sm:grid-cols-[150px_1fr]">
+      <div data-avatar-box class="aspect-square w-full max-w-[150px] border-2 border-cream [image-rendering:pixelated]"></div>
+      <div class="grid content-start gap-1">
+        <h2 data-name class="font-pixel text-2xl leading-tight text-orange [overflow-wrap:anywhere]"></h2>
+        <p data-rarity class="font-pixel text-lg"></p>
+        <p data-class class="font-pixel"></p>
+      </div>
+    </div>
+    <dl data-stats class="grid gap-1.5 px-4"></dl>
+    <div class="grid gap-1 px-4 pb-4 pt-3">
+      <p class="font-pixel text-sm text-ash">{t("fc_move")}</p>
+      <p data-move class="text-[15px]"></p>
+    </div>
+    <footer class="border-t-2 border-graphite px-4 py-2 font-pixel text-sm text-orange">xmr.fan/fan</footer>
+  </article>
+</div>
+
+<template id="fan-stat">
+  <div class="grid grid-cols-[110px_1fr_28px] items-center gap-2 text-sm">
+    <dt></dt><dd class="flex gap-0.5" aria-hidden="true"></dd><dd class="text-right font-pixel"></dd>
+  </div>
+</template>
+
+<script>
+  import { readStrings } from "../../i18n/format";
+  import { avatarSvg, fanCard, normalizeName, RARITY_COLORS, STATS, type FanCard } from "../../lib/fancard";
+
+  const root = document.getElementById("fan-tool")!;
+  const t = readStrings(root);
+  const $ = <T extends HTMLElement = HTMLElement>(s: string) => root.querySelector<T>(s)!;
+  const input = $<HTMLInputElement>("input[name=name]");
+  const statTemplate = document.getElementById("fan-stat") as HTMLTemplateElement;
+  const BLOCKS = 20;
+  let card: FanCard;
+
+  const label = (c: FanCard) => ({ rarity: t(`fc_rarity_${c.rarity}`), class: t(`fc_class_${c.className}`) });
+  const shareUrl = (c: FanCard) => `${location.origin}${location.pathname}#${encodeURIComponent(c.name)}`;
+  const shareText = (c: FanCard) => t("fc_share_text", label(c));
+
+  function render() {
+    card = fanCard(input.value);
+    const color = RARITY_COLORS[card.rarity];
+    $("[data-card]").style.borderColor = color;
+    $("[data-bar]").style.background = color;
+    $("[data-number]").textContent = card.number;
+    $("[data-avatar-box]").innerHTML = avatarSvg(card, card.name);
+    $("[data-name]").textContent = card.name;
+    $("[data-rarity]").textContent = label(card).rarity;
+    $("[data-rarity]").style.color = color;
+    $("[data-class]").textContent = label(card).class;
+    $("[data-move]").textContent = t(`fc_move_${card.move}`);
+    $("[data-stats]").replaceChildren(...STATS.map((s) => {
+      const row = statTemplate.content.firstElementChild!.cloneNode(true) as HTMLElement;
+      const [name, bar, value] = row.children as unknown as HTMLElement[];
+      name.textContent = t(`fc_stat_${s}`);
+      bar.replaceChildren(...Array.from({ length: BLOCKS }, (_, i) => {
+        const block = document.createElement("i");
+        block.className = "h-3 flex-1";
+        block.style.background = i < Math.round((card.stats[s] / 100) * BLOCKS) ? color : "var(--color-graphite)";
+        return block;
+      }));
+      value.textContent = String(card.stats[s]);
+      return row;
+    }));
+    root.querySelector<HTMLButtonElement>("button[data-idle]")!.dataset.copyText = `${shareText(card)} ${shareUrl(card)}`;
+    history.replaceState(null, "", normalizeName(input.value) ? `#${encodeURIComponent(card.name)}` : location.pathname);
+  }
+
+  /* ---------- PNG: the card at 1080×1080 for social media, and the avatar as a profile picture ---------- */
+  const PIXEL = "'DotGothic16', monospace", SANS = "'Manrope Variable', system-ui, sans-serif";
+  const C = { ink: "#2b282d", graphite: "#45404a", cream: "#fff1e4", orange: "#fb8c3c", ash: "#a39ca8" };
+
+  function drawAvatar(ctx: CanvasRenderingContext2D, c: FanCard, x: number, y: number, scale: number) {
+    c.avatar.forEach((line, j) => line.forEach((p, i) => { ctx.fillStyle = c.palette[p]; ctx.fillRect(x + i * scale, y + j * scale, scale, scale); }));
+  }
+
+  function wrap(ctx: CanvasRenderingContext2D, text: string, width: number): string[] {
+    const words = text.split(/(\s+)/), lines: string[] = [];
+    let line = "";
+    for (const w of words) {
+      if (line && ctx.measureText(line + w).width > width) { lines.push(line.trim()); line = w.trimStart(); } else line += w;
+    }
+    return line.trim() ? [...lines, line.trim()] : lines;
+  }
+
+  async function cardPng(c: FanCard): Promise<Blob> {
+    await Promise.all([`48px ${PIXEL}`, `32px ${SANS}`].map((f) => document.fonts.load(f)));
+    const S = 1080, color = RARITY_COLORS[c.rarity];
+    const canvas = Object.assign(document.createElement("canvas"), { width: S, height: S });
+    const ctx = canvas.getContext("2d")!;
+    ctx.fillStyle = color; ctx.fillRect(0, 0, S, S);
+    ctx.fillStyle = C.ink; ctx.fillRect(24, 24, S - 48, S - 48);
+    ctx.fillStyle = color; ctx.fillRect(24, 24, S - 48, 96);
+    ctx.fillStyle = C.ink; ctx.font = `44px ${PIXEL}`; ctx.textBaseline = "middle";
+    ctx.fillText(t("fc_card"), 64, 74);
+    ctx.textAlign = "right"; ctx.fillText(c.number, S - 64, 74); ctx.textAlign = "left";
+
+    ctx.fillStyle = C.cream; ctx.fillRect(64, 160, 352, 352);
+    drawAvatar(ctx, c, 72, 168, 21);
+
+    ctx.textBaseline = "top";
+    ctx.font = `64px ${PIXEL}`; ctx.fillStyle = C.orange;
+    let y = 176;
+    for (const line of wrap(ctx, c.name, S - 520).slice(0, 2)) { ctx.fillText(line, 456, y); y += 76; }
+    ctx.font = `48px ${PIXEL}`; ctx.fillStyle = color; ctx.fillText(label(c).rarity, 456, y + 8);
+    ctx.fillStyle = C.cream; ctx.fillText(label(c).class, 456, y + 72);
+
+    y = 560;
+    for (const s of STATS) {
+      ctx.font = `32px ${SANS}`; ctx.fillStyle = C.cream; ctx.fillText(t(`fc_stat_${s}`), 64, y);
+      const filled = Math.round((c.stats[s] / 100) * BLOCKS);
+      for (let i = 0; i < BLOCKS; i++) { ctx.fillStyle = i < filled ? color : C.graphite; ctx.fillRect(360 + i * 28, y + 4, 22, 30); }
+      ctx.font = `36px ${PIXEL}`; ctx.fillStyle = C.cream; ctx.textAlign = "right"; ctx.fillText(String(c.stats[s]), S - 64, y); ctx.textAlign = "left";
+      y += 56;
+    }
+
+    ctx.font = `32px ${PIXEL}`; ctx.fillStyle = C.ash; ctx.fillText(t("fc_move"), 64, y + 20);
+    ctx.font = `34px ${SANS}`; ctx.fillStyle = C.cream;
+    y += 66;
+    for (const line of wrap(ctx, t(`fc_move_${c.move}`), S - 128).slice(0, 2)) { ctx.fillText(line, 64, y); y += 44; }
+
+    ctx.fillStyle = C.graphite; ctx.fillRect(24, S - 112, S - 48, 4);
+    ctx.font = `40px ${PIXEL}`; ctx.fillStyle = C.orange; ctx.textBaseline = "middle";
+    ctx.fillText(`${t("fc_get")} xmr.fan/fan`, 64, S - 64);
+    return new Promise((r) => canvas.toBlob((b) => r(b!), "image/png"));
+  }
+
+  async function avatarPng(c: FanCard): Promise<Blob> {
+    const canvas = Object.assign(document.createElement("canvas"), { width: 512, height: 512 });
+    drawAvatar(canvas.getContext("2d")!, c, 0, 0, 32);
+    return new Promise((r) => canvas.toBlob((b) => r(b!), "image/png"));
+  }
+
+  const slug = (c: FanCard) => c.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "anon";
+  function save(blob: Blob, file: string) {
+    const a = Object.assign(document.createElement("a"), { href: URL.createObjectURL(blob), download: file });
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 0);
+  }
+
+  $("[data-download]").addEventListener("click", async () => save(await cardPng(card), `xmr-fan-card-${slug(card)}.png`));
+  $("[data-avatar]").addEventListener("click", async () => save(await avatarPng(card), `xmr-fan-avatar-${slug(card)}.png`));
+  $("[data-share]").addEventListener("click", async () => {
+    const file = new File([await cardPng(card)], `xmr-fan-card-${slug(card)}.png`, { type: "image/png" });
+    const data = { text: shareText(card), url: shareUrl(card), files: [file] };
+    if (navigator.canShare?.(data)) return navigator.share(data).catch(() => {});
+    if (navigator.share) return navigator.share({ text: data.text, url: data.url }).catch(() => {});
+    await navigator.clipboard.writeText(`${data.text} ${data.url}`).catch(() => {});
+    save(file, file.name);
+  });
+
+  input.value = decodeURIComponent(location.hash.slice(1));
+  input.addEventListener("input", render);
+  render();
+</script>

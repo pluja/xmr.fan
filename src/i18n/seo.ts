@@ -3,6 +3,8 @@ import { defineStrings } from "./define.ts";
 /** Search-friendly page titles and descriptions. Visible headings stay short; these name Monero and say what the page does. */
 export default defineStrings({
   en: {
+    seo_title_fan: "Monero fan card: your pixel avatar and rarity",
+    seo_desc_fan: "Type your nickname and get a Monero fan card: a pixel avatar, a rarity from Common to Mythic, a class, stats and a special move. Share it and compare.",
     seo_title_donate: "Monero donation roulette: support privacy projects",
     seo_desc_donate: "Support a random project that accepts Monero: privacy tools, free software, Monero itself. Every address comes from the project's own page and is checked regularly.",
     seo_home_title: "xmr.fan: free Monero tools for payments, proofs and fees",
@@ -31,6 +33,8 @@ export default defineStrings({
     seo_desc_gazette: "The week in Monero, every Monday: development, ecosystem, community and privacy news, price and network numbers, with sources and a podcast.",
   },
   es: {
+    seo_title_fan: "Tarjeta de fan de Monero: tu avatar pixelado y tu rareza",
+    seo_desc_fan: "Escribe tu apodo y consigue una tarjeta de fan de Monero: avatar pixelado, rareza de Común a Mítica, clase, estadísticas y movimiento especial. Compártela.",
     seo_title_donate: "Ruleta de donaciones en Monero: apoya proyectos de privacidad",
     seo_desc_donate: "Apoya un proyecto al azar que acepta Monero: privacidad, software libre y el propio Monero. Cada dirección viene de la web del proyecto y se comprueba a menudo.",
     seo_home_title: "xmr.fan: herramientas gratis de Monero",
@@ -59,6 +63,8 @@ export default defineStrings({
     seo_desc_gazette: "La semana de Monero cada lunes: desarrollo, ecosistema, comunidad y privacidad, precio y red, con fuentes y un podcast.",
   },
   ru: {
+    seo_title_fan: "Карточка фаната Monero: пиксельный аватар и редкость",
+    seo_desc_fan: "Введите ник и получите карточку фаната Monero: пиксельный аватар, редкость от обычной до мифической, класс, характеристики и суперприём. Делитесь ей.",
     seo_title_donate: "Рулетка пожертвований в Monero: поддержите проекты приватности",
     seo_desc_donate: "Поддержите случайный проект, который принимает Monero: приватность, свободное ПО и сам Monero. Каждый адрес взят с сайта проекта и регулярно проверяется.",
     seo_home_title: "xmr.fan: бесплатные инструменты Monero",
@@ -87,6 +93,8 @@ export default defineStrings({
     seo_desc_gazette: "Неделя Monero каждый понедельник: разработка, экосистема, сообщество и приватность, цена и сеть, с источниками и подкастом.",
   },
   fr: {
+    seo_title_fan: "Carte de fan Monero : ton avatar pixel et ta rareté",
+    seo_desc_fan: "Tape ton pseudo et obtiens une carte de fan Monero : avatar pixel, rareté de Commune à Mythique, classe, stats et coup spécial. Partage-la et compare.",
     seo_title_donate: "Roulette des dons en Monero : soutenez la vie privée",
     seo_desc_donate: "Soutenez un projet au hasard qui accepte le Monero : vie privée, logiciel libre, Monero lui-même. Chaque adresse vient du site du projet et est vérifiée souvent.",
     seo_home_title: "xmr.fan : outils Monero gratuits et privés",
@@ -115,6 +123,8 @@ export default defineStrings({
     seo_desc_gazette: "La semaine Monero chaque lundi : développement, écosystème, communauté et vie privée, prix et réseau, avec les sources et un podcast.",
   },
   pt: {
+    seo_title_fan: "Cartão de fã do Monero: seu avatar pixelado e raridade",
+    seo_desc_fan: "Digite seu apelido e ganhe um cartão de fã do Monero: avatar pixelado, raridade de Comum a Mítica, classe, atributos e golpe especial. Compartilhe.",
     seo_title_donate: "Roleta de doações em Monero: apoie projetos de privacidade",
     seo_desc_donate: "Apoie um projeto aleatório que aceita Monero: privacidade, software livre e o próprio Monero. Cada endereço vem do site do projeto e é verificado com frequência.",
     seo_home_title: "xmr.fan: ferramentas grátis de Monero",
@@ -143,6 +153,8 @@ export default defineStrings({
     seo_desc_gazette: "A semana do Monero toda segunda-feira: desenvolvimento, ecossistema, comunidade e privacidade, preço e rede, com fontes e podcast.",
   },
   ja: {
+    seo_title_fan: "Monero ファンカード：ドット絵アバターとレア度",
+    seo_desc_fan: "ニックネームを入れると Monero ファンカードが手に入ります。ドット絵アバター、コモンからミシックまでのレア度、クラス、ステータス、必殺技。シェアして比べよう。",
     seo_title_donate: "Monero 寄付ルーレット：プライバシー関連プロジェクトを支援",
     seo_desc_donate: "Monero を受け付けるプロジェクトをランダムに支援。プライバシー、自由ソフトウェア、Monero 自身。アドレスは各公式ページから取得し、定期的に確認しています。",
     seo_home_title: "xmr.fan：無料の Monero ツール集",
