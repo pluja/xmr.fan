@@ -18,6 +18,7 @@ No trackers, no accounts. Available in English, Spanish, Russian, French, Portug
 | [`/checksum`](https://xmr.fan/checksum) | Checks a Monero download against the official hashes signed by binaryFate |
 | [`/node`](https://xmr.fan/node) | Checks any node, and lists healthy public nodes |
 | [`/mining`](https://xmr.fan/mining) | Mining income for your CPU, and which P2Pool chain fits you |
+| [`/donate`](https://xmr.fan/donate) | Donation roulette: a random privacy, free software or Monero project to support |
 | [`/news`](https://xmr.fan/news) | The xmr.fan Times |
 
 ### Privacy model
@@ -158,4 +159,6 @@ scripts/                newsletter pipeline, sponsor approval, data and image ge
 
 **Add a language:** add its code to `LOCALES` and a dictionary to `src/i18n/ui.ts`, then to each module in `src/i18n/`. Check that the pixel font covers its script (see the Russian override in `src/styles/global.css`).
 
-**Maintenance:** run `npm run heights` every few months, and prune `PUBLIC_NODES` and `WALLET_NODES` in `src/lib/nodes.ts` when nodes go away.
+**Donation roulette:** projects live in `src/data/donations.json`. Every address must be copied from the project's own donation page (`source`). `npm run donations:check` confirms each address still appears on its page (or in the project's OpenAlias record), and `-- --write` stores today's date as `checked`. Run it weekly, for example from cron, and fix or remove anything it reports.
+
+**Maintenance:** run `npm run donations:check` weekly and `npm run heights` every few months, and prune `PUBLIC_NODES` and `WALLET_NODES` in `src/lib/nodes.ts` when nodes go away.

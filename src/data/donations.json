@@ -1,0 +1,139 @@
+[
+  {
+    "id": "getmonero",
+    "name": "Monero General Fund",
+    "category": "monero",
+    "address": "888tNkZrPN6JsEgekjMnABU4TBzc2Dt29EPAvkRxbANsAnjyPbb3iQ1YBRk1UXcdRsiKc9dhwMVgN5S9cQUiyoogDavup3H",
+    "source": "https://www.getmonero.org/get-started/contributing/",
+    "checked": "2026-10-21"
+  },
+  {
+    "id": "p2pool",
+    "name": "P2Pool",
+    "category": "monero",
+    "address": "44MnN1f3Eto8DZYUWuE5XZNUtE3vcRzt2j6PzqWpPau34e6Cf4fAxt6X2MBmrm6F9YMEiMNjN6W4Shn4pLcfNAja621jwyg",
+    "source": "https://github.com/SChernykh/p2pool",
+    "checked": "2026-10-21"
+  },
+  {
+    "id": "observer",
+    "name": "Monero Observer",
+    "category": "monero",
+    "address": "867TAc58FK2ScH6Kyz9VSJZYSKGbyGfRiJB7M7yV2qEdamdQsxJafEbXxp6QoAkVCjjarKTbsmsZuEm1XymGmSquRdZnN2C",
+    "source": "https://monero.observer/monero-observer-funding-2027/",
+    "checked": "2026-10-21"
+  },
+  {
+    "id": "monerocoalition",
+    "name": "Monero Coalition",
+    "category": "monero",
+    "address": "458KqN1qCy5BXevWrGaqUNHaFXRRcQE739BH9M4BKBi6Ng4U9htN3NbCZdyezD2qNBDaaQ5KZHFhnEQ9brFL8EdL5fxsBfC",
+    "source": "https://donate.monerocoalition.org/",
+    "checked": "2026-10-21"
+  },
+  {
+    "id": "kycnotme",
+    "name": "KYCnot.me",
+    "category": "monero",
+    "address": "83g1QHgQkbJeHr7m1wpDnNFsJcFMaFx6W7DsH4HuSR5ZHPRkeGErJAjYkHrJgBhq4TUrNrCimXNqwYTV1ywB6Rv86Z8iCAu",
+    "source": "https://kycnot.me/about",
+    "checked": "2026-10-21",
+    "openalias": "kycnot.me"
+  },
+  {
+    "id": "monerica",
+    "name": "Monerica",
+    "category": "monero",
+    "address": "8BciMHULmH1Gu6Jrwv1vEJB11f3sNNSGRVU2PKMuaMJ48wndUuNDbaZ94ijH7H3fKQbhkUA5k98ZHUB3cmuoJjwV7WcT3dC",
+    "source": "https://monerica.com/donate",
+    "checked": "2026-10-21"
+  },
+  {
+    "id": "orangefren",
+    "name": "OrangeFren",
+    "category": "monero",
+    "address": "868i3uV9Q8NjigjCnJ6P3L6oMizRYniGuAiVXYVYsBQE9g4gqVWs6qVEDC6SZR3ZiWgC787A9iTcdeFkUdTu8n7q2e7BN9m",
+    "source": "https://orangefren.com/",
+    "checked": "2026-10-21"
+  },
+  {
+    "id": "torproject",
+    "name": "Tor Project",
+    "category": "privacy",
+    "address": "4AcQxuMBUfJM7uAWpZP1Vs1BzQLC1QR6zZL3sMYdBuayWmpZHmaVYo7EQ3cSneyHYf2LRKJnRtrGz5ogZzjmmGygAyusEcJ",
+    "source": "https://donate.torproject.org/cryptocurrency/",
+    "checked": "2026-10-21"
+  },
+  {
+    "id": "grapheneos",
+    "name": "GrapheneOS",
+    "category": "privacy",
+    "address": "862CebHaBpFPgYoNC6zw4U8rsXrDjD8s5LMJNS7yVCRHMUKr9dDi7adMSLUMjkDYJ85xahQTCJHHyK5RCvvRJu9x7iSzN9D",
+    "source": "https://grapheneos.org/donate",
+    "checked": "2026-10-21"
+  },
+  {
+    "id": "whonix",
+    "name": "Whonix",
+    "category": "privacy",
+    "address": "84ZZSsqyh5niztCgxmWAejDLu9eDerWo4Wsx8woEhDGpdKP3BWPtqenNjKuv8vojrB968U3hqYTKgLGt2zEcGopX1qaEPew",
+    "source": "https://www.whonix.org/wiki/Donate",
+    "checked": "2026-10-21"
+  },
+  {
+    "id": "kicksecure",
+    "name": "Kicksecure",
+    "category": "privacy",
+    "address": "84ozcSohQfoV6nRgGfaQ8uBvWphXAH8zDTTuotVnJWF1JMNQfvgNFdbEo4ZnJ9hxPMeYfJuUoWGH3MRaXCfbYk8sFFgm4XL",
+    "source": "https://www.kicksecure.com/wiki/Donate",
+    "checked": "2026-10-21"
+  },
+  {
+    "id": "qubes",
+    "name": "Qubes OS",
+    "category": "privacy",
+    "address": "46PrVgXBdD4cps3SVkHoCDZvMfFdG5q4ej5DYKpuKpTnjiL7pv6KGv7dPh4DPijCGqTbxLDPqZJkobd9SttMiauoP1CQU4y",
+    "source": "https://www.qubes-os.org/donate/",
+    "checked": "2026-10-21"
+  },
+  {
+    "id": "simplex",
+    "name": "SimpleX Chat",
+    "category": "privacy",
+    "address": "8A3ZWAXrrQddvnT1fPrtbK86ZAoM4nai3Gjg1LEow3JWcryJtovMnHYZnxTJpCLmAbfWbnPMeTzPmMBjAhyd4xoM89hYq1c",
+    "source": "https://simplex.chat/donate/",
+    "checked": "2026-10-21"
+  },
+  {
+    "id": "linuxmint",
+    "name": "Linux Mint",
+    "category": "software",
+    "address": "45ZzMXudMd7RpCGLAwxJxpiccddpVdYmgc5ZV1vL9xhJUN6AK4hY8nEhCJfaT8b81n6wiS32UZSJYMQRxHxACxNDCYzXsew",
+    "source": "https://linuxmint.com/donors.php",
+    "checked": "2026-10-21"
+  },
+  {
+    "id": "parrot",
+    "name": "Parrot OS",
+    "category": "software",
+    "address": "88SXv9zrs5sWQr27JDR9sUURJQT3pF77F3xZrQLBv6sxZGNdgzGZyH54E5BT7G9TWfUgThM1SQBcMd6mHjzRo3pJ5whHeaP",
+    "source": "https://parrotsec.org/donate/",
+    "checked": "2026-10-21"
+  },
+  {
+    "id": "distrowatch",
+    "name": "DistroWatch",
+    "category": "software",
+    "address": "86fA3qPTeQtNb2k1vLwEQaAp3XxkvvvXt69gSG5LGunXXikK9koPWZaRQgfFPBPWhMgXjPjccy9LA9xRFchPWQAnPvxh5Le",
+    "source": "https://distrowatch.com/dwres.php?resource=donate",
+    "checked": "2026-10-21"
+  },
+  {
+    "id": "wikileaks",
+    "name": "WikiLeaks",
+    "category": "press",
+    "address": "42adSJwHXzzLrxvMQ5SkWr45oXYQMnva4WA4wwXWYLmohnWgBeUG6WoK4YEzhRpWwc25wvzNyeF4vBQphQ4saDRx42erDPD",
+    "source": "https://shop.wikileaks.org/donate",
+    "checked": "2026-10-21"
+  }
+]

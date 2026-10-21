@@ -1,0 +1,133 @@
+---
+import CopyButton from "../CopyButton.astro";
+import Disclosure from "../Disclosure.astro";
+import PixelIcon from "../PixelIcon.astro";
+import data from "../../data/donations.json";
+import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
+import { DONATION_CATEGORIES, type Donation } from "../../lib/donations";
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const list = data as Donation[];
+const descriptions = Object.fromEntries(list.map((d) => [d.id, t(`dn_desc_${d.id}` as never)]));
+const categories = Object.fromEntries(DONATION_CATEGORIES.map((c) => [c, t(`dn_cat_${c}`)]));
+const strings = pickStrings(lang, ["dn_source", "qr_alt"]);
+const site = (url: string) => new URL(url).hostname.replace(/^www\./, "");
+const chip = "cursor-pointer border-2 border-ink px-2.5 py-1 font-pixel text-sm has-[:checked]:bg-ink has-[:checked]:text-orange";
+---
+<div id="donate-tool" class="grid gap-6" data-strings={strings} data-lang={lang} data-list={JSON.stringify(list)} data-descriptions={JSON.stringify(descriptions)} data-categories={JSON.stringify(categories)}>
+  <div class="flex flex-wrap items-center gap-3">
+    <button type="button" data-spin class="btn text-lg"><PixelIcon name="dice" size={18} />{t("dn_spin")}</button>
+    <fieldset class="flex flex-wrap gap-1.5" aria-label={t("dn_all")}>
+      <label class={chip}><input type="radio" name="category" value="" class="sr-only" checked />{t("dn_all")}</label>
+      {DONATION_CATEGORIES.map((c) => <label class={chip}><input type="radio" name="category" value={c} class="sr-only" />{categories[c]}</label>)}
+    </fieldset>
+  </div>
+
+  <section data-card class="border-2 border-ink shadow-[6px_6px_0_var(--color-ink)]" hidden aria-live="polite">
+    <div class="flex items-center gap-3 bg-ink px-4 py-2.5">
+      <PixelIcon name="heart" size={16} class="text-orange" />
+      <span data-category class="border border-orange px-1.5 font-pixel text-xs uppercase leading-5 text-orange"></span>
+    </div>
+    <div class="grid gap-5 bg-paper p-4 sm:grid-cols-[minmax(0,1fr)_170px] sm:p-5">
+      <div class="grid content-start gap-3">
+        <h2 data-name class="font-pixel text-[clamp(24px,4vw,34px)] leading-tight"></h2>
+        <p data-desc class="text-[15px] text-graphite"></p>
+        <p data-address class="font-mono text-[14px] leading-loose tracking-wide"></p>
+        <div class="flex flex-wrap gap-2">
+          <a data-open class="btn">{t("card_open")}</a>
+          <CopyButton lang={lang} from="#donate-tool [data-address]" class="btn-ghost" />
+        </div>
+        <p class="text-xs text-graphite"><a data-source class="text-ink" rel="noopener noreferrer"></a></p>
+      </div>
+      <div data-qr class="max-w-[170px] border-2 border-ink bg-paper"></div>
+    </div>
+  </section>
+
+  <p class="max-w-[66ch] text-sm text-graphite">{t("dn_note")}</p>
+
+  <Disclosure title={t("dn_list_t", { n: list.length })}>
+    <ul class="grid gap-x-6 sm:grid-cols-2">
+      {list.map((d) => (
+        <li class="grid gap-0.5 border-b-2 border-dotted border-graphite/40 py-2 text-sm">
+          <a class="font-semibold text-ink" href={`#${d.id}`} data-pick={d.id}>{d.name}</a>
+          <span class="text-graphite">{descriptions[d.id]}</span>
+          <span class="break-all font-mono text-[11px] text-graphite">{d.address}</span>
+          <a class="text-xs text-ink" href={d.source} rel="noopener noreferrer">{site(d.source)}</a>
+        </li>
+      ))}
+    </ul>
+  </Disclosure>
+</div>
+
+<script>
+  import { readStrings } from "../../i18n/format";
+  import type { Locale } from "../../i18n/ui";
+  import { addressGroups } from "../../lib/address";
+  import { spin, type Donation } from "../../lib/donations";
+  import { buildUri } from "../../lib/monero";
+  import { drawQr, qrSvg } from "../../lib/qr";
+
+  const root = document.getElementById("donate-tool")!;
+  const t = readStrings(root);
+  const lang = root.dataset.lang as Locale;
+  const list: Donation[] = JSON.parse(root.dataset.list!);
+  const descriptions: Record<string, string> = JSON.parse(root.dataset.descriptions!);
+  const categories: Record<string, string> = JSON.parse(root.dataset.categories!);
+  const $ = <T extends HTMLElement = HTMLElement>(s: string) => root.querySelector<T>(s)!;
+  const longDate = new Intl.DateTimeFormat(lang, { dateStyle: "long", timeZone: "UTC" });
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let current: Donation | undefined, spinning = false;
+
+  const category = () => (root.querySelector<HTMLInputElement>("input[name=category]:checked")?.value ?? "");
+  const pool = () => list.filter((d) => !category() || d.category === category());
+
+  function show(d: Donation) {
+    current = d;
+    $("[data-name]").textContent = d.name;
+    $("[data-desc]").textContent = descriptions[d.id];
+    $("[data-category]").textContent = categories[d.category];
+    $("[data-address]").replaceChildren(...addressGroups(d.address).map((g, i, all) => {
+      const span = document.createElement("span");
+      span.textContent = g;
+      span.className = `mr-[0.45em] inline-block${i === 0 || i === all.length - 1 ? " font-bold text-flame" : ""}`;
+      return span;
+    }));
+    const uri = buildUri({ address: d.address, name: d.name });
+    $<HTMLAnchorElement>("[data-open]").href = uri;
+    $("[data-qr]").innerHTML = qrSvg(drawQr(uri), t("qr_alt"));
+    const source = $<HTMLAnchorElement>("[data-source]");
+    source.href = d.source;
+    source.textContent = t("dn_source", { site: new URL(d.source).hostname.replace(/^www\./, ""), date: longDate.format(new Date(`${d.checked}T00:00:00Z`)) });
+    $("[data-card]").hidden = false;
+    history.replaceState(null, "", `#${d.id}`);
+  }
+
+  /** Flicks through names like a slot machine, slowing down, then lands on the pick. */
+  async function roll() {
+    const pick = spin(pool(), current?.id);
+    if (!pick || spinning) return;
+    spinning = true;
+    if (!reducedMotion && current) {
+      const name = $("[data-name]");
+      for (const delay of [50, 50, 60, 70, 80, 100, 120, 150, 190]) {
+        name.textContent = spin(list, undefined)!.name;
+        await new Promise((r) => setTimeout(r, delay));
+      }
+    }
+    show(pick);
+    spinning = false;
+  }
+
+  $("[data-spin]").addEventListener("click", roll);
+  root.querySelectorAll<HTMLInputElement>("input[name=category]").forEach((r) => r.addEventListener("change", roll));
+  root.querySelectorAll<HTMLAnchorElement>("[data-pick]").forEach((a) => a.addEventListener("click", (e) => {
+    e.preventDefault();
+    show(list.find((d) => d.id === a.dataset.pick)!);
+    $("[data-card]").scrollIntoView({ block: "center", behavior: reducedMotion ? "auto" : "smooth" });
+  }));
+
+  const linked = list.find((d) => d.id === location.hash.slice(1));
+  linked ? show(linked) : roll();
+</script>

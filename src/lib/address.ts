@@ -84,3 +84,6 @@ export function differences(a: string, b: string): Set<number> {
   for (let i = 0; i < Math.max(a.length, b.length); i++) if (a[i] !== b[i]) out.add(i);
   return out;
 }
+
+/** Groups of four characters, for reading an address aloud or comparing it by eye. */
+export const addressGroups = (address: string) => address.match(/.{1,4}/g) ?? [];

@@ -3,6 +3,8 @@ import { defineStrings } from "./define";
 /** Search-friendly page titles and descriptions. Visible headings stay short; these name Monero and say what the page does. */
 export default defineStrings({
   en: {
+    seo_title_donate: "Monero donation roulette: support privacy projects",
+    seo_desc_donate: "Support a random project that accepts Monero: privacy tools, free software, Monero itself. Every address comes from the project's own page and is checked regularly.",
     seo_home_title: "xmr.fan: free Monero tools for payments, proofs and fees",
     seo_home_desc: "Free, private Monero (XMR) tools in your browser: payment links, QR codes, payment proofs, transaction tracking, fees, restore height, nodes and weekly news.",
     seo_title_uri: "Monero payment link & QR code generator",
@@ -29,6 +31,8 @@ export default defineStrings({
     seo_desc_gazette: "The week in Monero, every Monday: development, ecosystem, community and privacy news, price and network numbers, with sources and a podcast.",
   },
   es: {
+    seo_title_donate: "Ruleta de donaciones en Monero: apoya proyectos de privacidad",
+    seo_desc_donate: "Apoya un proyecto al azar que acepta Monero: privacidad, software libre y el propio Monero. Cada dirección viene de la web del proyecto y se comprueba a menudo.",
     seo_home_title: "xmr.fan: herramientas gratis de Monero",
     seo_home_desc: "Herramientas de Monero (XMR) gratis y privadas: enlaces de pago y QR, pruebas de pago, transacciones, comisiones, altura de restauración, nodos y noticias.",
     seo_title_uri: "Generador de enlaces de pago y QR de Monero",
@@ -55,6 +59,8 @@ export default defineStrings({
     seo_desc_gazette: "La semana de Monero cada lunes: desarrollo, ecosistema, comunidad y privacidad, precio y red, con fuentes y un podcast.",
   },
   ru: {
+    seo_title_donate: "Рулетка пожертвований в Monero: поддержите проекты приватности",
+    seo_desc_donate: "Поддержите случайный проект, который принимает Monero: приватность, свободное ПО и сам Monero. Каждый адрес взят с сайта проекта и регулярно проверяется.",
     seo_home_title: "xmr.fan: бесплатные инструменты Monero",
     seo_home_desc: "Бесплатные приватные инструменты Monero (XMR): ссылки на оплату и QR, доказательства платежей, транзакции, комиссии, высота восстановления, узлы и новости.",
     seo_title_uri: "Генератор ссылок на оплату и QR-кодов Monero",
@@ -81,6 +87,8 @@ export default defineStrings({
     seo_desc_gazette: "Неделя Monero каждый понедельник: разработка, экосистема, сообщество и приватность, цена и сеть, с источниками и подкастом.",
   },
   fr: {
+    seo_title_donate: "Roulette des dons en Monero : soutenez la vie privée",
+    seo_desc_donate: "Soutenez un projet au hasard qui accepte le Monero : vie privée, logiciel libre, Monero lui-même. Chaque adresse vient du site du projet et est vérifiée souvent.",
     seo_home_title: "xmr.fan : outils Monero gratuits et privés",
     seo_home_desc: "Outils Monero (XMR) gratuits et privés : liens de paiement et QR codes, preuves de paiement, transactions, frais, hauteur de restauration, nœuds et actualités.",
     seo_title_uri: "Générateur de lien de paiement et QR code Monero",
@@ -107,6 +115,8 @@ export default defineStrings({
     seo_desc_gazette: "La semaine Monero chaque lundi : développement, écosystème, communauté et vie privée, prix et réseau, avec les sources et un podcast.",
   },
   pt: {
+    seo_title_donate: "Roleta de doações em Monero: apoie projetos de privacidade",
+    seo_desc_donate: "Apoie um projeto aleatório que aceita Monero: privacidade, software livre e o próprio Monero. Cada endereço vem do site do projeto e é verificado com frequência.",
     seo_home_title: "xmr.fan: ferramentas grátis de Monero",
     seo_home_desc: "Ferramentas de Monero (XMR) grátis e privadas: links de pagamento e QR, provas de pagamento, transações, taxas, altura de restauração, nós e notícias.",
     seo_title_uri: "Gerador de link de pagamento e QR code Monero",
@@ -133,6 +143,8 @@ export default defineStrings({
     seo_desc_gazette: "A semana do Monero toda segunda-feira: desenvolvimento, ecossistema, comunidade e privacidade, preço e rede, com fontes e podcast.",
   },
   ja: {
+    seo_title_donate: "Monero 寄付ルーレット：プライバシー関連プロジェクトを支援",
+    seo_desc_donate: "Monero を受け付けるプロジェクトをランダムに支援。プライバシー、自由ソフトウェア、Monero 自身。アドレスは各公式ページから取得し、定期的に確認しています。",
     seo_home_title: "xmr.fan：無料の Monero ツール集",
     seo_home_desc: "ブラウザで動く無料でプライベートな Monero（XMR）ツール：支払いリンクと QR コード、支払い証明、トランザクション追跡、手数料、復元高さ、ノード確認、週刊ニュース。",
     seo_title_uri: "Monero 支払いリンク・QR コード作成",
