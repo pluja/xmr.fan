@@ -1,0 +1,126 @@
+---
+import Disclosure from "../Disclosure.astro";
+import Field from "../Field.astro";
+import CurrencySelect from "../live/CurrencySelect.astro";
+import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const yesterday = new Date(Date.now() - 86_400_000).toISOString().slice(0, 10);
+---
+<form id="units" class="grid gap-3.5 sm:grid-cols-2" data-strings={pickStrings(lang, ["err_amount", "u_rate", "price_error", "u_hist_price", "u_hist_amount", "u_hist_error"])} data-lang={lang} novalidate>
+  <Field label="XMR" messageId="xmr-message">
+    <input type="text" name="xmr" inputmode="decimal" placeholder="1.5" autocomplete="off" class="field font-mono" aria-describedby="xmr-message" autofocus />
+  </Field>
+  <Field label="piconero">
+    <input type="text" name="pico" inputmode="numeric" placeholder="1500000000000" autocomplete="off" class="field font-mono" />
+  </Field>
+  <Field label={t("u_fiat")}>
+    <input type="text" name="fiat" inputmode="decimal" autocomplete="off" class="field font-mono" disabled />
+  </Field>
+  <div class="grid content-end gap-2 pb-1">
+    <CurrencySelect lang={lang} />
+  </div>
+  <p class="flex flex-wrap gap-x-6 gap-y-1 font-mono text-xs text-graphite sm:col-span-2">
+    <span>1 XMR = 1 000 000 000 000 piconero</span>
+    <span data-rate>{t("u_loading")}</span>
+    <span>{t("price_from")}</span>
+  </p>
+  <Disclosure title={t("u_hist_t")} class="sm:col-span-2">
+    <Field label={t("u_hist_date")}>
+      <input name="day" type="date" min="2017-01-01" max={yesterday} class="field w-auto max-w-56 font-mono" />
+    </Field>
+    <p data-hist class="text-[15px] empty:hidden" aria-live="polite"></p>
+    <p data-hist-amount class="text-[15px] empty:hidden"></p>
+    <p class="text-xs text-graphite">{t("u_hist_source")}</p>
+  </Disclosure>
+</form>
+
+<script>
+  import { currencyPicker } from "../live/currency";
+  import { readStrings } from "../../i18n/format";
+  import type { Locale } from "../../i18n/ui";
+  import { formatMoney } from "../../lib/currency";
+  import { normalizeAmount, picoToXmr, xmrToPico } from "../../lib/monero";
+  import { getPrices, type Prices } from "../../lib/price-client";
+
+  const form = document.getElementById("units") as HTMLFormElement;
+  const t = readStrings(form);
+  const lang = form.dataset.lang as Locale;
+  const field = (name: string) => form.elements.namedItem(name) as HTMLInputElement;
+  const xmr = field("xmr"), pico = field("pico"), fiat = field("fiat");
+  const message = document.getElementById("xmr-message")!;
+  const rate = form.querySelector<HTMLElement>("[data-rate]")!;
+  let prices: Prices | undefined;
+  const currency = currencyPicker(lang, () => { showRate(); fromXmr(); showHistory(); });
+  const price = () => prices?.[currency()];
+
+  const plain = (n: number, digits: number) => (Number.isFinite(n) ? String(Number(n.toFixed(digits))) : "");
+
+  function fromXmr() {
+    const amount = normalizeAmount(xmr.value);
+    if (amount === null) return;
+    const p = price();
+    fiat.value = p && amount ? plain(Number(amount) * p, currency() === "btc" ? 8 : 2) : "";
+  }
+
+  // Piconero only takes whole numbers, so its red border is enough.
+  function sync(from: HTMLInputElement, to: HTMLInputElement, convert: (s: string) => string | null) {
+    const v = convert(from.value);
+    from.setAttribute("aria-invalid", String(v === null));
+    message.textContent = v === null && from === xmr ? t("err_amount") : "";
+    if (v !== null) to.value = v;
+  }
+
+  function showRate() {
+    const p = price();
+    rate.textContent = p ? t("u_rate", { price: formatMoney(p, currency(), lang) }) : t("price_error");
+  }
+
+  xmr.addEventListener("input", () => { sync(xmr, pico, xmrToPico); fromXmr(); });
+  pico.addEventListener("input", () => { sync(pico, xmr, picoToXmr); fromXmr(); });
+  fiat.addEventListener("input", () => {
+    const p = price();
+    const value = Number(fiat.value.trim().replace(",", "."));
+    fiat.setAttribute("aria-invalid", String(!Number.isFinite(value) || value < 0));
+    if (!p || !Number.isFinite(value) || value < 0 || !fiat.value.trim()) return;
+    xmr.value = plain(value / p, 12);
+    sync(xmr, pico, xmrToPico);
+  });
+  form.addEventListener("submit", (e) => e.preventDefault());
+
+  // Past prices: the USD close from our server, converted with that day's exchange rate.
+  const day = field("day");
+  const histBox = form.querySelector<HTMLElement>("[data-hist]")!, histAmount = form.querySelector<HTMLElement>("[data-hist-amount]")!;
+  let histRun = 0;
+  async function showHistory() {
+    const run = ++histRun;
+    histAmount.textContent = "";
+    if (!day.value) { histBox.textContent = ""; return; }
+    try {
+      const { usd } = await (await fetch(`/api/price-on?date=${day.value}`)).json();
+      if (typeof usd !== "number") throw new Error("no price");
+      const c = currency();
+      let rate = 1;
+      if (c !== "usd" && c !== "btc") {
+        const fx = await (await fetch(`https://api.frankfurter.dev/v1/${day.value}?from=USD&to=${c.toUpperCase()}`)).json();
+        rate = fx.rates?.[c.toUpperCase()];
+      }
+      if (run !== histRun) return;
+      const shown = rate && c !== "btc" ? c : "usd";
+      const price = usd * (shown === "usd" ? 1 : rate);
+      histBox.textContent = t("u_hist_price", { price: formatMoney(price, shown, lang) });
+      const amount = normalizeAmount(xmr.value);
+      if (amount) histAmount.textContent = t("u_hist_amount", { amount, value: formatMoney(Number(amount) * price, shown, lang) });
+    } catch {
+      if (run === histRun) histBox.textContent = t("u_hist_error");
+    }
+  }
+  day.addEventListener("change", showHistory);
+  xmr.addEventListener("change", showHistory);
+
+  getPrices()
+    .then((p) => { prices = p; fiat.disabled = false; showRate(); fromXmr(); })
+    .catch(() => (rate.textContent = t("price_error")));
+</script>
