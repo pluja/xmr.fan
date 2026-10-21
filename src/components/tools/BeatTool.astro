@@ -85,11 +85,7 @@ const PRESETS = ["getmonero", "torproject", "grapheneos", "privacyguides", "p2po
     if (player) return player;
     player = new BeatPlayer();
     player.setVolume(Number($<HTMLInputElement>("input[name=volume]").value));
-    const bins = new Uint8Array(player.analyser.frequencyBinCount);
-    visuals.bins = () => (player!.analyser.getByteFrequencyData(bins), bins);
-    player.onStep = (step) => {
-      visuals.hit(step);
-    };
+    player.onStep = (step) => visuals.hit(step);
     return player;
   }
 
