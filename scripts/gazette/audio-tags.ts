@@ -1,6 +1,7 @@
 /* ElevenLabs v3/v4 audio tags the podcast may use. Anything else in [brackets]
-   is stripped, so the voice never reads a stray tag aloud. */
-export const AUDIO_TAGS = ["laughs", "starts laughing", "sighs", "exhales", "curious", "excited", "sarcastic", "whispers", "mischievously"];
+   is stripped, so the voice never reads a stray tag aloud. [excited] is left out:
+   the voices overdo it. */
+export const AUDIO_TAGS = ["laughs", "starts laughing", "sighs", "exhales", "curious", "sarcastic", "whispers", "mischievously"];
 
 export const cleanTags = (text: string) =>
   text
