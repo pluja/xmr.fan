@@ -1,0 +1,15 @@
+---
+import PixelIcon from "./PixelIcon.astro";
+import { localePath, useTranslations, type Locale } from "../i18n/ui";
+
+interface Props { lang: Locale; class?: string }
+const { lang, class: cls } = Astro.props;
+const t = useTranslations(lang);
+const link = "inline-flex items-center gap-1.5 text-ink";
+---
+<p class:list={["flex flex-wrap items-center gap-x-4 gap-y-1 font-pixel text-sm", cls]}>
+  <a class={link} href={localePath(lang, "/feeds")}><PixelIcon name="rss" size={14} />{t("feed_subscribe")}:</a>
+  <a class={link} href={localePath(lang, "/feed/news.xml")}><PixelIcon name="paper" size={14} />{t("feed_news")}</a>
+  <a class={link} href="/feed/podcast.xml"><PixelIcon name="sound" size={14} />{t("feed_podcast")}</a>
+  <a class={link} href={localePath(lang, "/feed/tools.xml")}><PixelIcon name="star" size={14} />{t("feed_tools_rss")}</a>
+</p>

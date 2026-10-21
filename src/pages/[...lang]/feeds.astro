@@ -1,0 +1,54 @@
+---
+import Base from "../../layouts/Base.astro";
+import Container from "../../components/Container.astro";
+import CopyButton from "../../components/CopyButton.astro";
+import PixelIcon from "../../components/PixelIcon.astro";
+import { LOCALES, LOCALE_NAMES, langFromParams, localeParams, localePath, useTranslations, type Key } from "../../i18n/ui";
+import type { IconName } from "../../lib/pixel";
+
+export const getStaticPaths = () => localeParams().map((params) => ({ params }));
+
+const lang = langFromParams(Astro.params);
+const t = useTranslations(lang);
+const abs = (path: string) => new URL(path, Astro.site).href;
+
+const FEEDS: { id: string; icon: IconName; title: Key; desc: Key; path: string; perLanguage: boolean }[] = [
+  { id: "news", icon: "paper", title: "g_title", desc: "feed_news_desc", path: "/feed/news.xml", perLanguage: true },
+  { id: "podcast", icon: "sound", title: "feed_podcast", desc: "feed_podcast_desc", path: "/feed/podcast.xml", perLanguage: false },
+  { id: "tools", icon: "star", title: "feed_tools", desc: "feed_tools_desc", path: "/feed/tools.xml", perLanguage: true },
+];
+---
+<Base lang={lang} path="/feeds" title={t("feeds")} description={t("feeds_intro")}>
+  <Container as="section" class="pb-16 pt-6">
+    <h1 class="mb-3 flex items-center gap-3 font-pixel text-[clamp(28px,4.2vw,46px)] leading-tight"><PixelIcon name="rss" size={36} />{t("feeds")}</h1>
+    <p class="mb-10 max-w-[60ch] text-lg">{t("feeds_intro")}</p>
+    <ul class="grid max-w-3xl gap-6">
+      {FEEDS.map((feed) => {
+        const url = abs(feed.perLanguage ? localePath(lang, feed.path) : feed.path);
+        return (
+          <li class="border-2 border-ink bg-cream shadow-[6px_6px_0_var(--color-ink)]">
+            <div class="flex items-center gap-3 bg-ink px-4 py-2.5 text-orange">
+              <PixelIcon name={feed.icon} size={20} />
+              <h2 class="font-pixel text-lg">{t(feed.title)}</h2>
+            </div>
+            <div class="grid gap-3 p-4">
+              <p class="text-[15px]">{t(feed.desc)}</p>
+              <div class="flex flex-wrap items-center gap-2">
+                <input id={`feed-${feed.id}`} readonly value={url} class="field min-w-0 flex-1 basis-72 py-2 font-mono text-[13px]" aria-label={t(feed.title)} />
+                <CopyButton lang={lang} from={`#feed-${feed.id}`} />
+                {feed.id === "podcast" && <a class="btn btn-ghost" href={url.replace(/^https?:/, "podcast:")}>{t("feed_open_app")}</a>}
+              </div>
+              {feed.perLanguage && (
+                <p class="flex flex-wrap gap-x-3 gap-y-1 text-sm text-graphite">
+                  <span>{t("feed_langs")}:</span>
+                  {LOCALES.filter((l) => l !== lang).map((l) => <a class="text-ink" href={localePath(l, feed.path)} hreflang={l}>{LOCALE_NAMES[l]}</a>)}
+                </p>
+              )}
+            </div>
+          </li>
+        );
+      })}
+    </ul>
+    <p class="mt-8 text-sm text-graphite">{t("feed_how")}</p>
+  </Container>
+</Base>
