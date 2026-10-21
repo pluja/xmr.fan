@@ -113,7 +113,7 @@ const jsonLd = d && [
       </article>
       {d.art && <div class="-mx-6 md:mx-0"><LeadArt art={d.art} /></div>}
     </div>
-    {d.podcast && <div class="mx-auto mt-10 max-w-2xl"><PodcastPlayer lang={lang} podcast={d.podcast} /></div>}
+    {d.podcast && <div class="mx-auto mt-10 max-w-2xl"><PodcastPlayer lang={lang} podcast={d.podcast} audioLang={d.audioLang} /></div>}
     <Subscribe lang={lang} class="mt-5 justify-center" />
   </Container>
 

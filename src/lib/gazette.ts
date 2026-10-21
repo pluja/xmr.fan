@@ -1,6 +1,8 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 import type { Locale } from "../i18n/ui.ts";
 
+export { localize, type LocalizedData } from "./gazette-localize.ts";
+
 export type Edition = CollectionEntry<"gazette">;
 export type Story = Edition["data"]["lead"];
 export type SectionKey = keyof Edition["data"]["sections"];
@@ -25,42 +27,16 @@ export const formatNumber = (n: number, lang: Locale, opts?: Intl.NumberFormatOp
 /** The latest edition is at /news; older ones at /news/<week>. `all` is newest first. */
 export const editionPath = (e: Edition, all: Edition[]) => (e.id === all[0]?.id ? "/news" : `/news/${e.id}`);
 
-type Data = Edition["data"];
-export type LocalizedData = Omit<Data, "quotes"> & { quotes?: (NonNullable<Data["quotes"]>[number] & { gloss?: string })[]; translated: boolean };
-
-/** Falls back to English. Quotes keep the original words, with the translation as a `gloss`. */
-export function localize(d: Data, lang: Locale): LocalizedData {
-  const tr = lang === "en" ? undefined : d.translations?.[lang];
-  if (!tr) return { ...d, translated: false };
-  const story = <S extends { h: string; p: string }>(s: S, t?: { h: string; p: string }) => (t ? { ...s, h: t.h, p: t.p } : s);
-  const sections = Object.fromEntries(
-    Object.entries(d.sections).map(([k, list]) => [k, list.map((s, i) => story(s, tr.sections[k as SectionKey]?.[i]))]),
-  ) as Data["sections"];
-  const a = d.market?.analysis;
-  return {
-    ...d,
-    translated: true,
-    recap: tr.recap ?? d.recap,
-    lead: story(d.lead, tr.lead),
-    sections,
-    ...(d.art ? { art: { ...d.art, alt: tr.art?.alt ?? d.art.alt } } : {}),
-    ...(d.feature ? { feature: { ...d.feature, h: tr.feature?.h ?? d.feature.h, dek: tr.feature?.dek ?? d.feature.dek, body: tr.feature?.body ?? d.feature.body } } : {}),
-    ...(d.quotes ? { quotes: d.quotes.map((q, i) => ({ ...q, gloss: tr.quotes?.[i]?.text })) } : {}),
-    ...(d.upcoming ? { upcoming: d.upcoming.map((u, i) => ({ ...u, what: tr.upcoming?.[i]?.what ?? u.what })) } : {}),
-    ...(d.market && a ? {
-      market: {
-        ...d.market,
-        analysis: {
-          summary: tr.price?.summary ?? a.summary,
-          drivers: a.drivers.map((dr, i) => ({ ...dr, text: tr.price?.drivers[i] ?? dr.text })),
-          watch: [],
-        },
-      },
-    } : {}),
-  };
-}
-
 /** Biggest first. */
 export async function sponsorsFor(week: string) {
   return (await getCollection("sponsors")).map((s) => s.data).filter((s) => s.week === week).sort((a, b) => b.usd - a.usd);
 }
+
+/** Languages with at least one episode; English is the main podcast. */
+export async function podcastLanguages(): Promise<Set<Locale>> {
+  const langs = new Set<Locale>(["en"]);
+  for (const e of await visibleEditions()) for (const l of Object.keys(e.data.podcasts ?? {})) langs.add(l as Locale);
+  return langs;
+}
+
+export const podcastFeedPath = (lang: Locale, langs: Set<Locale>) => (lang !== "en" && langs.has(lang) ? `/${lang}/feed/podcast.xml` : "/feed/podcast.xml");

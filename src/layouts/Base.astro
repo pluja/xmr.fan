@@ -3,6 +3,7 @@ import Head from "../components/Head.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { LOCALES, DEFAULT_LOCALE, localePath, useTranslations, type Locale } from "../i18n/ui";
+import { podcastFeedPath, podcastLanguages } from "../lib/gazette";
 import { OG_LOCALE, ldJson, type JsonLd } from "../lib/seo";
 
 interface Props {
@@ -28,6 +29,7 @@ const desc = description ?? t("meta_desc");
 const site = Astro.site!;
 const url = new URL(localePath(lang, path), site).href;
 const imageUrl = new URL(image, site).href;
+const podcastFeed = podcastFeedPath(lang, await podcastLanguages());
 ---
 <!doctype html>
 <html lang={lang}>
@@ -37,7 +39,7 @@ const imageUrl = new URL(image, site).href;
     <link rel="alternate" hreflang="x-default" href={new URL(localePath(DEFAULT_LOCALE, path), site)} />
     <link rel="alternate" type="application/rss+xml" title={t("g_title")} href={new URL(localePath(lang, "/feed/news.xml"), site)} />
     <link rel="alternate" type="application/rss+xml" title={`xmr.fan · ${t("feed_tools")}`} href={new URL(localePath(lang, "/feed/tools.xml"), site)} />
-    <link rel="alternate" type="application/rss+xml" title={`${t("g_title")} · ${t("feed_podcast")}`} href={new URL("/feed/podcast.xml", site)} />
+    <link rel="alternate" type="application/rss+xml" title={`${t("g_title")} · ${t("feed_podcast")}`} href={new URL(podcastFeed, site)} />
     {noindex && <meta name="robots" content="noindex" />}
     <meta property="og:site_name" content="xmr.fan" />
     <meta property="og:type" content={type} />

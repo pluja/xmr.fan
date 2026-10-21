@@ -10,6 +10,7 @@ export const LOCALE_NAMES: Record<Locale, string> = {
 };
 
 const en = {
+  feed_podcast_desc_local: "The audio edition of the Times, for any podcast app.",
   g_read_t: "What we read this week",
   g_read_summary: "{items} items from {sources} sources. {links} links made it into this issue.",
   g_read_sources: "Sources checked",
@@ -197,6 +198,7 @@ type BaseDict = Record<BaseKey, string>;
 type Dict = Record<Key, string>;
 
 const es: BaseDict = {
+  feed_podcast_desc_local: "La edición en audio del Times, para cualquier app de podcasts.",
   g_read_t: "Lo que leímos esta semana",
   g_read_summary: "{items} elementos de {sources} fuentes. {links} enlaces llegaron a este número.",
   g_read_sources: "Fuentes consultadas",
@@ -376,6 +378,7 @@ const es: BaseDict = {
 };
 
 const ru: BaseDict = {
+  feed_podcast_desc_local: "Аудиоверсия Times для любого приложения подкастов.",
   g_read_t: "Что мы прочитали за неделю",
   g_read_summary: "Материалов: {items}, источников: {sources}. В выпуск попало ссылок: {links}.",
   g_read_sources: "Проверенные источники",
@@ -555,6 +558,7 @@ const ru: BaseDict = {
 };
 
 const fr: BaseDict = {
+  feed_podcast_desc_local: "L'édition audio du Times, pour toute appli de podcasts.",
   g_read_t: "Ce que nous avons lu cette semaine",
   g_read_summary: "{items} éléments venant de {sources} sources. {links} liens figurent dans ce numéro.",
   g_read_sources: "Sources consultées",
@@ -734,6 +738,7 @@ const fr: BaseDict = {
 };
 
 const pt: BaseDict = {
+  feed_podcast_desc_local: "A edição em áudio do Times, para qualquer app de podcasts.",
   g_read_t: "O que lemos nesta semana",
   g_read_summary: "{items} itens de {sources} fontes. {links} links entraram nesta edição.",
   g_read_sources: "Fontes consultadas",
@@ -913,6 +918,7 @@ const pt: BaseDict = {
 };
 
 const ja: BaseDict = {
+  feed_podcast_desc_local: "Times の音声版。どのポッドキャストアプリでも聴けます。",
   g_read_t: "今週読んだもの",
   g_read_summary: "{sources} の情報源から {items} 件。この号には {links} 件のリンクを掲載しています。",
   g_read_sources: "確認した情報源",

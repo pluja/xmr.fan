@@ -4,8 +4,8 @@ import PixelIcon from "../PixelIcon.astro";
 import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
 import type { Edition } from "../../lib/gazette";
 
-interface Props { lang: Locale; podcast: NonNullable<Edition["data"]["podcast"]> }
-const { lang, podcast } = Astro.props;
+interface Props { lang: Locale; podcast: NonNullable<Edition["data"]["podcast"]>; audioLang: Locale }
+const { lang, podcast, audioLang } = Astro.props;
 const t = useTranslations(lang);
 const minutes = Math.max(1, Math.round(podcast.duration / 60));
 const clock = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
@@ -21,7 +21,7 @@ const parts = (text: string) => text.split(/(\[[^\]]+\])/).filter(Boolean);
     <div class="grid min-w-0 flex-1 gap-1">
       <div class="flex flex-wrap items-baseline justify-between gap-x-3">
         <h2 id="listen-title" class="font-pixel text-sm text-orange">{t("g_listen")}</h2>
-        <span class="flex gap-3 font-pixel text-xs text-ash"><span>{t("g_minutes", { n: minutes })}</span>{t("g_audio_lang") && <span>{t("g_audio_lang")}</span>}</span>
+        <span class="flex gap-3 font-pixel text-xs text-ash"><span>{t("g_minutes", { n: minutes })}</span>{audioLang !== lang && <span>{t("g_audio_lang")}</span>}</span>
       </div>
       <div class="flex items-center gap-3 font-pixel text-xs text-ash">
         <input type="range" class="seek min-w-0 flex-1" min="0" max={Math.round(podcast.duration)} value="0" step="1" aria-label={t("seek")} />

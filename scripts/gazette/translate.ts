@@ -9,7 +9,7 @@ import { editionSchema, translationSchema, type EditionData, type TranslationDat
 import { chat, llmConfigFromEnv, type Message } from "./llm.ts";
 import { weekStarting } from "./week.ts";
 
-const LANGUAGES: Record<string, string> = { es: "Spanish", ru: "Russian", fr: "French", pt: "Brazilian Portuguese", ja: "Japanese" };
+export const LANGUAGES: Record<string, string> = { es: "Spanish", ru: "Russian", fr: "French", pt: "Brazilian Portuguese", ja: "Japanese" };
 
 /** Words that must appear unchanged in every translation when the English has them. */
 const KEEP = ["Monero", "XMR", "CCS", "GrapheneOS", "FCMP++", "CARROT", "Haveno", "Cake Wallet", "Tor", "Bitcoin", "DNSSEC", "RPC", "GUI", "CLI", "xmr.fan"];

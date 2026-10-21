@@ -98,6 +98,7 @@ npm run gazette -- --week 2026-10-12     # a specific week; --force to redo, --r
 npm run gazette -- --week 2026-10-12 --only-price   # refresh numbers and the price note
 npm run gazette -- --week 2026-10-12 --only-art     # redraw the headline art
 npm run gazette:podcast -- 2026-10-12    # audio episode (needs ffmpeg)
+npm run gazette:podcast -- 2026-10-12 --lang es   # the episode in Spanish (after translating)
 npm run gazette:publish -- 2026-10-12    # approve the draft
 npm run gazette:translate -- 2026-10-12  # translate the text (es, ru, fr, pt, ja); --lang es,ja
 ```
@@ -115,7 +116,7 @@ Pay what you want from $50, approved by hand. Sponsorships add up to lasting tie
 
 ## Feeds and SEO
 
-- **Feeds** (listed on `/feeds`): `/feed/news.xml` (the weekly issue) and `/feed/tools.xml` (new tools), also per language at `/<lang>/feed/…`. `/feed/podcast.xml` is the podcast with iTunes and Podcasting 2.0 tags, ready for Apple Podcasts and Podcast Index.
+- **Feeds** (listed on `/feeds`): `/feed/news.xml` (the weekly issue) and `/feed/tools.xml` (new tools), also per language at `/<lang>/feed/…`. `/feed/podcast.xml` is the podcast with iTunes and Podcasting 2.0 tags, ready for Apple Podcasts and Podcast Index; languages with their own episodes get their own podcast feed (`/es/feed/podcast.xml`), and their news page plays them.
 - **SEO:** each page has a search title and description in every language (`src/i18n/seo.ts`), canonical and hreflang links, Open Graph and Twitter cards, and JSON-LD (`src/lib/seo.ts`). `/sitemap.xml` lists every page in every language; `/robots.txt` keeps `/api/` and `/uri?…` out of the index.
 - **Images:** `npm run brand` redraws the share image, the podcast cover and the app icons from the site's pixel art.
 
