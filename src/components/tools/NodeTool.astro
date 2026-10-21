@@ -1,0 +1,139 @@
+---
+import CopyButton from "../CopyButton.astro";
+import Field from "../Field.astro";
+import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const strings = pickStrings(lang, [
+  "n_checking", "n_online", "n_synced", "n_behind", "n_network", "n_restricted", "n_unrestricted", "n_https", "n_plain", "n_cors", "n_no_cors", "n_update",
+  "n_err_unreachable", "n_err_timeout", "n_err_not_monero", "n_err_private", "n_err_onion", "n_err_bad_url", "n_err_rate_limited",
+  "n_ok", "n_down", "n_behind_short",
+]);
+const secondary = "hidden sm:table-cell";
+const cell = "border-b-2 border-dotted border-graphite/40 py-2 pr-3";
+---
+<div id="node-tool" class="grid gap-8" data-strings={strings} data-lang={lang}>
+  <form data-check class="grid gap-3" novalidate>
+    <div class="flex flex-wrap items-end gap-2">
+      <Field label={t("n_input")} class="min-w-0 flex-1 basis-72">
+        <input name="url" placeholder="node.example.com:18089" autocomplete="off" spellcheck="false" autocapitalize="off" class="field font-mono text-[14px]" autofocus />
+      </Field>
+      <button class="btn mb-px" type="submit">{t("n_check")}</button>
+    </div>
+    <p data-status class="text-[15px] empty:hidden" aria-live="polite"></p>
+    <ul data-results class="grid gap-2 empty:hidden"></ul>
+  </form>
+
+  <template id="node-line"><li class="flex gap-2.5 text-[15px]"><span class="w-4 shrink-0 font-pixel" aria-hidden="true"></span><span></span></li></template>
+
+  <section class="grid gap-3">
+    <h2 class="font-pixel text-lg">{t("n_list_t")}</h2>
+    <p class="max-w-[66ch] text-sm text-graphite">{t("n_list_help")}</p>
+    <div class="overflow-x-auto">
+      <table class="w-full border-t-[3px] border-ink text-left text-[14px]">
+        <thead class="font-pixel text-sm">
+          <tr><th class={cell}>{t("n_col_node")}</th><th class={cell}>{t("n_col_height")}</th><th class:list={[cell, secondary]}>{t("n_col_speed")}</th><th class:list={[cell, secondary]}>SSL</th><th class:list={[cell, secondary]}>{t("n_col_web")}</th><th class={cell}></th></tr>
+        </thead>
+        <tbody data-list><tr><td class={cell} colspan="6">…</td></tr></tbody>
+      </table>
+    </div>
+    <p class="text-xs text-graphite">{t("n_server_note")}</p>
+  </section>
+
+  <template id="node-row">
+    <tr>
+      <td class:list={[cell, "break-all font-mono"]} data-name></td>
+      <td class={cell} data-height></td>
+      <td class:list={[cell, secondary, "font-mono"]} data-ms></td>
+      <td class:list={[cell, secondary]} data-ssl></td>
+      <td class:list={[cell, secondary]} data-web></td>
+      <td class:list={[cell, "text-right"]}><CopyButton lang={lang} text="" class="btn-ghost px-2 py-1 text-xs" /></td>
+    </tr>
+  </template>
+</div>
+
+<script>
+  import { readStrings } from "../../i18n/format";
+  import type { Locale } from "../../i18n/ui";
+  import { walletAddress, type NodeCheck } from "../../lib/nodes";
+
+  const root = document.getElementById("node-tool")!;
+  const t = readStrings(root);
+  const num = new Intl.NumberFormat(root.dataset.lang as Locale);
+  const form = root.querySelector<HTMLFormElement>("[data-check]")!;
+  const input = form.elements.namedItem("url") as HTMLInputElement;
+  const status = root.querySelector<HTMLElement>("[data-status]")!, results = root.querySelector<HTMLElement>("[data-results]")!;
+  const lineTemplate = root.querySelector<HTMLTemplateElement>("#node-line")!, rowTemplate = root.querySelector<HTMLTemplateElement>("#node-row")!;
+
+  type Tone = "ok" | "warn" | "bad";
+  const MARK: Record<Tone, [string, string]> = { ok: ["✓", "text-ok"], warn: ["!", "text-flame"], bad: ["×", "text-danger"] };
+
+  function line(tone: Tone, text: string) {
+    const li = lineTemplate.content.firstElementChild!.cloneNode(true) as HTMLLIElement;
+    const [mark, text_] = li.children as unknown as [HTMLElement, HTMLElement];
+    mark.textContent = MARK[tone][0];
+    mark.classList.add(MARK[tone][1]);
+    text_.textContent = text;
+    results.append(li);
+  }
+
+  function showCheck(c: NodeCheck) {
+    results.replaceChildren();
+    status.textContent = "";
+    if (!c.ok) { line("bad", t(`n_err_${c.error}`)); return; }
+    line("ok", t("n_online", { ms: c.ms! }));
+    if (c.synced) line("ok", t("n_synced", { height: num.format(c.height!) }));
+    else line("bad", t("n_behind", { height: num.format(c.height!), reference: num.format(c.reference!) }));
+    line(c.network === "mainnet" ? "ok" : "warn", t("n_network", { network: c.network! }));
+    line(c.restricted ? "ok" : "warn", t(c.restricted ? "n_restricted" : "n_unrestricted"));
+    line(c.https ? "ok" : "warn", t(c.https ? "n_https" : "n_plain"));
+    line(c.cors ? "ok" : "warn", t(c.cors ? "n_cors" : "n_no_cors"));
+    if (c.updateAvailable) line("warn", t("n_update"));
+  }
+
+  async function check(value: string) {
+    results.replaceChildren();
+    status.textContent = t("n_checking", { node: value });
+    const res = await fetch(`/api/node?url=${encodeURIComponent(value)}`).catch(() => null);
+    const body = res ? await res.json().catch(() => null) : null;
+    if (!body || body.error && !("ok" in body)) {
+      status.textContent = "";
+      line("bad", t(`n_err_${body?.error ?? "unreachable"}`));
+      return;
+    }
+    showCheck(body);
+  }
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const value = input.value.trim();
+    if (!value) return;
+    history.replaceState(null, "", `?url=${encodeURIComponent(value)}`);
+    check(value);
+  });
+
+  async function loadList() {
+    const list = root.querySelector<HTMLElement>("[data-list]")!;
+    const checks: NodeCheck[] = await (await fetch("/api/node?list")).json();
+    checks.sort((a, b) => Number(b.ok && b.synced) - Number(a.ok && a.synced) || (a.ms ?? 1e9) - (b.ms ?? 1e9));
+    list.replaceChildren(...checks.map((c) => {
+      const row = rowTemplate.content.firstElementChild!.cloneNode(true) as HTMLTableRowElement;
+      const $ = (s: string) => row.querySelector<HTMLElement>(s)!;
+      const address = walletAddress(c.url);
+      $("[data-name]").textContent = address;
+      $("[data-ssl]").textContent = c.url.startsWith("https:") ? "✓" : "–";
+      $("[data-height]").textContent = !c.ok ? t("n_down") : c.synced ? `${t("n_ok")} · ${num.format(c.height!)}` : t("n_behind_short");
+      $("[data-height]").classList.add(!c.ok ? "text-danger" : c.synced ? "text-ok" : "text-flame");
+      $("[data-ms]").textContent = c.ms ? `${c.ms} ms` : "–";
+      $("[data-web]").textContent = c.cors ? "✓" : "–";
+      row.querySelector<HTMLButtonElement>("button")!.dataset.copyText = address;
+      return row;
+    }));
+  }
+
+  const prefill = new URLSearchParams(location.search).get("url");
+  if (prefill) { input.value = prefill; check(prefill); }
+  loadList().catch(() => {});
+</script>
