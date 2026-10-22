@@ -23,7 +23,7 @@ import { validatePayment, type PaymentInput } from "../../lib/payment";
 import { drawQr, qrPng } from "../../lib/qr";
 import { decodeShare } from "../../lib/share";
 import { breadcrumbLd, toolLd } from "../../lib/seo";
-import { getTool, seoDescKey, seoTitleKey, titleKey, toolPath } from "../../lib/tools";
+import { getTool, ogImage, seoDescKey, seoTitleKey, titleKey, toolPath } from "../../lib/tools";
 
 if (Astro.params.lang !== undefined && !isLocale(Astro.params.lang)) {
   return new Response("Not found", { status: 404 });
@@ -79,6 +79,7 @@ const pageUrl = new URL(localePath(lang, toolPath(tool)), Astro.site).href;
     path={toolPath(tool)}
     title={fromServer ? t("card_title") : t(seoTitleKey(tool))}
     description={t(seoDescKey(tool))}
+    image={ogImage(lang, tool.slug)}
     noindex={fromServer}
     jsonLd={[toolLd(pageUrl, t(seoTitleKey(tool)), t(seoDescKey(tool)), lang), breadcrumbLd([{ name: "xmr.fan", url: new URL(localePath(lang, "/"), Astro.site).href }, { name: t(titleKey(tool)), url: pageUrl }])]}
     active="tools"

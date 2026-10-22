@@ -4,7 +4,7 @@ import Base from "../layouts/Base.astro";
 import ToolFrame from "./ToolFrame.astro";
 import { localePath, useTranslations, type Locale } from "../i18n/ui";
 import { breadcrumbLd, toolLd } from "../lib/seo";
-import { seoDescKey, seoTitleKey, toolPath, titleKey, type Tool } from "../lib/tools";
+import { ogImage, seoDescKey, seoTitleKey, toolPath, titleKey, type Tool } from "../lib/tools";
 
 interface Props { lang: Locale; tool: Tool }
 const { lang, tool } = Astro.props;
@@ -15,7 +15,7 @@ const jsonLd = [
   breadcrumbLd([{ name: "xmr.fan", url: url("/") }, { name: t(titleKey(tool)), url: url(toolPath(tool)) }]),
 ];
 ---
-<Base lang={lang} path={toolPath(tool)} title={t(seoTitleKey(tool))} description={t(seoDescKey(tool))} jsonLd={jsonLd} active="tools">
+<Base lang={lang} path={toolPath(tool)} title={t(seoTitleKey(tool))} description={t(seoDescKey(tool))} image={ogImage(lang, tool.slug)} jsonLd={jsonLd} active="tools">
   <ToolFrame lang={lang} tool={tool}>
     <slot />
     <slot name="after" slot="after" />

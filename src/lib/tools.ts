@@ -14,6 +14,9 @@ export interface Tool {
   group?: ToolGroup;
 }
 
+/** Social share card for a page, drawn by `npm run og`. */
+export const ogImage = (lang: string, page: string) => `/og/${lang}/${page}.png`;
+
 export const TOOL_GROUPS = ["paid", "wallet", "numbers", "fun"] as const;
 export type ToolGroup = (typeof TOOL_GROUPS)[number];
 

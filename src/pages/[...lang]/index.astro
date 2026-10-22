@@ -6,7 +6,7 @@ import ToolCard from "../../components/ToolCard.astro";
 import GazetteBanner from "../../components/gazette/GazetteBanner.astro";
 import { langFromParams, localeParams, localePath, useTranslations } from "../../i18n/ui";
 import { itemListLd, websiteLd } from "../../lib/seo";
-import { TOOL_GROUPS, TOOLS, seoTitleKey, toolPath } from "../../lib/tools";
+import { ogImage, TOOL_GROUPS, TOOLS, seoTitleKey, toolPath } from "../../lib/tools";
 import { sponsorsFor, visibleEditions } from "../../lib/gazette";
 
 export const getStaticPaths = () => localeParams().map((params) => ({ params }));
@@ -21,7 +21,7 @@ const jsonLd = [
 const [latest] = await visibleEditions();
 const sponsor = latest ? (await sponsorsFor(latest.data.week))[0] : undefined;
 ---
-<Base lang={lang} path="/" title={t("seo_home_title")} fullTitle description={t("seo_home_desc")} jsonLd={jsonLd} active="tools" wide>
+<Base lang={lang} path="/" title={t("seo_home_title")} fullTitle description={t("seo_home_desc")} image={ogImage(lang, "home")} jsonLd={jsonLd} active="tools" wide>
   <Container as="section" class="pb-8 pt-4 sm:pb-10 sm:pt-8">
     <h1 class="mb-6 font-pixel text-[clamp(28px,4.4vw,48px)] leading-[1.15]">{t("tagline")}</h1>
     <div class="flex max-w-2xl items-center gap-3 bg-ink px-4 text-cream shadow-[6px_6px_0_var(--color-graphite)] focus-within:shadow-[6px_6px_0_var(--color-flame)]">
