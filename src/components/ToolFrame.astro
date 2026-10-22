@@ -1,7 +1,7 @@
 ---
 import Container from "./Container.astro";
 import PixelIcon from "./PixelIcon.astro";
-import MoreTools from "./MoreTools.astro";
+import RelatedTools from "./ui/RelatedTools.astro";
 import TitleBar from "./TitleBar.astro";
 import { localePath, useTranslations, type Locale } from "../i18n/ui";
 import { titleKey, descKey, nextTool, toolPath, type Tool } from "../lib/tools";
@@ -29,7 +29,7 @@ const next = nextTool(tool);
       </a>
     </nav>
     {dark ? (
-      <article class="bg-ink-2 shadow-[8px_8px_0_#1f1d22]">
+      <article class="bg-ink-2 shadow-[8px_8px_0_var(--color-shade)]">
         <header class="flex flex-wrap items-center gap-x-8 gap-y-1 bg-orange px-5 py-3.5 text-ink sm:px-7">
           <div class="flex items-center gap-3.5">
             <PixelIcon name={tool.icon} size={26} class="shrink-0" />
@@ -52,7 +52,7 @@ const next = nextTool(tool);
       </article>
     )}
     <slot name="after" />
-    <MoreTools lang={lang} current={tool} />
+    <RelatedTools lang={lang} current={tool} />
   </Container>
 </section>
 

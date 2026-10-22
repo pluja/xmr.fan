@@ -35,11 +35,11 @@ const chip = "w-fit bg-ink-2 px-2 py-0.5 font-pixel text-[10px] uppercase tracki
   <h2 id="api-title" class="mb-2 font-pixel text-2xl text-orange">{t("api_title")}</h2>
   <p class="mb-6 max-w-[70ch] text-ash">{t("api_intro")}</p>
 
-  <div class="border-l-4 border-orange bg-[#232126] px-6 py-3 shadow-[8px_8px_0_#1f1d22]">
+  <div class="border-l-4 border-orange bg-well px-6 py-3 shadow-[8px_8px_0_var(--color-shade)]">
     <div class="divide-y-2 divide-ink-2">
       {MODES.map((m) => (
         <div class={row}>
-          <code class="font-mono text-[14px] text-[#5fd38a]">{m.flag}</code>
+          <code class="font-mono text-[14px] text-good">{m.flag}</code>
           <span class="text-[15px] text-cream first-letter:uppercase">{m.text}</span>
           <span class={chip}>{m.type}</span>
         </div>
@@ -49,12 +49,12 @@ const chip = "w-fit bg-ink-2 px-2 py-0.5 font-pixel text-[10px] uppercase tracki
     <h3 class="mb-1 mt-5 font-pixel text-[11px] uppercase tracking-[0.2em] text-line">{t("api_params")}</h3>
     <div class="divide-y-2 divide-ink-2">
       <div class={row}>
-        <code class="font-mono text-[14px] text-[#5fd38a]">c</code>
+        <code class="font-mono text-[14px] text-good">c</code>
         <span class="text-[15px] text-cream">{t("api_c")}</span>
       </div>
       {PARAMS.map((p) => (
         <div class={row}>
-          <code class="font-mono text-[14px] text-[#5fd38a]">{p.param}</code>
+          <code class="font-mono text-[14px] text-good">{p.param}</code>
           <span class="text-[15px] text-cream">{p.label}</span>
           {p.required && <span class="w-fit border border-orange px-1.5 font-pixel text-[10px] uppercase tracking-wider text-orange">{t("api_required")}</span>}
         </div>

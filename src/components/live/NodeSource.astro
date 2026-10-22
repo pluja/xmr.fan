@@ -1,13 +1,14 @@
 ---
+import { button, field } from "../ui/styles";
 /* Drive it with liveTask() from live.ts. */
 import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
 
-interface Props { lang: Locale; prices?: boolean }
-const { lang, prices } = Astro.props;
+interface Props { lang: Locale; prices?: boolean; dark?: boolean }
+const { lang, prices, dark = false } = Astro.props;
 const t = useTranslations(lang);
 ---
-<div class="node-source grid gap-2 text-sm text-graphite" data-strings={pickStrings(lang, ["live_from", "live_connecting", "live_own_bad"])}>
-  <p data-error class="flex flex-wrap items-center gap-3 border-2 border-danger bg-paper px-3 py-2 text-danger" hidden>
+<div class:list={["node-source grid gap-2 text-sm", dark ? "text-ash" : "text-graphite"]} data-strings={pickStrings(lang, ["live_from", "live_connecting", "live_own_bad"])}>
+  <p data-error class:list={["flex flex-wrap items-center gap-3 border-2 px-3 py-2", dark ? "border-bad bg-well text-bad" : "border-danger bg-paper text-danger"]} hidden>
     <span>{t("live_error")}</span>
     <button type="button" data-retry class="cursor-pointer font-pixel underline">{t("live_retry")}</button>
   </p>
@@ -17,17 +18,17 @@ const t = useTranslations(lang);
       <span data-status aria-live="polite">{t("live_connecting")}</span>
     </span>
     {prices && <span>· {t("price_from")}</span>}
-    <button type="button" data-own-toggle class="cursor-pointer underline" aria-expanded="false">{t("live_own")}</button>
+    <button type="button" data-own-toggle class:list={["cursor-pointer underline", dark && "text-orange"]} aria-expanded="false">{t("live_own")}</button>
   </p>
-  <form data-own class="grid gap-2 border-2 border-ink bg-paper p-3" hidden novalidate>
-    <label class="grid gap-1 font-semibold text-ink">
+  <form data-own class:list={["grid gap-2 border-2 p-3", dark ? "border-graphite bg-well" : "border-ink bg-paper"]} hidden novalidate>
+    <label class:list={["grid gap-1 font-semibold", dark ? "text-cream" : "text-ink"]}>
       <span>{t("live_own_label")}</span>
-      <input name="node" class="field font-mono text-[13px]" placeholder="https://node.example.com:18089" autocomplete="off" spellcheck="false" />
+      <input name="node" class:list={[dark ? field : "field", "font-mono text-[13px]"]} placeholder="https://node.example.com:18089" autocomplete="off" spellcheck="false" />
     </label>
-    <p data-own-message class="text-danger empty:hidden" aria-live="polite"></p>
+    <p data-own-message class:list={[dark ? "text-bad" : "text-danger", "empty:hidden"]} aria-live="polite"></p>
     <div class="flex flex-wrap gap-2">
-      <button class="btn" type="submit">{t("live_own_save")}</button>
-      <button class="btn btn-ghost" type="button" data-own-reset>{t("live_own_reset")}</button>
+      <button class:list={[dark ? button.ghost : "btn"]} type="submit">{t("live_own_save")}</button>
+      <button class:list={[dark ? button.ghost : "btn btn-ghost"]} type="button" data-own-reset>{t("live_own_reset")}</button>
     </div>
     <p>{t("live_own_note")}</p>
   </form>

@@ -5,8 +5,6 @@ const C = {
   bg: "#2b282d", dim: "#36323a", graphite: "#45404a", line: "#5a5460", ash: "#a39ca8",
   orange: "#fb8c3c", flame: "#ff6600", cream: "#fff1e4", peach: "#ffd2ad", red: "#ff3b30", mint: "#a8e6c1", sky: "#8ecbff", lilac: "#e0b0ff",
 };
-/** People, told apart by color. */
-const PEOPLE = [C.peach, C.mint, C.sky, C.lilac, C.orange, C.cream];
 const W = 96, H = 54;
 
 const SPRITES = {

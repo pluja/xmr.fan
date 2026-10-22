@@ -56,8 +56,8 @@ const TRY = [
         )}
         {scene === "ledger" && (
           <div class="mt-1 flex w-fit border-2 border-ink bg-cream font-pixel shadow-[3px_3px_0_var(--color-ink)]" role="group">
-            <button type="button" data-ledger="public" aria-pressed="true" class="switch-btn"><Fragment set:html={LOGOS.public} />{t("el_btc")}</button>
-            <button type="button" data-ledger="sealed" aria-pressed="false" class="switch-btn border-l-2 border-ink"><Fragment set:html={LOGOS.sealed} />{t("el_xmr")}</button>
+            <button type="button" data-ledger="public" aria-pressed="true" class="flex cursor-pointer items-center gap-2 px-3.5 py-1.5 text-graphite transition-colors aria-pressed:bg-ink [&_svg]:opacity-55 [&_svg]:grayscale [&_svg]:transition aria-pressed:[&_svg]:opacity-100 aria-pressed:[&_svg]:grayscale-0 aria-pressed:text-[#f7931a]"><Fragment set:html={LOGOS.public} />{t("el_btc")}</button>
+            <button type="button" data-ledger="sealed" aria-pressed="false" class="flex cursor-pointer items-center gap-2 px-3.5 py-1.5 text-graphite transition-colors aria-pressed:bg-ink [&_svg]:opacity-55 [&_svg]:grayscale [&_svg]:transition aria-pressed:[&_svg]:opacity-100 aria-pressed:[&_svg]:grayscale-0 border-l-2 border-ink aria-pressed:text-flame"><Fragment set:html={LOGOS.sealed} />{t("el_xmr")}</button>
           </div>
         )}
         {scene === "ring" && <p data-ring-message class="font-pixel text-sm text-graphite" aria-live="polite">{t("el_4_hint")}</p>}
@@ -75,14 +75,6 @@ const TRY = [
   </section>
 </div>
 
-<style>
-  .switch-btn { display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.9rem; cursor: pointer; color: var(--color-graphite); transition: background 0.15s; }
-  .switch-btn :global(svg) { filter: grayscale(1); opacity: 0.55; transition: filter 0.15s, opacity 0.15s; }
-  .switch-btn[aria-pressed="true"] { background: var(--color-ink); }
-  .switch-btn[aria-pressed="true"] :global(svg) { filter: none; opacity: 1; }
-  .switch-btn[data-ledger="public"][aria-pressed="true"] { color: #f7931a; }
-  .switch-btn[data-ledger="sealed"][aria-pressed="true"] { color: #ff6600; }
-</style>
 
 <script>
   import { balanceScene, fungibleScene, ledgerScene, networkScene, ringScene, Scene, seedScene, sendScene, stealthScene } from "./eli5-scenes";
