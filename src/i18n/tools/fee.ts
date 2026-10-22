@@ -14,6 +14,9 @@ export default defineStrings({
     fee_pool_t: "Waiting to be mined",
     fee_pool: "{txs} transactions ({kb} kB). A block fits {cap} kB without penalty.",
     fee_why: "Monero blocks grow with demand, so fees stay low. Higher priority only helps when more than one block is waiting.",
+    fee_by_priority: "Fee by priority",
+    fee_default: "Wallet default",
+    fee_pool_short: "{txs} txs · {kb} kB",
   },
   es: {
     fee_typical: "Un pago típico cuesta",
@@ -28,6 +31,9 @@ export default defineStrings({
     fee_pool_t: "Esperando a ser minadas",
     fee_pool: "{txs} transacciones ({kb} kB). Un bloque admite {cap} kB sin penalización.",
     fee_why: "Los bloques de Monero crecen con la demanda, así que las comisiones siguen bajas. Más prioridad solo ayuda si espera más de un bloque.",
+    fee_by_priority: "Comisión por prioridad",
+    fee_default: "Por defecto",
+    fee_pool_short: "{txs} txs · {kb} kB",
   },
   ru: {
     fee_typical: "Обычный платёж стоит",
@@ -42,6 +48,9 @@ export default defineStrings({
     fee_pool_t: "Ожидают в мемпуле",
     fee_pool: "Транзакций: {txs} ({kb} кБ). Блок вмещает {cap} кБ без штрафа.",
     fee_why: "Блоки Monero растут вместе со спросом, поэтому комиссии низкие. Высокий приоритет помогает, только если ждёт больше одного блока.",
+    fee_by_priority: "Комиссия по приоритету",
+    fee_default: "По умолчанию",
+    fee_pool_short: "{txs} транз. · {kb} кБ",
   },
   fr: {
     fee_typical: "Un paiement typique coûte",
@@ -56,6 +65,9 @@ export default defineStrings({
     fee_pool_t: "En attente de minage",
     fee_pool: "{txs} transactions ({kb} ko). Un bloc contient {cap} ko sans pénalité.",
     fee_why: "Les blocs Monero grandissent avec la demande, donc les frais restent bas. Une priorité plus haute n'aide que si plus d'un bloc attend.",
+    fee_by_priority: "Frais par priorité",
+    fee_default: "Par défaut",
+    fee_pool_short: "{txs} tx · {kb} ko",
   },
   pt: {
     fee_typical: "Um pagamento típico custa",
@@ -70,6 +82,9 @@ export default defineStrings({
     fee_pool_t: "Aguardando mineração",
     fee_pool: "{txs} transações ({kb} kB). Um bloco comporta {cap} kB sem penalidade.",
     fee_why: "Os blocos do Monero crescem com a demanda, então as taxas continuam baixas. Prioridade maior só ajuda se houver mais de um bloco na fila.",
+    fee_by_priority: "Taxa por prioridade",
+    fee_default: "Padrão",
+    fee_pool_short: "{txs} txs · {kb} kB",
   },
   ja: {
     fee_typical: "一般的な送金の手数料",
@@ -84,5 +99,8 @@ export default defineStrings({
     fee_pool_t: "マイニング待ち",
     fee_pool: "{txs} 件（{kb} kB）。ブロックはペナルティなしで {cap} kB まで入ります。",
     fee_why: "Monero のブロックは需要に応じて大きくなるため、手数料は低いままです。優先度を上げて意味があるのは、待ちが 1 ブロックを超えるときだけです。",
+    fee_by_priority: "優先度ごとの手数料",
+    fee_default: "既定",
+    fee_pool_short: "{txs} 件 · {kb} kB",
   },
 });
