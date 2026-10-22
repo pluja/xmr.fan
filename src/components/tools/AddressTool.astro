@@ -1,151 +1,222 @@
 ---
-import CopyButton from "../CopyButton.astro";
-import Disclosure from "../Disclosure.astro";
-import Field from "../Field.astro";
-import TryExample from "../TryExample.astro";
+import PixelIcon from "../PixelIcon.astro";
+import AddressInput from "../ui/AddressInput.astro";
+import Button from "../ui/Button.astro";
+import Disclosure from "../ui/Disclosure.astro";
+import QrCode from "../ui/QrCode.astro";
+import Slip from "../ui/Slip.astro";
+import TrustNote from "../ui/TrustNote.astro";
+import { button, chip, code, field, fieldLabel, label, link, message, tone } from "../ui/styles";
 import { localePath, pickStrings, useTranslations, type Locale } from "../../i18n/ui";
 
 interface Props { lang: Locale }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const strings = pickStrings(lang, [
-  "a_valid", "a_type_standard", "a_type_subaddress", "a_type_integrated", "a_pid_bad",
-  "a_oa_looking", "a_oa_found", "a_oa_none", "a_oa_error", "a_oa_dnssec", "a_oa_unsigned", "a_oa_invalid",
-  "err_chars", "err_length", "err_checksum", "err_prefix", "warn_network", "a_same", "a_diff", "a_oa_step1", "qr_alt", "type_standard", "type_subaddress", "type_integrated",
+  "a_type_standard", "a_type_subaddress", "a_type_integrated", "a_pid_bad", "a_chars", "a_same", "a_diff", "a_alias_l",
+  "a_oa_looking", "a_oa_none", "a_oa_error", "a_oa_unsigned", "a_oa_invalid", "a_dnssec_ok", "a_dnssec_no", "a_chip_alias", "a_chip_address",
+  "err_chars", "err_length", "err_checksum", "err_prefix", "warn_network", "qr_alt", "type_standard", "type_subaddress", "type_integrated", "copied",
 ]);
-const row = "grid gap-1 border-b-2 border-dotted border-graphite/40 py-2.5 sm:grid-cols-[180px_1fr] sm:gap-4";
-const key = "break-all font-mono text-[13px]";
+const heading = "font-pixel text-sm tracking-[0.2em] text-cream uppercase";
+const keyRow = "grid gap-1 border-b-2 border-dotted border-graphite py-2.5 last:border-0 sm:grid-cols-[150px_1fr] sm:gap-4";
+const keyValue = "break-all font-mono text-[13px] text-cream";
+const copyChip = `${chip} ${tone.neutral} cursor-pointer hover:text-orange`;
+const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
 ---
-<div id="address-tool" class="grid gap-6" data-strings={strings} data-uri={localePath(lang, "/uri")}>
-  <div class="relative">
-  <TryExample lang={lang} class="absolute right-0 top-0 !my-0 !py-0" />
-  <Field label={t("a_input")}>
-    <textarea name="q" rows="2" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder={t("a_placeholder")} class="field min-h-14 resize-y font-mono text-[13px] [word-break:break-all]" aria-describedby="a-status" autofocus></textarea>
-  </Field>
-  </div>
-  <p id="a-status" class="-mt-4 text-sm empty:hidden" aria-live="polite"></p>
+<div id="address-tool" class="grid grid-cols-1 gap-8" data-strings={strings} data-uri={localePath(lang, "/uri")}>
+  <section class="grid grid-cols-1 gap-3">
+    <div class="flex items-baseline justify-between gap-4">
+      <label for="a-q" class={heading}>{t("a_input")}</label>
+      <button type="button" data-example class={link}>{t("try_example")}</button>
+    </div>
+    <AddressInput id="a-q" name="q" placeholder={t("a_placeholder")} paste={t("pl_paste")} describedby="a-status" autofocus>
+      <span data-chip class:list={[chip, tone.accent, "absolute bottom-2 left-3 sm:top-3 sm:right-3 sm:bottom-auto sm:left-auto"]} hidden></span>
+    </AddressInput>
+    <p id="a-status" class={message} aria-live="polite"></p>
 
-  <section data-oa class="grid gap-1 border-l-2 border-ink pl-4 text-[15px]" hidden>
-    <p data-oa-message></p>
-    <p data-oa-security class="text-sm"></p>
+    <div data-oa class="grid gap-2" hidden>
+      <div data-oa-bar class="flex flex-wrap items-center gap-x-3 gap-y-2 border-l-4 border-graphite bg-ink px-5 py-3 text-[13px]">
+        <span data-oa-name class="font-mono break-all text-cream"></span>
+        <span data-oa-chain class="contents" hidden>
+          <svg viewBox="0 0 3 5" width="6" height="10" class="text-slip-ink" aria-hidden="true" shape-rendering="crispEdges"><path d={chevron} fill="currentColor" /></svg>
+          <span data-oa-domain class="font-mono break-all text-ash"></span>
+          <svg viewBox="0 0 3 5" width="6" height="10" class="text-slip-ink" aria-hidden="true" shape-rendering="crispEdges"><path d={chevron} fill="currentColor" /></svg>
+          <span data-oa-recipient class="font-semibold text-cream"></span>
+        </span>
+        <span data-oa-message class="text-ash"></span>
+        <span data-oa-seal class:list={[chip, "ml-auto"]} hidden></span>
+      </div>
+      <p data-oa-warning class="text-sm text-bad" hidden>{t("a_oa_unsigned")}</p>
+    </div>
   </section>
 
-  <section data-details class="border-2 border-ink shadow-[6px_6px_0_var(--color-ink)]" hidden>
-    <div class="flex flex-wrap items-center gap-x-3 gap-y-1 bg-ink px-4 py-2.5">
-      <p class="font-pixel text-mint"><span aria-hidden="true">✓ </span><span data-valid></span></p>
-      <span data-type-badge class="border border-orange px-1.5 font-pixel text-xs uppercase leading-5 text-orange"></span>
+  <section data-card class="grid grid-cols-1 gap-5" hidden>
+    <Slip dither>
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_220px]">
+        <div class="grid min-w-0 content-start gap-4">
+          <div class="flex flex-wrap items-center gap-x-3.5 gap-y-3 border-b-2 border-slip-tile pb-4">
+            <span class="pixel-corners grid size-10 shrink-0 place-items-center bg-ok text-paper"><PixelIcon name="check" size={24} class="block" /></span>
+            <div class="grid min-w-0 flex-1 gap-0.5">
+              <b class="font-pixel text-xl font-normal tracking-[0.12em] text-ok uppercase">{t("a_valid_t")}</b>
+              <span class="text-[13px] text-graphite">{t("a_valid_sub")}</span>
+            </div>
+            <div class="flex shrink-0 gap-2 max-sm:basis-full">
+              <span data-network class="border-2 border-ink px-2 py-0.5 font-pixel text-[10px] tracking-wider uppercase"></span>
+              <span data-type-badge class="bg-ink px-2.5 py-1 font-pixel text-[10px] tracking-wider text-orange uppercase"></span>
+            </div>
+          </div>
+          <p data-chars class:list={[label, "text-[10px]"]}></p>
+          <div data-chunks class="grid grid-cols-4 gap-1.5 font-mono text-[15px] sm:grid-cols-6 xl:grid-cols-8"></div>
+          <p data-type class="text-[13px] text-graphite"></p>
+        </div>
+        <QrCode brackets={t("a_scan")} data-qr-box class="mx-auto w-full max-w-[220px] self-start" />
+      </div>
+      <Fragment slot="footer">
+        <span data-footer-label class={label}></span>
+        <span data-footer class="min-w-0 truncate font-mono text-[13px]"></span>
+        <span class="ml-auto font-pixel text-[11px] text-slip-ink">xmr.fan</span>
+      </Fragment>
+    </Slip>
+
+    <div class="flex flex-wrap gap-3">
+      <Button data-copy-from="[data-address-full]"><PixelIcon name="copy" size={16} /><span>{t("a_copy_address")}</span></Button>
+      <a data-pay class={button.ghost}>
+        <PixelIcon name="qr" size={16} class="text-orange" />{t("a_pay_link")}
+        <svg viewBox="0 0 3 5" width="6" height="10" class="text-slip-ink" aria-hidden="true" shape-rendering="crispEdges"><path d={chevron} fill="currentColor" /></svg>
+      </a>
+      <span data-address-full hidden></span>
     </div>
-    <div class="grid gap-5 bg-paper p-4 sm:grid-cols-[minmax(0,1fr)_160px] sm:p-5 md:grid-cols-[minmax(0,1fr)_190px]">
-      <div class="grid content-start gap-3">
-        <p data-full class="font-mono text-[15px] leading-loose tracking-wide"></p>
-        <p data-type class="text-sm text-graphite"></p>
+
+    <div class="grid grid-cols-1 items-start gap-3 lg:grid-cols-2">
+      <Disclosure title={t("a_details")} hint={t("a_keys_hint")}>
+        <dl>
+          <div class={keyRow}><dt class={fieldLabel}>{t("a_spend")}</dt><dd data-spend class={keyValue}></dd></div>
+          <div class={keyRow}><dt class={fieldLabel}>{t("a_view")}</dt><dd data-view class={keyValue}></dd></div>
+          <div class={keyRow} data-pid-row hidden><dt class={fieldLabel}>{t("a_pid")}</dt><dd data-pid class={keyValue}></dd></div>
+          <div class={keyRow} data-inner-row hidden><dt class={fieldLabel}>{t("a_inner")}</dt><dd data-inner class={keyValue}></dd></div>
+        </dl>
+        <p class="text-xs text-slip-ink">{t("a_keys_note")}</p>
+      </Disclosure>
+      <Disclosure title={t("a_compare_t")} hint={t("a_compare_hint")}>
+        <p class="text-sm text-ash">{t("a_compare_help")}</p>
+        <textarea name="other" rows="2" spellcheck="false" autocomplete="off" autocapitalize="off" class:list={[field, "min-h-14 resize-y font-mono text-[13px] break-all"]} aria-label={t("a_compare_t")}></textarea>
+        <div data-compare-result class="grid gap-2" hidden>
+          <p data-compare-verdict class="font-pixel"></p>
+          <p data-compare-a class="font-mono text-[13px] leading-relaxed break-all text-cream"></p>
+          <p data-compare-b class="font-mono text-[13px] leading-relaxed break-all text-cream"></p>
+        </div>
+      </Disclosure>
+      <Disclosure title={t("a_integrate_t")} hint={t("a_integrate_hint")} data-integrate class="lg:col-span-2" hidden>
+        <p class="text-sm text-ash">{t("a_integrate_help")}</p>
+        <label for="a-pid" class={fieldLabel}>{t("a_pid_input")}</label>
         <div class="flex flex-wrap gap-2">
-          <CopyButton lang={lang} from="[data-full]" class="btn-ghost" />
-          <a data-pay class="btn">{t("a_pay_link")}</a>
+          <input id="a-pid" name="pid" maxlength="16" spellcheck="false" autocomplete="off" class:list={[field, "min-w-0 flex-1 basis-64 font-mono"]} aria-describedby="pid-message" />
+          <Button variant="ghost" data-random>{t("a_random")}</Button>
+        </div>
+        <p id="pid-message" class={message}></p>
+        <div data-integrated-box class="grid gap-2" hidden>
+          <output id="integrated" class={code}></output>
+          <button type="button" data-copy-from="#integrated" class:list={[copyChip, "justify-self-start"]}><PixelIcon name="copy" size={10} class="text-orange" /><span>{t("share_copy")}</span></button>
+        </div>
+      </Disclosure>
+    </div>
+  </section>
+
+  <TrustNote class="border-t-2 border-graphite pt-5">{t("a_privacy")}</TrustNote>
+
+  <section data-oa-tool class="grid grid-cols-1 gap-6 border-l-4 border-orange bg-ink px-5 py-6 sm:px-7" aria-labelledby="oa-make">
+    <div class="grid gap-1.5">
+      <h2 id="oa-make" class="font-pixel text-xl text-orange">{t("a_oa_make_t")}</h2>
+      <p class="max-w-[70ch] text-[15px] text-ash">{t("a_oa_make_help")}</p>
+    </div>
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_400px]">
+      <div class="grid content-start gap-4">
+        <div class="grid gap-2">
+          <label for="oa-address" class={heading}>{t("a_oa_addr")}</label>
+          <AddressInput id="oa-address" name="oa-address" />
+        </div>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div class="grid content-start gap-2">
+            <label for="oa-host" class={heading}>{t("a_oa_host")}</label>
+            <input id="oa-host" name="oa-host" placeholder="donate@example.com" autocomplete="off" spellcheck="false" class:list={[field, "font-mono text-[14px]"]} />
+          </div>
+          <div class="grid content-start gap-2">
+            <label for="oa-name" class="flex items-baseline justify-between gap-2"><span class={heading}>{t("a_shown")}</span><span class="text-xs text-slip-ink">{t("pl_optional")}</span></label>
+            <input id="oa-name" name="oa-name" maxlength="60" placeholder="Example Shop" autocomplete="off" class={field} />
+          </div>
         </div>
       </div>
-      <div data-qr class="max-w-[190px] border-2 border-ink bg-paper"></div>
+      <div class="grid content-start gap-2">
+        <span class={heading}>{t("a_record")}</span>
+        <div class="relative grid gap-3 border-l-4 border-orange bg-well px-5 py-4">
+          <p data-record-wait class="text-sm text-slip-ink">{t("a_record_wait")}</p>
+          <dl data-record class="grid grid-cols-[52px_1fr] items-baseline gap-x-3 gap-y-2.5 pr-16" hidden>
+            <dt class:list={[label, "text-[10px]"]}>{t("a_rec_type")}</dt><dd class="font-mono text-[13px] text-good">TXT</dd>
+            <dt class:list={[label, "text-[10px]"]}>{t("a_rec_host")}</dt><dd data-record-host class="font-mono text-[13px] break-all text-cream"></dd>
+            <dt class:list={[label, "text-[10px]"]}>{t("a_rec_value")}</dt><dd data-record-value class="font-mono text-[13px] leading-relaxed break-all text-cream"></dd>
+          </dl>
+          <span id="oa-record" hidden></span>
+          <button type="button" data-copy-from="#oa-record" data-record-copy class:list={[copyChip, "absolute top-3 right-3"]} hidden><PixelIcon name="copy" size={10} class="text-orange" /><span>{t("share_copy")}</span></button>
+        </div>
+      </div>
     </div>
-  </section>
-
-  <div data-extras class="grid gap-3" hidden>
-  <Disclosure title={t("a_details")} data-keys>
-    <dl class="text-[15px]">
-      <div class={row}><dt class="text-sm font-semibold">{t("a_spend")}</dt><dd data-spend class={key}></dd></div>
-      <div class={row}><dt class="text-sm font-semibold">{t("a_view")}</dt><dd data-view class={key}></dd></div>
-      <div class={row} data-pid-row hidden><dt class="text-sm font-semibold">{t("a_pid")}</dt><dd data-pid class={key}></dd></div>
-      <div class={row} data-inner-row hidden><dt class="text-sm font-semibold">{t("a_inner")}</dt><dd data-inner class={key}></dd></div>
-    </dl>
-    <p class="text-xs text-graphite">{t("a_keys_note")}</p>
-  </Disclosure>
-  <Disclosure title={t("a_integrate_t")} data-integrate hidden>
-    <p class="text-sm text-graphite">{t("a_integrate_help")}</p>
-    <div class="flex flex-wrap items-end gap-2">
-      <Field label={t("a_pid_input")} messageId="pid-message" class="min-w-0 flex-1 basis-64">
-        <input name="pid" maxlength="16" spellcheck="false" autocomplete="off" class="field font-mono" aria-describedby="pid-message" />
-      </Field>
-      <button type="button" data-random class="btn btn-ghost mb-px">{t("a_random")}</button>
-    </div>
-    <div data-integrated-box class="grid gap-2" hidden>
-      <output id="integrated" class="block break-all bg-ink p-3 font-mono text-xs leading-normal text-mint"></output>
-      <CopyButton lang={lang} from="#integrated" class="justify-self-start" />
-    </div>
-  </Disclosure>
-
-  <Disclosure title={t("a_compare_t")} data-compare>
-    <p class="text-sm text-graphite">{t("a_compare_help")}</p>
-    <textarea name="other" rows="2" spellcheck="false" autocomplete="off" autocapitalize="off" class="field min-h-14 resize-y font-mono text-[13px] [word-break:break-all]" aria-label={t("a_compare_t")}></textarea>
-    <div data-compare-result class="grid gap-2" hidden>
-      <p data-compare-verdict class="font-pixel"></p>
-      <p data-compare-a class="break-all font-mono text-[13px] leading-relaxed"></p>
-      <p data-compare-b class="break-all font-mono text-[13px] leading-relaxed"></p>
-    </div>
-  </Disclosure>
-
-  </div>
-
-  <p class="text-sm text-graphite">{t("a_privacy")}</p>
-
-  <section data-oa-tool class="grid gap-4 border-t-2 border-ink pt-6">
-    <div class="grid gap-1">
-      <h2 class="font-pixel text-lg">{t("a_oa_make_t")}</h2>
-      <p class="max-w-[64ch] text-[15px] text-graphite">{t("a_oa_make_help")}</p>
-    </div>
-    <div class="grid gap-3 sm:grid-cols-2">
-      <Field label={t("a_oa_addr")} class="sm:col-span-2"><input name="oa-address" spellcheck="false" autocomplete="off" class="field font-mono text-[13px]" /></Field>
-      <Field label={t("a_oa_host")}><input name="oa-host" placeholder="donate@example.com" autocomplete="off" spellcheck="false" class="field font-mono text-[14px]" /></Field>
-      <Field label={t("a_oa_name")}><input name="oa-name" maxlength="60" autocomplete="off" class="field" /></Field>
-    </div>
-    <ol data-oa-steps class="grid list-inside list-decimal gap-2 text-[15px] marker:font-pixel" hidden>
-      <li data-step1></li>
-      <li>{t("a_oa_step2")}
-        <output id="oa-record" class="mt-2 block break-all bg-ink p-3 font-mono text-xs leading-normal text-mint"></output>
-        <CopyButton lang={lang} from="#oa-record" class="btn-ghost mt-2 px-2 py-1 text-xs" />
-      </li>
-      <li>{t("a_oa_step3")}</li>
+    <ol class="flex flex-wrap items-center gap-x-5 gap-y-3 bg-ink-2 px-4 py-3 text-[14px] text-cream">
+      {[t("a_step_add"), t("a_step_dnssec"), t("a_step_test")].map((step, i) => (
+        <li class="flex items-center gap-2.5">
+          <span class="grid size-5 place-items-center bg-orange font-pixel text-xs text-ink">{i + 1}</span>{step}
+        </li>
+      ))}
+      <li class="ml-auto"><button type="button" data-oa-test class="flex cursor-pointer items-center gap-2 font-pixel text-orange disabled:cursor-not-allowed disabled:opacity-40" disabled>{t("a_test_now")}<svg viewBox="0 0 3 5" width="6" height="10" aria-hidden="true" shape-rendering="crispEdges"><path d={chevron} fill="currentColor" /></svg></button></li>
     </ol>
-    <button type="button" data-oa-test class="btn btn-ghost justify-self-start" hidden>{t("a_oa_test")}</button>
   </section>
 </div>
 
 <script>
+  import { addressInput, shortAddressHtml } from "../ui/address-input";
+  import { bindCopyButtons } from "../ui/copy";
+  import { qrBox } from "../ui/qr";
+  import { tone } from "../ui/styles";
   import { readStrings } from "../../i18n/format";
   import { differences, integratedAddress, openAliasDomain, openAliasRecord, randomPaymentId, resolveOpenAlias, splitIntegrated } from "../../lib/address";
   import { EXAMPLE_OPENALIAS } from "../../lib/examples";
   import { buildUri, parseAddress } from "../../lib/monero";
-  import { drawQr, qrSvg } from "../../lib/qr";
 
   const root = document.getElementById("address-tool")!;
   const t = readStrings(root);
   const $ = <T extends HTMLElement = HTMLElement>(s: string) => root.querySelector<T>(s)!;
-  const input = $<HTMLTextAreaElement>("textarea[name=q]"), pid = $<HTMLInputElement>("input[name=pid]");
+  const [mainBox, oaBox] = root.querySelectorAll<HTMLElement>("[data-address-input]");
+  const query = addressInput(mainBox, () => render());
+  const oaAddress = addressInput(oaBox, () => renderRecord());
+  const pid = $<HTMLInputElement>("input[name=pid]");
   const status = $("#a-status");
+  const showQr = qrBox($("[data-qr-box]"));
+  const escape = (s: string) => s.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
   let current = "";
-  let aliasName: string | undefined;
-
-  function setStatus(text: string, tone: "error" | "" = "") {
-    status.textContent = text;
-    status.classList.toggle("text-danger", tone === "error");
-  }
+  let alias: { typed: string; name?: string } | undefined;
 
   /** False if the address is invalid. */
   function showAddress(address: string): boolean {
     const parsed = parseAddress(address);
-    $("[data-details]").hidden = $("[data-extras]").hidden = !parsed.ok;
+    $("[data-card]").hidden = !parsed.ok;
     if (!parsed.ok) return false;
     current = address.trim();
-    $("[data-valid]").textContent = t("a_valid", { network: parsed.network });
-    // Groups of four, with the first and last group marked: those are what people compare.
-    const groups = current.match(/.{1,4}/g)!;
-    $("[data-full]").replaceChildren(...groups.map((g, i) => {
-      const span = document.createElement("span");
-      span.textContent = g;
-      span.className = `mr-[0.45em] inline-block${i === 0 || i === groups.length - 1 ? " font-bold text-flame" : ""}`;
-      return span;
-    }));
+    $("[data-network]").textContent = parsed.network;
     $("[data-type-badge]").textContent = t(`type_${parsed.type}`);
-    $("[data-qr]").innerHTML = qrSvg(drawQr(buildUri({ address: current, name: aliasName })), t("qr_alt"));
+    $("[data-chars]").textContent = t("a_chars", { n: current.length });
+    // Groups of four, the first and last marked: those are what people compare.
+    const groups = current.match(/.{1,4}/g)!;
+    $("[data-chunks]").replaceChildren(...groups.map((g, i) => {
+      const cell = document.createElement("span");
+      const end = i === 0 || i === groups.length - 1;
+      cell.textContent = g;
+      cell.className = `py-1.5 text-center ${end ? "bg-[#ffe3cc] font-bold text-flame" : "bg-slip-tile"}`;
+      return cell;
+    }));
     $("[data-type]").textContent = t(`a_type_${parsed.type}`);
+    $("[data-address-full]").textContent = current;
+    showQr(buildUri({ address: current, name: alias?.name }), t("qr_alt"));
+    $("[data-footer-label]").textContent = alias ? t("a_alias_l") : "XMR";
+    $("[data-footer]").innerHTML = alias ? `${escape(alias.typed)}${alias.name ? ` <span class="font-sans text-slip-ink">· ${escape(alias.name)}</span>` : ""}` : shortAddressHtml(current);
     $("[data-spend]").textContent = parsed.publicSpendKey;
     $("[data-view]").textContent = parsed.publicViewKey;
     $("[data-pid-row]").hidden = !parsed.paymentId;
@@ -153,14 +224,21 @@ const key = "break-all font-mono text-[13px]";
     const inner = splitIntegrated(current);
     $("[data-inner-row]").hidden = !inner;
     $("[data-inner]").textContent = inner?.standard ?? "";
-    $<HTMLAnchorElement>("[data-pay]").href = `${root.dataset.uri}?address=${current}${aliasName ? `&recipient_name=${encodeURIComponent(aliasName)}` : ""}`;
+    $<HTMLAnchorElement>("[data-pay]").href = `${root.dataset.uri}?address=${current}${alias?.name ? `&recipient_name=${encodeURIComponent(alias.name)}` : ""}`;
     $("[data-integrate]").hidden = parsed.type !== "standard";
     renderIntegrated();
     renderCompare();
-    const oaAddress = $<HTMLInputElement>("input[name=oa-address]");
-    if (!oaAddress.value) { oaAddress.value = current; renderRecord(); }
-    if (parsed.network !== "mainnet") setStatus(t("warn_network", { net: parsed.network }), "error");
+    if (!oaAddress.field.value) { oaAddress.set(current); renderRecord(); }
+    if (parsed.network !== "mainnet") setStatus(t("warn_network", { net: parsed.network }));
     return true;
+  }
+
+  function setStatus(text: string) { status.textContent = text; }
+
+  function setChip(kind: "alias" | "address" | null) {
+    const el = $("[data-chip]");
+    el.hidden = !kind;
+    el.textContent = kind ? t(`a_chip_${kind}`) : "";
   }
 
   function renderIntegrated() {
@@ -181,11 +259,11 @@ const key = "break-all font-mono text-[13px]";
     const diff = differences(current, other);
     const verdict = $("[data-compare-verdict]");
     verdict.textContent = diff.size ? `× ${t("a_diff", { n: diff.size })}` : `✓ ${t("a_same")}`;
-    verdict.className = `font-pixel ${diff.size ? "text-danger" : "text-ok"}`;
+    verdict.className = `font-pixel ${diff.size ? "text-bad" : "text-good"}`;
     const marked = (text: string) => [...text].map((ch, i) => {
       if (!diff.has(i)) return document.createTextNode(ch);
       const mark = document.createElement("mark");
-      mark.className = "bg-danger text-paper";
+      mark.className = "bg-bad text-ink";
       mark.textContent = ch;
       return mark;
     });
@@ -194,35 +272,53 @@ const key = "break-all font-mono text-[13px]";
   }
 
   function renderRecord() {
-    const address = $<HTMLInputElement>("input[name=oa-address]").value.trim();
+    const address = oaAddress.field.value.trim();
     const host = openAliasDomain($<HTMLInputElement>("input[name=oa-host]").value);
-    const ready = parseAddress(address).ok && !!host;
-    $("[data-oa-steps]").hidden = $("[data-oa-test]").hidden = !ready;
+    const valid = parseAddress(address).ok;
+    oaAddress.show(address ? (valid ? "ok" : "error") : "");
+    const ready = valid && !!host;
+    $("[data-record]").hidden = $("[data-record-copy]").hidden = !ready;
+    $("[data-record-wait]").hidden = ready;
+    $<HTMLButtonElement>("[data-oa-test]").disabled = !host;
     if (!ready) return;
-    $("[data-step1]").textContent = t("a_oa_step1", { host: host! });
-    $("#oa-record").textContent = openAliasRecord(address, $<HTMLInputElement>("input[name=oa-name]").value);
+    const record = openAliasRecord(address, $<HTMLInputElement>("input[name=oa-name]").value);
+    $("#oa-record").textContent = record;
+    $("[data-record-host]").textContent = host!;
+    // oa1:xmr key=value; key=value;
+    $("[data-record-value]").innerHTML = escape(record)
+      .replace(/(\w+)=/g, '<span class="text-slip-ink">$1=</span>')
+      .replace(/^oa1:xmr/, '<span class="text-orange">oa1:xmr</span>');
   }
 
   let lookup = 0;
-  async function showAlias(domain: string) {
+  async function showAlias(domain: string, typed: string) {
     const run = ++lookup;
-    const box = $("[data-oa]"), message = $("[data-oa-message]"), security = $("[data-oa-security]");
+    const box = $("[data-oa]"), msg = $("[data-oa-message]"), seal = $("[data-oa-seal]"), bar = $("[data-oa-bar]");
     box.hidden = false;
-    message.textContent = t("a_oa_looking", { name: domain });
-    security.textContent = "";
+    $("[data-oa-name]").textContent = typed;
+    $("[data-oa-chain]").hidden = seal.hidden = $("[data-oa-warning]").hidden = true;
+    bar.classList.remove("border-good", "border-bad");
+    msg.textContent = t("a_oa_looking", { name: domain });
     try {
       const { aliases, dnssec } = await resolveOpenAlias(domain);
       if (run !== lookup) return;
-      const alias = aliases[0];
-      if (!alias) { message.textContent = t("a_oa_none", { name: domain }); return; }
-      const named = alias.name && alias.name.toLowerCase() !== domain ? `${domain} (${alias.name})` : domain;
-      message.textContent = alias.valid ? t("a_oa_found", { name: named }) : t("a_oa_invalid");
-      aliasName = alias.name;
-      security.textContent = dnssec ? t("a_oa_dnssec") : t("a_oa_unsigned");
-      security.className = `text-sm ${dnssec ? "text-ok" : "text-danger"}`;
-      if (alias.valid) showAddress(alias.address);
+      const found = aliases[0];
+      if (!found) { msg.textContent = t("a_oa_none", { name: domain }); bar.classList.add("border-bad"); return; }
+      if (!found.valid) { msg.textContent = t("a_oa_invalid"); bar.classList.add("border-bad"); return; }
+      msg.textContent = "";
+      $("[data-oa-chain]").hidden = false;
+      $("[data-oa-domain]").textContent = domain;
+      $("[data-oa-recipient]").textContent = found.name ?? "";
+      seal.hidden = false;
+      seal.textContent = t(dnssec ? "a_dnssec_ok" : "a_dnssec_no");
+      seal.classList.remove(...tone.good.split(" "), ...tone.bad.split(" "));
+      seal.classList.add(...(dnssec ? tone.good : tone.bad).split(" "));
+      $("[data-oa-warning]").hidden = dnssec;
+      bar.classList.add(dnssec ? "border-good" : "border-bad");
+      alias = { typed, name: found.name };
+      showAddress(found.address);
     } catch {
-      if (run === lookup) message.textContent = t("a_oa_error", { name: domain });
+      if (run === lookup) { msg.textContent = t("a_oa_error", { name: domain }); bar.classList.add("border-bad"); }
     }
   }
 
@@ -230,35 +326,40 @@ const key = "break-all font-mono text-[13px]";
   function render() {
     clearTimeout(timer);
     lookup++;
-    aliasName = undefined;
+    alias = undefined;
     setStatus("");
     $("[data-oa]").hidden = true;
-    const value = input.value.trim();
-    input.setAttribute("aria-invalid", "false");
-    if (!value) { showAddress(""); return; }
-    if (showAddress(value)) return;
+    const value = query.field.value.trim();
+    query.field.setAttribute("aria-invalid", "false");
+    if (!value) { setChip(null); query.show(""); showAddress(""); return; }
+    if (showAddress(value)) { setChip("address"); query.show("ok"); return; }
+    query.show("");
     const domain = openAliasDomain(value);
-    if (domain) { timer = setTimeout(() => showAlias(domain), 500); return; }
+    if (domain) { setChip("alias"); timer = setTimeout(() => showAlias(domain, value), 500); return; }
+    setChip(null);
     const parsed = parseAddress(value);
     if (!parsed.ok) {
-      input.setAttribute("aria-invalid", "true");
-      setStatus(t(`err_${parsed.error}`, { n: value.length }), "error");
+      query.field.setAttribute("aria-invalid", "true");
+      query.show("error");
+      setStatus(t(`err_${parsed.error}`, { n: value.length }));
     }
   }
 
-  input.addEventListener("input", render);
-  $("[data-example]").addEventListener("click", () => { input.value = EXAMPLE_OPENALIAS; render(); });
+  query.field.addEventListener("input", render);
+  $("[data-example]").addEventListener("click", () => { query.set(EXAMPLE_OPENALIAS); render(); });
   pid.addEventListener("input", renderIntegrated);
   $("textarea[name=other]").addEventListener("input", renderCompare);
-  for (const name of ["oa-address", "oa-host", "oa-name"]) $(`input[name=${name}]`).addEventListener("input", renderRecord);
+  oaAddress.field.addEventListener("input", renderRecord);
+  for (const name of ["oa-host", "oa-name"]) $(`input[name=${name}]`).addEventListener("input", renderRecord);
   $("[data-oa-test]").addEventListener("click", () => {
-    input.value = $<HTMLInputElement>("input[name=oa-host]").value.trim();
+    query.set($<HTMLInputElement>("input[name=oa-host]").value.trim());
     render();
-    input.scrollIntoView({ block: "center" });
+    query.field.scrollIntoView({ block: "center" });
   });
   $("[data-random]").addEventListener("click", () => { pid.value = randomPaymentId(); renderIntegrated(); });
+  bindCopyButtons(root, t("copied"));
 
   const prefill = new URLSearchParams(location.search).get("address");
-  if (prefill) input.value = prefill;
+  if (prefill) query.set(prefill);
   render();
 </script>
