@@ -15,9 +15,8 @@ const strings = pickStrings(lang, [
 const step = (n: string, label: string) => ({ n, label });
 const STEPS = { address: step("01", t("pl_step_address")), details: step("02", t("pl_step_details")), link: step("03", t("pl_step_link")) };
 ---
-<form id="payment-link" class="grid gap-x-10 gap-y-8 lg:grid-cols-[minmax(0,1fr)_380px]" data-strings={strings} data-lang={lang} novalidate>
-  <div class="grid min-w-0 content-start gap-8">
-    <section class="grid gap-2.5">
+<form id="payment-link" class="grid gap-x-10 gap-y-7 lg:grid-cols-[minmax(0,1fr)_380px] lg:gap-y-8" data-strings={strings} data-lang={lang} data-empty novalidate>
+    <section class="grid min-w-0 gap-2.5 lg:col-start-1">
       <div class="flex items-baseline justify-between gap-4">
         <label for="pl-address" class="step"><b>{STEPS.address.n}</b>{STEPS.address.label}</label>
         <button type="button" id="example" class="cursor-pointer text-sm text-orange underline">{t("try_example")}</button>
@@ -30,8 +29,9 @@ const STEPS = { address: step("01", t("pl_step_address")), details: step("02", t
       <p id="address-status" class="text-sm empty:hidden" aria-live="polite"></p>
     </section>
 
-    <section class="grid gap-4">
-      <h2 class="step"><b>{STEPS.details.n}</b>{STEPS.details.label}<span class="ml-3 font-sans text-sm normal-case tracking-normal text-line">{t("pl_optional")}</span></h2>
+    <details id="details" class="fold order-3 min-w-0 lg:order-none lg:col-start-1">
+      <summary class="step"><b>{STEPS.details.n}</b>{STEPS.details.label}<span class="ml-1 font-sans text-sm normal-case tracking-normal text-line">{t("pl_optional")}</span><i class="fold-mark"></i></summary>
+      <div class="mt-4 grid gap-4">
       <div class="grid gap-4 sm:grid-cols-2">
         <div class="grid content-start gap-1.5">
           <label for="pl-amount" class="text-sm text-ash">{t("f_amount")}</label>
@@ -63,26 +63,28 @@ const STEPS = { address: step("01", t("pl_step_address")), details: step("02", t
           <p id="paymentId-message" class="text-sm text-[#ff8a75] empty:hidden"></p>
         </div>
       )}
-    </section>
+      </div>
+    </details>
 
-    <section class="grid gap-2.5">
-      <div class="flex items-center justify-between gap-4">
-        <h2 class="step"><b>{STEPS.link.n}</b>{STEPS.link.label}</h2>
-        <div class="flex bg-[#232126] p-0.5 font-pixel text-[11px] uppercase" role="group">
+    <details id="link" class="fold order-4 min-w-0 lg:order-none lg:col-start-1">
+      <summary class="step"><b>{STEPS.link.n}</b>{STEPS.link.label}<i class="fold-mark"></i></summary>
+      <div class="mt-2.5 grid gap-2.5">
+      <div class="flex justify-end bg-transparent font-pixel text-[11px] uppercase lg:-mt-9" role="group">
+        <div class="flex bg-[#232126] p-0.5">
           <button type="button" data-view="pretty" aria-pressed="true" class="view-btn">{t("pl_pretty")}</button>
           <button type="button" data-view="raw" aria-pressed="false" class="view-btn">{t("pl_raw")}</button>
         </div>
       </div>
       <output id="uri" class="block min-h-24 border-l-4 border-orange bg-[#232126] px-5 py-4 font-mono text-[13px] leading-relaxed text-ash [word-break:break-all]"><span class="text-orange">monero:</span></output>
-    </section>
+      </div>
+    </details>
 
-    <p class="flex items-center gap-2.5 text-sm text-ash">
+    <p class="order-5 flex items-center gap-2.5 text-sm text-ash lg:order-none lg:col-start-1">
       <svg viewBox="0 0 8 8" width="14" height="14" class="shrink-0 text-[#5fd38a]" aria-hidden="true" shape-rendering="crispEdges"><path fill-rule="evenodd" d="M2 0h4v1H2zM1 1h1v2H1zM6 1h1v2H6zM0 3h8v5H0zM3 5h2v2H3z" fill="currentColor" /></svg>
       {t("pl_local")}
     </p>
-  </div>
 
-  <div class="grid max-w-[420px] content-start gap-5 lg:max-w-none">
+  <div class="slip-col order-2 grid w-full max-w-[420px] content-start gap-5 justify-self-center lg:order-none lg:col-start-2 lg:row-span-5 lg:row-start-1 lg:max-w-none">
     <figure class="slip relative bg-paper text-ink shadow-[8px_8px_0_#1f1d22]">
       <div class="grid gap-4 border-t-[6px] border-orange px-6 pb-5 pt-5">
         <div class="flex items-baseline justify-between gap-3 font-pixel text-[11px] uppercase tracking-[0.18em] text-[#8a8492]">
@@ -119,7 +121,7 @@ const STEPS = { address: step("01", t("pl_step_address")), details: step("02", t
     </div>
   </div>
 
-  <section id="share-box" class="grid gap-4 border-l-4 border-orange bg-[#232126] p-5 lg:col-span-2" hidden>
+  <section id="share-box" class="order-2 grid gap-4 border-l-4 border-orange bg-[#232126] p-5 lg:order-none lg:col-span-2" hidden>
     <h2 class="font-pixel text-lg text-orange">{t("share_t")}</h2>
     <div class="grid gap-1.5">
       <label for="share-link" class="text-sm text-ash">{t("share_link")}</label>
@@ -152,6 +154,13 @@ const STEPS = { address: step("01", t("pl_step_address")), details: step("02", t
   textarea.address-text { color: transparent; }
   textarea.address-text::selection { color: transparent; background: rgb(251 140 60 / 0.35); }
   #address-mirror :global(mark) { background: none; color: #ffb27a; font-weight: 700; }
+  .fold > summary { cursor: pointer; list-style: none; }
+  .fold > summary::-webkit-details-marker { display: none; }
+  .fold-mark { margin-left: auto; width: 10px; height: 10px; border-right: 2px solid var(--color-orange); border-bottom: 2px solid var(--color-orange); transform: rotate(45deg); }
+  .fold[open] .fold-mark { transform: rotate(-135deg); }
+  /* On wide screens every step stays open. */
+  @media (min-width: 1024px) { .fold > summary { pointer-events: none; } .fold-mark { display: none; } }
+  @media (max-width: 1023px) { form[data-empty] .slip-col { display: none; } }
   .view-btn { cursor: pointer; padding: 0.3rem 0.8rem; color: var(--color-line); }
   .view-btn[aria-pressed="true"] { background: var(--color-graphite); color: var(--color-cream); }
   #uri :global(.k) { color: var(--color-line); }
@@ -261,6 +270,7 @@ const STEPS = { address: step("01", t("pl_step_address")), details: step("02", t
     const wasEmpty = !uri;
     uri = result.ok ? result.uri : "";
     copyBtn.disabled = dlBtn.disabled = shareBtn.disabled = !uri;
+    form.toggleAttribute("data-empty", !uri);
     renderShare(input);
     renderLink();
 
@@ -341,6 +351,7 @@ const STEPS = { address: step("01", t("pl_step_address")), details: step("02", t
       address: EXAMPLE_ADDRESS, amount: EXAMPLE_AMOUNT, name: EXAMPLE_NAME, description: t("example_desc"),
     };
     for (const [name, v] of Object.entries(example)) (form.elements.namedItem(name) as HTMLInputElement).value = v;
+    ($("details") as HTMLDetailsElement).open = true;
     render();
   });
 
@@ -372,6 +383,11 @@ const STEPS = { address: step("01", t("pl_step_address")), details: step("02", t
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 0);
   });
+
+  // Small screens start with the optional steps folded, unless they already hold something.
+  const wide = matchMedia("(min-width: 1024px)").matches;
+  ($("details") as HTMLDetailsElement).open = wide || ["amount", "name", "description", "paymentId"].some((f) => value(f).trim());
+  ($("link") as HTMLDetailsElement).open = wide;
 
   render(); // fields may be prefilled from the URL or restored by the browser
 </script>
