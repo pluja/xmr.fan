@@ -1,7 +1,12 @@
 ---
-import CopyButton from "../CopyButton.astro";
-import Disclosure from "../Disclosure.astro";
 import PixelIcon from "../PixelIcon.astro";
+import Button from "../ui/Button.astro";
+import Disclosure from "../ui/Disclosure.astro";
+import Printer from "../ui/Printer.astro";
+import QrCode from "../ui/QrCode.astro";
+import Receipt from "../ui/Receipt.astro";
+import TrustNote from "../ui/TrustNote.astro";
+import { label } from "../ui/styles";
 import data from "../../data/donations.json";
 import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
 import { DONATION_CATEGORIES, type Donation } from "../../lib/donations";
@@ -12,49 +17,52 @@ const t = useTranslations(lang);
 const list = data as Donation[];
 const descriptions = Object.fromEntries(list.map((d) => [d.id, d.description[lang]]));
 const categories = Object.fromEntries(DONATION_CATEGORIES.map((c) => [c, t(`dn_cat_${c}`)]));
-const strings = pickStrings(lang, ["dn_source", "qr_alt", "dn_tx_desc"]);
+const strings = pickStrings(lang, ["dn_source", "qr_alt", "dn_tx_desc", "copied"]);
 const site = (url: string) => new URL(url).hostname.replace(/^www\./, "");
-const chip = "cursor-pointer border-2 border-ink px-2.5 py-1 font-pixel text-sm has-[:checked]:bg-ink has-[:checked]:text-orange";
+const tab = "cursor-pointer px-3 py-2 font-pixel text-sm text-ash has-checked:bg-graphite has-checked:text-cream has-focus-visible:outline-2 has-focus-visible:outline-orange";
 ---
-<div id="donate-tool" class="grid gap-6" data-strings={strings} data-lang={lang} data-list={JSON.stringify(list)} data-descriptions={JSON.stringify(descriptions)} data-categories={JSON.stringify(categories)}>
-  <div class="flex flex-wrap items-center gap-3">
-    <button type="button" data-spin class="btn text-lg"><PixelIcon name="dice" size={18} />{t("dn_spin")}</button>
-    <fieldset class="flex flex-wrap gap-1.5" aria-label={t("dn_all")}>
-      <label class={chip}><input type="radio" name="category" value="" class="sr-only" checked />{t("dn_all")}</label>
-      {DONATION_CATEGORIES.map((c) => <label class={chip}><input type="radio" name="category" value={c} class="sr-only" />{categories[c]}</label>)}
+<div id="donate-tool" class="grid grid-cols-1 gap-8" data-strings={strings} data-lang={lang} data-list={JSON.stringify(list)} data-descriptions={JSON.stringify(descriptions)} data-categories={JSON.stringify(categories)}>
+  <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+    <fieldset class="flex flex-wrap bg-well p-0.5" aria-label={t("dn_all")}>
+      <label class={tab}><input type="radio" name="category" value="" class="sr-only" checked />{t("dn_all")}</label>
+      {DONATION_CATEGORIES.map((c) => <label class={tab}><input type="radio" name="category" value={c} class="sr-only" />{categories[c]}</label>)}
     </fieldset>
+    <Button data-spin class="max-sm:w-full"><PixelIcon name="dice" size={18} />{t("dn_spin")}</Button>
   </div>
 
-  <section data-card class="border-2 border-ink shadow-[6px_6px_0_var(--color-ink)]" hidden aria-live="polite">
-    <div class="flex items-center gap-3 bg-ink px-4 py-2.5">
-      <PixelIcon name="heart" size={16} class="text-orange" />
-      <span data-category class="border border-orange px-1.5 font-pixel text-xs uppercase leading-5 text-orange"></span>
-    </div>
-    <div class="grid items-start gap-5 bg-paper p-4 sm:grid-cols-[minmax(0,1fr)_300px] sm:p-5">
-      <div class="grid content-start gap-3">
-        <h2 data-name class="font-pixel text-[clamp(24px,4vw,34px)] leading-tight"></h2>
-        <p data-desc class="text-[0.9375rem] text-graphite"></p>
-        <p data-address class="font-mono text-[0.875rem] leading-loose tracking-wide"></p>
-        <div class="flex flex-wrap gap-2">
-          <a data-open class="btn">{t("card_open")}</a>
-          <CopyButton lang={lang} from="#donate-tool [data-address]" class="btn-ghost" />
+  <Printer idle={t("dn_spin")} aria-live="polite">
+    <Receipt>
+      <div class="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-[230px_minmax(0,1fr)]">
+        <QrCode brackets={t("scan_to_pay")} data-qr-box class="mx-auto w-full max-w-[250px] self-start" />
+        <div class="grid min-w-0 content-start gap-3">
+          <span data-category class="w-fit bg-ink px-2.5 py-1 font-pixel text-xs tracking-wider text-orange uppercase"></span>
+          <h2 data-name class="font-pixel text-[clamp(1.6rem,4vw,2.2rem)] leading-tight"></h2>
+          <p data-desc class="text-[0.9375rem] text-graphite"></p>
+          <p data-address class="grid grid-cols-4 gap-1 font-mono text-[0.875rem] sm:grid-cols-6 lg:grid-cols-8"></p>
+          <div class="mt-1 flex flex-wrap gap-2">
+            <a data-open class="inline-flex items-center gap-2 bg-ink px-4 py-2.5 font-pixel text-sm text-orange no-underline hover:bg-graphite"><PixelIcon name="heart" size={14} />{t("card_open")}</a>
+            <button type="button" data-copy-from="#donate-address" class="inline-flex cursor-pointer items-center gap-2 border-2 border-ink px-4 py-2 font-pixel text-sm text-ink hover:bg-ink hover:text-paper"><PixelIcon name="copy" size={14} /><span>{t("card_copy_address")}</span></button>
+            <span id="donate-address" hidden></span>
+            <a data-source rel="noopener noreferrer" target="_blank" class="inline-flex items-center gap-1.5 self-center px-2 text-sm text-graphite underline underline-offset-3 hover:text-ink"><span data-source-site></span><PixelIcon name="external" size={10} /></a>
+          </div>
         </div>
-        <p class="text-xs text-graphite"><a data-source class="text-ink" rel="noopener noreferrer"></a></p>
       </div>
-      <div data-qr class="aspect-square w-full max-w-[300px] justify-self-center"></div>
-    </div>
-  </section>
+      <Fragment slot="footer">
+        <span data-memo class={label}></span>
+        <span class={cx(label, "ml-auto")}>xmr.fan</span>
+      </Fragment>
+    </Receipt>
+  </Printer>
 
-  <p class="max-w-[66ch] text-sm text-graphite">{t("dn_note")}</p>
+  <TrustNote icon="info" class="border-t-2 border-graphite pt-5">{t("dn_note")}</TrustNote>
 
   <Disclosure title={t("dn_list_t", { n: list.length })}>
-    <ul class="grid gap-x-6 sm:grid-cols-2">
+    <ul class="grid gap-2 sm:grid-cols-2">
       {list.map((d) => (
-        <li class="grid gap-0.5 border-b-2 border-dotted border-graphite/40 py-2 text-sm">
-          <a class="font-semibold text-ink" href={`#${d.id}`} data-pick={d.id}>{d.name}</a>
-          <span class="text-graphite">{descriptions[d.id]}</span>
-          <span class="break-all font-mono text-[0.6875rem] text-graphite">{d.address}</span>
-          <a class="text-xs text-ink" href={d.source} rel="noopener noreferrer">{site(d.source)}</a>
+        <li class="grid content-start gap-1 border-l-4 border-graphite bg-ink px-4 py-3 hover:border-orange">
+          <a class="font-pixel text-[0.9375rem] text-cream no-underline hover:text-orange" href={`#${d.id}`} data-pick={d.id}>{d.name}</a>
+          <span class="text-sm text-ash">{descriptions[d.id]}</span>
+          <a class="text-xs text-slip-ink underline underline-offset-3 hover:text-orange" href={d.source} rel="noopener noreferrer">{site(d.source)}</a>
         </li>
       ))}
     </ul>
@@ -67,7 +75,9 @@ const chip = "cursor-pointer border-2 border-ink px-2.5 py-1 font-pixel text-sm 
   import { addressGroups } from "../../lib/address";
   import { spin, type Donation } from "../../lib/donations";
   import { buildUri } from "../../lib/monero";
-  import { drawQr, qrSvg } from "../../lib/qr";
+  import { bindCopyButtons } from "../ui/copy";
+  import { printer } from "../ui/printer";
+  import { qrBox } from "../ui/qr";
 
   const root = document.getElementById("donate-tool")!;
   const t = readStrings(root);
@@ -79,6 +89,8 @@ const chip = "cursor-pointer border-2 border-ink px-2.5 py-1 font-pixel text-sm 
   const longDate = new Intl.DateTimeFormat(lang, { dateStyle: "long", timeZone: "UTC" });
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
   let current: Donation | undefined, spinning = false;
+  const print = printer($("[data-printer]"));
+  const showQr = qrBox($("[data-qr-box]"));
 
   const category = () => (root.querySelector<HTMLInputElement>("input[name=category]:checked")?.value ?? "");
   const pool = () => list.filter((d) => !category() || d.category === category());
@@ -91,16 +103,17 @@ const chip = "cursor-pointer border-2 border-ink px-2.5 py-1 font-pixel text-sm 
     $("[data-address]").replaceChildren(...addressGroups(d.address).map((g, i, all) => {
       const span = document.createElement("span");
       span.textContent = g;
-      span.className = `mr-[0.45em] inline-block${i === 0 || i === all.length - 1 ? " font-bold text-flame" : ""}`;
+      span.className = `py-1 text-center ${i === 0 || i === all.length - 1 ? "bg-[#ffe3cc] font-bold text-flame" : "bg-slip-tile"}`;
       return span;
     }));
+    $("#donate-address").textContent = d.address;
     const uri = buildUri({ address: d.address, name: d.name, description: t("dn_tx_desc", { name: d.name }) });
     $<HTMLAnchorElement>("[data-open]").href = uri;
-    $("[data-qr]").innerHTML = qrSvg(drawQr(uri), t("qr_alt"));
-    const source = $<HTMLAnchorElement>("[data-source]");
-    source.href = d.source;
-    source.textContent = t("dn_source", { site: new URL(d.source).hostname.replace(/^www\./, ""), date: longDate.format(new Date(`${d.checked}T00:00:00Z`)) });
-    $("[data-card]").hidden = false;
+    showQr(uri, t("qr_alt"));
+    $<HTMLAnchorElement>("[data-source]").href = d.source;
+    $("[data-source-site]").textContent = new URL(d.source).hostname.replace(/^www\./, "");
+    $("[data-memo]").textContent = t("dn_tx_desc", { name: d.name });
+    print.set("ok", t("dn_source", { site: new URL(d.source).hostname.replace(/^www\./, ""), date: longDate.format(new Date(`${d.checked}T00:00:00Z`)) }), { feed: true });
     history.replaceState(null, "", `#${d.id}`);
   }
 
@@ -110,9 +123,9 @@ const chip = "cursor-pointer border-2 border-ink px-2.5 py-1 font-pixel text-sm 
     if (!pick || spinning) return;
     spinning = true;
     if (!reducedMotion && current) {
-      const name = $("[data-name]");
+      // The slot flicks through names like a slot machine, slowing down, before the ticket prints.
       for (const delay of [50, 50, 60, 70, 80, 100, 120, 150, 190]) {
-        name.textContent = spin(list, undefined)!.name;
+        print.set("working", spin(list, undefined)!.name);
         await new Promise((r) => setTimeout(r, delay));
       }
     }
@@ -125,9 +138,10 @@ const chip = "cursor-pointer border-2 border-ink px-2.5 py-1 font-pixel text-sm 
   root.querySelectorAll<HTMLAnchorElement>("[data-pick]").forEach((a) => a.addEventListener("click", (e) => {
     e.preventDefault();
     show(list.find((d) => d.id === a.dataset.pick)!);
-    $("[data-card]").scrollIntoView({ block: "center", behavior: reducedMotion ? "auto" : "smooth" });
+    $("[data-printer]").scrollIntoView({ block: "center", behavior: reducedMotion ? "auto" : "smooth" });
   }));
 
+  bindCopyButtons(root, t("copied"));
   const linked = list.find((d) => d.id === location.hash.slice(1));
   linked ? show(linked) : roll();
 </script>
