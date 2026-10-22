@@ -1,9 +1,10 @@
 /* Tailwind class sets shared by the dark-panel tools. Components in this folder use them, and so can
    plain elements (inputs, links) that don't need a component. */
 
-/** A dark input well. data-state="ok" | "error" or aria-invalid color the border. */
-export const field =
-  "block w-full rounded-none border-2 border-graphite bg-well px-4 py-3 text-base text-cream placeholder:text-line focus:border-orange focus:outline-none aria-invalid:border-bad data-[state=error]:border-bad data-[state=ok]:border-good";
+/** A dark input well. data-state="ok" | "error" or aria-invalid color the border. fieldFrame has no padding, for wrappers. */
+export const fieldFrame =
+  "block w-full rounded-none border-2 border-graphite bg-well text-base text-cream placeholder:text-line focus:border-orange focus:outline-none aria-invalid:border-bad data-[state=error]:border-bad data-[state=ok]:border-good";
+export const field = `${fieldFrame} px-4 py-3`;
 
 export const fieldLabel = "text-sm text-ash";
 export const message = "text-sm text-bad empty:hidden";
