@@ -1,6 +1,9 @@
 ---
 import Dither from "./Dither.astro";
+
+interface Props { dots?: boolean }
+const { dots = false } = Astro.props;
 ---
 <Dither />
-<section class="on-ink bg-ink text-cream"><slot /></section>
+<section class:list={["on-ink bg-ink text-cream", dots && "bg-[radial-gradient(#36323b_1px,transparent_1.5px)] bg-[length:16px_16px]"]}><slot /></section>
 <Dither flip />

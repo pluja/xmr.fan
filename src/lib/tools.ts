@@ -10,23 +10,28 @@ export interface Tool {
   live: boolean;
   /** When it went live, for the new-tools feed. */
   added: string;
+  /** Column on the home page. */
+  group?: ToolGroup;
 }
 
+export const TOOL_GROUPS = ["paid", "wallet", "numbers", "fun"] as const;
+export type ToolGroup = (typeof TOOL_GROUPS)[number];
+
 export const TOOLS: Tool[] = [
-  { id: "eli5", slug: "eli5", icon: "bulb", live: true, added: "2026-10-22" },
-  { id: "uri", slug: "uri", icon: "qr", live: true, added: "2026-10-19" },
-  { id: "proof", slug: "verify", icon: "check", live: true, added: "2026-10-20" },
-  { id: "tx", slug: "tx", icon: "hourglass", live: true, added: "2026-10-20" },
-  { id: "addr", slug: "address", icon: "lens", live: true, added: "2026-10-20" },
-  { id: "units", slug: "units", icon: "swap", live: true, added: "2026-10-19" },
-  { id: "fee", slug: "fee", icon: "tag", live: true, added: "2026-10-20" },
-  { id: "height", slug: "height", icon: "calendar", live: true, added: "2026-10-20" },
-  { id: "dl", slug: "checksum", icon: "shield", live: true, added: "2026-10-20" },
-  { id: "node", slug: "node", icon: "server", live: true, added: "2026-10-20" },
-  { id: "mining", slug: "mining", icon: "pickaxe", live: true, added: "2026-10-20" },
-  { id: "donate", slug: "donate", icon: "heart", live: true, added: "2026-10-21" },
-  { id: "beat", slug: "beat", icon: "sound", live: true, added: "2026-10-21" },
-  { id: "live", slug: "live", icon: "notes", live: true, added: "2026-10-21" },
+  { id: "eli5", slug: "eli5", icon: "bulb", live: true, added: "2026-10-22", group: "fun" },
+  { id: "uri", slug: "uri", icon: "qr", live: true, added: "2026-10-19", group: "paid" },
+  { id: "proof", slug: "verify", icon: "check", live: true, added: "2026-10-20", group: "paid" },
+  { id: "tx", slug: "tx", icon: "hourglass", live: true, added: "2026-10-20", group: "paid" },
+  { id: "addr", slug: "address", icon: "lens", live: true, added: "2026-10-20", group: "wallet" },
+  { id: "units", slug: "units", icon: "swap", live: true, added: "2026-10-19", group: "numbers" },
+  { id: "fee", slug: "fee", icon: "tag", live: true, added: "2026-10-20", group: "numbers" },
+  { id: "height", slug: "height", icon: "calendar", live: true, added: "2026-10-20", group: "wallet" },
+  { id: "dl", slug: "checksum", icon: "shield", live: true, added: "2026-10-20", group: "wallet" },
+  { id: "node", slug: "node", icon: "server", live: true, added: "2026-10-20", group: "wallet" },
+  { id: "mining", slug: "mining", icon: "pickaxe", live: true, added: "2026-10-20", group: "numbers" },
+  { id: "beat", slug: "beat", icon: "sound", live: true, added: "2026-10-21", group: "fun" },
+  { id: "live", slug: "live", icon: "notes", live: true, added: "2026-10-21", group: "fun" },
+  { id: "donate", slug: "donate", icon: "heart", live: true, added: "2026-10-21", group: "fun" },
   { id: "gazette", slug: "news", icon: "paper", live: true, added: "2026-10-19" },
 ];
 

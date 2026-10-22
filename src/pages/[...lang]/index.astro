@@ -6,7 +6,7 @@ import ToolCard from "../../components/ToolCard.astro";
 import GazetteBanner from "../../components/gazette/GazetteBanner.astro";
 import { langFromParams, localeParams, localePath, useTranslations } from "../../i18n/ui";
 import { itemListLd, websiteLd } from "../../lib/seo";
-import { TOOLS, seoTitleKey, toolPath } from "../../lib/tools";
+import { TOOL_GROUPS, TOOLS, seoTitleKey, toolPath } from "../../lib/tools";
 import { sponsorsFor, visibleEditions } from "../../lib/gazette";
 
 export const getStaticPaths = () => localeParams().map((params) => ({ params }));
@@ -21,7 +21,7 @@ const jsonLd = [
 const [latest] = await visibleEditions();
 const sponsor = latest ? (await sponsorsFor(latest.data.week))[0] : undefined;
 ---
-<Base lang={lang} path="/" title={t("seo_home_title")} fullTitle description={t("seo_home_desc")} jsonLd={jsonLd} active="tools">
+<Base lang={lang} path="/" title={t("seo_home_title")} fullTitle description={t("seo_home_desc")} jsonLd={jsonLd} active="tools" wide>
   <Container as="section" class="pb-8 pt-4 sm:pb-10 sm:pt-8">
     <h1 class="mb-6 font-pixel text-[clamp(28px,4.4vw,48px)] leading-[1.15]">{t("tagline")}</h1>
     <div class="flex max-w-2xl items-center gap-3 bg-ink px-4 text-cream shadow-[6px_6px_0_var(--color-graphite)] focus-within:shadow-[6px_6px_0_var(--color-flame)]">
@@ -47,14 +47,29 @@ const sponsor = latest ? (await sponsorsFor(latest.data.week))[0] : undefined;
     )}
   </Container>
 
-  <InkBand>
+  <InkBand dots>
     <Container class="pb-12 pt-6">
       <GazetteBanner lang={lang} class="mb-5" />
       <h2 class="sr-only">{t("nav_tools")}</h2>
-      <ul id="tools" class="grid grid-cols-1 gap-2 sm:grid-cols-[repeat(auto-fill,minmax(240px,1fr))] sm:gap-3">
-        {TOOLS.filter((tool) => tool.id !== "gazette").map((tool) => <ToolCard lang={lang} tool={tool} />)}
-      </ul>
+      <div id="tools" class="grid gap-x-4 gap-y-7 md:grid-cols-2 xl:grid-cols-4">
+        {TOOL_GROUPS.map((group) => {
+          const tools = TOOLS.filter((tool) => tool.group === group);
+          return (
+            <section data-group class="grid content-start gap-3.5">
+              <h3 class="flex items-center gap-2.5 border-b-2 border-dashed border-graphite pb-2.5 font-pixel text-xs uppercase tracking-[0.2em] text-peach">
+                <span class="size-2 bg-orange"></span>{t(`grp_${group}`)}
+                <span class="ml-auto tracking-normal text-line">{String(tools.length).padStart(2, "0")}</span>
+              </h3>
+              <ul class="grid gap-2.5 sm:gap-3.5">{tools.map((tool) => <ToolCard lang={lang} tool={tool} />)}</ul>
+            </section>
+          );
+        })}
+      </div>
       <p id="no-results" class="mt-4 font-pixel text-ash" hidden>{t("no_results")}</p>
+      <p class="mt-8 flex items-center gap-2.5 border-t-2 border-graphite pt-4 text-sm text-ash">
+        <span class="size-2 shrink-0 bg-[#4ade80]"></span>{t("home_local")}
+        <span class="ml-auto hidden font-pixel text-xs uppercase tracking-wider text-line sm:inline">{t("home_search_hint")}</span>
+      </p>
     </Container>
   </InkBand>
 
@@ -83,6 +98,7 @@ const sponsor = latest ? (await sponsorsFor(latest.data.week))[0] : undefined;
       if (!li.hidden) shown++;
     }
     none.hidden = shown > 0;
+    list.querySelectorAll<HTMLElement>("[data-group]").forEach((g) => (g.hidden = !g.querySelector("li:not([hidden])")));
     hl = term && visibleLinks().length ? 0 : -1;
     paint();
   }

@@ -10,20 +10,39 @@ const title = t(titleKey(tool));
 const desc = t(descKey(tool));
 const Tag = tool.live ? "a" : "div";
 ---
-<li data-search={`${title} ${desc}`.toLowerCase()}>
+<li data-search={`${title} ${desc}`.toLowerCase()} class="card-wrap">
   <Tag
     href={tool.live ? localePath(lang, toolPath(tool)) : undefined}
     aria-disabled={tool.live ? undefined : "true"}
-    class:list={[
-      "group relative grid h-full grid-cols-[24px_1fr] content-start gap-x-3 gap-y-1 border-2 border-graphite bg-graphite px-3.5 py-3 text-left text-cream no-underline",
-      tool.live ? "hover:border-orange [&.hl]:border-orange [&.hl]:bg-orange [&.hl]:text-ink" : "opacity-70",
-    ]}
+    class:list={["card group relative grid grid-cols-[40px_1fr_10px] items-center gap-3 p-3 sm:grid-cols-[48px_1fr_10px] sm:gap-3.5 sm:p-3.5 text-cream no-underline", !tool.live && "opacity-70"]}
   >
-    <PixelIcon name={tool.icon} class="row-span-2 mt-0.5 size-6 text-orange group-[.hl]:text-ink" />
-    <b class:list={["font-pixel text-[17px] font-normal leading-snug sm:text-base", { "pr-16": !tool.live }]}>{title}</b>
-    <span class="text-sm leading-snug opacity-85">{desc}</span>
-    {!tool.live && (
-      <em class="absolute right-3.5 top-3.5 border border-ash px-1.5 font-pixel text-xs not-italic text-ash">{t("soon")}</em>
-    )}
+    <span class="tile grid size-10 place-items-center text-orange sm:size-12"><PixelIcon name={tool.icon} class="size-6 sm:size-7" /></span>
+    <span class="grid min-w-0 gap-1">
+      <b class="flex flex-wrap items-center gap-x-2.5 font-pixel text-[15px] font-normal leading-tight">
+        {title}
+        {tool.id === "live" && (
+          <span class="live-badge flex items-center gap-1 px-1.5 py-px font-pixel text-[10px] uppercase"><i class="size-1.5 bg-current"></i>{t("badge_live")}</span>
+        )}
+        {!tool.live && <em class="border border-ash px-1.5 font-pixel text-xs not-italic text-ash">{t("soon")}</em>}
+      </b>
+      <span class="text-sm leading-snug text-ash group-hover:text-peach group-[.hl]:text-peach">{desc}</span>
+    </span>
+    <svg viewBox="0 0 3 5" width="6" height="10" class="chev text-line" aria-hidden="true" shape-rendering="crispEdges"><path d="M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z" fill="currentColor" /></svg>
   </Tag>
 </li>
+
+<style>
+  /* Pixel corners: each box has 4px notches, and the shadow sits outside the clipped box. */
+  .card-wrap { filter: drop-shadow(4px 4px 0 #1c1a20); }
+  .card, .tile {
+    clip-path: polygon(4px 0, calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 4px calc(100% - 4px), 0 calc(100% - 4px), 0 4px, 4px 4px);
+  }
+  .card { height: 100%; background: #36323a; box-shadow: inset 0 0 0 2px var(--color-graphite); transition: background 0.1s; }
+  .tile { background: #3d2c25; box-shadow: inset 0 0 0 2px #5e3b27; }
+  .card-wrap:has(a:hover), .card-wrap:has(.hl) { filter: drop-shadow(5px 5px 0 #7a3510); }
+  a.card:hover, a.card.hl { background: #3d3843; box-shadow: inset 0 0 0 2px var(--color-orange); }
+  a.card:hover .tile, a.card.hl .tile { background: #4a2e1d; box-shadow: inset 0 0 0 2px var(--color-orange); }
+  a.card:hover .chev, a.card.hl .chev { color: var(--color-orange); }
+  a.card:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--color-cream); }
+  .live-badge { background: #1f3a2a; color: #4ade80; }
+</style>
