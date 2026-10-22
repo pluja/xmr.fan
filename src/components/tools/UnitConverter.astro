@@ -1,40 +1,79 @@
 ---
-import Disclosure from "../Disclosure.astro";
-import Field from "../Field.astro";
 import CurrencySelect from "../live/CurrencySelect.astro";
+import Metric from "../ui/Metric.astro";
+import TrustNote from "../ui/TrustNote.astro";
+import { cx, field, message } from "../ui/styles";
 import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
 
 interface Props { lang: Locale }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const yesterday = new Date(Date.now() - 86_400_000).toISOString().slice(0, 10);
+const QUICK = ["0.01", "0.1", "1", "10"];
+const unitField = cx(field, "pr-24 font-mono text-xl sm:text-2xl");
+const unitChip = "pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 bg-graphite px-2 py-1 font-pixel text-sm text-orange";
+const equals = "hidden self-center pt-7 font-pixel text-2xl text-line lg:block";
 ---
-<form id="units" class="grid gap-3.5 sm:grid-cols-2" data-strings={pickStrings(lang, ["err_amount", "u_rate", "price_error", "u_hist_price", "u_hist_amount", "u_hist_error"])} data-lang={lang} novalidate>
-  <Field label="XMR" messageId="xmr-message">
-    <input type="text" name="xmr" inputmode="decimal" placeholder="1.5" autocomplete="off" class="field font-mono" aria-describedby="xmr-message" autofocus />
-  </Field>
-  <Field label="piconero">
-    <input type="text" name="pico" inputmode="numeric" placeholder="1500000000000" autocomplete="off" class="field font-mono" />
-  </Field>
-  <Field label={t("u_fiat")}>
-    <input type="text" name="fiat" inputmode="decimal" autocomplete="off" class="field font-mono" disabled />
-  </Field>
-  <div class="grid content-end gap-2 pb-1">
-    <CurrencySelect lang={lang} />
+<form id="units" class="grid grid-cols-1 gap-8" data-strings={pickStrings(lang, ["err_amount", "u_rate", "price_error", "u_hist_price", "u_hist_amount", "u_hist_error", "u_hist_wait"])} data-lang={lang} novalidate>
+  <section class="grid gap-3">
+    <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
+      <h2 class="font-pixel text-sm tracking-[0.2em] text-cream uppercase">{t("u_convert")}</h2>
+      <div class="flex flex-wrap gap-1.5" role="group" aria-label={t("u_quick")}>
+        {QUICK.map((q) => <button type="button" data-quick={q} class="cursor-pointer border-2 border-graphite px-2.5 py-0.5 font-mono text-sm text-ash hover:border-orange hover:text-orange">{q}</button>)}
+      </div>
+    </div>
+    <div class="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)] lg:gap-4">
+      <label class="grid content-start gap-1.5">
+        <span class="text-sm text-ash">Monero</span>
+        <span class="relative">
+          <input type="text" name="xmr" inputmode="decimal" placeholder="1.5" autocomplete="off" class={unitField} aria-describedby="xmr-message" autofocus />
+          <span class={unitChip}>XMR</span>
+        </span>
+        <span id="xmr-message" class={message}></span>
+      </label>
+      <span class={equals} aria-hidden="true">=</span>
+      <label class="grid content-start gap-1.5">
+        <span class="text-sm text-ash">{t("u_atomic")}</span>
+        <span class="relative">
+          <input type="text" name="pico" inputmode="numeric" placeholder="1500000000000" autocomplete="off" class={cx(unitField, "pr-28 text-base sm:text-lg")} />
+          <span class={unitChip}>pico</span>
+        </span>
+      </label>
+      <span class={equals} aria-hidden="true">≈</span>
+      <div class="grid content-start gap-1.5">
+        <label for="u-fiat" class="text-sm text-ash">{t("u_fiat")}</label>
+        <div class="relative">
+          <input id="u-fiat" type="text" name="fiat" inputmode="decimal" autocomplete="off" class={unitField} disabled />
+          <CurrencySelect lang={lang} dark class="absolute top-1/2 right-2 -translate-y-1/2" />
+        </div>
+      </div>
+    </div>
+    <p class="flex flex-wrap gap-x-5 gap-y-1 font-mono text-sm text-ash">
+      <span data-rate class="text-cream">{t("u_loading")}</span>
+      <span>1 XMR = 10<sup>12</sup> piconero</span>
+    </p>
+  </section>
+
+  <section class="grid gap-4 border-l-4 border-orange bg-ink px-5 py-5 sm:px-6" aria-labelledby="u-hist">
+    <div class="grid gap-1">
+      <h2 id="u-hist" class="font-pixel text-lg text-orange">{t("u_hist_t")}</h2>
+      <p class="text-sm text-ash">{t("u_hist_help")}</p>
+    </div>
+    <div class="grid grid-cols-1 items-start gap-4 md:grid-cols-[minmax(0,14rem)_minmax(0,1fr)_minmax(0,1fr)]">
+      <label class="grid gap-1.5">
+        <span class="text-sm text-ash">{t("u_hist_date")}</span>
+        <input name="day" type="date" min="2017-01-01" max={yesterday} class={cx(field, "font-mono [color-scheme:dark]")} />
+      </label>
+      <Metric label={t("u_close")} class="md:mt-6.5"><span data-hist>–</span></Metric>
+      <Metric label={t("u_worth")} accent class="md:mt-6.5"><span data-hist-amount>–</span></Metric>
+    </div>
+    <p data-hist-note class="text-sm text-ash" aria-live="polite">{t("u_hist_wait")}</p>
+  </section>
+
+  <div class="grid gap-2.5 border-t-2 border-graphite pt-5">
+    <TrustNote icon="info">{t("price_from")}</TrustNote>
+    <TrustNote icon="info">{t("u_hist_source")}</TrustNote>
   </div>
-  <p class="flex flex-wrap gap-x-6 gap-y-1 font-mono text-xs text-graphite sm:col-span-2">
-    <span>1 XMR = 1 000 000 000 000 piconero</span>
-    <span data-rate>{t("u_loading")}</span>
-    <span>{t("price_from")}</span>
-  </p>
-  <Disclosure title={t("u_hist_t")} class="sm:col-span-2">
-    <Field label={t("u_hist_date")}>
-      <input name="day" type="date" min="2017-01-01" max={yesterday} class="field w-auto max-w-56 font-mono" />
-    </Field>
-    <p data-hist class="text-[0.9375rem] empty:hidden" aria-live="polite"></p>
-    <p data-hist-amount class="text-[0.9375rem] empty:hidden"></p>
-    <p class="text-xs text-graphite">{t("u_hist_source")}</p>
-  </Disclosure>
 </form>
 
 <script>
@@ -88,33 +127,41 @@ const yesterday = new Date(Date.now() - 86_400_000).toISOString().slice(0, 10);
     xmr.value = plain(value / p, 12);
     sync(xmr, pico, xmrToPico);
   });
+  form.querySelectorAll<HTMLButtonElement>("[data-quick]").forEach((b) => b.addEventListener("click", () => {
+    xmr.value = b.dataset.quick!;
+    sync(xmr, pico, xmrToPico);
+    fromXmr();
+    showHistory();
+  }));
   form.addEventListener("submit", (e) => e.preventDefault());
 
   // Past prices: the USD close from our server, converted with that day's exchange rate.
   const day = field("day");
   const histBox = form.querySelector<HTMLElement>("[data-hist]")!, histAmount = form.querySelector<HTMLElement>("[data-hist-amount]")!;
+  const histNote = form.querySelector<HTMLElement>("[data-hist-note]")!;
   let histRun = 0;
   async function showHistory() {
     const run = ++histRun;
-    histAmount.textContent = "";
-    if (!day.value) { histBox.textContent = ""; return; }
+    histBox.textContent = histAmount.textContent = "–";
+    if (!day.value) { histNote.textContent = t("u_hist_wait"); return; }
+    histNote.textContent = "";
     try {
       const { usd } = await (await fetch(`/api/price-on?date=${day.value}`)).json();
       if (typeof usd !== "number") throw new Error("no price");
       const c = currency();
-      let rate = 1;
+      let fx = 1;
       if (c !== "usd" && c !== "btc") {
-        const fx = await (await fetch(`https://api.frankfurter.dev/v1/${day.value}?from=USD&to=${c.toUpperCase()}`)).json();
-        rate = fx.rates?.[c.toUpperCase()];
+        const body = await (await fetch(`https://api.frankfurter.dev/v1/${day.value}?from=USD&to=${c.toUpperCase()}`)).json();
+        fx = body.rates?.[c.toUpperCase()];
       }
       if (run !== histRun) return;
-      const shown = rate && c !== "btc" ? c : "usd";
-      const price = usd * (shown === "usd" ? 1 : rate);
-      histBox.textContent = t("u_hist_price", { price: formatMoney(price, shown, lang) });
+      const shown = fx && c !== "btc" ? c : "usd";
+      const close = usd * (shown === "usd" ? 1 : fx);
+      histBox.textContent = formatMoney(close, shown, lang);
       const amount = normalizeAmount(xmr.value);
-      if (amount) histAmount.textContent = t("u_hist_amount", { amount, value: formatMoney(Number(amount) * price, shown, lang) });
+      histAmount.textContent = amount ? formatMoney(Number(amount) * close, shown, lang) : "–";
     } catch {
-      if (run === histRun) histBox.textContent = t("u_hist_error");
+      if (run === histRun) histNote.textContent = t("u_hist_error");
     }
   }
   day.addEventListener("change", showHistory);
