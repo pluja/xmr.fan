@@ -2,6 +2,7 @@
 import PixelIcon from "../PixelIcon.astro";
 import NodeSource from "../live/NodeSource.astro";
 import Button from "../ui/Button.astro";
+import ResultPlaceholder from "../ui/ResultPlaceholder.astro";
 import Slip from "../ui/Slip.astro";
 import TrustNote from "../ui/TrustNote.astro";
 import { cx, field, label, link, message } from "../ui/styles";
@@ -46,7 +47,8 @@ const DETAILS = [
 
   <div data-board data-state="idle" class="group/tx grid items-start gap-x-8 gap-y-6 lg:grid-cols-2">
     <div class="grid content-start gap-4 max-lg:group-data-[state=idle]/tx:hidden">
-      <Slip dither aria-live="polite">
+      <ResultPlaceholder icon="hourglass" text={t("tx_idle")} class="hidden min-h-40 group-data-[state=idle]/tx:grid" />
+      <Slip dither aria-live="polite" class="group-data-[state=idle]/tx:hidden">
         <div class="grid grid-cols-[auto_1fr] items-center gap-x-3.5 gap-y-3 border-b-2 border-slip-tile pb-4 sm:grid-cols-[auto_1fr_auto]">
           <span data-badge class="pixel-corners grid size-10 shrink-0 place-items-center bg-graphite text-paper">
             <span data-icon="wait"><PixelIcon name="hourglass" size={22} class="block" /></span>

@@ -1,6 +1,7 @@
 ---
 import PixelIcon from "../PixelIcon.astro";
 import Corners from "../ui/Corners.astro";
+import ResultPlaceholder from "../ui/ResultPlaceholder.astro";
 import Slip from "../ui/Slip.astro";
 import StatTile from "../ui/StatTile.astro";
 import StatusHead from "../ui/StatusHead.astro";
@@ -57,11 +58,8 @@ const FILTERS = [{ value: "all", name: t("c_all") }, { value: "gui", name: "GUI"
     </div>
 
     <aside data-receipt data-state="idle" class="grid grid-cols-1 max-lg:data-[state=idle]:hidden" aria-live="polite">
-      <Slip dither>
-        <div data-show="idle" class="grid min-h-60 place-items-center content-center gap-3 px-6 text-center text-sm text-slip-ink">
-          <PixelIcon name="shield" size={48} class="text-peach" />
-          <span>{t("c_idle")}</span>
-        </div>
+      <ResultPlaceholder data-show="idle" icon="shield" text={t("c_idle")} />
+      <Slip dither data-show="done" hidden>
         <StatusHead data-show="done" hidden>
           <Fragment slot="aside"><span>{t("c_receipt")}</span><span>SHA-256</span></Fragment>
         </StatusHead>

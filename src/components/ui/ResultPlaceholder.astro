@@ -1,0 +1,14 @@
+---
+/* What a result column shows before there's a result: a quiet dashed box with an icon and a hint. */
+import PixelIcon from "../PixelIcon.astro";
+import type { IconName } from "../../lib/pixel";
+import { cx } from "./styles";
+
+interface Props { icon: IconName; text: string; class?: string; [attr: string]: unknown }
+const { icon, text, class: cls, ...attrs } = Astro.props;
+---
+<div class={cx("grid min-h-64 place-items-center content-center gap-4 border-2 border-dashed border-graphite px-8 py-10 text-center", cls)} {...attrs}>
+  <PixelIcon name={icon} size={40} class="text-line" />
+  <p class="max-w-[30ch] text-sm text-ash">{text}</p>
+  <slot />
+</div>

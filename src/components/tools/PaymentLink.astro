@@ -3,6 +3,7 @@ import { button, code, cx, field, fold, label, link, message } from "../ui/style
 import PixelIcon from "../PixelIcon.astro";
 import AddressInput from "../ui/AddressInput.astro";
 import QrCode from "../ui/QrCode.astro";
+import ResultPlaceholder from "../ui/ResultPlaceholder.astro";
 import Slip from "../ui/Slip.astro";
 import Step from "../ui/Step.astro";
 import TrustNote from "../ui/TrustNote.astro";
@@ -82,7 +83,8 @@ const strings = pickStrings(lang, [
     <TrustNote class="order-5 lg:order-none lg:col-start-1">{t("pl_local")}</TrustNote>
 
   <div class="order-2 max-lg:group-data-empty/pay:hidden grid w-full max-w-[420px] content-start gap-5 justify-self-center lg:order-none lg:col-start-2 lg:row-span-5 lg:row-start-1 lg:max-w-none">
-    <Slip>
+    <ResultPlaceholder icon="qr" text={t("pl_waiting")} class="hidden group-data-empty/pay:grid" />
+    <Slip class="group-data-empty/pay:hidden">
       <div class={cx(label, "flex items-baseline justify-between gap-3")}>
         <span>{t("pl_request")}</span><span>{t("scan_to_pay")}</span>
       </div>
@@ -105,11 +107,11 @@ const strings = pickStrings(lang, [
       </Fragment>
     </Slip>
 
-    <button type="button" id="copy" class={cx(button.primary, "w-full py-4 text-[17px]")} disabled>
+    <button type="button" id="copy" class={cx(button.primary, "w-full py-4 text-[17px] group-data-empty/pay:hidden")} disabled>
       <PixelIcon name="copy" size={18} /><span>{t("pl_copy_link")}</span>
       <kbd id="copy-kbd" class="absolute right-4 hidden font-pixel text-[11px] text-ember sm:block">Ctrl C</kbd>
     </button>
-    <div class="grid grid-cols-2 gap-3">
+    <div class="grid grid-cols-2 gap-3 group-data-empty/pay:hidden">
       <button type="button" id="download" class={button.ghost} disabled><PixelIcon name="download" size={16} class="text-orange" /><span>{t("pl_download")}</span></button>
       <button type="button" id="share" class={button.ghost} disabled aria-expanded="false" aria-controls="share-box"><PixelIcon name="share" size={16} class="text-orange" /><span>{t("share_btn")}</span></button>
     </div>

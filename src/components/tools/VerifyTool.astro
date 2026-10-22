@@ -3,6 +3,7 @@ import PixelIcon from "../PixelIcon.astro";
 import NodeSource from "../live/NodeSource.astro";
 import AddressInput from "../ui/AddressInput.astro";
 import Button from "../ui/Button.astro";
+import ResultPlaceholder from "../ui/ResultPlaceholder.astro";
 import Slip from "../ui/Slip.astro";
 import StatTile from "../ui/StatTile.astro";
 import Step from "../ui/Step.astro";
@@ -66,11 +67,8 @@ const mono = "font-mono text-[13px]";
   </div>
 
   <aside data-state="idle" class="max-lg:data-[state=idle]:hidden grid w-full max-w-[420px] content-start gap-4 justify-self-center lg:max-w-none" data-receipt aria-live="polite">
-    <Slip dither>
-      <div data-show="idle" class="grid min-h-60 place-items-center content-center gap-3 px-6 text-center text-sm text-slip-ink">
-        <PixelIcon name="check" size={48} class="text-peach" />
-        <span>{t("v_idle")}</span>
-      </div>
+    <ResultPlaceholder data-show="idle" icon="check" text={t("v_idle")} />
+    <Slip dither data-show="checking ok fail" hidden>
       <div data-show="checking" class="grid min-h-60 place-items-center text-sm text-slip-ink" hidden>
         <span class="animate-pulse font-pixel">{t("v_checking")}</span>
       </div>
