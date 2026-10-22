@@ -46,7 +46,7 @@ const DETAILS = [
     <p id="tx-message" class={message}></p>
   </form>
 
-  <Printer idle={t("tx_printer_idle")} data-board class="group/tx" aria-live="polite">
+  <Printer feed={false} idle={t("tx_printer_idle")} data-board class="group/tx" aria-live="polite">
     <Receipt>
       <div class="flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
         <div class="grid min-w-0 flex-1 basis-64 gap-1">
@@ -103,9 +103,10 @@ const DETAILS = [
       </Fragment>
     </Receipt>
 
-    <div class="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3 group-data-[stage=fail]/tx:hidden">
+    <div class="mt-5 flex flex-wrap items-center gap-3 group-data-[stage=fail]/tx:hidden">
       <Button variant="ghost" data-notify aria-pressed="false"><PixelIcon name="sound" size={16} class="text-orange" /><span>{t("tx_n_notify")}</span></Button>
-      <a data-verify-link class={cx(link, "inline-flex items-center gap-2")}>{t("tx_hidden_amounts")} <b class="font-pixel font-normal">{t("tx_check")} ›</b></a>
+      <Button variant="ghost" href="#" data-verify-link><PixelIcon name="check" size={16} class="text-orange" />{t("tx_check")}</Button>
+      <p class="basis-full text-sm text-ash sm:basis-auto">{t("tx_hidden_amounts")}</p>
     </div>
     <p data-notify-note class="mt-2 text-sm text-ash" hidden></p>
   </Printer>

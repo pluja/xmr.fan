@@ -52,7 +52,7 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
     </div>
   </section>
 
-  <Printer idle={t("a_printer_idle")} aria-live="polite">
+  <Printer feed={false} idle={t("a_printer_idle")} aria-live="polite">
     <Receipt>
       <div class="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_220px]">
         <div class="grid min-w-0 content-start gap-4">
