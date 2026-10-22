@@ -1,21 +1,36 @@
 ---
 import PixelIcon from "../PixelIcon.astro";
 import { localePath, pickStrings, useTranslations, type Locale } from "../../i18n/ui";
+import { MONERO_LOGO } from "../../lib/qr";
 
 interface Props { lang: Locale }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const strings = pickStrings(lang, ["el_btc", "el_xmr", "el_3_guess_1", "el_3_guess_2", "el_3_guess_3", "el_7_min"]);
+const strings = pickStrings(lang, [
+  "el_btc", "el_xmr", "el_4_guess_1", "el_4_guess_2", "el_4_guess_3", "el_min", "el_from", "el_to", "el_amount", "el_linked",
+  "el_blockchain", "el_your_address", "el_your_wallet", "el_in", "el_out", "el_fee", "el_valid", "el_refused",
+]);
 const CHAPTERS = [
-  { n: 1, scene: "note" },
-  { n: 2, scene: "wall" },
-  { n: 3, scene: "ring" },
-  { n: 4, scene: "stealth" },
-  { n: 5, scene: "balance" },
-  { n: 6, scene: "fungible" },
-  { n: 7, scene: "network" },
-  { n: 8, scene: "keys" },
+  { n: 1, scene: "send" },
+  { n: 2, scene: "network" },
+  { n: 3, scene: "ledger" },
+  { n: 4, scene: "ring", term: "el_4_term" },
+  { n: 5, scene: "stealth", term: "el_5_term" },
+  { n: 6, scene: "balance", term: "el_6_term" },
+  { n: 7, scene: "fungible", term: "el_7_term" },
+  { n: 8, scene: "seed", term: "el_8_term" },
 ] as const;
+const BITCOIN_LOGO = [
+  "....#####....", "..#########..", ".###########.", ".####w#w####.", "####wwww#####", "####w###w####", "####wwww#####",
+  "####w###w####", "####wwww#####", ".####w#w####.", ".###########.", "..#########..", "....#####....",
+];
+/** Pixel logos as SVG: each letter of the bitmap maps to a color. */
+const pixelSvg = (rows: string[], colors: Record<string, string>) =>
+  `<svg viewBox="0 0 13 13" width="18" height="18" shape-rendering="crispEdges" aria-hidden="true">${rows.flatMap((row, y) => [...row].map((ch, x) => (colors[ch] ? `<rect x="${x}" y="${y}" width="1" height="1" fill="${colors[ch]}"/>` : ""))).join("")}</svg>`;
+const LOGOS = {
+  public: pixelSvg(BITCOIN_LOGO, { "#": "#f7931a", w: "#fff" }),
+  sealed: pixelSvg(MONERO_LOGO, { o: "#ff6600", k: "#4c4c4c", w: "#fff" }),
+};
 const TRY = [
   { href: localePath(lang, "/uri"), label: t("el_try_uri"), icon: "qr" },
   { href: localePath(lang, "/live"), label: t("el_try_live"), icon: "notes" },
@@ -25,7 +40,7 @@ const TRY = [
 <div id="eli5-tool" class="grid gap-10" data-strings={strings}>
   <p class="max-w-[60ch] text-lg">{t("el_intro")}</p>
 
-  {CHAPTERS.map(({ n, scene }) => (
+  {CHAPTERS.map(({ n, scene, ...rest }) => (
     <section class="grid items-center gap-4 md:grid-cols-2 md:gap-8">
       <div class:list={["grid gap-2", n % 2 === 0 && "md:order-last"]}>
         <h2 class="flex items-baseline gap-3 font-pixel text-xl leading-tight">
@@ -33,13 +48,19 @@ const TRY = [
           {t(`el_${n}_t`)}
         </h2>
         <p class="max-w-[52ch]">{t(`el_${n}_b`)}</p>
-        {scene === "wall" && (
-          <div class="mt-1 flex w-fit border-2 border-ink font-pixel text-sm" role="group">
-            <button type="button" data-wall="glass" aria-pressed="true" class="wall-btn px-3 py-1">{t("el_btc")}</button>
-            <button type="button" data-wall="sealed" aria-pressed="false" class="wall-btn px-3 py-1">{t("el_xmr")}</button>
+        {"term" in rest && (
+          <p class="flex flex-wrap items-center gap-2 text-sm">
+            <span class="font-pixel text-xs text-graphite">{t("el_term")}:</span>
+            <span class="bg-ink px-2 py-0.5 font-pixel text-orange">{t(rest.term)}</span>
+          </p>
+        )}
+        {scene === "ledger" && (
+          <div class="mt-1 flex w-fit border-2 border-ink bg-cream font-pixel shadow-[3px_3px_0_var(--color-ink)]" role="group">
+            <button type="button" data-ledger="public" aria-pressed="true" class="switch-btn"><Fragment set:html={LOGOS.public} />{t("el_btc")}</button>
+            <button type="button" data-ledger="sealed" aria-pressed="false" class="switch-btn border-l-2 border-ink"><Fragment set:html={LOGOS.sealed} />{t("el_xmr")}</button>
           </div>
         )}
-        {scene === "ring" && <p data-ring-message class="font-pixel text-sm text-graphite" aria-live="polite">{t("el_3_hint")}</p>}
+        {scene === "ring" && <p data-ring-message class="font-pixel text-sm text-graphite" aria-live="polite">{t("el_4_hint")}</p>}
       </div>
       <canvas data-scene={scene} class:list={["block w-full border-2 border-ink bg-ink shadow-[6px_6px_0_var(--color-graphite)] [aspect-ratio:96/54] [image-rendering:pixelated]", scene === "ring" && "cursor-pointer"]}></canvas>
     </section>
@@ -55,43 +76,47 @@ const TRY = [
 </div>
 
 <style>
-  .wall-btn { cursor: pointer; }
-  .wall-btn[aria-pressed="true"] { background: var(--color-ink); color: var(--color-orange); }
+  .switch-btn { display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.9rem; cursor: pointer; color: var(--color-graphite); transition: background 0.15s; }
+  .switch-btn :global(svg) { filter: grayscale(1); opacity: 0.55; transition: filter 0.15s, opacity 0.15s; }
+  .switch-btn[aria-pressed="true"] { background: var(--color-ink); }
+  .switch-btn[aria-pressed="true"] :global(svg) { filter: none; opacity: 1; }
+  .switch-btn[data-ledger="public"][aria-pressed="true"] { color: #f7931a; }
+  .switch-btn[data-ledger="sealed"][aria-pressed="true"] { color: #ff6600; }
 </style>
 
 <script>
-  import { balanceScene, fungibleScene, keysScene, networkScene, noteScene, ringScene, Scene, stealthScene, wallScene } from "./eli5-scenes";
+  import { balanceScene, fungibleScene, ledgerScene, networkScene, ringScene, Scene, seedScene, sendScene, stealthScene } from "./eli5-scenes";
   import { readStrings } from "../../i18n/format";
 
   const root = document.getElementById("eli5-tool")!;
   const t = readStrings(root);
   const canvas = (name: string) => root.querySelector<HTMLCanvasElement>(`[data-scene=${name}]`)!;
 
-  new Scene(canvas("note"), noteScene());
-  new Scene(canvas("stealth"), stealthScene());
-  new Scene(canvas("balance"), balanceScene());
-  new Scene(canvas("fungible"), fungibleScene({ btc: t("el_btc"), xmr: t("el_xmr") }));
-  new Scene(canvas("network"), networkScene(t("el_7_min")));
-  new Scene(canvas("keys"), keysScene());
+  new Scene(canvas("send"), sendScene({ minutes: t("el_min") }));
+  new Scene(canvas("network"), networkScene({ minutes: t("el_min"), blockchain: t("el_blockchain") }));
+  new Scene(canvas("stealth"), stealthScene({ address: t("el_your_address"), blockchain: t("el_blockchain") }));
+  new Scene(canvas("balance"), balanceScene({ in: t("el_in"), out: t("el_out"), fee: t("el_fee"), valid: t("el_valid") }));
+  new Scene(canvas("fungible"), fungibleScene({ btc: t("el_btc"), xmr: t("el_xmr"), refused: t("el_refused") }));
+  new Scene(canvas("seed"), seedScene({ wallet: t("el_your_wallet") }));
 
-  const wall = wallScene();
-  new Scene(canvas("wall"), wall.draw);
-  const wallButtons = root.querySelectorAll<HTMLButtonElement>("[data-wall]");
-  wallButtons.forEach((b) => b.addEventListener("click", () => {
-    wall.state.sealed = b.dataset.wall === "sealed";
-    wallButtons.forEach((other) => other.setAttribute("aria-pressed", String(other === b)));
+  const ledger = ledgerScene({ from: t("el_from"), to: t("el_to"), amount: t("el_amount"), linked: (n) => t("el_linked", { n }) });
+  new Scene(canvas("ledger"), ledger.draw);
+  const ledgerButtons = root.querySelectorAll<HTMLButtonElement>("[data-ledger]");
+  ledgerButtons.forEach((b) => b.addEventListener("click", () => {
+    ledger.state.sealed = b.dataset.ledger === "sealed";
+    ledgerButtons.forEach((other) => other.setAttribute("aria-pressed", String(other === b)));
   }));
 
-  const ring = ringScene();
-  const ringScene_ = new Scene(canvas("ring"), ring.draw);
+  const ring = ringScene({ valid: t("el_valid") });
+  const ringStage = new Scene(canvas("ring"), ring.draw);
   const message = root.querySelector<HTMLElement>("[data-ring-message]")!;
   let guesses = 0;
   canvas("ring").addEventListener("click", (e) => {
-    const { x, y } = ringScene_.point(e);
+    const { x, y } = ringStage.point(e);
     const i = ring.hit(x, y);
     if (i < 0) return;
     ring.state.picked = i;
-    ring.state.pickedAt = ringScene_.time;
-    message.textContent = t(`el_3_guess_${(guesses++ % 3) + 1}`);
+    ring.state.pickedAt = ringStage.time;
+    message.textContent = t(`el_4_guess_${(guesses++ % 3) + 1}`);
   });
 </script>
