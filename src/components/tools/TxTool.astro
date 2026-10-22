@@ -4,7 +4,7 @@ import NodeSource from "../live/NodeSource.astro";
 import Button from "../ui/Button.astro";
 import Slip from "../ui/Slip.astro";
 import TrustNote from "../ui/TrustNote.astro";
-import { field, label, link, message } from "../ui/styles";
+import { cx, field, label, link, message } from "../ui/styles";
 import { localePath, pickStrings, useTranslations, type Locale } from "../../i18n/ui";
 import { UNLOCK_BLOCKS } from "../../lib/tx";
 
@@ -38,7 +38,7 @@ const DETAILS = [
       <button type="button" data-example class={link}>{t("try_example")}</button>
     </div>
     <div class="flex flex-col gap-3 sm:flex-row">
-      <input id="tx-id" name="txid" spellcheck="false" autocomplete="off" autocapitalize="off" class:list={[field, "min-w-0 flex-1 font-mono text-[13px]"]} aria-describedby="tx-message" autofocus />
+      <input id="tx-id" name="txid" spellcheck="false" autocomplete="off" autocapitalize="off" class={cx(field, "min-w-0 flex-1 font-mono text-[13px]")} aria-describedby="tx-message" autofocus />
       <Button type="submit" class="sm:w-36">{t("tx_track")}</Button>
     </div>
     <p id="tx-message" class={message}></p>
@@ -57,7 +57,7 @@ const DETAILS = [
             <span data-subtitle class="text-[13px] text-graphite">{t("tx_idle")}</span>
           </div>
           <div class="col-span-2 flex items-baseline justify-between gap-3 sm:col-span-1 sm:grid sm:text-right group-data-[state=fail]/tx:hidden group-data-[state=idle]/tx:hidden">
-            <span class:list={[label, "text-[10px]"]}>{t("tx_confirmations")}</span>
+            <span class={cx(label, "text-[10px]")}>{t("tx_confirmations")}</span>
             <span data-confirmations class="font-pixel text-lg"></span>
           </div>
         </div>
@@ -70,14 +70,14 @@ const DETAILS = [
           {MILESTONES.map((m, i) => (
             <li class:list={["relative grid content-start gap-1", m.align, i === 1 ? "justify-items-center" : i === 2 ? "justify-items-end" : "justify-items-start"]}>
               <span data-dot={m.key} class="grid size-4 place-items-center bg-slip-line"><i class="size-2 bg-paper"></i></span>
-              <span class:list={[label, "mt-2 text-[10px]"]}>{m.name}</span>
+              <span class={cx(label, "mt-2 text-[10px]")}>{m.name}</span>
               <span data-sub={m.key} class="text-xs text-ink sm:text-[13px]">–</span>
             </li>
           ))}
         </ol>
 
         <div class="grid gap-2 group-data-[state=fail]/tx:hidden">
-          <div class:list={[label, "flex justify-between text-[10px]"]}>
+          <div class={cx(label, "flex justify-between text-[10px]")}>
             <span>{t("tx_unlock")}</span><span data-blocks>{t("tx_blocks", { n: 0 })}</span>
           </div>
           <ol data-pips class="grid grid-cols-10 gap-1" aria-hidden="true">

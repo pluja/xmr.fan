@@ -30,3 +30,6 @@ export const button = {
 
 /** Put on a <details> to make it a step that folds on small screens; see Step.astro. */
 export const fold = "group/fold";
+
+/** Joins class sets so later classes win over conflicting earlier ones (px-3 over px-4, w-40 over w-full). */
+export { twMerge as cx } from "tailwind-merge";

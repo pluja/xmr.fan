@@ -6,7 +6,7 @@ import Disclosure from "../ui/Disclosure.astro";
 import QrCode from "../ui/QrCode.astro";
 import Slip from "../ui/Slip.astro";
 import TrustNote from "../ui/TrustNote.astro";
-import { button, chip, code, field, fieldLabel, label, link, message, tone } from "../ui/styles";
+import { button, chip, code, cx, field, fieldLabel, label, link, message, tone } from "../ui/styles";
 import { localePath, pickStrings, useTranslations, type Locale } from "../../i18n/ui";
 
 interface Props { lang: Locale }
@@ -30,7 +30,7 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
       <button type="button" data-example class={link}>{t("try_example")}</button>
     </div>
     <AddressInput id="a-q" name="q" placeholder={t("a_placeholder")} paste={t("pl_paste")} describedby="a-status" autofocus>
-      <span data-chip class:list={[chip, tone.accent, "absolute bottom-2 left-3 sm:top-3 sm:right-3 sm:bottom-auto sm:left-auto"]} hidden></span>
+      <span data-chip class={cx(chip, tone.accent, "absolute bottom-2 left-3 sm:top-3 sm:right-3 sm:bottom-auto sm:left-auto")} hidden></span>
     </AddressInput>
     <p id="a-status" class={message} aria-live="polite"></p>
 
@@ -44,7 +44,7 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
           <span data-oa-recipient class="font-semibold text-cream"></span>
         </span>
         <span data-oa-message class="text-ash"></span>
-        <span data-oa-seal class:list={[chip, "ml-auto"]} hidden></span>
+        <span data-oa-seal class={cx(chip, "ml-auto")} hidden></span>
       </div>
       <p data-oa-warning class="text-sm text-bad" hidden>{t("a_oa_unsigned")}</p>
     </div>
@@ -65,7 +65,7 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
               <span data-type-badge class="bg-ink px-2.5 py-1 font-pixel text-[10px] tracking-wider text-orange uppercase"></span>
             </div>
           </div>
-          <p data-chars class:list={[label, "text-[10px]"]}></p>
+          <p data-chars class={cx(label, "text-[10px]")}></p>
           <div data-chunks class="grid grid-cols-4 gap-1.5 font-mono text-[15px] sm:grid-cols-6 xl:grid-cols-8"></div>
           <p data-type class="text-[13px] text-graphite"></p>
         </div>
@@ -99,7 +99,7 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
       </Disclosure>
       <Disclosure title={t("a_compare_t")} hint={t("a_compare_hint")}>
         <p class="text-sm text-ash">{t("a_compare_help")}</p>
-        <textarea name="other" rows="2" spellcheck="false" autocomplete="off" autocapitalize="off" class:list={[field, "min-h-14 resize-y font-mono text-[13px] break-all"]} aria-label={t("a_compare_t")}></textarea>
+        <textarea name="other" rows="2" spellcheck="false" autocomplete="off" autocapitalize="off" class={cx(field, "min-h-14 resize-y font-mono text-[13px] break-all")} aria-label={t("a_compare_t")}></textarea>
         <div data-compare-result class="grid gap-2" hidden>
           <p data-compare-verdict class="font-pixel"></p>
           <p data-compare-a class="font-mono text-[13px] leading-relaxed break-all text-cream"></p>
@@ -110,13 +110,13 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
         <p class="text-sm text-ash">{t("a_integrate_help")}</p>
         <label for="a-pid" class={fieldLabel}>{t("a_pid_input")}</label>
         <div class="flex flex-wrap gap-2">
-          <input id="a-pid" name="pid" maxlength="16" spellcheck="false" autocomplete="off" class:list={[field, "min-w-0 flex-1 basis-64 font-mono"]} aria-describedby="pid-message" />
+          <input id="a-pid" name="pid" maxlength="16" spellcheck="false" autocomplete="off" class={cx(field, "min-w-0 flex-1 basis-64 font-mono")} aria-describedby="pid-message" />
           <Button variant="ghost" data-random>{t("a_random")}</Button>
         </div>
         <p id="pid-message" class={message}></p>
         <div data-integrated-box class="grid gap-2" hidden>
           <output id="integrated" class={code}></output>
-          <button type="button" data-copy-from="#integrated" class:list={[copyChip, "justify-self-start"]}><PixelIcon name="copy" size={10} class="text-orange" /><span>{t("share_copy")}</span></button>
+          <button type="button" data-copy-from="#integrated" class={cx(copyChip, "justify-self-start")}><PixelIcon name="copy" size={10} class="text-orange" /><span>{t("share_copy")}</span></button>
         </div>
       </Disclosure>
     </div>
@@ -138,7 +138,7 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
         <div class="grid gap-4 sm:grid-cols-2">
           <div class="grid content-start gap-2">
             <label for="oa-host" class={heading}>{t("a_oa_host")}</label>
-            <input id="oa-host" name="oa-host" placeholder="donate@example.com" autocomplete="off" spellcheck="false" class:list={[field, "font-mono text-[14px]"]} aria-describedby="oa-host-message" />
+            <input id="oa-host" name="oa-host" placeholder="donate@example.com" autocomplete="off" spellcheck="false" class={cx(field, "font-mono text-[14px]")} aria-describedby="oa-host-message" />
             <p id="oa-host-message" class={message}></p>
           </div>
           <div class="grid content-start gap-2">
@@ -152,12 +152,12 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
         <div class="relative grid gap-3 border-l-4 border-orange bg-well px-5 py-4">
           <p data-record-wait class="text-sm text-slip-ink">{t("a_record_wait")}</p>
           <dl data-record class="grid grid-cols-[52px_1fr] items-baseline gap-x-3 gap-y-2.5 pr-16" hidden>
-            <dt class:list={[label, "text-[10px]"]}>{t("a_rec_type")}</dt><dd class="font-mono text-[13px] text-good">TXT</dd>
-            <dt class:list={[label, "text-[10px]"]}>{t("a_rec_host")}</dt><dd data-record-host class="font-mono text-[13px] break-all text-cream"></dd>
-            <dt class:list={[label, "text-[10px]"]}>{t("a_rec_value")}</dt><dd data-record-value class="font-mono text-[13px] leading-relaxed break-all text-cream"></dd>
+            <dt class={cx(label, "text-[10px]")}>{t("a_rec_type")}</dt><dd class="font-mono text-[13px] text-good">TXT</dd>
+            <dt class={cx(label, "text-[10px]")}>{t("a_rec_host")}</dt><dd data-record-host class="font-mono text-[13px] break-all text-cream"></dd>
+            <dt class={cx(label, "text-[10px]")}>{t("a_rec_value")}</dt><dd data-record-value class="font-mono text-[13px] leading-relaxed break-all text-cream"></dd>
           </dl>
           <span id="oa-record" hidden></span>
-          <button type="button" data-copy-from="#oa-record" data-record-copy class:list={[copyChip, "absolute top-3 right-3"]} hidden><PixelIcon name="copy" size={10} class="text-orange" /><span>{t("share_copy")}</span></button>
+          <button type="button" data-copy-from="#oa-record" data-record-copy class={cx(copyChip, "absolute top-3 right-3")} hidden><PixelIcon name="copy" size={10} class="text-orange" /><span>{t("share_copy")}</span></button>
         </div>
       </div>
     </div>

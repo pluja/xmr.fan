@@ -1,9 +1,10 @@
 ---
+import { cx } from "./styles";
 /* A cream receipt on a dark panel: orange top edge, body, a perforated tear line and a footer row. */
 interface Props { dither?: boolean; class?: string; [attr: string]: unknown }
 const { dither = false, class: cls, ...attrs } = Astro.props;
 ---
-<figure class:list={["relative m-0 bg-paper text-ink shadow-[8px_8px_0_var(--color-shade)]", cls]} {...attrs}>
+<figure class={cx("relative m-0 bg-paper text-ink shadow-[8px_8px_0_var(--color-shade)]", cls)} {...attrs}>
   <div class="h-1.5 bg-orange"></div>
   {dither && <div class="h-2 bg-[conic-gradient(var(--color-orange)_25%,transparent_0_50%,var(--color-orange)_0_75%,transparent_0)] bg-size-[8px_8px]" aria-hidden="true"></div>}
   <div class="grid grid-cols-1 gap-4 px-5 pt-5 pb-5 sm:px-6"><slot /></div>

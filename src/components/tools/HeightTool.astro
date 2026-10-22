@@ -5,7 +5,7 @@ import Button from "../ui/Button.astro";
 import Slip from "../ui/Slip.astro";
 import Step from "../ui/Step.astro";
 import TrustNote from "../ui/TrustNote.astro";
-import { field, label, message } from "../ui/styles";
+import { cx, field, label, message } from "../ui/styles";
 import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
 import { SAFETY_CHOICES, SAFETY_DAYS } from "../../lib/heights";
 
@@ -26,10 +26,10 @@ const pick = "cursor-pointer border-2 border-line px-3 py-1 font-pixel text-xs t
     <div class="grid content-start gap-8">
       <section class="grid gap-3">
         <Step as="label" for="h-date" n="01" label={t("h_created")} />
-        <input id="h-date" name="date" type="date" min="2014-04-18" max={today} value={today} class:list={[field, "font-mono text-lg [color-scheme:dark]"]} />
+        <input id="h-date" name="date" type="date" min="2014-04-18" max={today} value={today} class={cx(field, "font-mono text-lg [color-scheme:dark]")} />
         <div class="flex flex-wrap gap-2">
           {PICKS.map((p) => <button type="button" data-pick={p.days} aria-pressed="false" class={pick}>{p.name}</button>)}
-          <button type="button" data-unsure aria-expanded="false" aria-controls="h-unsure" class:list={[pick, "border-dashed text-ash"]}>{t("h_unsure")}</button>
+          <button type="button" data-unsure aria-expanded="false" aria-controls="h-unsure" class={cx(pick, "border-dashed text-ash")}>{t("h_unsure")}</button>
         </div>
         <p id="h-unsure" class="border-l-4 border-orange bg-ink px-5 py-3 text-sm text-ash" hidden>{t("h_unsure_help")}</p>
       </section>
@@ -51,7 +51,7 @@ const pick = "cursor-pointer border-2 border-line px-3 py-1 font-pixel text-xs t
     </div>
 
     <Slip dither aria-live="polite">
-      <span class:list={[label, "text-[10px]"]}>{t("h_restore")}</span>
+      <span class={cx(label, "text-[10px]")}>{t("h_restore")}</span>
       <div class="-mt-2 flex flex-wrap items-center justify-between gap-3">
         <output data-height class="font-pixel text-[clamp(36px,6vw,52px)] leading-none">…</output>
         <span id="restore-height" hidden></span>
@@ -67,18 +67,18 @@ const pick = "cursor-pointer border-2 border-line px-3 py-1 font-pixel text-xs t
           <i data-tick class="absolute -top-2 h-7.5 w-1 -translate-x-1/2 bg-ink"></i>
           <i class="absolute -top-1.5 right-0 h-6.5 w-1 bg-ink"></i>
         </div>
-        <div class:list={[label, "mt-2 flex flex-wrap gap-x-5 gap-y-1 text-[10px]"]}>
+        <div class={cx(label, "mt-2 flex flex-wrap gap-x-5 gap-y-1 text-[10px]")}>
           <span class="flex items-center gap-1.5"><i class="size-2.5 bg-[repeating-linear-gradient(45deg,var(--color-orange)_0_2px,var(--color-peach)_2px_4px)]"></i><span data-margin-label class="text-flame"></span></span>
           <span class="flex items-center gap-1.5"><i class="size-2.5 bg-ok"></i><span data-created></span></span>
         </div>
         <div class="mt-1 flex justify-between gap-4">
-          <div class="grid"><span class:list={[label, "text-[10px]"]}>{t("h_start")}</span><span data-start class="font-mono text-[13px]"></span></div>
-          <div class="grid text-right"><span class:list={[label, "text-[10px]"]}>{t("h_now")}</span><span data-now class="font-mono text-[13px]">…</span></div>
+          <div class="grid"><span class={cx(label, "text-[10px]")}>{t("h_start")}</span><span data-start class="font-mono text-[13px]"></span></div>
+          <div class="grid text-right"><span class={cx(label, "text-[10px]")}>{t("h_now")}</span><span data-now class="font-mono text-[13px]">…</span></div>
         </div>
       </div>
 
       <Fragment slot="footer">
-        <span data-foot class:list={[label, "text-[10px]"]}>{t("h_foot_estimate")}</span>
+        <span data-foot class={cx(label, "text-[10px]")}>{t("h_foot_estimate")}</span>
         <span class="ml-auto font-pixel text-[11px] text-slip-ink">xmr.fan</span>
       </Fragment>
     </Slip>
@@ -90,7 +90,7 @@ const pick = "cursor-pointer border-2 border-line px-3 py-1 font-pixel text-xs t
       <p class="text-sm text-ash">{t("h_reverse_sub")}</p>
     </div>
     <div class="grid gap-1">
-      <input name="block" inputmode="numeric" placeholder="3000000" autocomplete="off" class:list={[field, "font-mono"]} aria-label={t("h_block")} aria-describedby="block-message block-result" />
+      <input name="block" inputmode="numeric" placeholder="3000000" autocomplete="off" class={cx(field, "font-mono")} aria-label={t("h_block")} aria-describedby="block-message block-result" />
       <p id="block-message" class={message}></p>
     </div>
     <p id="block-result" data-block-result class="text-sm text-ash" aria-live="polite">{t("h_reverse_wait")}</p>

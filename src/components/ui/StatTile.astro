@@ -1,11 +1,11 @@
 ---
 /* A labelled value on a slip. */
-import { label as labelClass } from "./styles";
+import { cx, label as labelClass } from "./styles";
 
 interface Props { label: string; class?: string; [attr: string]: unknown }
 const { label, class: cls, ...attrs } = Astro.props;
 ---
-<div class:list={["grid gap-1 bg-slip-tile px-3.5 py-2.5", cls]} {...attrs}>
-  <span class:list={[labelClass, "text-[10px]"]}>{label}</span>
+<div class={cx("grid gap-1 bg-slip-tile px-3.5 py-2.5", cls)} {...attrs}>
+  <span class={cx(labelClass, "text-[10px]")}>{label}</span>
   <span class="font-pixel text-lg leading-tight"><slot /></span>
 </div>

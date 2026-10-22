@@ -2,18 +2,18 @@
 /* A Monero address field whose first and last characters can be highlighted, so people can compare
    them with the address they expect. Drive it with addressInput() from address-input.ts. The slot is
    for badges laid over the field. */
-import { fieldFrame } from "./styles";
+import { cx, fieldFrame } from "./styles";
 
 interface Props { id: string; name: string; value?: string; placeholder?: string; paste?: string; describedby?: string; autofocus?: boolean }
 const { id, name, value = "", placeholder = "4… / 8…", paste, describedby, autofocus } = Astro.props;
 /* The textarea and the copy behind it must lay out text identically. */
 const text = ["block min-h-[4.6rem] w-full whitespace-pre-wrap break-all px-4 py-3.5 font-mono text-sm leading-[1.75] sm:px-[1.1rem]", paste && "pb-11 sm:pb-3.5 sm:pr-24"];
 ---
-<div class:list={[fieldFrame, "relative focus-within:border-orange"]} data-address-input>
-  <div class:list={[text, "pointer-events-none text-cream [&_mark]:bg-transparent [&_mark]:font-bold [&_mark]:text-apricot"]} data-mirror aria-hidden="true"></div>
+<div class={cx(fieldFrame, "relative focus-within:border-orange")} data-address-input>
+  <div class={cx(text, "pointer-events-none text-cream [&_mark]:bg-transparent [&_mark]:font-bold [&_mark]:text-apricot")} data-mirror aria-hidden="true"></div>
   <textarea
     id={id} name={name} rows="2" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder={placeholder}
-    class:list={[text, "absolute inset-0 resize-none overflow-hidden bg-transparent text-transparent caret-cream outline-none placeholder:text-line selection:bg-orange/35 selection:text-transparent"]}
+    class={cx(text, "absolute inset-0 resize-none overflow-hidden bg-transparent text-transparent caret-cream outline-none placeholder:text-line selection:bg-orange/35 selection:text-transparent")}
     aria-describedby={describedby} autofocus={autofocus}
   >{value}</textarea>
   <slot />

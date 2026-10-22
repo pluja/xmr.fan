@@ -1,5 +1,5 @@
 ---
-import { button, code, field, fold, label, link, message } from "../ui/styles";
+import { button, code, cx, field, fold, label, link, message } from "../ui/styles";
 import PixelIcon from "../PixelIcon.astro";
 import AddressInput from "../ui/AddressInput.astro";
 import QrCode from "../ui/QrCode.astro";
@@ -36,7 +36,7 @@ const strings = pickStrings(lang, [
         <div class="grid content-start gap-1.5">
           <label for="pl-amount" class="text-sm text-ash">{t("f_amount")}</label>
           <div class="relative">
-            <input id="pl-amount" type="text" name="amount" value={initial.amount} inputmode="decimal" placeholder="0.05" autocomplete="off" class:list={[field, "pr-20 font-mono"]} aria-describedby="amount-message amount-fiat" />
+            <input id="pl-amount" type="text" name="amount" value={initial.amount} inputmode="decimal" placeholder="0.05" autocomplete="off" class={cx(field, "pr-20 font-mono")} aria-describedby="amount-message amount-fiat" />
             <span class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 bg-graphite px-2.5 py-1 font-pixel text-xs text-orange">XMR</span>
           </div>
           <p id="amount-message" class={message}></p>
@@ -51,7 +51,7 @@ const strings = pickStrings(lang, [
       <div class="grid gap-1.5">
         <label for="pl-description" class="text-sm text-ash">{t("f_desc")}</label>
         <div class="relative">
-          <input id="pl-description" type="text" name="description" value={initial.description} maxlength={LIMITS.description} autocomplete="off" class:list={[field, "pr-24"]} aria-describedby="description-message" />
+          <input id="pl-description" type="text" name="description" value={initial.description} maxlength={LIMITS.description} autocomplete="off" class={cx(field, "pr-24")} aria-describedby="description-message" />
           <span id="description-count" class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-xs text-line"></span>
         </div>
         <p id="description-message" class={message}></p>
@@ -59,7 +59,7 @@ const strings = pickStrings(lang, [
       {initial.paymentId && (
         <div class="grid gap-1.5">
           <label for="pl-payment-id" class="text-sm text-ash">{t("f_payment_id")}</label>
-          <input id="pl-payment-id" type="text" name="paymentId" value={initial.paymentId} spellcheck="false" autocomplete="off" class:list={[field, "font-mono text-[13px]"]} aria-describedby="paymentId-message" />
+          <input id="pl-payment-id" type="text" name="paymentId" value={initial.paymentId} spellcheck="false" autocomplete="off" class={cx(field, "font-mono text-[13px]")} aria-describedby="paymentId-message" />
           <p id="paymentId-message" class={message}></p>
         </div>
       )}
@@ -75,7 +75,7 @@ const strings = pickStrings(lang, [
           <button type="button" data-view="raw" aria-pressed="false" class="cursor-pointer px-3 py-1 text-line aria-pressed:bg-graphite aria-pressed:text-cream">{t("pl_raw")}</button>
         </div>
       </div>
-      <output id="uri" class:list={[code, "min-h-24"]}><span class="text-orange">monero:</span></output>
+      <output id="uri" class={cx(code, "min-h-24")}><span class="text-orange">monero:</span></output>
       </div>
     </details>
 
@@ -83,7 +83,7 @@ const strings = pickStrings(lang, [
 
   <div class="order-2 max-lg:group-data-empty/pay:hidden grid w-full max-w-[420px] content-start gap-5 justify-self-center lg:order-none lg:col-start-2 lg:row-span-5 lg:row-start-1 lg:max-w-none">
     <Slip>
-      <div class:list={[label, "flex items-baseline justify-between gap-3"]}>
+      <div class={cx(label, "flex items-baseline justify-between gap-3")}>
         <span>{t("pl_request")}</span><span>{t("scan_to_pay")}</span>
       </div>
       <p id="slip-name" class="-mt-2 text-lg font-bold leading-tight empty:hidden"></p>
@@ -105,7 +105,7 @@ const strings = pickStrings(lang, [
       </Fragment>
     </Slip>
 
-    <button type="button" id="copy" class:list={[button.primary, "w-full py-4 text-[17px]"]} disabled>
+    <button type="button" id="copy" class={cx(button.primary, "w-full py-4 text-[17px]")} disabled>
       <PixelIcon name="copy" size={18} /><span>{t("pl_copy_link")}</span>
       <kbd id="copy-kbd" class="absolute right-4 hidden font-pixel text-[11px] text-ember sm:block">Ctrl C</kbd>
     </button>
@@ -120,16 +120,16 @@ const strings = pickStrings(lang, [
     <div class="grid gap-1.5">
       <label for="share-link" class="text-sm text-ash">{t("share_link")}</label>
       <div class="flex flex-wrap gap-2">
-        <input id="share-link" readonly class:list={[field, "min-w-0 flex-1 basis-64 font-mono text-[13px]"]} />
-        <button type="button" class:list={[button.ghost, "px-4"]} data-copy="share-link"><span>{t("share_copy")}</span></button>
-        <a id="share-preview" class:list={[button.ghost, "px-4"]} target="_blank" rel="noopener">{t("share_preview")}</a>
+        <input id="share-link" readonly class={cx(field, "min-w-0 flex-1 basis-64 font-mono text-[13px]")} />
+        <button type="button" class={cx(button.ghost, "px-4")} data-copy="share-link"><span>{t("share_copy")}</span></button>
+        <a id="share-preview" class={cx(button.ghost, "px-4")} target="_blank" rel="noopener">{t("share_preview")}</a>
       </div>
     </div>
     <div class="grid gap-1.5">
       <label for="share-embed" class="text-sm text-ash">{t("share_embed")}</label>
       <div class="flex flex-wrap items-start gap-2">
-        <textarea id="share-embed" readonly rows="3" class:list={[field, "min-w-0 flex-1 basis-64 resize-none font-mono text-[12px] [word-break:break-all]"]}></textarea>
-        <button type="button" class:list={[button.ghost, "px-4"]} data-copy="share-embed"><span>{t("share_copy")}</span></button>
+        <textarea id="share-embed" readonly rows="3" class={cx(field, "min-w-0 flex-1 basis-64 resize-none font-mono text-[12px] [word-break:break-all]")}></textarea>
+        <button type="button" class={cx(button.ghost, "px-4")} data-copy="share-embed"><span>{t("share_copy")}</span></button>
       </div>
     </div>
     <p class="text-sm text-ash">{t("share_note")}</p>
