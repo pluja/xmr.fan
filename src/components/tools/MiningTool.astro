@@ -34,7 +34,7 @@ const PERIODS = [["day", 1], ["month", 30], ["year", 365]] as const;
   </section>
 
   <div class="overflow-x-auto">
-    <table class="w-full border-t-[3px] border-ink text-left text-[15px]">
+    <table class="w-full border-t-[3px] border-ink text-left text-[0.9375rem]">
       <thead class="font-pixel text-sm">
         <tr>
           <th class={cell}>{t("m_col_period")}</th><th class={cell}>{t("m_col_mined")}</th>
@@ -58,13 +58,13 @@ const PERIODS = [["day", 1], ["month", 30], ["year", 365]] as const;
 
   <section class="grid gap-3 border-2 border-ink bg-paper p-4">
     <h2 class="font-pixel text-lg">{t("m_p2pool_t")}</h2>
-    <ul data-chains class="grid gap-1.5 text-[15px]">
+    <ul data-chains class="grid gap-1.5 text-[0.9375rem]">
       {["main", "mini", "nano"].map((c) => <li data-chain={c} class="flex flex-wrap items-baseline gap-x-3"><span data-text>…</span><b data-pick class="border border-ok px-1.5 font-pixel text-xs font-normal text-ok" hidden></b></li>)}
     </ul>
     <p class="text-sm text-graphite">{t("m_p2pool_help")}</p>
   </section>
 
-  <p data-solo class="text-[15px]"></p>
+  <p data-solo class="text-[0.9375rem]"></p>
   <div class="grid gap-1 text-sm text-graphite">
     <p data-network></p>
     <p class="max-w-[66ch]">{t("m_note")}</p>

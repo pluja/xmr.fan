@@ -48,7 +48,9 @@
   :root:lang(ru) { --font-pixel: "Pixelify Sans", "DotGothic16", monospace; }
 
   html { -webkit-text-size-adjust: 100%; }
-  body { @apply bg-orange text-ink font-sans antialiased; font-size: 17px; line-height: 1.55; }
+  body { @apply bg-orange text-ink font-sans antialiased; font-size: 1.0625rem; line-height: 1.55; }
+  /* Tool pages run a touch smaller, so a whole tool and its result fit on screen. */
+  :root:has([data-tool-frame]) { font-size: 93.75%; }
   :focus-visible { outline: 3px solid var(--color-ink); outline-offset: 3px; }
   .on-ink :focus-visible { outline-color: var(--color-orange); }
   ::selection { background: var(--color-ink); color: var(--color-orange); }

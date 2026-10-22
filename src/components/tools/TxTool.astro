@@ -40,7 +40,7 @@ const DETAILS = [
       <button type="button" data-example class={link}>{t("try_example")}</button>
     </div>
     <div class="flex flex-col gap-3 sm:flex-row">
-      <input id="tx-id" name="txid" spellcheck="false" autocomplete="off" autocapitalize="off" class={cx(field, "min-w-0 flex-1 font-mono text-[13px]")} aria-describedby="tx-message" autofocus />
+      <input id="tx-id" name="txid" spellcheck="false" autocomplete="off" autocapitalize="off" class={cx(field, "min-w-0 flex-1 font-mono text-[0.8125rem]")} aria-describedby="tx-message" autofocus />
       <Button type="submit" class="sm:w-36">{t("tx_track")}</Button>
     </div>
     <p id="tx-message" class={message}></p>
@@ -51,8 +51,8 @@ const DETAILS = [
       <div class="flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
         <div class="grid min-w-0 flex-1 basis-64 gap-1">
           <b data-title class="font-pixel text-3xl font-normal tracking-[0.08em] uppercase sm:text-4xl"></b>
-          <span data-subtitle class="text-[14px] text-graphite"></span>
-          <p data-failure class="text-[16px] text-danger" hidden></p>
+          <span data-subtitle class="text-[0.875rem] text-graphite"></span>
+          <p data-failure class="text-[1rem] text-danger" hidden></p>
         </div>
         <Stamp class="mt-1 mr-2 shrink-0" />
       </div>
@@ -68,7 +68,7 @@ const DETAILS = [
               <li class:list={["relative grid content-start gap-1", m.align, i === 1 ? "justify-items-center" : i === 2 ? "justify-items-end" : "justify-items-start"]}>
                 <span data-dot={m.key} class="grid size-4 place-items-center bg-slip-line"><i class="size-2 bg-paper"></i></span>
                 <span class={cx(label, "mt-2")}>{m.name}</span>
-                <span data-sub={m.key} class="text-[13px] text-ink sm:text-sm">–</span>
+                <span data-sub={m.key} class="text-[0.8125rem] text-ink sm:text-sm">–</span>
               </li>
             ))}
           </ol>
@@ -80,7 +80,7 @@ const DETAILS = [
               {Array.from({ length: UNLOCK_BLOCKS }, () => <li class="h-3.5 bg-slip-tile"></li>)}
             </ol>
           </div>
-          <p data-warning class="text-[14px] text-danger" hidden>{t("tx_double")}</p>
+          <p data-warning class="text-[0.875rem] text-danger" hidden>{t("tx_double")}</p>
         </div>
         <dl aria-label={t("tx_details")}>
           <div class="flex items-baseline justify-between gap-4 border-b-2 border-dotted border-slip-line pb-2">
@@ -98,7 +98,7 @@ const DETAILS = [
 
       <Fragment slot="footer">
         <span class={label}>TX</span>
-        <span data-tx class="min-w-0 truncate font-mono text-[13px]">…</span>
+        <span data-tx class="min-w-0 truncate font-mono text-[0.8125rem]">…</span>
         <span class={cx(label, "ml-auto")}>xmr.fan</span>
       </Fragment>
     </Receipt>

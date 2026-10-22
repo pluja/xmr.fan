@@ -23,7 +23,7 @@ const t = useTranslations(lang);
   <form data-own class:list={["grid gap-2 border-2 p-3", dark ? "border-graphite bg-well" : "border-ink bg-paper"]} hidden novalidate>
     <label class:list={["grid gap-1 font-semibold", dark ? "text-cream" : "text-ink"]}>
       <span>{t("live_own_label")}</span>
-      <input name="node" class:list={[dark ? field : "field", "font-mono text-[13px]"]} placeholder="https://node.example.com:18089" autocomplete="off" spellcheck="false" />
+      <input name="node" class:list={[dark ? field : "field", "font-mono text-[0.8125rem]"]} placeholder="https://node.example.com:18089" autocomplete="off" spellcheck="false" />
     </label>
     <p data-own-message class:list={[dark ? "text-bad" : "text-danger", "empty:hidden"]} aria-live="polite"></p>
     <div class="flex flex-wrap gap-2">

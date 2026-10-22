@@ -31,8 +31,8 @@ const yesterday = new Date(Date.now() - 86_400_000).toISOString().slice(0, 10);
     <Field label={t("u_hist_date")}>
       <input name="day" type="date" min="2017-01-01" max={yesterday} class="field w-auto max-w-56 font-mono" />
     </Field>
-    <p data-hist class="text-[15px] empty:hidden" aria-live="polite"></p>
-    <p data-hist-amount class="text-[15px] empty:hidden"></p>
+    <p data-hist class="text-[0.9375rem] empty:hidden" aria-live="polite"></p>
+    <p data-hist-amount class="text-[0.9375rem] empty:hidden"></p>
     <p class="text-xs text-graphite">{t("u_hist_source")}</p>
   </Disclosure>
 </form>

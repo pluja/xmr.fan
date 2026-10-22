@@ -27,19 +27,19 @@ const FILTERS = [{ value: "all", name: t("c_all") }, { value: "gui", name: "GUI"
       <label data-drop class="group/drop relative grid h-full min-h-44 cursor-pointer place-items-center content-center gap-2 border-2 border-dashed border-line bg-ink px-6 py-8 text-center hover:border-orange [&.over]:border-solid [&.over]:border-orange [&.over]:bg-well">
         <Corners inset="10px" />
         <PixelIcon name="download" size={32} class="text-orange" />
-        <span class="font-pixel text-[15px] text-cream">{t("c_drop_t")}</span>
+        <span class="font-pixel text-[0.9375rem] text-cream">{t("c_drop_t")}</span>
         <span class="text-sm text-ash"><span class="text-orange underline underline-offset-3">{t("c_drop_or")}</span> · .exe .dmg .zip .tar.bz2</span>
         <input type="file" class="sr-only" />
       </label>
     </section>
 
-    <div class="flex items-center gap-4 font-pixel text-[11px] tracking-[0.2em] text-slip-ink uppercase lg:flex-col lg:pt-9">
+    <div class="flex items-center gap-4 font-pixel text-[0.6875rem] tracking-[0.2em] text-slip-ink uppercase lg:flex-col lg:pt-9">
       <span class="h-0.5 flex-1 bg-graphite lg:h-auto lg:w-0.5"></span>{t("c_or")}<span class="h-0.5 flex-1 bg-graphite lg:h-auto lg:w-0.5"></span>
     </div>
 
     <section class="grid content-start gap-3">
       <Step as="label" for="c-hash" n="02" label={t("c_step_paste")} />
-      <input id="c-hash" name="hash" spellcheck="false" autocomplete="off" maxlength="64" placeholder="44cd1489…" class={cx(field, "font-mono text-[13px]")} aria-describedby="c-hash-status" />
+      <input id="c-hash" name="hash" spellcheck="false" autocomplete="off" maxlength="64" placeholder="44cd1489…" class={cx(field, "font-mono text-[0.8125rem]")} aria-describedby="c-hash-status" />
       <p id="c-hash-status" class="text-sm empty:hidden" aria-live="polite"></p>
       <TrustNote class="mt-1">{`${t("c_local_t")} ${t("c_local_sub")}`}</TrustNote>
       <p class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-ash">
@@ -55,28 +55,28 @@ const FILTERS = [{ value: "all", name: t("c_all") }, { value: "gui", name: "GUI"
         <div class="grid min-w-0 flex-1 basis-64 gap-1">
           <span class={label}>{t("c_file")}</span>
           <span data-file class="font-pixel text-lg leading-snug break-all sm:text-xl"></span>
-          <span data-status-sub class="text-[14px] text-graphite"></span>
+          <span data-status-sub class="text-[0.875rem] text-graphite"></span>
         </div>
         <Stamp data-stamp-text class="mt-1 mr-2 shrink-0"></Stamp>
       </div>
       <div data-show="genuine" class="grid grid-cols-2 gap-2 sm:grid-cols-4">
-        <StatTile label={t("c_version")}><span data-version class="text-[15px]"></span></StatTile>
-        <StatTile label={t("c_type")}><span data-kind class="text-[15px]"></span></StatTile>
-        <StatTile label={t("c_platform")}><span data-platform class="text-[15px]"></span></StatTile>
-        <StatTile label={t("c_release")}><span class="flex items-center gap-1.5 text-[15px] text-ok"><i class="size-2 bg-ok"></i>{t("c_latest")}</span></StatTile>
+        <StatTile label={t("c_version")}><span data-version class="text-[0.9375rem]"></span></StatTile>
+        <StatTile label={t("c_type")}><span data-kind class="text-[0.9375rem]"></span></StatTile>
+        <StatTile label={t("c_platform")}><span data-platform class="text-[0.9375rem]"></span></StatTile>
+        <StatTile label={t("c_release")}><span class="flex items-center gap-1.5 text-[0.9375rem] text-ok"><i class="size-2 bg-ok"></i>{t("c_latest")}</span></StatTile>
       </div>
-      <p data-show="mismatch unknown" data-detail class="text-[15px] text-graphite"></p>
+      <p data-show="mismatch unknown" data-detail class="text-[0.9375rem] text-graphite"></p>
       <div class="grid gap-4 md:grid-cols-2">
         <div class="grid content-start gap-1.5">
           <div class="flex items-center justify-between gap-3">
             <span class={label}>{t("c_your_hash")}</span>
             <span data-badge class="px-2 py-0.5 font-pixel text-xs tracking-wider text-paper uppercase"></span>
           </div>
-          <p data-yours class="border-b-2 pb-1 font-mono text-[13px] leading-relaxed break-all"></p>
+          <p data-yours class="border-b-2 pb-1 font-mono text-[0.8125rem] leading-relaxed break-all"></p>
         </div>
         <div data-official-row class="grid content-start gap-1.5">
           <span class={label}>{t("c_official")}</span>
-          <p data-official class="border-b-2 pb-1 font-mono text-[13px] leading-relaxed break-all"></p>
+          <p data-official class="border-b-2 pb-1 font-mono text-[0.8125rem] leading-relaxed break-all"></p>
         </div>
       </div>
       <Fragment slot="footer">
@@ -195,10 +195,10 @@ const FILTERS = [{ value: "all", name: t("c_all") }, { value: "gui", name: "GUI"
     const info = describeFile(f.name), hit = f.sha256 === matched;
     const what = `${info.platform}${info.installer ? ` · ${t("c_installer")}` : ""}`;
     return `<li class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-0.5 border-l-4 px-4 py-2.5 sm:grid-cols-[minmax(0,13rem)_minmax(0,1fr)_auto_auto] ${hit ? "border-good bg-[#1f3a2a]" : "border-transparent bg-ink"}">
-      <span class="truncate text-[15px] ${hit ? "text-good" : "text-cream"}">${hit ? "✓ " : ""}${escape(what)}</span>
+      <span class="truncate text-[0.9375rem] ${hit ? "text-good" : "text-cream"}">${hit ? "✓ " : ""}${escape(what)}</span>
       <button type="button" class="row-span-2 cursor-pointer self-center p-1.5 ${hit ? "text-good" : "text-slip-ink"} hover:text-orange sm:order-last sm:row-span-1" data-copy-hash="${f.sha256}" aria-label="${t("share_copy")} SHA-256 ${escape(f.name)}" title="${t("share_copy")} SHA-256"><svg viewBox="0 0 8 8" width="14" height="14" aria-hidden="true" shape-rendering="crispEdges"><path fill-rule="evenodd" d="M2 0h6v6H2zM3 1v4h4V1zM0 2h1v5h5v1H0z" fill="currentColor"/></svg></button>
-      <a href="${downloadUrl(f.name)}" class="min-w-0 font-mono text-[13px] break-all text-ash sm:truncate underline decoration-graphite underline-offset-3 hover:text-orange hover:decoration-orange" title="${t("c_download")} ${escape(f.name)}">${escape(f.name)}</a>
-      <code class="hidden font-mono text-[13px] sm:block ${hit ? "text-good" : "text-slip-ink"}">${f.sha256.slice(0, 8)}…${f.sha256.slice(-8)}</code>
+      <a href="${downloadUrl(f.name)}" class="min-w-0 font-mono text-[0.8125rem] break-all text-ash sm:truncate underline decoration-graphite underline-offset-3 hover:text-orange hover:decoration-orange" title="${t("c_download")} ${escape(f.name)}">${escape(f.name)}</a>
+      <code class="hidden font-mono text-[0.8125rem] sm:block ${hit ? "text-good" : "text-slip-ink"}">${f.sha256.slice(0, 8)}…${f.sha256.slice(-8)}</code>
     </li>`;
   }
 

@@ -16,7 +16,7 @@ const { lang, tool, dark = false } = Astro.props;
 const t = useTranslations(lang);
 const next = nextTool(tool);
 ---
-<section class="on-ink flex-1 bg-ink pb-20 pt-6 text-cream sm:pt-8">
+<section class="on-ink flex-1 bg-ink pb-20 pt-6 text-cream sm:pt-8" data-tool-frame>
   <Container>
     <nav class="mb-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
       <a id="back" href={localePath(lang, "/")} class="group inline-flex items-center gap-2.5 py-1.5 font-pixel text-orange no-underline">

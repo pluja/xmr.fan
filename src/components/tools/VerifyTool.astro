@@ -20,7 +20,7 @@ const strings = pickStrings(lang, [
   "v_checking", "v_printer_idle", "v_paid_t", "v_fail_t", "v_chip_key", "v_chip_out", "v_chip_in", "v_via", "v_paid_sub", "v_pool_sub", "v_st_yes", "v_st_in_blocks", "v_st_pending",
   "v_err_txid", "v_err_address", "v_err_secret", "v_err_network", "v_err_not_found", "live_error", "copied", "v_share", ...ERRORS,
 ] as never);
-const mono = "font-mono text-[13px]";
+const mono = "font-mono text-[0.8125rem]";
 ---
 <div id="verify-tool" class="grid grid-cols-1 gap-8" data-strings={strings} data-lang={lang}>
   <form data-form class="grid grid-cols-1 gap-7" novalidate>
@@ -70,20 +70,20 @@ const mono = "font-mono text-[13px]";
         <div class="grid min-w-0 flex-1 basis-64 gap-1">
           <span class={label}>{t("v_receipt")} · <span data-via></span></span>
           <p data-show="ok" class="flex items-baseline gap-2.5"><span data-amount class="font-pixel text-5xl leading-none"></span><span class="font-pixel text-xl text-flame">XMR</span></p>
-          <p data-show="ok" class="text-[14px] text-graphite">{t("v_received_by")} <span data-recipient class="font-mono text-ink"></span> · <span data-subtitle></span></p>
-          <p data-show="fail" data-reason class="text-[16px] text-danger"></p>
+          <p data-show="ok" class="text-[0.875rem] text-graphite">{t("v_received_by")} <span data-recipient class="font-mono text-ink"></span> · <span data-subtitle></span></p>
+          <p data-show="fail" data-reason class="text-[1rem] text-danger"></p>
         </div>
         <Stamp class="mt-1 mr-2 shrink-0" />
       </div>
       <div data-show="ok" class="grid grid-cols-2 gap-2 sm:grid-cols-4">
         <StatTile label={t("v_st_confirmations")}><span data-confirmations></span></StatTile>
         <StatTile label={t("v_st_outputs")}><span data-outputs></span></StatTile>
-        <StatTile label={t("v_st_mined")}><span data-mined class="text-[15px]"></span></StatTile>
-        <StatTile label={t("v_st_spendable")}><span data-spendable class="flex items-center gap-2 text-[15px]"></span></StatTile>
+        <StatTile label={t("v_st_mined")}><span data-mined class="text-[0.9375rem]"></span></StatTile>
+        <StatTile label={t("v_st_spendable")}><span data-spendable class="flex items-center gap-2 text-[0.9375rem]"></span></StatTile>
       </div>
       <Fragment slot="footer">
         <span class={label}>TX</span>
-        <span data-tx class="min-w-0 truncate font-mono text-[13px]">…</span>
+        <span data-tx class="min-w-0 truncate font-mono text-[0.8125rem]">…</span>
         <span class={cx(label, "ml-auto")}>xmr.fan</span>
       </Fragment>
     </Receipt>

@@ -33,8 +33,8 @@ const chip = "cursor-pointer border-2 border-ink px-2.5 py-1 font-pixel text-sm 
     <div class="grid items-start gap-5 bg-paper p-4 sm:grid-cols-[minmax(0,1fr)_300px] sm:p-5">
       <div class="grid content-start gap-3">
         <h2 data-name class="font-pixel text-[clamp(24px,4vw,34px)] leading-tight"></h2>
-        <p data-desc class="text-[15px] text-graphite"></p>
-        <p data-address class="font-mono text-[14px] leading-loose tracking-wide"></p>
+        <p data-desc class="text-[0.9375rem] text-graphite"></p>
+        <p data-address class="font-mono text-[0.875rem] leading-loose tracking-wide"></p>
         <div class="flex flex-wrap gap-2">
           <a data-open class="btn">{t("card_open")}</a>
           <CopyButton lang={lang} from="#donate-tool [data-address]" class="btn-ghost" />
@@ -53,7 +53,7 @@ const chip = "cursor-pointer border-2 border-ink px-2.5 py-1 font-pixel text-sm 
         <li class="grid gap-0.5 border-b-2 border-dotted border-graphite/40 py-2 text-sm">
           <a class="font-semibold text-ink" href={`#${d.id}`} data-pick={d.id}>{d.name}</a>
           <span class="text-graphite">{descriptions[d.id]}</span>
-          <span class="break-all font-mono text-[11px] text-graphite">{d.address}</span>
+          <span class="break-all font-mono text-[0.6875rem] text-graphite">{d.address}</span>
           <a class="text-xs text-ink" href={d.source} rel="noopener noreferrer">{site(d.source)}</a>
         </li>
       ))}

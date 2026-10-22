@@ -189,13 +189,13 @@ const heading = "font-pixel text-sm tracking-[0.2em] text-cream uppercase";
     return `<li class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-1 border-l-4 px-4 py-2.5 sm:grid-cols-[minmax(0,1fr)_88px_80px_44px_44px_32px] ${hit ? "border-orange bg-[#3d2b22]" : "border-transparent bg-ink"}">
       <button type="button" data-check-node="${escape(address)}" class="flex min-w-0 cursor-pointer items-center gap-2.5 text-left" title="${t("n_check_this")}">
         <i class="size-2 shrink-0 ${!c.ok ? "bg-bad" : c.synced ? "bg-good" : "bg-flame"}"></i>
-        <span class="truncate font-mono text-[14px] ${hit ? "text-apricot" : "text-cream"} hover:text-orange hover:underline">${escape(address)}</span>
+        <span class="truncate font-mono text-[0.875rem] ${hit ? "text-apricot" : "text-cream"} hover:text-orange hover:underline">${escape(address)}</span>
         ${hit ? `<span class="${tone.accent} shrink-0 px-1.5 py-0.5 font-pixel text-xs uppercase">${t("n_checked_badge")}</span>` : ""}
       </button>
       <button type="button" data-copy-node="${escape(address)}" class="cursor-pointer p-1.5 text-slip-ink hover:text-orange sm:order-last" aria-label="${t("share_copy")} ${escape(address)}" title="${t("share_copy")}"><svg viewBox="0 0 8 8" width="14" height="14" aria-hidden="true" shape-rendering="crispEdges"><path fill-rule="evenodd" d="M2 0h6v6H2zM3 1v4h4V1zM0 2h1v5h5v1H0z" fill="currentColor"/></svg></button>
       <span class="col-span-2 flex items-center gap-3 sm:contents">
         <span class="flex w-20 gap-0.5 sm:w-auto" aria-hidden="true">${bars}</span>
-        <span class="font-mono text-[13px] text-ash sm:text-right">${state || (c.ms ? `${num.format(c.ms)} ms` : "–")}</span>
+        <span class="font-mono text-[0.8125rem] text-ash sm:text-right">${state || (c.ms ? `${num.format(c.ms)} ms` : "–")}</span>
         <span class="flex justify-center">${flag(c.url.startsWith("https:"), "SSL")}</span>
         <span class="flex justify-center">${flag(!!c.cors, t("n_col_web"))}</span>
       </span>

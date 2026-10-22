@@ -21,7 +21,7 @@ const strings = pickStrings(lang, [
 ]);
 const heading = "font-pixel text-sm tracking-[0.2em] text-cream uppercase";
 const keyRow = "grid gap-1 border-b-2 border-dotted border-graphite py-2.5 last:border-0 sm:grid-cols-[150px_1fr] sm:gap-4";
-const keyValue = "break-all font-mono text-[13px] text-cream";
+const keyValue = "break-all font-mono text-[0.8125rem] text-cream";
 const copyChip = `${chip} ${tone.neutral} cursor-pointer hover:text-orange`;
 const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
 ---
@@ -37,7 +37,7 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
     <p id="a-status" class="sr-only"></p>
 
     <div data-oa class="grid gap-2" hidden>
-      <div data-oa-bar class="flex flex-wrap items-center gap-x-3 gap-y-2 border-l-4 border-graphite bg-ink px-5 py-3 text-[13px]">
+      <div data-oa-bar class="flex flex-wrap items-center gap-x-3 gap-y-2 border-l-4 border-graphite bg-ink px-5 py-3 text-[0.8125rem]">
         <span data-oa-name class="font-mono break-all text-cream"></span>
         <span data-oa-chain class="contents" hidden>
           <svg viewBox="0 0 3 5" width="6" height="10" class="text-slip-ink" aria-hidden="true" shape-rendering="crispEdges"><path d={chevron} fill="currentColor" /></svg>
@@ -66,14 +66,14 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
             </div>
             <Stamp class="mt-1 mr-2">{t("a_valid_t")}</Stamp>
           </div>
-          <div data-chunks class="grid grid-cols-4 gap-1.5 font-mono text-[15px] sm:grid-cols-6 xl:grid-cols-8"></div>
+          <div data-chunks class="grid grid-cols-4 gap-1.5 font-mono text-[0.9375rem] sm:grid-cols-6 xl:grid-cols-8"></div>
           <p data-type class="text-sm text-graphite"></p>
         </div>
         <QrCode brackets={t("a_scan")} data-qr-box class="mx-auto w-full max-w-[220px] self-start" />
       </div>
       <Fragment slot="footer">
         <span data-footer-label class={label}></span>
-        <span data-footer class="min-w-0 truncate font-mono text-[13px]"></span>
+        <span data-footer class="min-w-0 truncate font-mono text-[0.8125rem]"></span>
         <span class={cx(label, "ml-auto")}>xmr.fan</span>
       </Fragment>
     </Receipt>
@@ -102,11 +102,11 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
       </Disclosure>
       <Disclosure title={t("a_compare_t")} hint={t("a_compare_hint")}>
         <p class="text-sm text-ash">{t("a_compare_help")}</p>
-        <textarea name="other" rows="2" spellcheck="false" autocomplete="off" autocapitalize="off" class={cx(field, "min-h-14 resize-y font-mono text-[13px] break-all")} aria-label={t("a_compare_t")}></textarea>
+        <textarea name="other" rows="2" spellcheck="false" autocomplete="off" autocapitalize="off" class={cx(field, "min-h-14 resize-y font-mono text-[0.8125rem] break-all")} aria-label={t("a_compare_t")}></textarea>
         <div data-compare-result class="grid gap-2" hidden>
           <p data-compare-verdict class="font-pixel"></p>
-          <p data-compare-a class="font-mono text-[13px] leading-relaxed break-all text-cream"></p>
-          <p data-compare-b class="font-mono text-[13px] leading-relaxed break-all text-cream"></p>
+          <p data-compare-a class="font-mono text-[0.8125rem] leading-relaxed break-all text-cream"></p>
+          <p data-compare-b class="font-mono text-[0.8125rem] leading-relaxed break-all text-cream"></p>
         </div>
       </Disclosure>
       <Disclosure title={t("a_integrate_t")} hint={t("a_integrate_hint")} data-integrate class="lg:col-span-2" hidden>
@@ -130,7 +130,7 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
   <section data-oa-tool class="grid grid-cols-1 gap-6 border-l-4 border-orange bg-ink px-5 py-6 sm:px-7" aria-labelledby="oa-make">
     <div class="grid gap-1.5">
       <h2 id="oa-make" class="font-pixel text-xl text-orange">{t("a_oa_make_t")}</h2>
-      <p class="max-w-[70ch] text-[15px] text-ash">{t("a_oa_make_help")}</p>
+      <p class="max-w-[70ch] text-[0.9375rem] text-ash">{t("a_oa_make_help")}</p>
     </div>
     <div class="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_400px]">
       <div class="grid content-start gap-4">
@@ -141,7 +141,7 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
         <div class="grid gap-4 sm:grid-cols-2">
           <div class="grid content-start gap-2">
             <label for="oa-host" class={heading}>{t("a_oa_host")}</label>
-            <input id="oa-host" name="oa-host" placeholder="donate@example.com" autocomplete="off" spellcheck="false" class={cx(field, "font-mono text-[14px]")} aria-describedby="oa-host-message" />
+            <input id="oa-host" name="oa-host" placeholder="donate@example.com" autocomplete="off" spellcheck="false" class={cx(field, "font-mono text-[0.875rem]")} aria-describedby="oa-host-message" />
             <p id="oa-host-message" class={message}></p>
           </div>
           <div class="grid content-start gap-2">
@@ -155,16 +155,16 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
         <div class="relative grid gap-3 border-l-4 border-orange bg-well px-5 py-4">
           <p data-record-wait class="text-sm text-slip-ink">{t("a_record_wait")}</p>
           <dl data-record class="grid grid-cols-[52px_1fr] items-baseline gap-x-3 gap-y-2.5 pr-16" hidden>
-            <dt class={label}>{t("a_rec_type")}</dt><dd class="font-mono text-[13px] text-good">TXT</dd>
-            <dt class={label}>{t("a_rec_host")}</dt><dd data-record-host class="font-mono text-[13px] break-all text-cream"></dd>
-            <dt class={label}>{t("a_rec_value")}</dt><dd data-record-value class="font-mono text-[13px] leading-relaxed break-all text-cream"></dd>
+            <dt class={label}>{t("a_rec_type")}</dt><dd class="font-mono text-[0.8125rem] text-good">TXT</dd>
+            <dt class={label}>{t("a_rec_host")}</dt><dd data-record-host class="font-mono text-[0.8125rem] break-all text-cream"></dd>
+            <dt class={label}>{t("a_rec_value")}</dt><dd data-record-value class="font-mono text-[0.8125rem] leading-relaxed break-all text-cream"></dd>
           </dl>
           <span id="oa-record" hidden></span>
           <button type="button" data-copy-from="#oa-record" data-record-copy class={cx(copyChip, "absolute top-3 right-3")} hidden><PixelIcon name="copy" size={10} class="text-orange" /><span>{t("share_copy")}</span></button>
         </div>
       </div>
     </div>
-    <ol class="flex flex-wrap items-center gap-x-5 gap-y-3 bg-ink-2 px-4 py-3 text-[14px] text-cream">
+    <ol class="flex flex-wrap items-center gap-x-5 gap-y-3 bg-ink-2 px-4 py-3 text-[0.875rem] text-cream">
       {[t("a_step_add"), t("a_step_dnssec"), t("a_step_test")].map((step, i) => (
         <li class="flex items-center gap-2.5">
           <span class="grid size-5 place-items-center bg-orange font-pixel text-xs text-ink">{i + 1}</span>{step}

@@ -13,8 +13,8 @@ const escape = (s: string) => s.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};
 export function renderChecks(list: HTMLElement, checks: Check[]): number {
   list.innerHTML = checks.map(({ tone, label, detail }) => `<li class="flex flex-wrap items-center gap-x-3 gap-y-0.5 border-b-2 border-dotted border-slip-line py-2 last:border-0">
     <span class="grid size-5 shrink-0 place-items-center ${MARK[tone][0]} text-paper"><svg viewBox="0 0 8 8" width="11" height="11" aria-hidden="true" shape-rendering="crispEdges"><path d="${MARK[tone][1]}" fill="currentColor"/></svg></span>
-    <span class="text-[15px] ${tone === "bad" ? "text-danger" : "text-ink"}">${escape(label)}</span>
-    ${detail ? `<span class="basis-full pl-8 font-mono text-[13px] text-graphite sm:ml-auto sm:basis-auto sm:pl-0 sm:text-right">${escape(detail)}</span>` : ""}
+    <span class="text-[0.9375rem] ${tone === "bad" ? "text-danger" : "text-ink"}">${escape(label)}</span>
+    ${detail ? `<span class="basis-full pl-8 font-mono text-[0.8125rem] text-graphite sm:ml-auto sm:basis-auto sm:pl-0 sm:text-right">${escape(detail)}</span>` : ""}
   </li>`).join("");
   return checks.filter((c) => c.tone === "ok").length;
 }

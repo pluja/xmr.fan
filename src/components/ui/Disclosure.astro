@@ -7,7 +7,7 @@ const { title, hint, open, class: cls, ...attrs } = Astro.props;
 <details class={cx("group/disc border-2 border-dashed border-line open:border-solid open:border-graphite open:bg-well", cls)} open={open} {...attrs}>
   <summary class="flex cursor-pointer list-none items-center gap-3 px-4 py-3 [&::-webkit-details-marker]:hidden">
     <svg viewBox="0 0 3 5" width="6" height="10" class="shrink-0 text-orange transition-transform group-open/disc:rotate-90" aria-hidden="true" shape-rendering="crispEdges"><path d="M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z" fill="currentColor" /></svg>
-    <span class="font-pixel text-[15px] text-cream">{title}</span>
+    <span class="font-pixel text-[0.9375rem] text-cream">{title}</span>
     {hint && <span class="ml-auto hidden text-right text-xs text-slip-ink sm:inline">{hint}</span>}
   </summary>
   <div class="grid gap-3 px-4 pt-1 pb-4"><slot /></div>
