@@ -73,7 +73,6 @@ const priorityName = (p: string) => t(`fee_${p}` as never).replace(/\s*[(（].*[
   import type { Locale } from "../../i18n/ui";
   import { formatMoney, formatNumber } from "../../lib/currency";
   import { PRIORITIES, blocksToClear, estimateTxWeight, feeFor } from "../../lib/fees";
-  import { picoToXmr } from "../../lib/monero";
   import { call, getFeeEstimate, getInfo } from "../../lib/node-client";
   import { BLOCK_SECONDS, PICO_PER_XMR, type FeeEstimate, type NodeInfo } from "../../lib/nodes";
   import { getPrices, type Prices } from "../../lib/price-client";
@@ -85,6 +84,9 @@ const priorityName = (p: string) => t(`fee_${p}` as never).replace(/\s*[(（].*[
   const $ = (s: string) => root.querySelector<HTMLElement>(s)!;
   const currency = currencyPicker(lang, render);
   const kb = (bytes: number) => formatNumber(bytes / 1000, lang, 1);
+  // Fixed decimals so the priority fees line up and compare at a glance.
+  const xmrFee = new Intl.NumberFormat(lang, { minimumFractionDigits: 6, maximumFractionDigits: 6 });
+  const xmr = (pico: number) => `${xmrFee.format(pico / PICO_PER_XMR)} XMR`;
 
   let estimate: FeeEstimate | undefined, info: NodeInfo | undefined, poolBytes = 0, prices: Prices | undefined;
 
@@ -98,7 +100,7 @@ const priorityName = (p: string) => t(`fee_${p}` as never).replace(/\s*[(（].*[
     if (!estimate || !info) return;
     const rates = estimate.fees?.length ? estimate.fees : [estimate.fee];
     const typical = feeFor(estimateTxWeight(1, 2), rates[0], estimate.quantization_mask);
-    $("[data-typical-xmr]").textContent = `${picoToXmr(String(typical))} XMR`;
+    $("[data-typical-xmr]").textContent = xmr(typical);
     $("[data-typical-fiat]").textContent = fiat(typical);
 
     const weight = estimateTxWeight(count("inputs", 1, 16), count("recipients", 1, 15) + 1);
@@ -112,7 +114,7 @@ const priorityName = (p: string) => t(`fee_${p}` as never).replace(/\s*[(（].*[
       row.hidden = rates[i] === undefined;
       if (row.hidden) return;
       const fee = feeFor(weight, rates[i], estimate!.quantization_mask);
-      row.querySelector("[data-xmr]")!.textContent = `${picoToXmr(String(fee))} XMR`;
+      row.querySelector("[data-xmr]")!.textContent = xmr(fee);
       row.querySelector("[data-fiat]")!.textContent = fiat(fee);
       const blocks = i === 0 ? queue : 1;
       row.querySelector("[data-wait]")!.innerHTML = sameWait ? "" : `<i class="size-2 shrink-0 ${blocks === 1 ? "bg-good" : "bg-flame"}"></i>${blocks === 1
