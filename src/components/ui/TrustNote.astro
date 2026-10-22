@@ -1,9 +1,15 @@
 ---
+/* A one-line note in a tool's footer: a privacy promise with a green lock, or a tip with an info mark. */
 import { cx } from "./styles";
-/* A one-line privacy promise with a green lock. */
-interface Props { class?: string }
+
+interface Props { icon?: "lock" | "info"; class?: string }
+const { icon = "lock", class: cls } = Astro.props;
+const PATHS = {
+  lock: { d: "M2 0h4v1H2zM1 1h1v2H1zM6 1h1v2H6zM0 3h8v5H0zM3 5h2v2H3z", color: "text-good" },
+  info: { d: "M0 0h8v8H0zM3 1v2h2V1zM3 4v3h2V4z", color: "text-orange" },
+};
 ---
-<p class={cx("flex items-start gap-2.5 text-sm text-ash", Astro.props.class)}>
-  <svg viewBox="0 0 8 8" width="14" height="14" class="mt-0.5 shrink-0 text-good" aria-hidden="true" shape-rendering="crispEdges"><path fill-rule="evenodd" d="M2 0h4v1H2zM1 1h1v2H1zM6 1h1v2H6zM0 3h8v5H0zM3 5h2v2H3z" fill="currentColor" /></svg>
+<p class={cx("flex items-start gap-2.5 text-sm text-ash", cls)}>
+  <svg viewBox="0 0 8 8" width="14" height="14" class={cx("mt-0.5 shrink-0", PATHS[icon].color)} aria-hidden="true" shape-rendering="crispEdges"><path fill-rule="evenodd" d={PATHS[icon].d} fill="currentColor" /></svg>
   <span><slot /></span>
 </p>
