@@ -60,7 +60,8 @@ export class Scene {
   }
 
   private frame = (now: number) => {
-    const dt = Math.min(0.05, (now - this.last) / 1000);
+    // A frame timestamp can predate the performance.now() taken when the loop started.
+    const dt = Math.min(0.05, Math.max(0, (now - this.last) / 1000));
     this.last = now;
     this.t += dt;
     this.render(dt);
@@ -237,7 +238,7 @@ export function ringScene(labels: { valid: string }) {
     if (lit) { s.sprite("check", 58, 5, C.mint); s.text(labels.valid, 67, 8, { color: C.mint, size: 3.4, align: "start" }); }
   };
   const hit = (x: number, y: number) => (y < 30 ? -1 : xs.findIndex((px) => x >= px - 0.5 && x < px + 5.5));
-  return { draw, state, hit };
+  return { draw, state, hit, count };
 }
 
 /* ---------- 5. Stealth addresses: one-time addresses only your wallet recognizes ---------- */
