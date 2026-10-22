@@ -3,7 +3,7 @@ import PixelIcon from "../PixelIcon.astro";
 import AddressInput from "../ui/AddressInput.astro";
 import Range from "../ui/Range.astro";
 import TrustNote from "../ui/TrustNote.astro";
-import { button, cx, link, message } from "../ui/styles";
+import { button, cx, message } from "../ui/styles";
 import donations from "../../data/donations.json";
 import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
 
@@ -20,27 +20,24 @@ const PRESETS = ["getmonero", "torproject", "grapheneos", "privacyguides", "p2po
 ---
 <div id="beat-tool" class="grid grid-cols-1 gap-6" data-strings={strings}>
   <section class="grid gap-2.5">
-    <div class="flex items-baseline justify-between gap-4">
-      <label for="bt-address" class="flex items-center gap-2.5 font-pixel text-sm tracking-[0.2em] text-cream uppercase"><span class="size-2 bg-orange"></span>{t("bt_address")}</label>
-      <button type="button" data-example class={link}>{t("try_example")}</button>
-    </div>
+    <label for="bt-address" class="flex items-center gap-2.5 font-pixel text-sm tracking-[0.2em] text-cream uppercase"><span class="size-2 bg-orange"></span>{t("bt_address")}</label>
     <AddressInput id="bt-address" name="address" paste={t("pl_paste")} describedby="beat-message" />
     <p id="beat-message" class={message}></p>
-    <div class="flex flex-wrap items-center gap-1.5 text-sm">
-      <span class="text-ash">{t("bt_try")}:</span>
-      {PRESETS.map((d) => <button type="button" data-preset={d.address} class="cursor-pointer border-2 border-graphite px-2.5 py-0.5 text-sm text-ash hover:border-orange hover:text-orange">{d.name}</button>)}
+    <div class="flex flex-wrap items-center gap-2 text-sm max-sm:-mx-5 max-sm:flex-nowrap max-sm:overflow-x-auto max-sm:px-5 max-sm:pb-1">
+      <span class="shrink-0 text-ash">{t("bt_try")}:</span>
+      {PRESETS.map((d) => <button type="button" data-preset={d.address} class="min-h-10 shrink-0 cursor-pointer border-2 border-graphite px-3 text-sm whitespace-nowrap text-ash hover:border-orange hover:text-orange">{d.name}</button>)}
     </div>
   </section>
 
   <section data-stage class="grid gap-4 border-2 border-graphite bg-ink p-3 shadow-[8px_8px_0_var(--color-shade)] sm:p-4 [&:fullscreen]:flex [&:fullscreen]:flex-col [&:fullscreen]:items-center [&:fullscreen]:justify-center [&:fullscreen]:border-0 [&:fullscreen]:px-[3vw] [&:fullscreen]:py-[2vh] [&:fullscreen]:shadow-none [&:fullscreen>*]:w-[min(100%,calc(80vh*var(--ratio,1.78)))]" hidden>
     <canvas data-viz class="block w-full [image-rendering:pixelated]"></canvas>
     <div class="flex flex-wrap items-center gap-x-4 gap-y-3">
-      <button type="button" data-play class={cx(button.primary, "min-w-32")}>
+      <button type="button" data-play class={cx(button.primary, "min-w-32 max-sm:w-full")}>
         <PixelIcon name="play" size={18} class="icon-play" /><PixelIcon name="pause" size={18} class="icon-pause hidden" /><span>{t("bt_play")}</span>
       </button>
-      <p data-info class="font-pixel text-sm text-orange"></p>
-      <div class="ml-auto flex items-center gap-3">
-        <label class="flex items-center gap-2"><PixelIcon name="sound" size={16} class="text-orange" /><Range name="volume" label={t("bt_volume")} /></label>
+      <p data-info class="font-pixel text-sm text-orange max-sm:hidden"></p>
+      <div class="ml-auto flex items-center gap-3 max-sm:ml-0 max-sm:w-full">
+        <label class="flex items-center gap-2 max-sm:flex-1"><PixelIcon name="sound" size={16} class="text-orange" /><Range name="volume" label={t("bt_volume")} class="max-sm:w-auto max-sm:flex-1" /></label>
         <button type="button" data-fullscreen class={cx(button.ghost, "px-3")} aria-label={t("bt_fullscreen")} title={t("bt_fullscreen")}><PixelIcon name="expand" size={16} /></button>
       </div>
     </div>
@@ -62,7 +59,7 @@ const PRESETS = ["getmonero", "torproject", "grapheneos", "privacyguides", "p2po
   import { bindCopyButtons } from "../ui/copy";
   import { readStrings } from "../../i18n/format";
   import { songFromAddress, STEPS, type Song } from "../../lib/beat";
-  import { EXAMPLE_ADDRESS, parseAddress } from "../../lib/monero";
+  import { parseAddress } from "../../lib/monero";
 
   const root = document.getElementById("beat-tool")!;
   const t = readStrings(root);
@@ -154,7 +151,6 @@ const PRESETS = ["getmonero", "torproject", "grapheneos", "privacyguides", "p2po
   $("[data-fullscreen]").addEventListener("click", () => (document.fullscreenElement ? document.exitFullscreen() : stage.requestFullscreen()));
   $<HTMLInputElement>("input[name=volume]").addEventListener("input", (e) => player?.setVolume(Number((e.target as HTMLInputElement).value)));
   input.addEventListener("input", load);
-  $("[data-example]").addEventListener("click", () => { address_.set(EXAMPLE_ADDRESS); load(); play(); });
   root.querySelectorAll<HTMLButtonElement>("[data-preset]").forEach((b) => b.addEventListener("click", () => { address_.set(b.dataset.preset!); load(); play(); }));
   bindCopyButtons(root, t("copied"));
   document.addEventListener("keydown", (e) => {
