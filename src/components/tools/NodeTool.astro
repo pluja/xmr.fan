@@ -1,110 +1,243 @@
 ---
-import CopyButton from "../CopyButton.astro";
-import Field from "../Field.astro";
+import PixelIcon from "../PixelIcon.astro";
+import Button from "../ui/Button.astro";
+import Printer from "../ui/Printer.astro";
+import Receipt from "../ui/Receipt.astro";
+import Stamp from "../ui/Stamp.astro";
+import StatTile from "../ui/StatTile.astro";
+import TrustNote from "../ui/TrustNote.astro";
+import { cx, field, label, message } from "../ui/styles";
 import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
 
 interface Props { lang: Locale }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const strings = pickStrings(lang, [
-  "n_checking", "n_online", "n_synced", "n_behind", "n_network", "n_restricted", "n_unrestricted", "n_https", "n_plain", "n_cors", "n_no_cors", "n_update",
-  "n_err_unreachable", "n_err_timeout", "n_err_not_monero", "n_err_private", "n_err_onion", "n_err_bad_url", "n_err_rate_limited",
-  "n_ok", "n_down", "n_behind_short",
+  "n_checking", "n_err_unreachable", "n_err_timeout", "n_err_not_monero", "n_err_private", "n_err_onion", "n_err_bad_url", "n_err_rate_limited", "n_down", "n_behind_short",
+  "n_online_t", "n_behind_t", "n_offline_t", "n_online_sub", "n_behind_sub", "n_blocks", "n_passed", "n_c_reach", "n_c_reach_v", "n_c_sync", "n_c_sync_ok", "n_c_sync_bad",
+  "n_c_net", "n_c_ssl", "n_c_ssl_ok", "n_c_ssl_bad", "n_c_web", "n_c_web_ok", "n_c_web_bad", "n_c_rpc", "n_c_rpc_ok", "n_c_rpc_bad", "n_c_update", "n_c_update_ok", "n_c_update_bad",
+  "n_checked_at", "n_col_web", "n_summary", "n_checked_badge", "n_more", "n_check_this", "copied", "share_copy",
 ]);
-const secondary = "hidden sm:table-cell";
-const cell = "border-b-2 border-dotted border-graphite/40 py-2 pr-3";
+const FILTERS = [{ value: "all", name: t("n_all") }, { value: "ssl", name: "SSL" }, { value: "web", name: t("n_col_web") }];
+const heading = "font-pixel text-sm tracking-[0.2em] text-cream uppercase";
 ---
-<div id="node-tool" class="grid gap-8" data-strings={strings} data-lang={lang}>
-  <form data-check class="grid gap-3" novalidate>
-    <div class="flex flex-wrap items-end gap-2">
-      <Field label={t("n_input")} class="min-w-0 flex-1 basis-72">
-        <input name="url" placeholder="node.example.com:18089" autocomplete="off" spellcheck="false" autocapitalize="off" class="field font-mono text-[14px]" autofocus />
-      </Field>
-      <button class="btn mb-px" type="submit">{t("n_check")}</button>
+<div id="node-tool" class="grid grid-cols-1 gap-8" data-strings={strings} data-lang={lang}>
+  <form data-check class="grid gap-2.5" novalidate>
+    <label for="n-url" class={heading}>{t("n_input")}</label>
+    <div class="flex flex-col gap-3 sm:flex-row">
+      <input id="n-url" name="url" placeholder="node.example.com:18089" autocomplete="off" spellcheck="false" autocapitalize="off" class={cx(field, "min-w-0 flex-1 font-mono")} aria-describedby="n-message" autofocus />
+      <Button type="submit" class="sm:w-36">{t("n_check")}</Button>
     </div>
-    <p data-status class="text-[15px] empty:hidden" aria-live="polite"></p>
-    <ul data-results class="grid gap-2 empty:hidden"></ul>
+    <p id="n-message" class={message}></p>
   </form>
 
-  <template id="node-line"><li class="flex gap-2.5 text-[15px]"><span class="w-4 shrink-0 font-pixel" aria-hidden="true"></span><span></span></li></template>
-
-  <section class="grid gap-3">
-    <h2 class="font-pixel text-lg">{t("n_list_t")}</h2>
-    <p class="max-w-[66ch] text-sm text-graphite">{t("n_list_help")}</p>
-    <div class="overflow-x-auto">
-      <table class="w-full border-t-[3px] border-ink text-left text-[14px]">
-        <thead class="font-pixel text-sm">
-          <tr><th class={cell}>{t("n_col_node")}</th><th class={cell}>{t("n_col_height")}</th><th class:list={[cell, secondary]}>{t("n_col_speed")}</th><th class:list={[cell, secondary]}>SSL</th><th class:list={[cell, secondary]}>{t("n_col_web")}</th><th class={cell}></th></tr>
-        </thead>
-        <tbody data-list><tr><td class={cell} colspan="6">…</td></tr></tbody>
-      </table>
+  <Printer idle={t("n_printer_idle")} aria-live="polite">
+    <Receipt>
+      <div class="flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
+        <div class="grid min-w-0 flex-1 basis-64 gap-1">
+          <span class={label}>{t("n_node")}</span>
+          <span data-node class="font-mono text-lg font-semibold [overflow-wrap:anywhere] sm:text-xl"></span>
+          <span data-sub class="text-sm text-graphite"></span>
+        </div>
+        <Stamp class="mt-1 mr-2 shrink-0" />
+      </div>
+      <div data-details class="grid grid-cols-1 gap-x-10 gap-y-5 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
+        <div class="grid grid-cols-2 content-start gap-2">
+          <StatTile label={t("n_height")}><span data-height></span></StatTile>
+          <StatTile label={t("n_response")}><span data-ms></span></StatTile>
+          <StatTile label={t("n_network_l")}><span data-network class="capitalize"></span></StatTile>
+          <StatTile label={t("n_lag")}><span data-lag class="flex items-center gap-2 whitespace-nowrap"></span></StatTile>
+        </div>
+        <div class="grid content-start gap-1">
+          <div class="flex items-baseline justify-between gap-3">
+            <span class={label}>{t("n_checks")}</span>
+            <span data-passed class="text-sm"></span>
+          </div>
+          <ul data-checks></ul>
+        </div>
+      </div>
+      <Fragment slot="footer">
+        <span data-checked-at class={label}></span>
+        <span class={cx(label, "ml-auto")}>xmr.fan</span>
+      </Fragment>
+    </Receipt>
+    <div data-actions class="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2">
+      <Button variant="ghost" data-copy-node><PixelIcon name="copy" size={16} class="text-orange" /><span>{t("n_copy")}</span></Button>
+      <p class="text-sm text-ash">{t("n_paste_tip")}</p>
     </div>
-    <p class="text-xs text-graphite">{t("n_server_note")}</p>
+  </Printer>
+
+  <section class="grid gap-4" aria-labelledby="n-list">
+    <div class="flex flex-wrap items-center gap-x-4 gap-y-3 border-b-2 border-line pb-3">
+      <h2 id="n-list" class="flex items-center gap-2.5 font-pixel text-sm tracking-[0.2em] text-cream uppercase"><span class="size-2 bg-orange"></span>{t("n_list_t")}</h2>
+      <span data-summary class="text-sm text-ash"></span>
+      <div class="flex bg-well p-0.5 font-pixel text-xs uppercase sm:ml-auto" role="radiogroup" aria-label={t("n_list_t")}>
+        {FILTERS.map((f) => (
+          <label class="cursor-pointer px-3 py-1.5 text-ash has-checked:bg-graphite has-checked:text-cream has-focus-visible:outline-2 has-focus-visible:outline-orange">
+            <input type="radio" name="feature" value={f.value} checked={f.value === "all"} class="sr-only" />{f.name}
+          </label>
+        ))}
+      </div>
+    </div>
+    <div class="hidden grid-cols-[minmax(0,1fr)_88px_80px_44px_44px_32px] gap-x-4 px-4 sm:grid">
+      <span class={label}>{t("n_col_node")}</span>
+      <span class={label}>{t("n_speed")}</span>
+      <span class={cx(label, "text-right")}>{t("n_col_speed")}</span>
+      <span class={cx(label, "text-center")}>SSL</span>
+      <span class={cx(label, "text-center")}>{t("n_col_web")}</span>
+    </div>
+    <ul data-list class="grid gap-1"><li class="px-4 py-3 text-sm text-ash">…</li></ul>
   </section>
 
-  <template id="node-row">
-    <tr>
-      <td class:list={[cell, "break-all font-mono"]} data-name></td>
-      <td class={cell} data-height></td>
-      <td class:list={[cell, secondary, "font-mono"]} data-ms></td>
-      <td class:list={[cell, secondary]} data-ssl></td>
-      <td class:list={[cell, secondary]} data-web></td>
-      <td class:list={[cell, "text-right"]}><CopyButton lang={lang} text="" class="btn-ghost px-2 py-1 text-xs" /></td>
-    </tr>
-  </template>
+  <div class="grid gap-2.5 border-t-2 border-graphite pt-5">
+    <TrustNote>{t("n_trust")}</TrustNote>
+    <TrustNote icon="info">{t("n_tip")}</TrustNote>
+  </div>
 </div>
 
 <script>
+  import { renderChecks, type Check } from "../ui/checklist";
+  import { printer } from "../ui/printer";
+  import { tone } from "../ui/styles";
   import { readStrings } from "../../i18n/format";
   import type { Locale } from "../../i18n/ui";
   import { walletAddress, type NodeCheck } from "../../lib/nodes";
 
   const root = document.getElementById("node-tool")!;
   const t = readStrings(root);
-  const num = new Intl.NumberFormat(root.dataset.lang as Locale);
-  const form = root.querySelector<HTMLFormElement>("[data-check]")!;
+  const lang = root.dataset.lang as Locale;
+  const num = new Intl.NumberFormat(lang);
+  const when = new Intl.DateTimeFormat(lang, { dateStyle: "medium", timeStyle: "short" });
+  const $ = <T extends HTMLElement = HTMLElement>(s: string) => root.querySelector<T>(s)!;
+  const form = $<HTMLFormElement>("[data-check]");
   const input = form.elements.namedItem("url") as HTMLInputElement;
-  const status = root.querySelector<HTMLElement>("[data-status]")!, results = root.querySelector<HTMLElement>("[data-results]")!;
-  const lineTemplate = root.querySelector<HTMLTemplateElement>("#node-line")!, rowTemplate = root.querySelector<HTMLTemplateElement>("#node-row")!;
+  const print = printer($("[data-printer]"));
+  const escape = (s: string) => s.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
+  const VISIBLE = 8;
+  let checked: string | undefined, list: NodeCheck[] = [], showAll = false;
 
-  type Tone = "ok" | "warn" | "bad";
-  const MARK: Record<Tone, [string, string]> = { ok: ["✓", "text-ok"], warn: ["!", "text-flame"], bad: ["×", "text-danger"] };
+  const behind = (c: NodeCheck) => Math.max(0, (c.reference ?? 0) - (c.height ?? 0));
 
-  function line(tone: Tone, text: string) {
-    const li = lineTemplate.content.firstElementChild!.cloneNode(true) as HTMLLIElement;
-    const [mark, text_] = li.children as unknown as [HTMLElement, HTMLElement];
-    mark.textContent = MARK[tone][0];
-    mark.classList.add(MARK[tone][1]);
-    text_.textContent = text;
-    results.append(li);
+  function stamp(kind: "ok" | "warn" | "bad", text: string) {
+    const el = $("[data-stamp]");
+    el.dataset.tone = kind;
+    el.textContent = text;
   }
 
-  function showCheck(c: NodeCheck) {
-    results.replaceChildren();
-    status.textContent = "";
-    if (!c.ok) { line("bad", t(`n_err_${c.error}`)); return; }
-    line("ok", t("n_online", { ms: c.ms! }));
-    if (c.synced) line("ok", t("n_synced", { height: num.format(c.height!) }));
-    else line("bad", t("n_behind", { height: num.format(c.height!), reference: num.format(c.reference!) }));
-    line(c.network === "mainnet" ? "ok" : "warn", t("n_network", { network: c.network! }));
-    line(c.restricted ? "ok" : "warn", t(c.restricted ? "n_restricted" : "n_unrestricted"));
-    line(c.https ? "ok" : "warn", t(c.https ? "n_https" : "n_plain"));
-    line(c.cors ? "ok" : "warn", t(c.cors ? "n_cors" : "n_no_cors"));
-    if (c.updateAvailable) line("warn", t("n_update"));
+  function showCheck(c: NodeCheck, address: string) {
+    $("[data-node]").textContent = address;
+    $("[data-checked-at]").textContent = t("n_checked_at", { when: when.format(c.checkedAt ?? Date.now()) });
+    $("[data-details]").hidden = $("[data-actions]").hidden = !c.ok;
+    if (!c.ok) {
+      $("[data-sub]").textContent = t(`n_err_${c.error ?? "unreachable"}`);
+      stamp("bad", t("n_offline_t"));
+      print.set("bad", t("n_offline_t"), { feed: true });
+      return;
+    }
+    const lag = behind(c);
+    $("[data-sub]").textContent = c.synced ? t("n_online_sub") : t("n_behind_sub", { n: num.format(lag) });
+    stamp(c.synced ? "ok" : "warn", t(c.synced ? "n_online_t" : "n_behind_t"));
+    $("[data-height]").textContent = num.format(c.height!);
+    $("[data-ms]").textContent = `${num.format(c.ms!)} ms`;
+    $("[data-network]").textContent = c.network ?? "";
+    $("[data-lag]").innerHTML = `<i class="size-2 ${lag ? "bg-flame" : "bg-ok"}"></i>${escape(t("n_blocks", { n: num.format(lag) }))}`;
+    const checks: Check[] = [
+      { tone: "ok", label: t("n_c_reach"), detail: t("n_c_reach_v", { ms: num.format(c.ms!) }) },
+      { tone: c.synced ? "ok" : "bad", label: t("n_c_sync"), detail: c.synced ? t("n_c_sync_ok") : t("n_c_sync_bad", { n: num.format(lag) }) },
+      { tone: c.network === "mainnet" ? "ok" : "warn", label: t("n_c_net"), detail: c.network },
+      { tone: c.https ? "ok" : "warn", label: t("n_c_ssl"), detail: t(c.https ? "n_c_ssl_ok" : "n_c_ssl_bad") },
+      { tone: c.cors ? "ok" : "warn", label: t("n_c_web"), detail: t(c.cors ? "n_c_web_ok" : "n_c_web_bad") },
+      { tone: c.restricted ? "ok" : "bad", label: t("n_c_rpc"), detail: t(c.restricted ? "n_c_rpc_ok" : "n_c_rpc_bad") },
+      { tone: c.updateAvailable ? "warn" : "ok", label: t("n_c_update"), detail: t(c.updateAvailable ? "n_c_update_bad" : "n_c_update_ok") },
+    ];
+    const passed = renderChecks($("[data-checks]"), checks);
+    $("[data-passed]").textContent = t("n_passed", { n: passed, total: checks.length });
+    $("[data-passed]").className = `text-sm ${passed === checks.length ? "text-ok" : "text-flame"}`;
+    print.set(c.synced ? "ok" : "warn", `${c.synced ? "✓ " : ""}${t(c.synced ? "n_online_t" : "n_behind_t")} · ${t("n_passed", { n: passed, total: checks.length })}`, { feed: true });
   }
 
   async function check(value: string) {
-    results.replaceChildren();
-    status.textContent = t("n_checking", { node: value });
+    $("#n-message").textContent = "";
+    input.setAttribute("aria-invalid", "false");
+    print.set("working", t("n_checking", { node: value }));
     const res = await fetch(`/api/node?url=${encodeURIComponent(value)}`).catch(() => null);
-    const body = res ? await res.json().catch(() => null) : null;
-    if (!body || body.error && !("ok" in body)) {
-      status.textContent = "";
-      line("bad", t(`n_err_${body?.error ?? "unreachable"}`));
+    const body: (Omit<Partial<NodeCheck>, "error"> & { error?: string }) | null = res ? await res.json().catch(() => null) : null;
+    // Problems with what was typed stay with the field; a node that doesn't answer still gets a receipt.
+    if (body?.error && (!("ok" in body) || body.error === "private" || body.error === "onion")) {
+      input.setAttribute("aria-invalid", String(body.error !== "rate_limited"));
+      $("#n-message").textContent = t(`n_err_${body.error}`);
+      print.set("error", t(`n_err_${body.error}`));
       return;
     }
-    showCheck(body);
+    if (!body?.url) { showCheck({ url: value, ok: false, error: "unreachable", checkedAt: Date.now() } as NodeCheck, value); return; }
+    checked = walletAddress(body.url);
+    showCheck(body as NodeCheck, checked);
+    renderList();
+    if ($("[data-printer]").getBoundingClientRect().bottom > innerHeight) $("[data-printer]").scrollIntoView({ behavior: "smooth", block: "start" });
   }
+
+  /* ---------- public nodes ---------- */
+  const speed = (ms?: number) => (!ms ? 0 : ms < 350 ? 5 : ms < 500 ? 4 : ms < 800 ? 3 : ms < 1300 ? 2 : 1);
+  const flag = (on: boolean, text: string) => on
+    ? `<span class="${tone.good} px-1.5 py-0.5 font-pixel text-xs uppercase">${text}</span>`
+    : `<span class="block h-0.5 w-3 bg-line" aria-label="—"></span>`;
+
+  function row(c: NodeCheck) {
+    const address = walletAddress(c.url), hit = address === checked, up = c.ok && c.synced;
+    const state = !c.ok ? `<span class="text-bad">${t("n_down")}</span>` : !c.synced ? `<span class="text-flame">${t("n_behind_short")}</span>` : "";
+    const bars = Array.from({ length: 5 }, (_, i) => `<i class="h-2.5 flex-1 ${i < speed(up ? c.ms : 0) ? "bg-good" : "bg-graphite"}"></i>`).join("");
+    return `<li class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-1 border-l-4 px-4 py-2.5 sm:grid-cols-[minmax(0,1fr)_88px_80px_44px_44px_32px] ${hit ? "border-orange bg-[#3d2b22]" : "border-transparent bg-ink"}">
+      <button type="button" data-check-node="${escape(address)}" class="flex min-w-0 cursor-pointer items-center gap-2.5 text-left" title="${t("n_check_this")}">
+        <i class="size-2 shrink-0 ${!c.ok ? "bg-bad" : c.synced ? "bg-good" : "bg-flame"}"></i>
+        <span class="truncate font-mono text-[14px] ${hit ? "text-apricot" : "text-cream"} hover:text-orange hover:underline">${escape(address)}</span>
+        ${hit ? `<span class="${tone.accent} shrink-0 px-1.5 py-0.5 font-pixel text-xs uppercase">${t("n_checked_badge")}</span>` : ""}
+      </button>
+      <button type="button" data-copy-node="${escape(address)}" class="cursor-pointer p-1.5 text-slip-ink hover:text-orange sm:order-last" aria-label="${t("share_copy")} ${escape(address)}" title="${t("share_copy")}"><svg viewBox="0 0 8 8" width="14" height="14" aria-hidden="true" shape-rendering="crispEdges"><path fill-rule="evenodd" d="M2 0h6v6H2zM3 1v4h4V1zM0 2h1v5h5v1H0z" fill="currentColor"/></svg></button>
+      <span class="col-span-2 flex items-center gap-3 sm:contents">
+        <span class="flex w-20 gap-0.5 sm:w-auto" aria-hidden="true">${bars}</span>
+        <span class="font-mono text-[13px] text-ash sm:text-right">${state || (c.ms ? `${num.format(c.ms)} ms` : "–")}</span>
+        <span class="flex justify-center">${flag(c.url.startsWith("https:"), "SSL")}</span>
+        <span class="flex justify-center">${flag(!!c.cors, t("n_col_web"))}</span>
+      </span>
+    </li>`;
+  }
+
+  function renderList() {
+    const feature = root.querySelector<HTMLInputElement>("input[name=feature]:checked")!.value;
+    const shown = list.filter((c) => feature === "all" || (feature === "ssl" ? c.url.startsWith("https:") : c.cors));
+    const visible = showAll ? shown : shown.slice(0, VISIBLE);
+    const rest = shown.slice(VISIBLE);
+    const range = rest.filter((c) => c.ms).map((c) => c.ms!);
+    $("[data-list]").innerHTML = visible.map(row).join("") + (!showAll && rest.length
+      ? `<li><button type="button" data-more class="flex w-full cursor-pointer items-center gap-3 border-2 border-dashed border-line px-4 py-2.5 text-left hover:border-orange"><span class="font-pixel text-sm text-cream">› ${t("n_more", { n: rest.length })}</span>${range.length ? `<span class="ml-auto text-sm text-ash">${num.format(Math.min(...range))} – ${num.format(Math.max(...range))} ms</span>` : ""}</button></li>`
+      : "");
+  }
+
+  async function loadList() {
+    list = await (await fetch("/api/node?list")).json();
+    list.sort((a, b) => Number(b.ok && b.synced) - Number(a.ok && a.synced) || (a.ms ?? 1e9) - (b.ms ?? 1e9));
+    const online = list.filter((c) => c.ok && c.synced);
+    $("[data-summary]").textContent = t("n_summary", { online: online.length, height: num.format(Math.max(0, ...online.map((c) => c.height ?? 0))) });
+    renderList();
+  }
+
+  async function copy(btn: HTMLElement, text: string) {
+    try { await navigator.clipboard.writeText(text); } catch { return; }
+    const label = btn.querySelector("span");
+    if (!label) return;
+    const idle = label.textContent;
+    label.textContent = t("copied");
+    setTimeout(() => (label.textContent = idle), 1400);
+  }
+
+  root.addEventListener("click", (e) => {
+    const target = (e.target as HTMLElement).closest<HTMLElement>("[data-check-node], [data-copy-node], [data-more]");
+    if (!target) return;
+    if (target.dataset.more !== undefined) { showAll = true; renderList(); return; }
+    if (target.dataset.checkNode) { input.value = target.dataset.checkNode; form.requestSubmit(); return; }
+    copy(target, target.dataset.copyNode || checked || input.value.trim());
+  });
+  root.querySelectorAll("input[name=feature]").forEach((r) => r.addEventListener("change", renderList));
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -113,25 +246,6 @@ const cell = "border-b-2 border-dotted border-graphite/40 py-2 pr-3";
     history.replaceState(null, "", `?url=${encodeURIComponent(value)}`);
     check(value);
   });
-
-  async function loadList() {
-    const list = root.querySelector<HTMLElement>("[data-list]")!;
-    const checks: NodeCheck[] = await (await fetch("/api/node?list")).json();
-    checks.sort((a, b) => Number(b.ok && b.synced) - Number(a.ok && a.synced) || (a.ms ?? 1e9) - (b.ms ?? 1e9));
-    list.replaceChildren(...checks.map((c) => {
-      const row = rowTemplate.content.firstElementChild!.cloneNode(true) as HTMLTableRowElement;
-      const $ = (s: string) => row.querySelector<HTMLElement>(s)!;
-      const address = walletAddress(c.url);
-      $("[data-name]").textContent = address;
-      $("[data-ssl]").textContent = c.url.startsWith("https:") ? "✓" : "–";
-      $("[data-height]").textContent = !c.ok ? t("n_down") : c.synced ? `${t("n_ok")} · ${num.format(c.height!)}` : t("n_behind_short");
-      $("[data-height]").classList.add(!c.ok ? "text-danger" : c.synced ? "text-ok" : "text-flame");
-      $("[data-ms]").textContent = c.ms ? `${c.ms} ms` : "–";
-      $("[data-web]").textContent = c.cors ? "✓" : "–";
-      row.querySelector<HTMLButtonElement>("button")!.dataset.copyText = address;
-      return row;
-    }));
-  }
 
   const prefill = new URLSearchParams(location.search).get("url");
   if (prefill) { input.value = prefill; check(prefill); }
