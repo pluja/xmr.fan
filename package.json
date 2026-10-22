@@ -20,7 +20,8 @@
     "sponsor:approve": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings scripts/sponsor.ts approve",
     "heights": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings scripts/heights.ts",
     "brand": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings scripts/brand-images.ts",
-    "donations:check": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings scripts/donations.ts"
+    "donations:check": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings scripts/donations.ts",
+    "og": "node --experimental-strip-types --no-warnings scripts/og-images.ts"
   },
   "dependencies": {
     "@astrojs/node": "^11.1.9",
@@ -42,6 +43,7 @@
     "@types/pngjs": "^6.0.5",
     "fast-xml-parser": "^5.11.2",
     "jsqr": "^1.4.0",
+    "playwright": "^1.64.1",
     "pngjs": "^7.0.0",
     "typescript": "^5.9.3"
   }

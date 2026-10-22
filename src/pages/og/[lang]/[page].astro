@@ -1,0 +1,90 @@
+---
+/* Social share cards, 1200x630. Only built in dev: `npm run og` screenshots them into public/og/. */
+import Head from "../../../components/Head.astro";
+import Dither from "../../../components/Dither.astro";
+import PixelIcon from "../../../components/PixelIcon.astro";
+import PixelText from "../../../components/PixelText.astro";
+import { LOCALES, useTranslations, type Locale } from "../../../i18n/ui";
+import { descKey, titleKey, TOOLS, type Tool } from "../../../lib/tools";
+
+export function getStaticPaths() {
+  if (!import.meta.env.DEV) return [];
+  return LOCALES.flatMap((lang) => [
+    { params: { lang, page: "home" }, props: { tool: undefined } },
+    ...TOOLS.map((tool) => ({ params: { lang, page: tool.slug }, props: { tool } })),
+  ]);
+}
+
+const { tool } = Astro.props as { tool?: Tool };
+const lang = Astro.params.lang as Locale;
+const t = useTranslations(lang);
+const HOME_ICONS = ["qr", "check", "hourglass", "lens", "swap", "tag", "calendar", "shield", "server", "pickaxe", "notes", "heart"] as const;
+---
+<html lang={lang}>
+  <Head title="og" />
+  <body>
+    <main class="card">
+      {tool ? (
+        <>
+          <PixelIcon name={tool.icon} class="watermark" />
+          <header class="brand"><PixelText text="xmr.fan" class="wordmark" /></header>
+          <section class="main">
+            <div class="tile-shadow"><div class="tile"><PixelIcon name={tool.icon} class="tile-icon" /></div></div>
+            <div class="copy">
+              <h1>{t(titleKey(tool))}</h1>
+              <p>{t(descKey(tool))}</p>
+            </div>
+          </section>
+          <footer>
+            <Dither />
+            <div class="band">
+              <span class="url">xmr.fan/<b>{tool.slug}</b></span>
+              <span class="tagline">{t("tagline")}</span>
+            </div>
+          </footer>
+        </>
+      ) : (
+        <>
+          <section class="home">
+            <PixelText text="xmr.fan" class="home-wordmark" />
+            <h1 class="home-tagline">{t("tagline")}</h1>
+          </section>
+          <footer>
+            <Dither />
+            <div class="band icons">
+              {HOME_ICONS.map((name) => <PixelIcon name={name} class="band-icon" />)}
+            </div>
+          </footer>
+        </>
+      )}
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  html, body { margin: 0; background: var(--color-orange); }
+  .card { position: relative; width: 1200px; height: 630px; overflow: hidden; display: flex; flex-direction: column; color: var(--color-ink); background: var(--color-orange); }
+  .watermark { position: absolute; right: -60px; top: -40px; width: 480px; height: 480px; color: #f58132; }
+  .brand { position: relative; padding: 52px 72px 0; }
+  .wordmark { display: block; height: 44px; width: auto; }
+  .main { position: relative; flex: 1; display: flex; align-items: center; gap: 56px; padding: 0 72px 24px; }
+  .tile {
+    flex: none; display: grid; place-items: center; width: 224px; height: 224px; background: var(--color-ink); color: var(--color-orange);
+    clip-path: polygon(16px 0, calc(100% - 16px) 0, calc(100% - 16px) 16px, 100% 16px, 100% calc(100% - 16px), calc(100% - 16px) calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 16px calc(100% - 16px), 0 calc(100% - 16px), 0 16px, 16px 16px);
+  }
+  .tile-shadow { flex: none; filter: drop-shadow(12px 12px 0 #c4621f); }
+  .tile-icon { width: 144px; height: 144px; }
+  .copy { min-width: 0; }
+  h1 { margin: 0; font-family: var(--font-pixel); font-weight: 400; font-size: 76px; line-height: 1.08; letter-spacing: -0.01em; }
+  .copy p { margin: 22px 0 0; max-width: 760px; font-family: "Manrope Variable", sans-serif; font-weight: 600; font-size: 34px; line-height: 1.3; opacity: 0.82; }
+  footer { position: relative; }
+  .band { display: flex; align-items: center; justify-content: space-between; height: 104px; padding: 0 72px; background: var(--color-ink); font-family: var(--font-pixel); }
+  .url { font-size: 38px; color: var(--color-cream); }
+  .url b { font-weight: 400; color: var(--color-orange); }
+  .tagline { font-size: 26px; color: var(--color-ash); }
+  .home { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 36px; padding: 0 96px 20px; }
+  .home-wordmark { display: block; height: 150px; width: auto; align-self: flex-start; }
+  .home-tagline { font-size: 64px; }
+  .band.icons { height: 130px; padding: 0 96px; }
+  .band-icon { width: 56px; height: 56px; color: var(--color-orange); }
+</style>
