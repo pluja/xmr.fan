@@ -25,7 +25,10 @@ const mono = "font-mono text-[13px]";
 <div id="verify-tool" class="grid grid-cols-1 gap-8" data-strings={strings} data-lang={lang}>
   <form data-form class="grid grid-cols-1 gap-7" novalidate>
     <section class="grid gap-2.5">
-      <Step as="label" for="v-txid" n="01" label={t("v_txid")} />
+      <div class="flex items-baseline justify-between gap-4">
+        <Step as="label" for="v-txid" n="01" label={t("v_txid")} />
+        <button type="button" data-example class={link}>{t("try_example")}</button>
+      </div>
       <input id="v-txid" name="txid" spellcheck="false" autocomplete="off" autocapitalize="off" class={cx(field, mono)} aria-describedby="txid-message" autofocus />
       <p id="txid-message" class={message}></p>
     </section>
@@ -34,7 +37,7 @@ const mono = "font-mono text-[13px]";
       <section class="grid content-start gap-2.5">
         <div class="flex items-baseline justify-between gap-4">
           <Step as="label" for="v-address" n="02" label={t("v_address")} />
-          <span data-address-ok class="flex items-center gap-1.5 text-sm text-good" hidden><PixelIcon name="check" size={12} />{t("v_valid_address")}</span>
+          <span data-address-ok class="flex shrink-0 items-center gap-1.5 text-sm whitespace-nowrap text-good" hidden><PixelIcon name="check" size={12} />{t("v_valid_address")}</span>
         </div>
         <AddressInput id="v-address" name="address" paste={t("pl_paste")} describedby="address-message" />
         <p id="address-message" class={message}></p>
@@ -43,10 +46,12 @@ const mono = "font-mono text-[13px]";
       <section class="grid content-start gap-2.5">
         <Step as="label" for="v-secret" n="03" label={t("v_secret")} />
         <div class="relative">
-          <textarea id="v-secret" name="secret" rows="3" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder={t("v_secret_placeholder")} class={cx(field, mono, "min-h-[4.6rem] resize-y pr-32 break-all")} aria-describedby="secret-message"></textarea>
-          <span data-kind class={cx(chip, tone.accent, "absolute top-3 right-3")} hidden><svg viewBox="0 0 8 8" width="10" height="10" aria-hidden="true" shape-rendering="crispEdges"><path d="M0 2h4v4H0zM4 3h4v2H4zM6 5h1v2H6zM1 3v2h2V3z" fill="currentColor" fill-rule="evenodd" /></svg><span></span></span>
+          <textarea id="v-secret" name="secret" rows="3" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder={t("v_secret_placeholder")} class={cx(field, mono, "min-h-[4.6rem] resize-y pb-11 break-all sm:pr-32 sm:pb-3")} aria-describedby="secret-message"></textarea>
+          <span data-kind class={cx(chip, tone.accent, "absolute right-3 bottom-3 sm:top-3 sm:bottom-auto")} hidden><svg viewBox="0 0 8 8" width="10" height="10" aria-hidden="true" shape-rendering="crispEdges"><path d="M0 2h4v4H0zM4 3h4v2H4zM6 5h1v2H6zM1 3v2h2V3z" fill="currentColor" fill-rule="evenodd" /></svg><span></span></span>
         </div>
         <p id="secret-message" class={message}></p>
+        <button type="button" data-where-toggle class={cx(link, "justify-self-start")} aria-expanded="false" aria-controls="where">{t("v_where_t")}</button>
+        <p id="where" class="border-l-4 border-orange bg-ink px-4 py-3 text-sm text-ash" hidden>{t("v_where")}</p>
         <div data-message-field class="grid gap-1.5" hidden>
           <label for="v-message" class={fieldLabel}>{t("v_message")}</label>
           <input id="v-message" name="message" autocomplete="off" class={field} />
@@ -54,12 +59,9 @@ const mono = "font-mono text-[13px]";
       </section>
     </div>
 
-    <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
+    <div>
       <Button type="submit">{t("v_check")}</Button>
-      <button type="button" data-example class={cx(link, "text-ash")}>{t("try_example")}</button>
-      <button type="button" data-where-toggle class={cx(link, "sm:ml-auto")} aria-expanded="false" aria-controls="where">{t("v_where_t")}</button>
     </div>
-    <p id="where" class="-mt-3 border-l-4 border-orange bg-well px-5 py-4 text-[15px] text-ash" hidden>{t("v_where")}</p>
   </form>
 
   <Printer idle={t("v_printer_idle")} aria-live="polite">
@@ -161,7 +163,7 @@ const mono = "font-mono text-[13px]";
     stamp.textContent = t(state === "ok" ? "v_paid_t" : "v_fail_t");
     if (state === "idle") return print.set("idle");
     if (state === "checking") return print.set("working", t("v_checking"));
-    print.set(state === "ok" ? "ok" : "bad", state === "ok" ? `✓ ${$("[data-subtitle]").textContent}` : t("v_fail_t"), { feed: true });
+    print.set(state === "ok" ? "ok" : "bad", state === "ok" ? `✓ ${t("v_paid_t")} · ${$("[data-via]").textContent}` : t("v_fail_t"), { feed: true });
     if (box.getBoundingClientRect().bottom > innerHeight) box.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
