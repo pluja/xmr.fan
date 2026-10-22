@@ -1,8 +1,9 @@
 ---
-import CopyButton from "../CopyButton.astro";
-import Field from "../Field.astro";
 import PixelIcon from "../PixelIcon.astro";
-import TryExample from "../TryExample.astro";
+import AddressInput from "../ui/AddressInput.astro";
+import Range from "../ui/Range.astro";
+import TrustNote from "../ui/TrustNote.astro";
+import { button, cx, link, message } from "../ui/styles";
 import donations from "../../data/donations.json";
 import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
 
@@ -11,62 +12,54 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 const strings = pickStrings(lang, [
   "bt_play", "bt_stop", "bt_info", "bt_error", "bt_recording", "bt_video",
-  "bt_scale_minor", "bt_scale_major", "bt_scale_dorian", "bt_scale_phrygian", "bt_scale_lydian",
+  "bt_scale_minor", "bt_scale_major", "bt_scale_dorian", "bt_scale_phrygian", "bt_scale_lydian", "copied",
 ]);
 const PRESETS = ["getmonero", "torproject", "grapheneos", "privacyguides", "p2pool", "wikileaks"]
   .map((id) => donations.find((d) => d.id === id))
   .filter((d): d is (typeof donations)[number] => !!d);
 ---
-<div id="beat-tool" class="grid gap-5" data-strings={strings}>
-  <div class="relative grid gap-2">
-    <TryExample lang={lang} class="absolute right-0 top-0 !my-0 !py-0" />
-    <Field label={t("bt_address")} messageId="beat-message">
-      <textarea name="address" rows="2" spellcheck="false" autocomplete="off" autocapitalize="off" class="field min-h-14 resize-y font-mono text-[0.8125rem] [word-break:break-all]" aria-describedby="beat-message"></textarea>
-    </Field>
-    <p class="flex flex-wrap items-center gap-1.5 text-sm">
-      <span class="font-pixel text-graphite">{t("bt_try")}:</span>
-      {PRESETS.map((d) => <button type="button" data-preset={d.address} class="cursor-pointer border-2 border-ink px-2 py-0.5 font-pixel text-xs hover:bg-ink hover:text-orange">{d.name}</button>)}
-    </p>
-  </div>
-
-  <section data-stage class="beat-stage grid gap-3 border-2 border-ink bg-ink p-3 text-cream shadow-[6px_6px_0_var(--color-graphite)] sm:p-4" hidden>
-    <canvas data-viz class="block w-full border-2 border-graphite [image-rendering:pixelated]"></canvas>
-
-    <div class="flex flex-wrap items-center gap-x-4 gap-y-3">
-      <button type="button" data-play class="btn min-w-32 border-orange bg-orange px-5 py-3 text-lg text-ink">
-        <PixelIcon name="play" size={20} class="icon-play" /><PixelIcon name="pause" size={20} class="icon-pause hidden" /><span>{t("bt_play")}</span>
-      </button>
-      <p data-info class="font-pixel text-orange"></p>
-      <label class="ml-auto flex items-center gap-2 font-pixel text-xs text-ash">
-        <PixelIcon name="sound" size={16} class="text-orange" /><span class="sr-only">{t("bt_volume")}</span>
-        <input type="range" name="volume" min="0" max="1" step="0.05" value="0.8" class="volume w-24" aria-label={t("bt_volume")} />
-      </label>
-      <button type="button" data-fullscreen class="btn btn-ghost border-cream px-3 py-2 text-cream" aria-label={t("bt_fullscreen")} title={t("bt_fullscreen")}><PixelIcon name="expand" size={18} /></button>
+<div id="beat-tool" class="grid grid-cols-1 gap-6" data-strings={strings}>
+  <section class="grid gap-2.5">
+    <div class="flex items-baseline justify-between gap-4">
+      <label for="bt-address" class="flex items-center gap-2.5 font-pixel text-sm tracking-[0.2em] text-cream uppercase"><span class="size-2 bg-orange"></span>{t("bt_address")}</label>
+      <button type="button" data-example class={link}>{t("try_example")}</button>
     </div>
-
-    <div class="flex flex-wrap items-center gap-2">
-      <button type="button" data-video class="btn btn-ghost border-cream text-cream"><PixelIcon name="download" size={16} /><span>{t("bt_video")}</span></button>
-      <CopyButton lang={lang} text="" label={t("bt_copy_link")} class="btn-ghost border-cream text-cream" />
-      <span class="ml-auto hidden font-pixel text-xs text-ash sm:inline">{t("bt_keys")}</span>
+    <AddressInput id="bt-address" name="address" paste={t("pl_paste")} describedby="beat-message" />
+    <p id="beat-message" class={message}></p>
+    <div class="flex flex-wrap items-center gap-1.5 text-sm">
+      <span class="text-ash">{t("bt_try")}:</span>
+      {PRESETS.map((d) => <button type="button" data-preset={d.address} class="cursor-pointer border-2 border-graphite px-2.5 py-0.5 text-sm text-ash hover:border-orange hover:text-orange">{d.name}</button>)}
     </div>
   </section>
 
-  <p class="max-w-[66ch] text-sm text-graphite">{t("bt_note")}</p>
-</div>
+  <section data-stage class="grid gap-4 border-2 border-graphite bg-ink p-3 shadow-[8px_8px_0_var(--color-shade)] sm:p-4 [&:fullscreen]:flex [&:fullscreen]:flex-col [&:fullscreen]:items-center [&:fullscreen]:justify-center [&:fullscreen]:border-0 [&:fullscreen]:px-[3vw] [&:fullscreen]:py-[2vh] [&:fullscreen]:shadow-none [&:fullscreen>*]:w-[min(100%,calc(80vh*var(--ratio,1.78)))]" hidden>
+    <canvas data-viz class="block w-full [image-rendering:pixelated]"></canvas>
+    <div class="flex flex-wrap items-center gap-x-4 gap-y-3">
+      <button type="button" data-play class={cx(button.primary, "min-w-32")}>
+        <PixelIcon name="play" size={18} class="icon-play" /><PixelIcon name="pause" size={18} class="icon-pause hidden" /><span>{t("bt_play")}</span>
+      </button>
+      <p data-info class="font-pixel text-sm text-orange"></p>
+      <div class="ml-auto flex items-center gap-3">
+        <label class="flex items-center gap-2"><PixelIcon name="sound" size={16} class="text-orange" /><Range name="volume" label={t("bt_volume")} /></label>
+        <button type="button" data-fullscreen class={cx(button.ghost, "px-3")} aria-label={t("bt_fullscreen")} title={t("bt_fullscreen")}><PixelIcon name="expand" size={16} /></button>
+      </div>
+    </div>
+    <div class="flex flex-wrap items-center gap-2 border-t-2 border-graphite pt-4">
+      <button type="button" data-video class={button.ghost}><PixelIcon name="download" size={16} class="text-orange" /><span>{t("bt_video")}</span></button>
+      <button type="button" data-copy-from="#bt-link" class={button.ghost}><PixelIcon name="copy" size={16} class="text-orange" /><span>{t("bt_copy_link")}</span></button>
+      <span id="bt-link" hidden></span>
+      <span class="ml-auto hidden text-sm text-ash sm:inline">{t("bt_keys")}</span>
+    </div>
+  </section>
 
-<style>
-  .volume { appearance: none; height: 8px; background: var(--color-graphite); cursor: pointer; }
-  .volume::-webkit-slider-thumb { appearance: none; width: 10px; height: 16px; background: var(--color-orange); }
-  .volume::-moz-range-thumb { width: 10px; height: 16px; background: var(--color-orange); border: 0; border-radius: 0; }
-  /* Fullscreen: the canvas as large as fits, controls underneath. */
-  .beat-stage:fullscreen { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2vh 3vw; border: 0; box-shadow: none; }
-  .beat-stage:fullscreen canvas { width: min(100%, calc(80vh * var(--ratio, 1.78))); }
-  .beat-stage:fullscreen > :not(canvas) { width: min(100%, calc(80vh * var(--ratio, 1.78))); }
-</style>
+  <TrustNote icon="info" class="border-t-2 border-graphite pt-5">{t("bt_note")}</TrustNote>
+</div>
 
 <script>
   import { BeatPlayer } from "./beat-player";
   import { BeatVisuals } from "./beat-visuals";
+  import { addressInput } from "../ui/address-input";
+  import { bindCopyButtons } from "../ui/copy";
   import { readStrings } from "../../i18n/format";
   import { songFromAddress, STEPS, type Song } from "../../lib/beat";
   import { EXAMPLE_ADDRESS, parseAddress } from "../../lib/monero";
@@ -74,7 +67,8 @@ const PRESETS = ["getmonero", "torproject", "grapheneos", "privacyguides", "p2po
   const root = document.getElementById("beat-tool")!;
   const t = readStrings(root);
   const $ = <T extends HTMLElement = HTMLElement>(s: string) => root.querySelector<T>(s)!;
-  const input = $<HTMLTextAreaElement>("textarea[name=address]");
+  const address_ = addressInput($("[data-address-input]"), () => load());
+  const input = address_.field;
   const stage = $("[data-stage]");
   const canvas = $<HTMLCanvasElement>("[data-viz]");
   const playBtn = $<HTMLButtonElement>("[data-play]");
@@ -114,6 +108,7 @@ const PRESETS = ["getmonero", "torproject", "grapheneos", "privacyguides", "p2po
     const value = input.value.trim();
     const next = parseAddress(value).ok ? songFromAddress(value) : null;
     input.setAttribute("aria-invalid", String(!!value && !next));
+    address_.show(!value ? "" : next ? "ok" : "error");
     $("#beat-message").textContent = value && !next ? t("bt_error") : "";
     stage.hidden = !next;
     if (!next) { stop(); visuals.stop(); return; }
@@ -123,7 +118,7 @@ const PRESETS = ["getmonero", "torproject", "grapheneos", "privacyguides", "p2po
     visuals.setSong(song, value);
     visuals.start();
     $("[data-info]").textContent = t("bt_info", { bpm: song.bpm, key: song.key, scale: t(`bt_scale_${song.scale}`) });
-    root.querySelector<HTMLButtonElement>("button[data-idle]")!.dataset.copyText = `${location.origin}${location.pathname}#${value}`;
+    $("#bt-link").textContent = `${location.origin}${location.pathname}#${value}`;
     history.replaceState(null, "", `#${value}`);
     if (changed && player?.playing) player.play(song);
   }
@@ -159,14 +154,15 @@ const PRESETS = ["getmonero", "torproject", "grapheneos", "privacyguides", "p2po
   $("[data-fullscreen]").addEventListener("click", () => (document.fullscreenElement ? document.exitFullscreen() : stage.requestFullscreen()));
   $<HTMLInputElement>("input[name=volume]").addEventListener("input", (e) => player?.setVolume(Number((e.target as HTMLInputElement).value)));
   input.addEventListener("input", load);
-  $("[data-example]").addEventListener("click", () => { input.value = EXAMPLE_ADDRESS; load(); play(); });
-  root.querySelectorAll<HTMLButtonElement>("[data-preset]").forEach((b) => b.addEventListener("click", () => { input.value = b.dataset.preset!; load(); play(); }));
+  $("[data-example]").addEventListener("click", () => { address_.set(EXAMPLE_ADDRESS); load(); play(); });
+  root.querySelectorAll<HTMLButtonElement>("[data-preset]").forEach((b) => b.addEventListener("click", () => { address_.set(b.dataset.preset!); load(); play(); }));
+  bindCopyButtons(root, t("copied"));
   document.addEventListener("keydown", (e) => {
     if (e.key !== " " || stage.hidden || /^(INPUT|TEXTAREA|SELECT|BUTTON)$/.test((e.target as HTMLElement).tagName)) return;
     e.preventDefault();
     toggle();
   });
 
-  input.value = decodeURIComponent(location.hash.slice(1));
+  address_.set(decodeURIComponent(location.hash.slice(1)));
   load();
 </script>
