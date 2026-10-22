@@ -1,6 +1,7 @@
 ---
 /* A Monero address field whose first and last characters can be highlighted, so people can compare
-   them with the address they expect. Drive it with addressInput() from address-input.ts. */
+   them with the address they expect. Drive it with addressInput() from address-input.ts. The slot is
+   for badges laid over the field. */
 import { field } from "./styles";
 
 interface Props { id: string; name: string; value?: string; placeholder?: string; paste?: string; describedby?: string; autofocus?: boolean }
@@ -15,5 +16,6 @@ const text = ["block min-h-[4.6rem] w-full whitespace-pre-wrap break-all px-4 py
     class:list={[text, "absolute inset-0 resize-none overflow-hidden bg-transparent text-transparent caret-cream outline-none placeholder:text-line selection:bg-orange/35 selection:text-transparent"]}
     aria-describedby={describedby} autofocus={autofocus}
   >{value}</textarea>
+  <slot />
   {paste && <button type="button" data-paste class="absolute right-2 bottom-2 cursor-pointer bg-graphite px-2.5 py-1 font-pixel text-[11px] uppercase tracking-wider text-cream hover:bg-orange hover:text-ink" hidden>{paste}</button>}
 </div>

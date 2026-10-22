@@ -2,6 +2,7 @@
 import { button, code, field, fold, label, link, message } from "../ui/styles";
 import PixelIcon from "../PixelIcon.astro";
 import AddressInput from "../ui/AddressInput.astro";
+import QrCode from "../ui/QrCode.astro";
 import Slip from "../ui/Slip.astro";
 import Step from "../ui/Step.astro";
 import TrustNote from "../ui/TrustNote.astro";
@@ -86,12 +87,12 @@ const strings = pickStrings(lang, [
         <span>{t("pl_request")}</span><span>{t("scan_to_pay")}</span>
       </div>
       <p id="slip-name" class="-mt-2 text-lg font-bold leading-tight empty:hidden"></p>
-      <div id="qr" class="grid aspect-square place-items-center [&.reveal_svg]:motion-safe:animate-qr-print">
+      <QrCode id="qr">
         <div class="grid justify-items-center gap-3 px-8 text-center text-sm text-slip-ink">
           <PixelIcon name="qr" size={56} class="text-peach" />
           <span>{t("pl_waiting")}</span>
         </div>
-      </div>
+      </QrCode>
       <div id="slip-amount-row" class="flex flex-wrap items-baseline justify-between gap-x-3" hidden>
         <span id="slip-amount" class="font-pixel text-3xl"></span>
         <span id="slip-fiat" class="text-sm text-slip-ink"></span>
@@ -144,7 +145,8 @@ const strings = pickStrings(lang, [
   import { LIMITS, validatePayment, type PaymentField, type PaymentInput } from "../../lib/payment";
   import { publishPayment } from "../../lib/payment-store";
   import { chosenCurrency, getPrices } from "../../lib/price-client";
-  import { drawQr, qrPng, qrSvg } from "../../lib/qr";
+  import { drawQr, qrPng } from "../../lib/qr";
+  import { qrBox } from "../ui/qr";
   import { encodeShare } from "../../lib/share";
   import { addressInput, shortAddressHtml } from "../ui/address-input";
 
@@ -152,12 +154,11 @@ const strings = pickStrings(lang, [
   const t = readStrings(form);
   const lang = form.dataset.lang as Locale;
   const $ = (id: string) => document.getElementById(id);
-  const status = $("address-status")!, out = $("uri")!, qrBox = $("qr")!;
+  const status = $("address-status")!, out = $("uri")!, showQr = qrBox($("qr")!);
   const address = addressInput(form.querySelector("[data-address-input]")!, () => render());
   const copyBtn = $("copy") as HTMLButtonElement, dlBtn = $("download") as HTMLButtonElement, shareBtn = $("share") as HTMLButtonElement;
   const shareBox = $("share-box")!, shareLink = $("share-link") as HTMLInputElement, shareEmbed = $("share-embed") as HTMLTextAreaElement;
   const copyLabel = copyBtn.querySelector("span")!;
-  const placeholder = qrBox.innerHTML;
   const FIELDS: PaymentField[] = ["address", "amount", "paymentId", "name", "description"];
   let uri = "", view: "pretty" | "raw" = "pretty", price: number | undefined;
 
@@ -211,7 +212,6 @@ const strings = pickStrings(lang, [
     }
     $("description-count")!.textContent = `${input.description?.length ?? 0} / ${LIMITS.description}`;
 
-    const wasEmpty = !uri;
     uri = result.ok ? result.uri : "";
     copyBtn.disabled = dlBtn.disabled = shareBtn.disabled = !uri;
     form.toggleAttribute("data-empty", !uri);
@@ -227,16 +227,7 @@ const strings = pickStrings(lang, [
     if (amount && !price) getPrices().then((p) => { price = p[chosenCurrency(lang)]; renderFiat(value("amount")); }).catch(() => {});
     renderFiat(errorFor("amount") ? "" : input.amount ?? "");
 
-    if (!uri) {
-      qrBox.innerHTML = placeholder;
-      qrBox.classList.remove("reveal");
-    } else {
-      const drawing = drawQr(uri);
-      // Module gaps need at least ~7 physical pixels per module, or they blur into gray.
-      const gaps = (qrBox.clientWidth / drawing.size) * devicePixelRatio >= 7;
-      qrBox.innerHTML = qrSvg(drawing, t("qr_alt"), { gaps });
-      qrBox.classList.toggle("reveal", wasEmpty);
-    }
+    showQr(uri, t("qr_alt"));
     publishPayment({ input, ok: result.ok });
   }
 

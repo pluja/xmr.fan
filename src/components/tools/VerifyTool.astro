@@ -7,7 +7,7 @@ import Slip from "../ui/Slip.astro";
 import StatTile from "../ui/StatTile.astro";
 import Step from "../ui/Step.astro";
 import TrustNote from "../ui/TrustNote.astro";
-import { chip, field, fieldLabel, label, link, message } from "../ui/styles";
+import { chip, field, tone, fieldLabel, label, link, message } from "../ui/styles";
 import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
 
 interface Props { lang: Locale }
@@ -42,7 +42,7 @@ const mono = "font-mono text-[13px]";
       <Step as="label" for="v-secret" n="03" label={t("v_secret")} />
       <div class="relative">
         <textarea id="v-secret" name="secret" rows="2" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder={t("v_secret_placeholder")} class:list={[field, mono, "min-h-14 resize-y pr-32 break-all"]} aria-describedby="secret-message"></textarea>
-        <span data-kind class:list={[chip, "absolute top-3 right-3 bg-[#4a2a18] text-orange"]} hidden><svg viewBox="0 0 8 8" width="10" height="10" aria-hidden="true" shape-rendering="crispEdges"><path d="M0 2h4v4H0zM4 3h4v2H4zM6 5h1v2H6zM1 3v2h2V3z" fill="currentColor" fill-rule="evenodd" /></svg><span></span></span>
+        <span data-kind class:list={[chip, tone.accent, "absolute top-3 right-3"]} hidden><svg viewBox="0 0 8 8" width="10" height="10" aria-hidden="true" shape-rendering="crispEdges"><path d="M0 2h4v4H0zM4 3h4v2H4zM6 5h1v2H6zM1 3v2h2V3z" fill="currentColor" fill-rule="evenodd" /></svg><span></span></span>
       </div>
       <p id="secret-message" class={message}></p>
       <div data-message-field class="grid gap-1.5" hidden>

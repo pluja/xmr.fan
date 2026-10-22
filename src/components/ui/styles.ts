@@ -10,7 +10,14 @@ export const message = "text-sm text-bad empty:hidden";
 export const link = "cursor-pointer text-sm text-orange underline underline-offset-3";
 /** Small uppercase pixel label, for slips. */
 export const label = "font-pixel text-[11px] uppercase tracking-[0.18em] text-slip-ink";
-export const chip = "inline-flex items-center gap-1.5 bg-graphite px-2.5 py-1 font-pixel text-[11px] uppercase tracking-wider text-cream";
+export const chip = "inline-flex items-center gap-1.5 px-2.5 py-1 font-pixel text-[11px] uppercase tracking-wider";
+/** Chip colors; pick one with chip. */
+export const tone = {
+  neutral: "bg-graphite text-cream",
+  accent: "bg-[#4a2a18] text-orange",
+  good: "bg-[#1f3a2a] text-good",
+  bad: "bg-[#3a1f1f] text-bad",
+} as const;
 /** A code well with an orange edge. */
 export const code = "block border-l-4 border-orange bg-well px-5 py-4 font-mono text-[13px] leading-[1.7] text-ash break-all";
 
