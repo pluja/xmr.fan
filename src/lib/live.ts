@@ -2,8 +2,11 @@
 
 export const POLL_SECONDS = 5;
 
-/** Notes of C minor pentatonic over two octaves, as MIDI numbers. */
-const NOTES = [60, 63, 65, 67, 70, 72, 75, 77, 79, 82];
+/** C minor pentatonic, as semitones above C. */
+const SCALE = [0, 3, 5, 7, 10];
+
+/** Low, normal or high fee, compared with the node's fee estimates for each priority. */
+export type FeeTier = 0 | 1 | 2;
 
 export interface PoolChange { added: string[]; removed: string[] }
 
@@ -15,8 +18,13 @@ export function diffPool(previous: ReadonlySet<string>, current: readonly string
   };
 }
 
-/** The same transaction always plays the same note. */
-export const noteFor = (txHash: string) => NOTES[parseInt(txHash.slice(0, 8), 16) % NOTES.length];
+/** Wallets pay a multiple of the base fee per byte; anything from about the third priority up counts as high. */
+export function feeTier(fee: number, bytes: number, estimates: readonly number[]): FeeTier {
+  const perByte = fee / bytes;
+  if (estimates[2] && perByte >= estimates[2] * 0.9) return 2;
+  if (estimates[1] && perByte >= estimates[1] * 0.9) return 1;
+  return 0;
+}
 
-/** A hash's first byte as a color index, so each transaction keeps its color on screen. */
-export const shadeFor = (txHash: string) => parseInt(txHash.slice(8, 10), 16);
+/** The same transaction always plays the same note; higher fees play an octave higher. */
+export const noteFor = (txHash: string, tier: FeeTier = 1) => 48 + tier * 12 + SCALE[parseInt(txHash.slice(0, 8), 16) % SCALE.length];

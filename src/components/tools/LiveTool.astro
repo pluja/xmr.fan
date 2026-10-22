@@ -1,11 +1,13 @@
 ---
 import NodeSource from "../live/NodeSource.astro";
 import PixelIcon from "../PixelIcon.astro";
+import { FEE_TONES } from "./live-visuals";
 import { localePath, pickStrings, useTranslations, type Locale } from "../../i18n/ui";
 
 interface Props { lang: Locale }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
+const FEE_LEGEND = [["lv_fee_low", FEE_TONES[0][0]], ["lv_fee_normal", FEE_TONES[1][0]], ["lv_fee_high", FEE_TONES[2][0]]] as const;
 const strings = pickStrings(lang, ["lv_listen", "lv_stop", "lv_height", "lv_waiting", "lv_ago", "lv_new_block", "lv_hint", "dur_s", "dur_min", "dur_h", "dur_d", "dur_y"]);
 ---
 <div id="live-tool" class="grid gap-5" data-strings={strings} data-lang={lang} data-tx={localePath(lang, "/tx")}>
@@ -19,7 +21,14 @@ const strings = pickStrings(lang, ["lv_listen", "lv_stop", "lv_height", "lv_wait
         </span>
       </button>
     </div>
-    <p class="font-pixel text-xs text-ash">{t("lv_hint")}</p>
+    <div class="grid gap-1.5 font-pixel text-xs text-ash">
+      <p>{t("lv_legend")}</p>
+      <p class="flex flex-wrap items-center gap-x-4 gap-y-1">
+        {FEE_LEGEND.map(([key, color]) => <span class="flex items-center gap-1.5"><span class="size-2.5" style={`background:${color}`}></span>{t(key)}</span>)}
+        <span class="text-line">·</span>
+        <span>{t("lv_hint")}</span>
+      </p>
+    </div>
     <div class="flex flex-wrap items-center gap-x-4 gap-y-3">
       <button type="button" data-listen class="btn min-w-32 border-orange bg-orange px-5 py-3 text-lg text-ink">
         <PixelIcon name="sound" size={20} /><span>{t("lv_listen")}</span>
@@ -57,8 +66,8 @@ const strings = pickStrings(lang, ["lv_listen", "lv_stop", "lv_height", "lv_wait
   import { readStrings } from "../../i18n/format";
   import type { Locale } from "../../i18n/ui";
   import { formatDuration } from "../../lib/duration";
-  import { diffPool, POLL_SECONDS } from "../../lib/live";
-  import { call, getInfo } from "../../lib/node-client";
+  import { diffPool, feeTier, POLL_SECONDS, type FeeTier } from "../../lib/live";
+  import { call, getFeeEstimate, getInfo } from "../../lib/node-client";
 
   const root = document.getElementById("live-tool")!;
   const t = readStrings(root);
@@ -83,6 +92,18 @@ const strings = pickStrings(lang, ["lv_listen", "lv_stop", "lv_height", "lv_wait
     return music;
   }
 
+  /** Fee tier of each waiting transaction, from its fee per byte. Missing ones count as normal. */
+  const tiers = new Map<string, FeeTier>();
+  let estimates: number[] = [], estimatesAt = 0;
+  async function lookUpFees(hashes: string[]) {
+    if (!hashes.length) return;
+    try {
+      if (Date.now() - estimatesAt > 60_000) { estimates = (await getFeeEstimate()).fees ?? []; estimatesAt = Date.now(); }
+      const r = await call<{ txs?: { tx_hash: string; as_hex: string; as_json: string }[] }>("/get_transactions", { txs_hashes: hashes.slice(0, 40), decode_as_json: true });
+      for (const tx of r.txs ?? []) tiers.set(tx.tx_hash, feeTier(JSON.parse(tx.as_json).rct_signatures?.txnFee ?? 0, tx.as_hex.length / 2, estimates));
+    } catch { /* colors and notes fall back to normal */ }
+  }
+
   async function poll() {
     const [info, mempool] = await Promise.all([getInfo(), call<{ tx_hashes?: string[] }>("/get_transaction_pool_hashes", {})]);
     const hashes = mempool.tx_hashes ?? [];
@@ -92,9 +113,11 @@ const strings = pickStrings(lang, ["lv_listen", "lv_stop", "lv_height", "lv_wait
       visuals.block(info.height - 1, removed);
       music?.block();
     }
-    visuals.add(added, first);
+    await lookUpFees(added);
+    visuals.add(added, tiers, first);
     if (first) visuals.begin(info.height - 1);
-    else for (const { hash, delay } of music?.transactions(added) ?? []) setTimeout(() => visuals.ring(hash), delay * 1000);
+    else for (const { hash, delay } of music?.transactions(added, tiers) ?? []) setTimeout(() => visuals.ring(hash), delay * 1000);
+    for (const hash of removed) tiers.delete(hash);
     pool = new Set(hashes);
     height = info.height;
   }
@@ -115,7 +138,7 @@ const strings = pickStrings(lang, ["lv_listen", "lv_stop", "lv_height", "lv_wait
 
   /** Hovering a transaction plays it; browsers only allow sound once the visitor has interacted with the page. */
   let hovered: string | undefined, armed: string | undefined;
-  const touch = (hash: string) => { visuals.poke(hash); ensureMusic().hover(hash); };
+  const touch = (hash: string) => { visuals.poke(hash); ensureMusic().hover(hash, tiers.get(hash)); };
   const open = (hash: string) => window.open(`${root.dataset.tx}#${hash}`, "_blank", "noopener");
   canvas.addEventListener("pointermove", (e) => {
     if (e.pointerType === "touch") return;

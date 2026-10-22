@@ -2,7 +2,7 @@
    transactions ring as soft bells over them, and a block lands as a low chime. Gentle enough to
    leave on while working. */
 import { midiToHz } from "../../lib/beat";
-import { noteFor, POLL_SECONDS } from "../../lib/live";
+import { noteFor, POLL_SECONDS, type FeeTier } from "../../lib/live";
 import { Synth } from "./synth";
 
 /** Cm, Ab, Eb, Bb: every chord fits the C minor pentatonic notes transactions play. */
@@ -48,13 +48,13 @@ export class LiveMusic {
   }
 
   /** Spreads new transactions over the next poll on a slow beat grid; returns when each one sounds. */
-  transactions(hashes: string[]): { hash: string; delay: number }[] {
+  transactions(hashes: string[], tiers: ReadonlyMap<string, FeeTier>): { hash: string; delay: number }[] {
     if (!this.playing) return [];
     const slots = Math.floor(POLL_SECONDS / (BEAT / 2));
     const picked = hashes.slice(0, Math.min(MAX_NOTES_PER_POLL, slots));
     return picked.map((hash, i) => {
       const delay = 0.05 + Math.floor((i / picked.length) * slots) * (BEAT / 2);
-      this.synth.bell(midiToHz(noteFor(hash)), this.synth.now + delay, 0.05);
+      this.synth.bell(midiToHz(noteFor(hash, tiers.get(hash))), this.synth.now + delay, 0.05);
       return { hash, delay };
     });
   }
@@ -70,11 +70,11 @@ export class LiveMusic {
   }
 
   /** A hovered transaction plays its note an octave up; rapid sweeps are thinned so they stay pleasant. */
-  hover(hash: string) {
+  hover(hash: string, tier?: FeeTier) {
     const now = this.synth.now;
     if (now - this.lastHover < 0.06) return;
     this.lastHover = now;
     void this.synth.resume();
-    this.synth.bell(midiToHz(noteFor(hash) + 12), now + 0.01, 0.07);
+    this.synth.bell(midiToHz(noteFor(hash, tier) + 12), now + 0.01, 0.07);
   }
 }

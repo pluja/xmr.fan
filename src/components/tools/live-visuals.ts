@@ -2,15 +2,16 @@
    glass jar; when a block is found, the mined ones fly up, pack into a block and slide onto the chain.
    Tokens can be hovered (they pop and show their ID) and clicked. Text is drawn on top at full
    resolution so it stays sharp. */
-import { shadeFor } from "../../lib/live";
+import type { FeeTier } from "../../lib/live";
 
 const C = {
   bg: "#2b282d", dim: "#36323a", graphite: "#45404a", line: "#5a5460", ash: "#a39ca8",
   orange: "#fb8c3c", flame: "#ff6600", cream: "#fff1e4", peach: "#ffd2ad", ember: "#e0712c", red: "#ff3b30",
 };
 /** Token colors: [face, highlight, shade]. */
-const TOKENS: [string, string, string][] = [
-  [C.flame, C.orange, "#b84a00"], [C.orange, C.peach, "#c4621f"], [C.peach, C.cream, "#d99a6c"], [C.ember, "#f59a55", "#9e4a17"], ["#ffb27a", "#ffe0c4", "#c97c45"],
+/** Token colors per fee tier, [face, highlight, shade]: muted for low fees, gold for high. */
+export const FEE_TONES: [string, string, string][] = [
+  ["#9c6a48", "#c08a62", "#6e4630"], [C.orange, C.peach, "#c4621f"], ["#ffd24a", "#fff1b0", "#c99a1a"],
 ];
 /** Token sizes, largest first: the jar uses the biggest one that still fits every transaction. */
 const SIZES = [6, 5, 4, 3];
@@ -90,7 +91,7 @@ export class LiveVisuals {
   }
 
   /** New transactions in the pool; `instant` places them without the fall (first load). */
-  add(hashes: string[], instant = false) {
+  add(hashes: string[], tiers: ReadonlyMap<string, FeeTier>, instant = false) {
     for (const hash of hashes) {
       if (this.txs.has(hash)) continue;
       this.order.push(hash);
@@ -98,7 +99,7 @@ export class LiveVisuals {
       const s = this.slot(this.order.length - 1);
       this.txs.set(hash, {
         x: s.x, y: instant ? s.y : this.layout.jar.y - 8 - Math.random() * 16, tx: s.x, ty: s.y,
-        tone: TOKENS[shadeFor(hash) % TOKENS.length], glow: 0, pop: 0, leaving: false,
+        tone: FEE_TONES[tiers.get(hash) ?? 1], glow: 0, pop: 0, leaving: false,
       });
     }
   }
