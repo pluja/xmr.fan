@@ -1,0 +1,13 @@
+---
+/* Orange scan corners framing their positioned parent, with an optional label on the bottom edge. */
+interface Props { label?: string; inset?: string }
+const { label, inset = "0" } = Astro.props;
+const corner = "absolute size-6 border-orange";
+---
+<span class="pointer-events-none absolute" style={`inset:${inset}`} aria-hidden="true">
+  <span class:list={[corner, "top-0 left-0 border-t-4 border-l-4"]}></span>
+  <span class:list={[corner, "top-0 right-0 border-t-4 border-r-4"]}></span>
+  <span class:list={[corner, "bottom-0 left-0 border-b-4 border-l-4"]}></span>
+  <span class:list={[corner, "right-0 bottom-0 border-r-4 border-b-4"]}></span>
+  {label && <span class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 bg-paper px-2 font-pixel text-[10px] tracking-[0.2em] text-flame uppercase">{label}</span>}
+</span>

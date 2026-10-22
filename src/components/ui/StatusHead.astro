@@ -1,0 +1,23 @@
+---
+/* The status row at the top of a slip: a colored tile, a title and a line under it, and optional
+   small labels on the right. Set data-tone="ok" | "bad" | "warn" | "wait" on it to recolor; scripts
+   fill [data-status-title] and [data-status-sub]. */
+import PixelIcon from "../PixelIcon.astro";
+import { cx, label } from "./styles";
+
+interface Props { title?: string; sub?: string; tone?: "ok" | "bad" | "warn" | "wait"; class?: string; [attr: string]: unknown }
+const { title = "", sub = "", tone = "wait", class: cls, ...attrs } = Astro.props;
+---
+<div class={cx("group/status flex flex-wrap items-center gap-x-3.5 gap-y-3 border-b-2 border-slip-tile pb-4", cls)} data-tone={tone} {...attrs}>
+  <span class="pixel-corners grid size-10 shrink-0 place-items-center bg-graphite text-paper group-data-[tone=bad]/status:bg-danger group-data-[tone=ok]/status:bg-ok group-data-[tone=warn]/status:bg-flame">
+    <span class="hidden group-data-[tone=ok]/status:block"><PixelIcon name="check" size={24} class="block" /></span>
+    <svg viewBox="0 0 5 5" width="20" height="20" class="hidden group-data-[tone=bad]/status:block" aria-hidden="true" shape-rendering="crispEdges"><path d="M0 0h1v1H0zM4 0h1v1H4zM1 1h1v1H1zM3 1h1v1H3zM2 2h1v1H2zM1 3h1v1H1zM3 3h1v1H3zM0 4h1v1H0zM4 4h1v1H4z" fill="currentColor" /></svg>
+    <svg viewBox="0 0 1 5" width="5" height="22" class="hidden group-data-[tone=warn]/status:block" aria-hidden="true" shape-rendering="crispEdges"><path d="M0 0h1v3H0zM0 4h1v1H0z" fill="currentColor" /></svg>
+    <span class="hidden group-data-[tone=wait]/status:block"><PixelIcon name="hourglass" size={22} class="block" /></span>
+  </span>
+  <div class="grid min-w-0 flex-1 gap-0.5">
+    <b data-status-title class="font-pixel text-xl font-normal tracking-[0.12em] uppercase group-data-[tone=bad]/status:text-danger group-data-[tone=ok]/status:text-ok group-data-[tone=warn]/status:text-flame">{title}</b>
+    <span data-status-sub class="text-[13px] text-graphite">{sub}</span>
+  </div>
+  <div class={cx(label, "hidden text-right text-[10px] sm:grid")}><slot name="aside" /></div>
+</div>
