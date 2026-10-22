@@ -1,75 +1,98 @@
 ---
-import Field from "../Field.astro";
 import CurrencySelect from "../live/CurrencySelect.astro";
 import NodeSource from "../live/NodeSource.astro";
+import TrustNote from "../ui/TrustNote.astro";
+import { chip, cx, field, tone } from "../ui/styles";
 import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
 
 interface Props { lang: Locale }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const strings = pickStrings(lang, ["m_p2pool_share", "m_p2pool_pick", "m_solo", "m_network", "dur_s", "dur_min", "dur_h", "dur_d", "dur_y"]);
-const cell = "border-b-2 border-dotted border-graphite/40 py-2.5 pr-3";
-const secondary = "hidden sm:table-cell";
+const strings = pickStrings(lang, ["m_p2pool_share", "m_p2pool_pick", "m_solo", "m_network", "m_profit", "m_loss", "m_p2pool_every", "dur_s", "dur_min", "dur_h", "dur_d", "dur_y"]);
 const PERIODS = [["day", 1], ["month", 30], ["year", 365]] as const;
+/** Rough RandomX figures, a starting point to adjust. */
+const PRESETS = [
+  { name: t("m_laptop"), hashrate: 3, watts: 30 },
+  { name: t("m_desktop"), hashrate: 8, watts: 90 },
+  { name: "Ryzen 9 7950X", hashrate: 22, watts: 170 },
+];
+const suffixField = cx(field, "pr-20 font-mono text-lg");
+const suffix = "pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 font-pixel text-sm text-ash";
+const row = "flex items-baseline justify-between gap-3 border-b-2 border-dotted border-graphite py-1.5 last:border-0";
 ---
-<div id="mining-tool" class="grid gap-7" data-strings={strings} data-lang={lang}>
-  <form data-inputs class="grid gap-4 sm:grid-cols-[repeat(auto-fit,minmax(200px,1fr))]" novalidate>
-    <Field label={t("m_hashrate")}>
-      <span class="flex gap-2">
-        <input name="hashrate" inputmode="decimal" value="10" autocomplete="off" class="field min-w-0 font-mono" />
-        <select name="unit" class="field w-auto font-mono text-sm"><option value="1">H/s</option><option value="1000" selected>kH/s</option><option value="1000000">MH/s</option></select>
-      </span>
-    </Field>
-    <Field label={t("m_power")}><input name="watts" inputmode="decimal" value="100" autocomplete="off" class="field font-mono" /></Field>
-    <Field label={t("m_price")}><input name="kwh" inputmode="decimal" value="0.15" autocomplete="off" class="field font-mono" /></Field>
-    <div class="grid content-end pb-1"><CurrencySelect lang={lang} /></div>
-  </form>
-
-  <section class="grid gap-1">
-    <h2 class="text-sm font-semibold">{t("m_earn")}</h2>
-    <p class="flex flex-wrap items-baseline gap-x-4 font-pixel">
-      <span data-daily class="text-[clamp(30px,5vw,44px)] text-flame">…</span>
-      <span class="text-xl">{t("m_per_day")}</span>
-    </p>
+<div id="mining-tool" class="grid grid-cols-1 gap-8" data-strings={strings} data-lang={lang}>
+  <section class="grid gap-3">
+    <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
+      <h2 class="flex items-center gap-2.5 font-pixel text-sm tracking-[0.2em] text-cream uppercase"><span class="size-2 bg-orange"></span>{t("m_your_rig")}</h2>
+      <div class="flex flex-wrap items-center gap-1.5" role="group" aria-label={t("m_presets")}>
+        {PRESETS.map((p) => <button type="button" data-preset={`${p.hashrate}:${p.watts}`} class="cursor-pointer border-2 border-graphite px-2.5 py-0.5 text-sm text-ash hover:border-orange hover:text-orange">{p.name}</button>)}
+      </div>
+    </div>
+    <form data-inputs class="grid grid-cols-1 gap-4 sm:grid-cols-3" novalidate>
+      <label class="grid gap-1.5">
+        <span class="text-sm text-ash">{t("m_hashrate")}</span>
+        <span class="relative">
+          <input name="hashrate" inputmode="decimal" value="10" autocomplete="off" class={cx(suffixField, "pr-24")} />
+          <select name="unit" class="absolute top-1/2 right-2 -translate-y-1/2 cursor-pointer border-2 border-graphite bg-graphite px-1.5 py-1 font-pixel text-sm text-orange focus:border-orange focus:outline-none" aria-label={t("m_unit")}><option value="1">H/s</option><option value="1000" selected>kH/s</option><option value="1000000">MH/s</option></select>
+        </span>
+      </label>
+      <label class="grid gap-1.5">
+        <span class="text-sm text-ash">{t("m_power")}</span>
+        <span class="relative"><input name="watts" inputmode="decimal" value="100" autocomplete="off" class={suffixField} /><span class={suffix}>W</span></span>
+      </label>
+      <div class="grid gap-1.5">
+        <label for="m-kwh" class="text-sm text-ash">{t("m_price")}</label>
+        <span class="relative"><input id="m-kwh" name="kwh" inputmode="decimal" value="0.15" autocomplete="off" class={cx(suffixField, "pr-24")} /><CurrencySelect lang={lang} dark class="absolute top-1/2 right-2 -translate-y-1/2" /></span>
+      </div>
+    </form>
   </section>
 
-  <div class="overflow-x-auto">
-    <table class="w-full border-t-[3px] border-ink text-left text-[0.9375rem]">
-      <thead class="font-pixel text-sm">
-        <tr>
-          <th class={cell}>{t("m_col_period")}</th><th class={cell}>{t("m_col_mined")}</th>
-          <th class:list={[cell, secondary]}>{t("m_col_value")}</th><th class:list={[cell, secondary]}>{t("m_col_power")}</th>
-          <th class={cell}>{t("m_col_profit")}</th>
-        </tr>
-      </thead>
-      <tbody>
-        {PERIODS.map(([p, days]) => (
-          <tr data-days={days}>
-            <td class={cell}>{t(`m_${p}`)}</td>
-            <td class:list={[cell, "font-mono"]} data-mined></td>
-            <td class:list={[cell, secondary, "font-mono"]} data-value></td>
-            <td class:list={[cell, secondary, "font-mono"]} data-cost></td>
-            <td class:list={[cell, "font-mono font-bold"]} data-profit></td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
+  <section class="flex flex-wrap items-end justify-between gap-x-8 gap-y-3 border-y-2 border-graphite py-6">
+    <div class="grid gap-1">
+      <h2 class="font-pixel text-sm tracking-[0.2em] text-ash uppercase">{t("m_earn")}</h2>
+      <p class="flex flex-wrap items-baseline gap-x-3">
+        <span data-daily class="font-pixel text-[clamp(2rem,5vw,3rem)] leading-none text-orange">…</span>
+        <span class="font-pixel text-xl text-cream">{t("m_per_day")}</span>
+      </p>
+    </div>
+    <p data-verdict class="font-pixel text-lg"></p>
+  </section>
 
-  <section class="grid gap-3 border-2 border-ink bg-paper p-4">
-    <h2 class="font-pixel text-lg">{t("m_p2pool_t")}</h2>
-    <ul data-chains class="grid gap-1.5 text-[0.9375rem]">
-      {["main", "mini", "nano"].map((c) => <li data-chain={c} class="flex flex-wrap items-baseline gap-x-3"><span data-text>…</span><b data-pick class="border border-ok px-1.5 font-pixel text-xs font-normal text-ok" hidden></b></li>)}
+  <ul class="grid grid-cols-1 gap-3 md:grid-cols-3">
+    {PERIODS.map(([p, days]) => (
+      <li data-days={days} class="grid content-start gap-1 border-2 border-graphite bg-ink px-4 py-4">
+        <span class="font-pixel text-sm tracking-[0.12em] text-ash uppercase">{t(`m_${p}`)}</span>
+        <span data-mined class="font-mono text-xl text-cream"></span>
+        <dl class="mt-2 text-sm">
+          <div class={row}><dt class="text-ash">{t("m_col_value")}</dt><dd data-value class="font-mono text-cream"></dd></div>
+          <div class={row}><dt class="text-ash">{t("m_col_power")}</dt><dd data-cost class="font-mono text-cream"></dd></div>
+          <div class={row}><dt class="text-cream">{t("m_col_profit")}</dt><dd data-profit class="font-mono font-semibold"></dd></div>
+        </dl>
+      </li>
+    ))}
+  </ul>
+
+  <section class="grid gap-4 border-l-4 border-orange bg-ink px-5 py-5 sm:px-6" aria-labelledby="m-p2pool">
+    <div class="grid gap-1">
+      <h2 id="m-p2pool" class="font-pixel text-lg text-orange">{t("m_p2pool_t")}</h2>
+      <p class="max-w-[70ch] text-sm text-ash">{t("m_p2pool_help")}</p>
+    </div>
+    <ul class="grid gap-1.5">
+      {["main", "mini", "nano"].map((c) => (
+        <li data-chain={c} class="grid grid-cols-[6rem_minmax(0,1fr)_auto] items-center gap-x-4 border-l-4 border-transparent bg-ink-2 px-4 py-2.5 data-[pick]:border-good">
+          <span class="font-pixel text-sm text-cream">P2Pool {c}</span>
+          <span data-text class="text-sm text-ash">…</span>
+          <b data-pick class={cx(chip, tone.good, "font-normal")} hidden>{t("m_p2pool_pick")}</b>
+        </li>
+      ))}
     </ul>
-    <p class="text-sm text-graphite">{t("m_p2pool_help")}</p>
   </section>
 
-  <p data-solo class="text-[0.9375rem]"></p>
-  <div class="grid gap-1 text-sm text-graphite">
-    <p data-network></p>
-    <p class="max-w-[66ch]">{t("m_note")}</p>
+  <div class="grid gap-3 border-t-2 border-graphite pt-5">
+    <TrustNote icon="info"><span data-solo></span></TrustNote>
+    <TrustNote icon="info"><span data-network></span> {t("m_note")}</TrustNote>
+    <NodeSource lang={lang} prices dark />
   </div>
-  <NodeSource lang={lang} prices />
 </div>
 
 <script>
@@ -108,7 +131,7 @@ const PERIODS = [["day", 1], ["month", 30], ["year", 365]] as const;
     const money = (n: number) => (price === undefined ? "–" : formatMoney(n, currency(), lang));
     $("[data-daily]").textContent = xmr(daily);
 
-    for (const row of root.querySelectorAll<HTMLElement>("tr[data-days]")) {
+    for (const row of root.querySelectorAll<HTMLElement>("li[data-days]")) {
       const days = Number(row.dataset.days);
       const mined = daily * days, cost = powerCostPerDay(value("watts"), value("kwh")) * days;
       const cell = (s: string) => row.querySelector<HTMLElement>(s)!;
@@ -117,18 +140,22 @@ const PERIODS = [["day", 1], ["month", 30], ["year", 365]] as const;
       cell("[data-cost]").textContent = money(cost);
       const profit = mined * (price ?? 0) - cost;
       cell("[data-profit]").textContent = money(profit);
-      cell("[data-profit]").classList.toggle("text-danger", price !== undefined && profit < 0);
-      cell("[data-profit]").classList.toggle("text-ok", price !== undefined && profit >= 0);
+      cell("[data-profit]").classList.toggle("text-bad", price !== undefined && profit < 0);
+      cell("[data-profit]").classList.toggle("text-good", price !== undefined && profit >= 0);
     }
 
+    const dailyProfit = daily * (price ?? 0) - powerCostPerDay(value("watts"), value("kwh"));
+    $("[data-verdict]").textContent = price === undefined ? "" : t(dailyProfit >= 0 ? "m_profit" : "m_loss", { amount: money(Math.abs(dailyProfit)) });
+    $("[data-verdict]").className = `font-pixel text-lg ${dailyProfit >= 0 ? "text-good" : "text-bad"}`;
     const pick = bestSidechain(hashrate, chains);
     for (const li of root.querySelectorAll<HTMLElement>("[data-chain]")) {
       const chain = chains.find((c) => c.name === li.dataset.chain);
       li.hidden = !chain;
       if (!chain) continue;
-      li.querySelector("[data-text]")!.textContent = t("m_p2pool_share", { time: formatDuration(timeToFind(hashrate, chain.difficulty), t, lang), chain: `P2Pool ${chain.name}` });
+      li.querySelector("[data-text]")!.textContent = t("m_p2pool_every", { time: formatDuration(timeToFind(hashrate, chain.difficulty), t, lang) });
       const badge = li.querySelector<HTMLElement>("[data-pick]")!;
       badge.hidden = chain.name !== pick;
+      li.toggleAttribute("data-pick", chain.name === pick);
       badge.textContent = t("m_p2pool_pick");
     }
     $("[data-solo]").textContent = hashrate > 0 ? t("m_solo", { time: formatDuration(timeToFind(hashrate, difficulty), t, lang) }) : "";
@@ -136,6 +163,13 @@ const PERIODS = [["day", 1], ["month", 30], ["year", 365]] as const;
   }
 
   form.addEventListener("input", render);
+  root.querySelectorAll<HTMLButtonElement>("[data-preset]").forEach((b) => b.addEventListener("click", () => {
+    const [hashrate, watts] = b.dataset.preset!.split(":");
+    (form.elements.namedItem("hashrate") as HTMLInputElement).value = hashrate;
+    (form.elements.namedItem("unit") as HTMLSelectElement).value = "1000";
+    (form.elements.namedItem("watts") as HTMLInputElement).value = watts;
+    render();
+  }));
   form.addEventListener("submit", (e) => e.preventDefault());
 
   liveTask(async () => {
