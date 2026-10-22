@@ -1,13 +1,14 @@
 ---
 /* A result printer: a slot with a status light, and a receipt that feeds out of it when there's
-   something to show. Drive it with printer() from printer.ts. Before a result it is just the slot,
-   telling people what it's waiting for. */
+   something to show (or just appears, with feed={false}). Drive it with printer() from printer.ts.
+   Before a result it is just the slot, telling people what it's waiting for. */
 import { cx } from "./styles";
 
-interface Props { idle: string; label?: string; class?: string; [attr: string]: unknown }
-const { idle, label = "xmr.fan", class: cls, ...attrs } = Astro.props;
+/** `feed={false}` for tools whose result updates live: the ticket just appears, no printing. */
+interface Props { idle: string; label?: string; feed?: boolean; class?: string; [attr: string]: unknown }
+const { idle, label = "xmr.fan", feed = true, class: cls, ...attrs } = Astro.props;
 ---
-<div class={cx("group/printer grid", cls)} data-printer data-state="idle" {...attrs}>
+<div class={cx("group/printer grid min-w-0 grid-cols-1", cls)} data-printer data-state="idle" {...attrs}>
   <div class="relative z-10 flex items-center gap-3 border-2 border-b-0 border-graphite bg-ink px-4 py-2.5 shadow-[0_6px_0_var(--color-shade)]">
     <i class="size-2.5 shrink-0 bg-line group-data-[state=bad]/printer:bg-bad group-data-[state=error]/printer:bg-bad group-data-[state=idle]/printer:animate-blink group-data-[state=idle]/printer:bg-orange group-data-[state=ok]/printer:bg-good group-data-[state=warn]/printer:bg-orange group-data-[state=working]/printer:animate-blink group-data-[state=working]/printer:bg-orange"></i>
     <span data-printer-status class="min-w-0 truncate text-sm text-ash group-data-[state=error]/printer:text-bad group-data-[state=ok]/printer:text-good">{idle}</span>
@@ -15,7 +16,7 @@ const { idle, label = "xmr.fan", class: cls, ...attrs } = Astro.props;
   </div>
   <div class="h-2 border-x-2 border-b-2 border-graphite bg-[#1a181d]"></div>
   <div class="relative mx-3 -mt-1 hidden group-data-[state=bad]/printer:block group-data-[state=ok]/printer:block group-data-[state=warn]/printer:block sm:mx-5">
-    <div data-printer-paper class="motion-safe:animate-paper-feed">
+    <div data-printer-paper class:list={[feed && "motion-safe:animate-paper-feed"]}>
       <slot />
     </div>
   </div>
