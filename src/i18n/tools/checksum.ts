@@ -58,6 +58,7 @@ export default defineStrings({
     c_trust: "Hashes from getmonero.org, signed with {signer}'s key {fingerprint}.",
     c_verify_yourself: "Check the signature yourself",
     c_download: "Download",
+    c_printer_idle: "Waiting for a file or a hash",
   },
   es: {
     c_drop: "Suelta aquí tu descarga de Monero, o haz clic para elegirla",
@@ -116,6 +117,7 @@ export default defineStrings({
     c_trust: "Hashes de getmonero.org, firmados con la clave {fingerprint} de {signer}.",
     c_verify_yourself: "Comprueba tú mismo la firma",
     c_download: "Descargar",
+    c_printer_idle: "Esperando un archivo o un hash",
   },
   ru: {
     c_drop: "Перетащите сюда скачанный файл Monero или нажмите, чтобы выбрать",
@@ -174,6 +176,7 @@ export default defineStrings({
     c_trust: "Хеши с getmonero.org, подписаны ключом {fingerprint} ({signer}).",
     c_verify_yourself: "Проверьте подпись самостоятельно",
     c_download: "Скачать",
+    c_printer_idle: "Ждём файл или хеш",
   },
   fr: {
     c_drop: "Déposez ici votre téléchargement Monero, ou cliquez pour le choisir",
@@ -232,6 +235,7 @@ export default defineStrings({
     c_trust: "Hashes de getmonero.org, signés avec la clé {fingerprint} de {signer}.",
     c_verify_yourself: "Vérifiez vous-même la signature",
     c_download: "Télécharger",
+    c_printer_idle: "En attente d'un fichier ou d'un hash",
   },
   pt: {
     c_drop: "Solte aqui seu download do Monero, ou clique para escolher",
@@ -290,6 +294,7 @@ export default defineStrings({
     c_trust: "Hashes do getmonero.org, assinados com a chave {fingerprint} de {signer}.",
     c_verify_yourself: "Verifique a assinatura você mesmo",
     c_download: "Baixar",
+    c_printer_idle: "Aguardando um arquivo ou um hash",
   },
   ja: {
     c_drop: "ダウンロードした Monero のファイルをここにドロップ、またはクリックして選択",
@@ -348,5 +353,6 @@ export default defineStrings({
     c_trust: "getmonero.orgのハッシュです。{signer}の鍵{fingerprint}で署名されています。",
     c_verify_yourself: "署名を自分で確認する",
     c_download: "ダウンロード",
+    c_printer_idle: "ファイルかハッシュを待っています",
   },
 });

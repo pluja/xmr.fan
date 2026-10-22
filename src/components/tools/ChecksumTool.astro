@@ -1,12 +1,13 @@
 ---
 import PixelIcon from "../PixelIcon.astro";
 import Corners from "../ui/Corners.astro";
-import ResultPlaceholder from "../ui/ResultPlaceholder.astro";
-import Slip from "../ui/Slip.astro";
+import Printer from "../ui/Printer.astro";
+import Receipt from "../ui/Receipt.astro";
+import Stamp from "../ui/Stamp.astro";
+import TrustNote from "../ui/TrustNote.astro";
 import StatTile from "../ui/StatTile.astro";
-import StatusHead from "../ui/StatusHead.astro";
 import Step from "../ui/Step.astro";
-import { button, cx, field, label, link } from "../ui/styles";
+import { cx, field, label, link } from "../ui/styles";
 import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
 import { DOWNLOADS_PAGE, VERIFY_GUIDE } from "../../lib/hashes";
 
@@ -15,86 +16,76 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 const strings = pickStrings(lang, [
   "c_hashing", "c_mismatch_detail", "c_unknown_detail", "c_list_error", "c_matches", "c_no_match", "c_genuine_t", "c_genuine_sub", "c_mismatch_t", "c_mismatch", "c_unknown_t", "c_unknown",
-  "c_kind_gui", "c_kind_cli", "c_kind_source", "c_latest", "c_match_badge", "c_differs", "c_signed", "c_count", "c_show_more", "c_installer", "c_trust", "c_download", "copied", "share_copy",
+  "c_kind_gui", "c_kind_cli", "c_kind_source", "c_latest", "c_match_badge", "c_differs", "c_signed", "c_count", "c_show_more", "c_installer", "c_trust", "c_download", "copied", "share_copy", "c_unknown_t", "c_mismatch_t",
 ]);
 const FILTERS = [{ value: "all", name: t("c_all") }, { value: "gui", name: "GUI" }, { value: "cli", name: "CLI" }, { value: "source", name: t("c_kind_source") }];
 ---
-<div id="checksum-tool" class="grid grid-cols-1 gap-10" data-strings={strings} data-lang={lang}>
-  <div class="grid grid-cols-1 items-start gap-x-10 gap-y-8 lg:grid-cols-2">
-    <div class="grid content-start gap-5">
-      <section class="grid gap-3">
-        <Step n="01" label={t("c_step_drop")} />
-        <label data-drop class="group/drop relative grid cursor-pointer place-items-center gap-2 border-2 border-dashed border-line bg-ink px-6 py-9 text-center hover:border-orange [&.over]:border-solid [&.over]:border-orange [&.over]:bg-well">
-          <Corners inset="10px" />
-          <PixelIcon name="download" size={32} class="text-orange" />
-          <span class="font-pixel text-[15px] text-cream">{t("c_drop_t")}</span>
-          <span class="text-sm text-ash"><span class="text-orange underline underline-offset-3">{t("c_drop_or")}</span> · .exe .dmg .zip .tar.bz2</span>
-          <input type="file" class="sr-only" />
-          <span data-progress class="grid w-full max-w-sm gap-1.5" hidden>
-            <span data-progress-text class="truncate text-xs text-ash" aria-live="polite"></span>
-            <span class="block h-2 bg-graphite"><span data-bar class="block h-full w-0 bg-orange"></span></span>
-          </span>
-        </label>
-      </section>
+<div id="checksum-tool" class="grid grid-cols-1 gap-8" data-strings={strings} data-lang={lang}>
+  <div class="grid grid-cols-1 items-stretch gap-x-6 gap-y-5 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
+    <section class="grid content-start gap-3">
+      <Step n="01" label={t("c_step_drop")} />
+      <label data-drop class="group/drop relative grid h-full min-h-44 cursor-pointer place-items-center content-center gap-2 border-2 border-dashed border-line bg-ink px-6 py-8 text-center hover:border-orange [&.over]:border-solid [&.over]:border-orange [&.over]:bg-well">
+        <Corners inset="10px" />
+        <PixelIcon name="download" size={32} class="text-orange" />
+        <span class="font-pixel text-[15px] text-cream">{t("c_drop_t")}</span>
+        <span class="text-sm text-ash"><span class="text-orange underline underline-offset-3">{t("c_drop_or")}</span> · .exe .dmg .zip .tar.bz2</span>
+        <input type="file" class="sr-only" />
+      </label>
+    </section>
 
-      <div class="flex items-center gap-4 font-pixel text-[11px] tracking-[0.2em] text-slip-ink uppercase"><span class="h-0.5 flex-1 bg-graphite"></span>{t("c_or")}<span class="h-0.5 flex-1 bg-graphite"></span></div>
-
-      <section class="grid gap-2.5">
-        <Step as="label" for="c-hash" n="02" label={t("c_step_paste")} />
-        <input id="c-hash" name="hash" spellcheck="false" autocomplete="off" maxlength="64" placeholder="44cd1489…" class={cx(field, "font-mono text-[13px]")} aria-describedby="c-hash-status" />
-        <p id="c-hash-status" class="text-sm empty:hidden" aria-live="polite"></p>
-      </section>
-
-      <div class="grid gap-3 sm:grid-cols-2">
-        <div class="border-l-4 border-good bg-ink px-4 py-3">
-          <p class="flex items-center gap-2 text-[15px] text-cream"><svg viewBox="0 0 8 8" width="13" height="13" class="shrink-0 text-good" aria-hidden="true" shape-rendering="crispEdges"><path fill-rule="evenodd" d="M2 0h4v1H2zM1 1h1v2H1zM6 1h1v2H6zM0 3h8v5H0zM3 5h2v2H3z" fill="currentColor" /></svg>{t("c_local_t")}</p>
-          <p class="mt-1 text-sm text-ash">{t("c_local_sub")}</p>
-        </div>
-        <div class="grid content-center justify-items-start gap-2 border-l-4 border-orange bg-ink px-4 py-3">
-          <p class="text-sm text-ash">{t("c_get_t")}</p>
-          <a href={DOWNLOADS_PAGE} target="_blank" rel="noopener" class={cx(button.ghost, "px-3 py-2")}><PixelIcon name="download" size={14} class="text-orange" />{t("c_get_link")}<PixelIcon name="external" size={10} /></a>
-        </div>
-      </div>
+    <div class="flex items-center gap-4 font-pixel text-[11px] tracking-[0.2em] text-slip-ink uppercase lg:flex-col lg:pt-9">
+      <span class="h-0.5 flex-1 bg-graphite lg:h-auto lg:w-0.5"></span>{t("c_or")}<span class="h-0.5 flex-1 bg-graphite lg:h-auto lg:w-0.5"></span>
     </div>
 
-    <aside data-receipt data-state="idle" class="grid grid-cols-1 max-lg:data-[state=idle]:hidden" aria-live="polite">
-      <ResultPlaceholder data-show="idle" icon="shield" text={t("c_idle")} />
-      <Slip dither data-show="done" hidden>
-        <StatusHead data-show="done" hidden>
-          <Fragment slot="aside"><span>{t("c_receipt")}</span><span>SHA-256</span></Fragment>
-        </StatusHead>
-        <div data-show="done" class="grid gap-1" hidden>
-          <span class={cx(label, "text-[10px]")}>{t("c_file")}</span>
-          <span data-file class="font-pixel text-[17px] break-all"></span>
-        </div>
-        <div data-show="genuine" class="grid grid-cols-2 gap-2 sm:grid-cols-4" hidden>
-          <StatTile label={t("c_version")}><span data-version class="text-[15px]"></span></StatTile>
-          <StatTile label={t("c_type")}><span data-kind class="text-[15px]"></span></StatTile>
-          <StatTile label={t("c_platform")}><span data-platform class="text-[15px]"></span></StatTile>
-          <StatTile label={t("c_release")}><span class="flex items-center gap-1.5 text-[15px] text-ok"><i class="size-2 bg-ok"></i>{t("c_latest")}</span></StatTile>
-        </div>
-        <p data-show="mismatch unknown" data-detail class="text-[15px] text-graphite" hidden></p>
-        <div data-show="done" class="grid gap-3" hidden>
-          <div class="grid gap-1.5">
-            <div class="flex items-center justify-between gap-3">
-              <span class={cx(label, "text-[10px]")}>{t("c_your_hash")}</span>
-              <span data-badge class="px-2 py-0.5 font-pixel text-[10px] tracking-wider text-paper uppercase"></span>
-            </div>
-            <p data-yours class="border-b-2 pb-1 font-mono text-[12px] leading-relaxed break-all"></p>
-          </div>
-          <div data-official-row class="grid gap-1.5">
-            <span class={cx(label, "text-[10px]")}>{t("c_official")}</span>
-            <p data-official class="border-b-2 pb-1 font-mono text-[12px] leading-relaxed break-all"></p>
-          </div>
-        </div>
-        <Fragment slot="footer">
-          <svg viewBox="0 0 8 8" width="11" height="11" class="shrink-0 text-slip-ink" aria-hidden="true" shape-rendering="crispEdges"><path d="M0 2h4v4H0zM4 3h4v2H4zM6 5h1v2H6zM1 3v2h2V3z" fill="currentColor" fill-rule="evenodd" /></svg>
-          <span data-signed class={cx(label, "min-w-0 truncate text-[10px]")}>…</span>
-          <span class="ml-auto font-pixel text-[11px] text-slip-ink">xmr.fan</span>
-        </Fragment>
-      </Slip>
-    </aside>
+    <section class="grid content-start gap-3">
+      <Step as="label" for="c-hash" n="02" label={t("c_step_paste")} />
+      <input id="c-hash" name="hash" spellcheck="false" autocomplete="off" maxlength="64" placeholder="44cd1489…" class={cx(field, "font-mono text-[13px]")} aria-describedby="c-hash-status" />
+      <p id="c-hash-status" class="text-sm empty:hidden" aria-live="polite"></p>
+      <TrustNote class="mt-1">{`${t("c_local_t")} ${t("c_local_sub")}`}</TrustNote>
+      <p class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-ash">
+        {t("c_get_t")}
+        <a href={DOWNLOADS_PAGE} target="_blank" rel="noopener" class={cx(link, "inline-flex items-center gap-1.5")}>{t("c_get_link")}<PixelIcon name="external" size={10} /></a>
+      </p>
+    </section>
   </div>
+
+  <Printer idle={t("c_printer_idle")} aria-live="polite">
+    <Receipt>
+      <div class="flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
+        <div class="grid min-w-0 flex-1 basis-64 gap-1">
+          <span class={cx(label, "text-[10px]")}>{t("c_file")}</span>
+          <span data-file class="font-pixel text-lg leading-snug break-all sm:text-xl"></span>
+          <span data-status-sub class="text-[14px] text-graphite"></span>
+        </div>
+        <Stamp data-stamp-text class="mt-1 mr-2 shrink-0"></Stamp>
+      </div>
+      <div data-show="genuine" class="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <StatTile label={t("c_version")}><span data-version class="text-[15px]"></span></StatTile>
+        <StatTile label={t("c_type")}><span data-kind class="text-[15px]"></span></StatTile>
+        <StatTile label={t("c_platform")}><span data-platform class="text-[15px]"></span></StatTile>
+        <StatTile label={t("c_release")}><span class="flex items-center gap-1.5 text-[15px] text-ok"><i class="size-2 bg-ok"></i>{t("c_latest")}</span></StatTile>
+      </div>
+      <p data-show="mismatch unknown" data-detail class="text-[15px] text-graphite"></p>
+      <div class="grid gap-4 md:grid-cols-2">
+        <div class="grid content-start gap-1.5">
+          <div class="flex items-center justify-between gap-3">
+            <span class={cx(label, "text-[10px]")}>{t("c_your_hash")}</span>
+            <span data-badge class="px-2 py-0.5 font-pixel text-[10px] tracking-wider text-paper uppercase"></span>
+          </div>
+          <p data-yours class="border-b-2 pb-1 font-mono text-[12px] leading-relaxed break-all"></p>
+        </div>
+        <div data-official-row class="grid content-start gap-1.5">
+          <span class={cx(label, "text-[10px]")}>{t("c_official")}</span>
+          <p data-official class="border-b-2 pb-1 font-mono text-[12px] leading-relaxed break-all"></p>
+        </div>
+      </div>
+      <Fragment slot="footer">
+        <svg viewBox="0 0 8 8" width="11" height="11" class="shrink-0 text-slip-ink" aria-hidden="true" shape-rendering="crispEdges"><path d="M0 2h4v4H0zM4 3h4v2H4zM6 5h1v2H6zM1 3v2h2V3z" fill="currentColor" fill-rule="evenodd" /></svg>
+        <span data-signed class={cx(label, "min-w-0 truncate text-[10px]")}>…</span>
+        <span class={cx(label, "ml-auto text-[10px]")}>{t("c_receipt")} · SHA-256 · xmr.fan</span>
+      </Fragment>
+    </Receipt>
+  </Printer>
 
   <section data-list-box class="grid gap-4" aria-labelledby="c-list" hidden>
     <div class="flex flex-wrap items-center gap-x-4 gap-y-3 border-b-2 border-line pb-3">
@@ -125,13 +116,15 @@ const FILTERS = [{ value: "all", name: t("c_all") }, { value: "gui", name: "GUI"
 <script>
   import { sha256 } from "@noble/hashes/sha2.js";
   import { bindCopyButtons } from "../ui/copy";
+  import { printer } from "../ui/printer";
   import { readStrings } from "../../i18n/format";
   import { describeFile, downloadUrl, matchHash, type HashEntry, type HashList } from "../../lib/hashes";
 
   const root = document.getElementById("checksum-tool")!;
   const t = readStrings(root);
   const $ = <T extends HTMLElement = HTMLElement>(s: string) => root.querySelector<T>(s)!;
-  const receipt = $("[data-receipt]");
+  const box = $("[data-printer]");
+  const print = printer(box);
   const drop = $("[data-drop]"), fileInput = $<HTMLInputElement>("input[type=file]"), hashInput = $<HTMLInputElement>("input[name=hash]");
   const hex = (b: Uint8Array) => Array.from(b, (x) => x.toString(16).padStart(2, "0")).join("");
   const escape = (s: string) => s.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
@@ -140,13 +133,9 @@ const FILTERS = [{ value: "all", name: t("c_all") }, { value: "gui", name: "GUI"
 
   const listReady: Promise<HashList | null> = fetch("/api/hashes").then((r) => (r.ok ? r.json() : null)).catch(() => null);
 
-  /** Which parts of the receipt show: idle, or a result (genuine, mismatch, unknown). */
-  function show(state: "idle" | "genuine" | "mismatch" | "unknown") {
-    receipt.dataset.state = state;
-    receipt.querySelectorAll<HTMLElement>("[data-show]").forEach((el) => {
-      const on = el.dataset.show!.split(" ");
-      el.hidden = !(on.includes(state) || (on.includes("done") && state !== "idle"));
-    });
+  /** Parts of the receipt that only apply to some results. */
+  function showParts(kind: "genuine" | "mismatch" | "unknown") {
+    box.querySelectorAll<HTMLElement>("[data-show]").forEach((el) => (el.hidden = !el.dataset.show!.split(" ").includes(kind)));
   }
 
   /** The hash in groups of eight; with `other`, groups that differ are marked. */
@@ -159,9 +148,10 @@ const FILTERS = [{ value: "all", name: t("c_all") }, { value: "gui", name: "GUI"
     hash = hash.toLowerCase();
     const match = matchHash(hash, fileName, list.files);
     const entry = match.kind === "unknown" ? undefined : match.entry;
-    const status = $("[data-tone]");
-    status.dataset.tone = { genuine: "ok", mismatch: "bad", unknown: "warn" }[match.kind];
-    $("[data-status-title]").textContent = t(`c_${match.kind}_t`);
+    const tone = ({ genuine: "ok", mismatch: "bad", unknown: "warn" } as const)[match.kind];
+    const stamp = $("[data-stamp]");
+    stamp.dataset.tone = tone;
+    stamp.textContent = t(`c_${match.kind}_t`);
     $("[data-status-sub]").textContent = match.kind === "genuine" ? t("c_genuine_sub") : t(`c_${match.kind}`, { version: list.version });
     $("[data-file]").textContent = entry?.name ?? fileName ?? "–";
     const vars = { name: entry?.name ?? fileName ?? "", version: list.version };
@@ -185,15 +175,16 @@ const FILTERS = [{ value: "all", name: t("c_all") }, { value: "gui", name: "GUI"
     hashInput.dataset.state = ok ? "ok" : "error";
     matched = ok ? entry!.sha256 : undefined;
     renderList(list);
-    show(match.kind);
-    if (receipt.getBoundingClientRect().top > innerHeight) receipt.scrollIntoView({ behavior: "smooth", block: "start" });
+    showParts(match.kind);
+    print.set(tone, ok ? `✓ ${t("c_matches")}` : t(`c_${match.kind}_t`));
+    if (box.getBoundingClientRect().bottom > innerHeight) box.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   function clear() {
     hashInput.dataset.state = "";
     $("#c-hash-status").textContent = "";
     matched = undefined;
-    show("idle");
+    print.set("idle");
     listReady.then((list) => list && renderList(list));
   }
 
@@ -244,9 +235,7 @@ const FILTERS = [{ value: "all", name: t("c_all") }, { value: "gui", name: "GUI"
   });
 
   async function hashFile(file: File) {
-    show("idle");
-    const progress = $("[data-progress]"), bar = $("[data-bar]"), text = $("[data-progress-text]");
-    progress.hidden = false;
+    print.set("working", t("c_hashing", { name: file.name, pct: 0 }));
     const hasher = sha256.create();
     const reader = file.stream().getReader();
     let done = 0, lastPaint = 0;
@@ -257,13 +246,11 @@ const FILTERS = [{ value: "all", name: t("c_all") }, { value: "gui", name: "GUI"
       done += value.length;
       if (performance.now() - lastPaint > 100) {
         const pct = file.size ? Math.floor((done / file.size) * 100) : 100;
-        bar.style.width = `${pct}%`;
-        text.textContent = t("c_hashing", { name: file.name, pct });
+        print.set("working", t("c_hashing", { name: file.name, pct }));
         lastPaint = performance.now();
         await new Promise((r) => setTimeout(r));
       }
     }
-    progress.hidden = true;
     const hash = hex(hasher.digest());
     hashInput.value = hash;
     check(hash, file.name);
