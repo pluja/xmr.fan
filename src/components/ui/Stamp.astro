@@ -1,0 +1,17 @@
+---
+/* An ink stamp that lands on a receipt: GENUINE, PAID, NOT FOUND. data-tone="ok" | "bad" | "warn"
+   on it (or set by a script) picks the ink. */
+import { cx } from "./styles";
+
+interface Props { tone?: "ok" | "bad" | "warn"; class?: string; [attr: string]: unknown }
+const { tone = "ok", class: cls, ...attrs } = Astro.props;
+---
+<span
+  class={cx(
+    "pointer-events-none inline-grid -rotate-8 place-items-center border-4 border-current px-3 py-1.5 font-pixel text-xl tracking-[0.18em] uppercase opacity-90 outline-2 outline-offset-2 outline-current motion-safe:animate-stamp data-[tone=bad]:text-danger data-[tone=ok]:text-ok data-[tone=warn]:text-flame",
+    cls,
+  )}
+  data-tone={tone}
+  data-stamp
+  {...attrs}
+><slot /></span>

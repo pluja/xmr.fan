@@ -33,6 +33,14 @@
   /* A QR code printing in like an old dot-matrix: top to bottom, in steps. */
   --animate-qr-print: qr-print 480ms steps(12) both;
   @keyframes qr-print { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0); } }
+
+  /* A receipt feeding out of a printer slot, and a stamp landing on it. */
+  --animate-paper-feed: paper-feed 700ms steps(14) both;
+  @keyframes paper-feed { from { clip-path: inset(0 0 100% 0); transform: translateY(-24px); } to { clip-path: inset(0); transform: none; } }
+  --animate-stamp: stamp 260ms steps(4) 600ms both;
+  @keyframes stamp { from { opacity: 0; scale: 1.8; } to { opacity: 0.9; scale: 1; } }
+  --animate-blink: blink 1s steps(2) infinite;
+  @keyframes blink { 50% { opacity: 0.25; } }
 }
 
 @layer base {
