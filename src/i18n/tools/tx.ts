@@ -52,6 +52,8 @@ export default defineStrings({
     tx_hidden_amounts: "Amounts are hidden on-chain.",
     tx_idle: "Paste a transaction ID to follow it from the mempool until it can be spent.",
     tx_t_fail: "Not found",
+    tx_printer_idle: "Waiting for a transaction ID",
+    tx_looking: "Looking it up…",
   },
   es: {
     tx_n_notify: "Avisarme",
@@ -104,6 +106,8 @@ export default defineStrings({
     tx_hidden_amounts: "Los importes están ocultos en la cadena.",
     tx_idle: "Pega un ID de transacción para seguirla desde el mempool hasta que se pueda gastar.",
     tx_t_fail: "No encontrada",
+    tx_printer_idle: "Esperando un ID de transacción",
+    tx_looking: "Buscándola…",
   },
   ru: {
     tx_n_notify: "Уведомить меня",
@@ -156,6 +160,8 @@ export default defineStrings({
     tx_hidden_amounts: "Суммы скрыты в блокчейне.",
     tx_idle: "Вставьте ID транзакции, чтобы отследить её от мемпула до момента, когда её можно будет потратить.",
     tx_t_fail: "Не найдена",
+    tx_printer_idle: "Ждём ID транзакции",
+    tx_looking: "Ищем…",
   },
   fr: {
     tx_n_notify: "Me prévenir",
@@ -208,6 +214,8 @@ export default defineStrings({
     tx_hidden_amounts: "Les montants sont masqués sur la blockchain.",
     tx_idle: "Collez un ID de transaction pour la suivre depuis le mempool jusqu'à ce qu'elle soit dépensable.",
     tx_t_fail: "Introuvable",
+    tx_printer_idle: "En attente d'un ID de transaction",
+    tx_looking: "Recherche…",
   },
   pt: {
     tx_n_notify: "Avisar-me",
@@ -260,6 +268,8 @@ export default defineStrings({
     tx_hidden_amounts: "Os valores ficam ocultos no blockchain.",
     tx_idle: "Cole um ID de transação para acompanhá-la do mempool até que possa ser gasta.",
     tx_t_fail: "Não encontrada",
+    tx_printer_idle: "Aguardando um ID de transação",
+    tx_looking: "Procurando…",
   },
   ja: {
     tx_n_notify: "通知する",
@@ -312,5 +322,7 @@ export default defineStrings({
     tx_hidden_amounts: "金額はブロックチェーン上で非公開です。",
     tx_idle: "トランザクションIDを貼り付けると、メモリプールから使用可能になるまで追跡できます。",
     tx_t_fail: "見つかりません",
+    tx_printer_idle: "トランザクション ID を待っています",
+    tx_looking: "検索中…",
   },
 });

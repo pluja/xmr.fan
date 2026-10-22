@@ -2,8 +2,9 @@
 import PixelIcon from "../PixelIcon.astro";
 import NodeSource from "../live/NodeSource.astro";
 import Button from "../ui/Button.astro";
-import ResultPlaceholder from "../ui/ResultPlaceholder.astro";
-import Slip from "../ui/Slip.astro";
+import Printer from "../ui/Printer.astro";
+import Receipt from "../ui/Receipt.astro";
+import Stamp from "../ui/Stamp.astro";
 import TrustNote from "../ui/TrustNote.astro";
 import { cx, field, label, link, message } from "../ui/styles";
 import { localePath, pickStrings, useTranslations, type Locale } from "../../i18n/ui";
@@ -15,7 +16,7 @@ const t = useTranslations(lang);
 const strings = pickStrings(lang, [
   "tx_t_pool", "tx_t_confirming", "tx_t_fail", "tx_t_spendable", "tx_pool_note", "tx_confirming_note", "tx_spendable_sub", "tx_m_waiting", "tx_m_in", "tx_m_pool_sub", "tx_m_unlocked_sub",
   "tx_block", "tx_blocks", "tx_coinbase", "tx_locked", "tx_locked_time", "tx_not_found", "v_err_txid", "tx_n_notify", "tx_n_note", "tx_n_off", "tx_n_denied",
-  "tx_n_mined", "tx_n_spendable", "tx_n_double", "tx_confirming", "live_error", "dur_s", "dur_min", "dur_h", "dur_d", "dur_y",
+  "tx_n_mined", "tx_n_spendable", "tx_live", "tx_pool", "tx_spendable", "tx_looking", "tx_n_double", "tx_confirming", "live_error", "dur_s", "dur_min", "dur_h", "dur_d", "dur_y",
 ]);
 const MILESTONES = [
   { key: "pool", name: t("tx_m_pool"), align: "text-left" },
@@ -45,82 +46,69 @@ const DETAILS = [
     <p id="tx-message" class={message}></p>
   </form>
 
-  <div data-board data-state="idle" class="group/tx grid items-start gap-x-8 gap-y-6 lg:grid-cols-2">
-    <div class="grid content-start gap-4 max-lg:group-data-[state=idle]/tx:hidden">
-      <ResultPlaceholder icon="hourglass" text={t("tx_idle")} class="hidden min-h-40 group-data-[state=idle]/tx:grid" />
-      <Slip dither aria-live="polite" class="group-data-[state=idle]/tx:hidden">
-        <div class="grid grid-cols-[auto_1fr] items-center gap-x-3.5 gap-y-3 border-b-2 border-slip-tile pb-4 sm:grid-cols-[auto_1fr_auto]">
-          <span data-badge class="pixel-corners grid size-10 shrink-0 place-items-center bg-graphite text-paper">
-            <span data-icon="wait"><PixelIcon name="hourglass" size={22} class="block" /></span>
-            <span data-icon="ok" hidden><PixelIcon name="check" size={24} class="block" /></span>
-          </span>
-          <div class="grid min-w-0 gap-0.5">
-            <b data-title class="font-pixel text-xl font-normal tracking-[0.12em] uppercase">{t("tx_track")}</b>
-            <span data-subtitle class="text-[13px] text-graphite">{t("tx_idle")}</span>
-          </div>
-          <div class="col-span-2 flex items-baseline justify-between gap-3 sm:col-span-1 sm:grid sm:text-right group-data-[state=fail]/tx:hidden group-data-[state=idle]/tx:hidden">
-            <span class={cx(label, "text-[10px]")}>{t("tx_confirmations")}</span>
-            <span data-confirmations class="font-pixel text-lg"></span>
-          </div>
+  <Printer idle={t("tx_printer_idle")} data-board class="group/tx" aria-live="polite">
+    <Receipt>
+      <div class="flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
+        <div class="grid min-w-0 flex-1 basis-64 gap-1">
+          <b data-title class="font-pixel text-3xl font-normal tracking-[0.08em] uppercase sm:text-4xl"></b>
+          <span data-subtitle class="text-[14px] text-graphite"></span>
+          <p data-failure class="text-[16px] text-danger" hidden></p>
         </div>
-
-        <ol class="relative grid grid-cols-3 pt-1 group-data-[state=fail]/tx:hidden" aria-hidden="true">
-          <li class="absolute top-[11px] right-2 left-2 grid grid-cols-2 gap-0">
-            <span data-line="0" class="h-1 bg-slip-line"></span>
-            <span data-line="1" class="h-1 bg-slip-line"></span>
-          </li>
-          {MILESTONES.map((m, i) => (
-            <li class:list={["relative grid content-start gap-1", m.align, i === 1 ? "justify-items-center" : i === 2 ? "justify-items-end" : "justify-items-start"]}>
-              <span data-dot={m.key} class="grid size-4 place-items-center bg-slip-line"><i class="size-2 bg-paper"></i></span>
-              <span class={cx(label, "mt-2 text-[10px]")}>{m.name}</span>
-              <span data-sub={m.key} class="text-xs text-ink sm:text-[13px]">–</span>
-            </li>
-          ))}
-        </ol>
-
-        <div class="grid gap-2 group-data-[state=fail]/tx:hidden">
-          <div class={cx(label, "flex justify-between text-[10px]")}>
-            <span>{t("tx_unlock")}</span><span data-blocks>{t("tx_blocks", { n: 0 })}</span>
-          </div>
-          <ol data-pips class="grid grid-cols-10 gap-1" aria-hidden="true">
-            {Array.from({ length: UNLOCK_BLOCKS }, () => <li class="h-3.5 bg-slip-tile"></li>)}
-          </ol>
-        </div>
-        <p data-warning class="text-[14px] text-danger" hidden>{t("tx_double")}</p>
-        <p data-failure class="text-[15px] text-danger" hidden></p>
-
-        <Fragment slot="footer">
-          <span class={label}>TX</span>
-          <span data-tx class="min-w-0 truncate font-mono text-[13px]">…</span>
-          <span class="ml-auto font-pixel text-[11px] text-slip-ink">xmr.fan</span>
-        </Fragment>
-      </Slip>
-
-      <div data-alerts class="grid gap-2 group-data-[state=idle]/tx:hidden group-data-[state=fail]/tx:hidden">
-        <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
-          <Button variant="ghost" data-notify aria-pressed="false"><PixelIcon name="sound" size={16} class="text-orange" /><span>{t("tx_n_notify")}</span></Button>
-          <span data-live class="text-sm text-ash">{t("tx_live")}</span>
-        </div>
-        <p data-notify-note class="text-sm text-ash" hidden></p>
+        <Stamp class="mt-1 mr-2 shrink-0" />
       </div>
-    </div>
 
-    <section class="grid gap-0 group-data-[state=fail]/tx:hidden group-data-[state=idle]/tx:hidden" aria-labelledby="tx-details">
-      <h2 id="tx-details" class="flex items-center gap-2.5 border-b-2 border-line pb-3 font-pixel text-sm tracking-[0.2em] text-cream uppercase"><span class="size-2 bg-orange"></span>{t("tx_details")}</h2>
-      <dl>
-        {DETAILS.map((d) => (
-          <div data-row={d.key} class="flex items-baseline justify-between gap-4 border-b-2 border-dotted border-graphite py-2.5">
-            <dt class="text-sm text-ash">{d.name}</dt>
-            <dd data-value={d.key} class="text-right font-mono text-[13px] text-cream"></dd>
+      <div class="grid grid-cols-1 gap-x-10 gap-y-6 group-data-[stage=fail]/tx:hidden lg:grid-cols-2">
+        <div class="grid content-start gap-6">
+          <ol class="relative grid grid-cols-3" aria-hidden="true">
+            <li class="absolute top-[6px] right-2 left-2 grid grid-cols-2 gap-0">
+              <span data-line="0" class="h-1 bg-slip-line"></span>
+              <span data-line="1" class="h-1 bg-slip-line"></span>
+            </li>
+            {MILESTONES.map((m, i) => (
+              <li class:list={["relative grid content-start gap-1", m.align, i === 1 ? "justify-items-center" : i === 2 ? "justify-items-end" : "justify-items-start"]}>
+                <span data-dot={m.key} class="grid size-4 place-items-center bg-slip-line"><i class="size-2 bg-paper"></i></span>
+                <span class={cx(label, "mt-2 text-[10px]")}>{m.name}</span>
+                <span data-sub={m.key} class="text-xs text-ink sm:text-[13px]">–</span>
+              </li>
+            ))}
+          </ol>
+          <div class="grid gap-2">
+            <div class={cx(label, "flex justify-between text-[10px]")}>
+              <span>{t("tx_unlock")}</span><span data-blocks>{t("tx_blocks", { n: 0 })}</span>
+            </div>
+            <ol data-pips class="grid grid-cols-10 gap-1" aria-hidden="true">
+              {Array.from({ length: UNLOCK_BLOCKS }, () => <li class="h-3.5 bg-slip-tile"></li>)}
+            </ol>
           </div>
-        ))}
-      </dl>
-      <a data-verify-link class="mt-4 flex items-center justify-between gap-4 border-l-4 border-orange bg-ink px-5 py-3 text-sm text-ash no-underline hover:text-cream">
-        <span>{t("tx_hidden_amounts")}</span>
-        <span class="flex shrink-0 items-center gap-2 font-pixel text-orange">{t("tx_check")}<svg viewBox="0 0 3 5" width="6" height="10" aria-hidden="true" shape-rendering="crispEdges"><path d="M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z" fill="currentColor" /></svg></span>
-      </a>
-    </section>
-  </div>
+          <p data-warning class="text-[14px] text-danger" hidden>{t("tx_double")}</p>
+        </div>
+        <dl aria-label={t("tx_details")}>
+          <div class="flex items-baseline justify-between gap-4 border-b-2 border-dotted border-slip-line pb-2">
+            <dt class={cx(label, "text-[10px]")}>{t("tx_confirmations")}</dt>
+            <dd data-confirmations class="font-pixel text-lg"></dd>
+          </div>
+          {DETAILS.map((d) => (
+            <div data-row={d.key} class="flex items-baseline justify-between gap-4 border-b-2 border-dotted border-slip-line py-2 last:border-0">
+              <dt class="text-[13px] text-graphite">{d.name}</dt>
+              <dd data-value={d.key} class="text-right font-mono text-[13px] text-ink"></dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+
+      <Fragment slot="footer">
+        <span class={cx(label, "text-[10px]")}>TX</span>
+        <span data-tx class="min-w-0 truncate font-mono text-[12px]">…</span>
+        <span class={cx(label, "ml-auto text-[10px]")}>xmr.fan</span>
+      </Fragment>
+    </Receipt>
+
+    <div class="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3 group-data-[stage=fail]/tx:hidden">
+      <Button variant="ghost" data-notify aria-pressed="false"><PixelIcon name="sound" size={16} class="text-orange" /><span>{t("tx_n_notify")}</span></Button>
+      <a data-verify-link class={cx(link, "inline-flex items-center gap-2")}>{t("tx_hidden_amounts")} <b class="font-pixel font-normal">{t("tx_check")} ›</b></a>
+    </div>
+    <p data-notify-note class="mt-2 text-sm text-ash" hidden></p>
+  </Printer>
 
   <div class="grid gap-3 border-t-2 border-graphite pt-5">
     <TrustNote>{t("tx_privacy")}</TrustNote>
@@ -131,6 +119,7 @@ const DETAILS = [
 <script>
   import { liveTask } from "../live/live";
   import { shortAddressHtml } from "../ui/address-input";
+  import { printer } from "../ui/printer";
   import { readStrings } from "../../i18n/format";
   import type { Locale } from "../../i18n/ui";
   import { playChime, unlockChime } from "../../lib/chime";
@@ -147,6 +136,7 @@ const DETAILS = [
   const lang = root.dataset.lang as Locale;
   const form = root.querySelector<HTMLFormElement>("[data-form]")!;
   const board = root.querySelector<HTMLElement>("[data-board]")!;
+  const print = printer(board);
   const input = form.elements.namedItem("txid") as HTMLInputElement;
   const $ = <T extends HTMLElement = HTMLElement>(s: string) => root.querySelector<T>(s)!;
   const num = new Intl.NumberFormat(lang);
@@ -188,16 +178,20 @@ const DETAILS = [
 
   const paint = (el: Element, color: string) => { el.classList.remove(DONE, NOW, TODO, "bg-danger", "bg-graphite", "bg-slip-tile"); el.classList.add(color); };
 
+  function stamp(tone: "ok" | "warn" | "bad", text: string) {
+    const el = $("[data-stamp]");
+    el.dataset.tone = tone;
+    el.textContent = text;
+  }
+
   function fail(text: string) {
-    board.dataset.state = "fail";
-    $("[data-title]").textContent = t("tx_t_fail");
-    $("[data-title]").classList.remove("text-ok");
+    board.dataset.stage = "fail";
+    $("[data-title]").textContent = "";
     $("[data-subtitle]").textContent = "";
-    paint($("[data-badge]"), "bg-danger");
-    $("[data-icon=ok]").hidden = true;
-    $("[data-icon=wait]").hidden = false;
     $("[data-failure]").textContent = text;
     $("[data-failure]").hidden = false;
+    stamp("bad", t("tx_t_fail"));
+    print.set("bad", t("tx_t_fail"));
   }
 
   async function load(txid: string) {
@@ -219,16 +213,15 @@ const DETAILS = [
     const stage = txStage(found.in_pool, confirmations);
     const done = Math.min(confirmations, UNLOCK_BLOCKS);
     const spendable = stage === "spendable";
-    board.dataset.state = stage;
+    board.dataset.stage = stage;
 
-    $("[data-title]").textContent = t(`tx_t_${stage}`);
+    $("[data-title]").textContent = stage === "pool" ? t("tx_pool") : stage === "confirming" ? t("tx_confirming", { n: confirmations }) : t("tx_spendable");
     $("[data-title]").classList.toggle("text-ok", spendable);
+    stamp(spendable ? "ok" : "warn", t(`tx_t_${stage}`));
+    print.set(spendable ? "ok" : "warn", spendable ? `✓ ${t("tx_t_spendable")}` : t("tx_live"));
     $("[data-subtitle]").textContent = stage === "pool" ? t("tx_pool_note")
       : stage === "confirming" ? t("tx_confirming_note", { time: formatDuration((UNLOCK_BLOCKS - confirmations) * BLOCK_SECONDS, t, lang) })
       : t("tx_spendable_sub");
-    paint($("[data-badge]"), spendable ? DONE : NOW);
-    $("[data-icon=ok]").hidden = !spendable;
-    $("[data-icon=wait]").hidden = spendable;
     $("[data-confirmations]").textContent = num.format(confirmations);
 
     // Timeline: in the mempool, mined, unlocked.
@@ -245,7 +238,7 @@ const DETAILS = [
     $("[data-blocks]").textContent = t("tx_blocks", { n: done });
     [...$("[data-pips]").children].forEach((pip, i) => paint(pip, i < done ? (spendable ? DONE : NOW) : "bg-slip-tile"));
 
-    $("[data-live]").hidden = notifyBtn.hidden = spendable;
+    notifyBtn.hidden = spendable;
     if (spendable) notifyNote.hidden = true;
     document.title = spendable ? `✓ ${baseTitle}` : `(${done}/${UNLOCK_BLOCKS}) ${baseTitle}`;
     if (lastStage && stage !== lastStage) {
@@ -286,7 +279,7 @@ const DETAILS = [
     input.setAttribute("aria-invalid", String(!!txid && !ok));
     $("#tx-message").textContent = txid && !ok ? t("v_err_txid") : "";
     if (!ok) return;
-    if (txid !== current) { lastStage = undefined; lastDouble = false; }
+    if (txid !== current) { lastStage = undefined; lastDouble = false; print.set("working", t("tx_looking")); }
     current = txid;
     $("[data-tx]").innerHTML = shortAddressHtml(txid);
     history.replaceState(null, "", `#${txid}`);
