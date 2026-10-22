@@ -3,13 +3,13 @@
 import { useTranslations, type Locale } from "../../i18n/ui";
 import { CURRENCIES } from "../../lib/currency";
 
-interface Props { lang: Locale; class?: string }
-const { lang, class: cls } = Astro.props;
+interface Props { lang: Locale; dark?: boolean; class?: string }
+const { lang, dark = false, class: cls } = Astro.props;
 const t = useTranslations(lang);
 ---
-<label class:list={["inline-flex items-center gap-2 text-sm font-semibold", cls]}>
-  <span>{t("currency")}</span>
-  <select data-currency class="field w-auto py-1.5 font-mono text-sm">
+<label class:list={["inline-flex items-center gap-2 text-sm", !dark && "font-semibold", cls]}>
+  <span class:list={[dark && "sr-only"]}>{t("currency")}</span>
+  <select data-currency class:list={[dark ? "cursor-pointer border-2 border-graphite bg-graphite px-2 py-1 font-pixel text-sm text-orange focus:border-orange focus:outline-none" : "field w-auto py-1.5 font-mono text-sm"]}>
     {CURRENCIES.map((c) => <option value={c}>{c.toUpperCase()}</option>)}
   </select>
 </label>

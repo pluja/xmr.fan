@@ -1,0 +1,12 @@
+---
+/* A labelled number on a dark panel: fees, earnings, prices. `accent` makes the value orange. */
+import { cx } from "./styles";
+
+interface Props { label: string; accent?: boolean; class?: string; [attr: string]: unknown }
+const { label, accent = false, class: cls, ...attrs } = Astro.props;
+---
+<div class={cx("grid content-start gap-1.5 border-2 border-graphite bg-ink px-4 py-3", cls)} {...attrs}>
+  <span class="font-pixel text-xs tracking-[0.14em] text-ash uppercase">{label}</span>
+  <span class={cx("font-pixel text-2xl leading-tight", accent ? "text-orange" : "text-cream")}><slot /></span>
+  <slot name="sub" />
+</div>
