@@ -6,6 +6,6 @@ interface Props { label: string; class?: string; [attr: string]: unknown }
 const { label, class: cls, ...attrs } = Astro.props;
 ---
 <div class={cx("grid gap-1 bg-slip-tile px-3.5 py-2.5", cls)} {...attrs}>
-  <span class={cx(labelClass, "text-[10px]")}>{label}</span>
+  <span class={labelClass}>{label}</span>
   <span class="font-pixel text-lg leading-tight"><slot /></span>
 </div>

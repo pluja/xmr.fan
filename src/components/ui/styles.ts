@@ -10,7 +10,7 @@ export const fieldLabel = "text-sm text-ash";
 export const message = "text-sm text-bad empty:hidden";
 export const link = "cursor-pointer text-sm text-orange underline underline-offset-3";
 /** Small uppercase pixel label, for slips. */
-export const label = "font-pixel text-[11px] uppercase tracking-[0.18em] text-slip-ink";
+export const label = "font-pixel text-xs uppercase tracking-[0.14em] text-slip-ink";
 export const chip = "inline-flex items-center gap-1.5 px-2.5 py-1 font-pixel text-[11px] uppercase tracking-wider";
 /** Chip colors; pick one with chip. */
 export const tone = {

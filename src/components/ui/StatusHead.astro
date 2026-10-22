@@ -17,7 +17,7 @@ const { title = "", sub = "", tone = "wait", class: cls, ...attrs } = Astro.prop
   </span>
   <div class="grid min-w-0 flex-1 gap-0.5">
     <b data-status-title class="font-pixel text-xl font-normal tracking-[0.12em] uppercase group-data-[tone=bad]/status:text-danger group-data-[tone=ok]/status:text-ok group-data-[tone=warn]/status:text-flame">{title}</b>
-    <span data-status-sub class="text-[13px] text-graphite">{sub}</span>
+    <span data-status-sub class="text-sm text-graphite">{sub}</span>
   </div>
-  <div class={cx(label, "hidden text-right text-[10px] sm:grid")}><slot name="aside" /></div>
+  <div class={cx(label, "hidden text-right sm:grid")}><slot name="aside" /></div>
 </div>

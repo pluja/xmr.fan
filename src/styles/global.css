@@ -28,7 +28,7 @@
 
   --font-pixel: "DotGothic16", ui-monospace, monospace;
   --font-sans: "Manrope Variable", system-ui, "Hiragino Sans", "Noto Sans JP", sans-serif;
-  --font-mono: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", Menlo, monospace;
 
   /* A QR code printing in like an old dot-matrix: top to bottom, in steps. */
   --animate-qr-print: qr-print 480ms steps(12) both;

@@ -1,5 +1,6 @@
 /* Client side of Printer.astro. */
-export type PrinterState = "idle" | "working" | "ok" | "bad" | "warn";
+/** error: something is wrong with the input; the slot says so and nothing prints. */
+export type PrinterState = "idle" | "working" | "error" | "ok" | "bad" | "warn";
 const PRINTED: PrinterState[] = ["ok", "bad", "warn"];
 
 export function printer(root: HTMLElement) {
