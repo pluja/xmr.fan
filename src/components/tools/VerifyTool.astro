@@ -1,9 +1,13 @@
 ---
-import CopyButton from "../CopyButton.astro";
-import Disclosure from "../Disclosure.astro";
-import Field from "../Field.astro";
-import TryExample from "../TryExample.astro";
+import PixelIcon from "../PixelIcon.astro";
 import NodeSource from "../live/NodeSource.astro";
+import AddressInput from "../ui/AddressInput.astro";
+import Button from "../ui/Button.astro";
+import Slip from "../ui/Slip.astro";
+import StatTile from "../ui/StatTile.astro";
+import Step from "../ui/Step.astro";
+import TrustNote from "../ui/TrustNote.astro";
+import { chip, field, fieldLabel, label, link, message } from "../ui/styles";
 import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
 
 interface Props { lang: Locale }
@@ -11,55 +15,112 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 const ERRORS = ["bad-tx", "bad-key", "bad-address", "bad-signature-format", "bad-signature", "no-tx-pubkey", "no-outputs", "commitment-mismatch", "unsupported-tx-type"].map((e) => `v_err_${e}`);
 const strings = pickStrings(lang, [
-  "v_checking", "v_kind_key", "v_kind_out", "v_kind_in", "v_paid", "v_outputs", "v_confirmed", "v_pool", "v_locked",
-  "v_err_txid", "v_err_address", "v_err_secret", "v_err_network", "v_err_not_found", "live_error", ...ERRORS,
+  "v_checking", "v_paid_t", "v_fail_t", "v_chip_key", "v_chip_out", "v_chip_in", "v_via", "v_paid_sub", "v_pool_sub", "v_st_yes", "v_st_in_blocks", "v_st_pending",
+  "v_err_txid", "v_err_address", "v_err_secret", "v_err_network", "v_err_not_found", "live_error", "copied", "v_share", ...ERRORS,
 ] as never);
+const mono = "font-mono text-[13px]";
 ---
-<div id="verify-tool" class="grid gap-6" data-strings={strings} data-lang={lang}>
-  <form data-form class="grid gap-3.5" novalidate>
-    <Field label={t("v_txid")} messageId="txid-message">
-      <input name="txid" spellcheck="false" autocomplete="off" autocapitalize="off" class="field font-mono text-[13px]" aria-describedby="txid-message" autofocus />
-    </Field>
-    <Field label={t("v_address")} messageId="address-message">
-      <textarea name="address" rows="2" spellcheck="false" autocomplete="off" autocapitalize="off" class="field min-h-14 resize-y font-mono text-[13px] [word-break:break-all]" aria-describedby="address-message"></textarea>
-    </Field>
-    <Field label={t("v_secret")} messageId="secret-message">
-      <textarea name="secret" rows="2" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder={t("v_secret_placeholder")} class="field min-h-14 resize-y font-mono text-[13px] [word-break:break-all]" aria-describedby="secret-message"></textarea>
-    </Field>
-    <p data-kind class="-mt-1 font-pixel text-xs text-graphite empty:hidden"></p>
-    <div data-message-field hidden>
-      <Field label={t("v_message")}><input name="message" autocomplete="off" class="field" /></Field>
+<div id="verify-tool" class="grid gap-x-10 gap-y-8 lg:grid-cols-[minmax(0,1fr)_380px]" data-strings={strings} data-lang={lang}>
+  <div class="grid min-w-0 content-start gap-7">
+  <form data-form class="grid gap-7" novalidate>
+    <section class="grid gap-2.5">
+      <Step as="label" for="v-txid" n="01" label={t("v_txid")} />
+      <input id="v-txid" name="txid" spellcheck="false" autocomplete="off" autocapitalize="off" class:list={[field, mono]} aria-describedby="txid-message" autofocus />
+      <p id="txid-message" class={message}></p>
+    </section>
+
+    <section class="grid gap-2.5">
+      <div class="flex items-baseline justify-between gap-4">
+        <Step as="label" for="v-address" n="02" label={t("v_address")} />
+        <span data-address-ok class="flex items-center gap-1.5 text-sm text-good" hidden><PixelIcon name="check" size={12} />{t("v_valid_address")}</span>
+      </div>
+      <AddressInput id="v-address" name="address" paste={t("pl_paste")} describedby="address-message" />
+      <p id="address-message" class={message}></p>
+    </section>
+
+    <section class="grid gap-2.5">
+      <Step as="label" for="v-secret" n="03" label={t("v_secret")} />
+      <div class="relative">
+        <textarea id="v-secret" name="secret" rows="2" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder={t("v_secret_placeholder")} class:list={[field, mono, "min-h-14 resize-y pr-32 break-all"]} aria-describedby="secret-message"></textarea>
+        <span data-kind class:list={[chip, "absolute top-3 right-3 bg-[#4a2a18] text-orange"]} hidden><svg viewBox="0 0 8 8" width="10" height="10" aria-hidden="true" shape-rendering="crispEdges"><path d="M0 2h4v4H0zM4 3h4v2H4zM6 5h1v2H6zM1 3v2h2V3z" fill="currentColor" fill-rule="evenodd" /></svg><span></span></span>
+      </div>
+      <p id="secret-message" class={message}></p>
+      <div data-message-field class="grid gap-1.5" hidden>
+        <label for="v-message" class={fieldLabel}>{t("v_message")}</label>
+        <input id="v-message" name="message" autocomplete="off" class={field} />
+      </div>
+    </section>
+
+    <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
+      <Button type="submit">{t("v_check")}</Button>
+      <button type="button" data-example class:list={[link, "text-ash"]}>{t("try_example")}</button>
+      <button type="button" data-where-toggle class:list={[link, "sm:ml-auto"]} aria-expanded="false" aria-controls="where">{t("v_where_t")}</button>
     </div>
-    <div class="flex flex-wrap items-center gap-x-5 gap-y-2">
-      <button class="btn" type="submit">{t("v_check")}</button>
-      <TryExample lang={lang} />
-    </div>
+    <p id="where" class="-mt-3 border-l-4 border-orange bg-well px-5 py-4 text-[15px] text-ash" hidden>{t("v_where")}</p>
   </form>
 
-  <p data-status class="text-[15px] empty:hidden" aria-live="polite"></p>
-
-  <section data-result class="result ok" hidden>
-    <p class="flex items-baseline gap-2 font-pixel text-[clamp(20px,3.4vw,28px)]"><span aria-hidden="true">✓</span><span data-paid></span></p>
-    <p data-detail class="text-[15px]"></p>
-    <p data-confirmations class="text-[15px]"></p>
-    <div class="mt-2 flex flex-wrap items-center gap-3">
-      <input id="verify-link" class="sr-only" readonly tabindex="-1" aria-hidden="true" />
-      <CopyButton lang={lang} from="#verify-link" label={t("v_share")} class="btn-ghost" />
-      <span class="text-xs text-graphite">{t("v_share_note")}</span>
+    <div class="grid gap-3 border-t-2 border-graphite pt-5">
+      <TrustNote>{t("v_privacy")}</TrustNote>
+      <NodeSource lang={lang} dark />
     </div>
-  </section>
+  </div>
 
-  <section data-failure class="result bad" hidden>
-    <p class="flex items-baseline gap-2 font-pixel text-lg"><span aria-hidden="true">×</span><span data-reason></span></p>
-  </section>
+  <aside data-state="idle" class="max-lg:data-[state=idle]:hidden grid w-full max-w-[420px] content-start gap-4 justify-self-center lg:max-w-none" data-receipt aria-live="polite">
+    <Slip dither>
+      <div data-show="idle" class="grid min-h-60 place-items-center content-center gap-3 px-6 text-center text-sm text-slip-ink">
+        <PixelIcon name="check" size={48} class="text-peach" />
+        <span>{t("v_idle")}</span>
+      </div>
+      <div data-show="checking" class="grid min-h-60 place-items-center text-sm text-slip-ink" hidden>
+        <span class="animate-pulse font-pixel">{t("v_checking")}</span>
+      </div>
 
-  <Disclosure title={t("v_where_t")}><p class="max-w-[70ch] text-[15px]">{t("v_where")}</p></Disclosure>
-  <p class="text-sm text-graphite">{t("v_privacy")}</p>
-  <NodeSource lang={lang} />
+      <div data-show="ok fail" class="flex items-center gap-3.5 border-b-2 border-slip-tile pb-4" hidden>
+        <span data-badge class="pixel-corners grid size-10 shrink-0 place-items-center text-paper">
+          <span data-icon="ok"><PixelIcon name="check" size={24} class="block" /></span>
+          <svg viewBox="0 0 5 5" width="20" height="20" data-icon="fail" aria-hidden="true" shape-rendering="crispEdges"><path d="M0 0h1v1H0zM4 0h1v1H4zM1 1h1v1H1zM3 1h1v1H3zM2 2h1v1H2zM1 3h1v1H1zM3 3h1v1H3zM0 4h1v1H0zM4 4h1v1H4z" fill="currentColor" /></svg>
+        </span>
+        <div class="grid min-w-0 gap-0.5">
+          <b data-title class="font-pixel text-xl font-normal tracking-[0.12em] uppercase"></b>
+          <span data-subtitle class="text-[13px] text-graphite"></span>
+        </div>
+        <div class:list={[label, "ml-auto hidden text-right text-[10px] sm:grid"]}>
+          <span>{t("v_receipt")}</span><span data-via></span>
+        </div>
+      </div>
+
+      <div data-show="ok" class="grid gap-4" hidden>
+        <div>
+          <p class="flex items-baseline gap-2.5"><span data-amount class="font-pixel text-5xl leading-none"></span><span class="font-pixel text-xl text-flame">XMR</span></p>
+          <p class="mt-2 text-[13px] text-graphite">{t("v_received_by")} <span data-recipient class="font-mono text-ink"></span></p>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <StatTile label={t("v_st_confirmations")}><span data-confirmations></span></StatTile>
+          <StatTile label={t("v_st_outputs")}><span data-outputs></span></StatTile>
+          <StatTile label={t("v_st_mined")}><span data-mined class="text-[15px]"></span></StatTile>
+          <StatTile label={t("v_st_spendable")}><span data-spendable class="flex items-center gap-2 text-[15px]"></span></StatTile>
+        </div>
+      </div>
+
+      <p data-show="fail" data-reason class="text-[15px] text-danger" hidden></p>
+
+      <Fragment slot="footer">
+        <span class={label}>TX</span>
+        <span data-tx class="min-w-0 truncate font-mono text-[13px]">…</span>
+        <span class="ml-auto font-pixel text-[11px] text-slip-ink">xmr.fan</span>
+      </Fragment>
+    </Slip>
+
+    <div data-share class="grid gap-2" hidden>
+      <Button variant="ghost" data-copy-check><PixelIcon name="copy" size={16} class="text-orange" /><span>{t("v_share")}</span></Button>
+      <p class="text-center text-xs text-slip-ink">{t("v_share_note")}</p>
+    </div>
+  </aside>
 </div>
 
 <script>
   import { liveTask } from "../live/live";
+  import { addressInput, shortAddressHtml } from "../ui/address-input";
   import { readStrings } from "../../i18n/format";
   import type { Locale } from "../../i18n/ui";
   import { EXAMPLE_PAYMENT } from "../../lib/examples";
@@ -71,10 +132,13 @@ const strings = pickStrings(lang, [
   const t = readStrings(root);
   const lang = root.dataset.lang as Locale;
   const form = root.querySelector<HTMLFormElement>("[data-form]")!;
-  const $ = (s: string) => root.querySelector<HTMLElement>(s)!;
+  const receipt = root.querySelector<HTMLElement>("[data-receipt]")!;
+  const $ = <T extends HTMLElement = HTMLElement>(s: string) => root.querySelector<T>(s)!;
   const field = (name: string) => form.elements.namedItem(name) as HTMLInputElement;
-  const dateTime = new Intl.DateTimeFormat(lang, { dateStyle: "long", timeStyle: "short" });
+  const num = new Intl.NumberFormat(lang);
+  const date = new Intl.DateTimeFormat(lang, { dateStyle: "medium" });
   const UNLOCK_BLOCKS = 10;
+  let shareLink = "";
 
   type Kind = "key" | "out" | "in";
   const kindOf = (secret: string): Kind | null => {
@@ -84,47 +148,72 @@ const strings = pickStrings(lang, [
     return parseTxKey(s) ? "key" : null;
   };
 
+  const address = addressInput($("[data-address-input]"), () => showAddress());
+  function showAddress() {
+    const value = address.field.value.trim();
+    const ok = !!value && parseAddress(value).ok;
+    address.show(!value ? "" : ok ? "ok" : "");
+    $("[data-address-ok]").hidden = !ok;
+  }
+
   function showKind() {
     const kind = kindOf(field("secret").value);
-    $("[data-kind]").textContent = kind ? t(`v_kind_${kind}`) : "";
+    const badge = $("[data-kind]");
+    badge.hidden = !kind;
+    badge.querySelector("span")!.textContent = kind ? t(`v_chip_${kind}`) : "";
     $("[data-message-field]").hidden = kind !== "out" && kind !== "in";
   }
 
   function fieldError(name: string, key: string | null, vars?: Record<string, string>) {
     field(name).setAttribute("aria-invalid", String(!!key));
+    if (name === "address") address.show(key ? "error" : "");
     $(`#${name}-message`).textContent = key ? t(key, vars) : "";
     return !!key;
   }
 
-  function reset() {
-    $("[data-result]").hidden = $("[data-failure]").hidden = true;
-    $("[data-status]").textContent = "";
+  /** Which parts of the receipt are visible: idle, checking, ok or fail. */
+  function show(state: "idle" | "checking" | "ok" | "fail") {
+    receipt.dataset.state = state;
+    receipt.querySelectorAll<HTMLElement>("[data-show]").forEach((el) => (el.hidden = !el.dataset.show!.split(" ").includes(state)));
+    $("[data-share]").hidden = state !== "ok";
+    const ok = state === "ok";
+    $("[data-badge]").classList.toggle("bg-ok", ok);
+    $("[data-badge]").classList.toggle("bg-danger", !ok);
+    $("[data-title]").classList.toggle("text-ok", ok);
+    $("[data-title]").classList.toggle("text-danger", !ok);
+    $("[data-icon=ok]").toggleAttribute("hidden", !ok);
+    $("[data-icon=fail]").toggleAttribute("hidden", ok);
+    // On small screens the receipt sits under the form; bring it into view.
+    if ((ok || state === "fail") && receipt.getBoundingClientRect().top > innerHeight) receipt.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  function fail(key: string, vars?: Record<string, string>) {
-    $("[data-status]").textContent = "";
+  function fail(key: string, kind: Kind | null, vars?: Record<string, string>) {
+    $("[data-title]").textContent = t("v_fail_t");
+    $("[data-subtitle]").textContent = "";
+    $("[data-via]").textContent = kind ? t("v_via", { kind: t(`v_chip_${kind}`) }) : "";
     $("[data-reason]").textContent = t(key, vars);
-    $("[data-failure]").hidden = false;
+    show("fail");
   }
 
   let run = 0;
   async function check() {
-    reset();
     const txid = field("txid").value.trim().toLowerCase();
-    const address = field("address").value.trim();
+    const addr = address.field.value.trim();
     const secret = field("secret").value.replace(/\s+/g, "");
     const kind = kindOf(secret);
-    const parsed = parseAddress(address);
+    const parsed = parseAddress(addr);
     const bad = [
       fieldError("txid", isTxid(txid) ? null : "v_err_txid"),
       fieldError("address", parsed.ok ? null : "v_err_address"),
       fieldError("secret", kind ? null : "v_err_secret"),
     ].some(Boolean);
-    if (bad || !parsed.ok) return;
+    if (bad || !parsed.ok || !kind) return show("idle");
     if (parsed.network !== "mainnet" && !customNode()) return void fieldError("address", "v_err_network", { net: parsed.network });
+    showAddress();
 
     const mine = ++run;
-    $("[data-status]").textContent = t("v_checking");
+    $("[data-tx]").innerHTML = shortAddressHtml(txid);
+    show("checking");
     let response: { txs?: { as_json: string; in_pool: boolean; block_height: number; block_timestamp: number }[] };
     let height: number;
     try {
@@ -133,49 +222,69 @@ const strings = pickStrings(lang, [
         getInfo(),
       ]);
     } catch {
-      if (mine === run) fail("live_error");
+      if (mine === run) fail("live_error", kind);
       return;
     }
     if (mine !== run) return;
     const found = response.txs?.[0];
-    if (!found) return fail("v_err_not_found");
+    if (!found) return fail("v_err_not_found", kind);
     const tx = txFromJson(found.as_json);
-    if (!tx) return fail("v_err_bad-tx");
+    if (!tx) return fail("v_err_bad-tx", kind);
 
     const message = field("message").value;
     const result: PaymentCheck = kind === "key"
-      ? checkTxKey({ tx, txKey: secret, address })
-      : checkTxProof({ tx, txid, address, message, signature: secret });
-    if (!result.ok) return fail(`v_err_${result.error ?? "no-outputs"}`);
+      ? checkTxKey({ tx, txKey: secret, address: addr })
+      : checkTxProof({ tx, txid, address: addr, message, signature: secret });
+    if (!result.ok) return fail(`v_err_${result.error ?? "no-outputs"}`, kind);
 
-    $("[data-status]").textContent = "";
-    $("[data-paid]").textContent = t("v_paid", { amount: picoToXmr(result.total.toString())! });
-    $("[data-detail]").textContent = `${t(`v_kind_${kind}`)} · ${t("v_outputs", { n: String(result.outputs.length) })}`;
     const confirmations = found.in_pool ? 0 : height - found.block_height;
-    $("[data-confirmations]").textContent = found.in_pool
-      ? t("v_pool")
-      : `${t("v_confirmed", { n: new Intl.NumberFormat(lang).format(confirmations), date: dateTime.format(found.block_timestamp * 1000) })}${confirmations < UNLOCK_BLOCKS ? ` ${t("v_locked")}` : ""}`;
-    const share = new URLSearchParams({ tx: txid, address, [kind === "key" ? "key" : "proof"]: secret, ...(message && kind !== "key" ? { message } : {}) });
-    (document.getElementById("verify-link") as HTMLInputElement).value = `${location.origin}${location.pathname}#${share}`;
-    $("[data-result]").hidden = false;
+    const left = Math.max(0, UNLOCK_BLOCKS - confirmations);
+    $("[data-title]").textContent = t("v_paid_t");
+    $("[data-subtitle]").textContent = t(found.in_pool ? "v_pool_sub" : "v_paid_sub");
+    $("[data-via]").textContent = t("v_via", { kind: t(`v_chip_${kind}`) });
+    $("[data-amount]").textContent = picoToXmr(result.total.toString())!;
+    $("[data-recipient]").innerHTML = shortAddressHtml(addr);
+    $("[data-confirmations]").textContent = num.format(confirmations);
+    $("[data-outputs]").textContent = num.format(result.outputs.length);
+    $("[data-mined]").textContent = found.in_pool ? t("v_st_pending") : date.format(found.block_timestamp * 1000);
+    $("[data-spendable]").innerHTML = left
+      ? `<i class="size-2 bg-flame"></i>${t("v_st_in_blocks", { n: num.format(left) })}`
+      : `<i class="size-2 bg-ok"></i><span class="text-ok">${t("v_st_yes")}</span>`;
+    const share = new URLSearchParams({ tx: txid, address: addr, [kind === "key" ? "key" : "proof"]: secret, ...(message && kind !== "key" ? { message } : {}) });
+    shareLink = `${location.origin}${location.pathname}#${share}`;
+    show("ok");
   }
 
   field("secret").addEventListener("input", showKind);
+  address.field.addEventListener("input", showAddress);
   $("[data-example]").addEventListener("click", () => {
     field("txid").value = EXAMPLE_PAYMENT.txid;
-    field("address").value = EXAMPLE_PAYMENT.address;
+    address.set(EXAMPLE_PAYMENT.address);
     field("secret").value = EXAMPLE_PAYMENT.txKey;
+    showAddress();
     showKind();
     check();
+  });
+  $("[data-where-toggle]").addEventListener("click", (e) => {
+    const where = document.getElementById("where")!;
+    where.hidden = !where.hidden;
+    (e.currentTarget as HTMLElement).setAttribute("aria-expanded", String(!where.hidden));
+  });
+  $("[data-copy-check]").addEventListener("click", async () => {
+    const label = $("[data-copy-check] span");
+    try { await navigator.clipboard.writeText(shareLink); } catch { return; }
+    label.textContent = t("copied");
+    setTimeout(() => (label.textContent = t("v_share")), 1400);
   });
   form.addEventListener("submit", (e) => { e.preventDefault(); check(); });
 
   const shared = new URLSearchParams(location.hash.slice(1));
   if (shared.get("tx")) {
     field("txid").value = shared.get("tx") ?? "";
-    field("address").value = shared.get("address") ?? "";
+    address.set(shared.get("address") ?? "");
     field("secret").value = shared.get("key") ?? shared.get("proof") ?? "";
     field("message").value = shared.get("message") ?? "";
+    showAddress();
     showKind();
   }
   // A shared link checks as soon as the page opens.

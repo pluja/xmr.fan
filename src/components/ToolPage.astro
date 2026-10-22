@@ -15,8 +15,8 @@ const jsonLd = [
   breadcrumbLd([{ name: "xmr.fan", url: url("/") }, { name: t(titleKey(tool)), url: url(toolPath(tool)) }]),
 ];
 ---
-<Base lang={lang} path={toolPath(tool)} title={t(seoTitleKey(tool))} description={t(seoDescKey(tool))} image={ogImage(lang, tool.slug)} jsonLd={jsonLd} active="tools">
-  <ToolFrame lang={lang} tool={tool}>
+<Base lang={lang} path={toolPath(tool)} title={t(seoTitleKey(tool))} description={t(seoDescKey(tool))} image={ogImage(lang, tool.slug)} jsonLd={jsonLd} active="tools" wide={tool.dark}>
+  <ToolFrame lang={lang} tool={tool} dark={tool.dark}>
     <slot />
     <slot name="after" slot="after" />
   </ToolFrame>

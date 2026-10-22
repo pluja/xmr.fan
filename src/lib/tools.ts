@@ -12,6 +12,8 @@ export interface Tool {
   added: string;
   /** Column on the home page. */
   group?: ToolGroup;
+  /** Uses the wide dark frame (being rolled out tool by tool). */
+  dark?: boolean;
 }
 
 /** The tool after this one in the list, wrapping around; the newsletter is skipped. */
@@ -29,7 +31,7 @@ export type ToolGroup = (typeof TOOL_GROUPS)[number];
 export const TOOLS: Tool[] = [
   { id: "eli5", slug: "eli5", icon: "bulb", live: true, added: "2026-10-22", group: "fun" },
   { id: "uri", slug: "uri", icon: "qr", live: true, added: "2026-10-19", group: "paid" },
-  { id: "proof", slug: "verify", icon: "check", live: true, added: "2026-10-20", group: "paid" },
+  { id: "proof", slug: "verify", icon: "check", live: true, added: "2026-10-20", group: "paid", dark: true },
   { id: "tx", slug: "tx", icon: "hourglass", live: true, added: "2026-10-20", group: "paid" },
   { id: "addr", slug: "address", icon: "lens", live: true, added: "2026-10-20", group: "wallet" },
   { id: "units", slug: "units", icon: "swap", live: true, added: "2026-10-19", group: "numbers" },

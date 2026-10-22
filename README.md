@@ -160,6 +160,7 @@ scripts/                newsletter pipeline, sponsor approval, data and image ge
 2. Create `src/components/tools/<Name>.astro` and register it in `COMPONENTS` in `src/pages/[...lang]/[tool].astro`.
 3. Put its strings in `src/i18n/tools/<tool>.ts` with `defineStrings` and list the module in `src/i18n/tools/index.ts`. TypeScript flags any language missing a key. Add its search title and description to `src/i18n/seo.ts`.
 4. For live data, use `src/lib/node-client.ts`, `liveTask()` and the `NodeSource` bar from `src/components/live/`.
+5. Build the UI from `src/components/ui/`: `Step`, `AddressInput`, `Slip`, `StatTile`, `Button`, `TrustNote` and the class sets in `styles.ts`, all Tailwind. Set `dark: true` on the tool to use the wide dark frame.
 
 **Add a language:** add its code to `LOCALES` and a dictionary to `src/i18n/ui.ts`, then to each module in `src/i18n/`. Check that the pixel font covers its script (see the Russian override in `src/styles/global.css`).
 
