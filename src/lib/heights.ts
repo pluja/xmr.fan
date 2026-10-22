@@ -38,4 +38,5 @@ export function timeAt(height: number, samples: readonly Sample[]): number {
 
 /** Wallets scan from the restore height, so starting a little early costs minutes; starting late misses funds. */
 export const SAFETY_DAYS = 7;
-export const restoreHeight = (exact: number) => Math.max(0, exact - Math.round((SAFETY_DAYS * 86_400) / BLOCK_SECONDS));
+export const SAFETY_CHOICES = [1, 7, 30] as const;
+export const restoreHeight = (exact: number, days: number = SAFETY_DAYS) => Math.max(0, exact - Math.round((days * 86_400) / BLOCK_SECONDS));

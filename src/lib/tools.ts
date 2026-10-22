@@ -36,7 +36,7 @@ export const TOOLS: Tool[] = [
   { id: "addr", slug: "address", icon: "lens", live: true, added: "2026-10-20", group: "wallet", dark: true },
   { id: "units", slug: "units", icon: "swap", live: true, added: "2026-10-19", group: "numbers" },
   { id: "fee", slug: "fee", icon: "tag", live: true, added: "2026-10-20", group: "numbers" },
-  { id: "height", slug: "height", icon: "calendar", live: true, added: "2026-10-20", group: "wallet" },
+  { id: "height", slug: "height", icon: "calendar", live: true, added: "2026-10-20", group: "wallet", dark: true },
   { id: "dl", slug: "checksum", icon: "shield", live: true, added: "2026-10-20", group: "wallet" },
   { id: "node", slug: "node", icon: "server", live: true, added: "2026-10-20", group: "wallet" },
   { id: "mining", slug: "mining", icon: "pickaxe", live: true, added: "2026-10-20", group: "numbers" },

@@ -26,4 +26,5 @@ test("before launch is block 1; restore height goes a week back", () => {
   assert.equal(heightAt(0, table), 1);
   assert.equal(restoreHeight(10_000), 10_000 - 5040);
   assert.equal(restoreHeight(100), 0);
+  assert.equal(restoreHeight(10_000, 1), 10_000 - 720);
 });
