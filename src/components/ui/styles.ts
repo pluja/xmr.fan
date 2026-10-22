@@ -11,7 +11,7 @@ export const message = "text-sm text-bad empty:hidden";
 export const link = "cursor-pointer whitespace-nowrap text-sm text-orange underline underline-offset-3";
 /** Small uppercase pixel label, for slips. */
 export const label = "font-pixel text-xs uppercase tracking-[0.14em] text-slip-ink";
-export const chip = "inline-flex items-center gap-1.5 px-2.5 py-1 font-pixel text-[0.6875rem] uppercase tracking-wider";
+export const chip = "inline-flex items-center gap-1.5 px-2.5 py-1 font-pixel text-xs uppercase tracking-wider";
 /** Chip colors; pick one with chip. */
 export const tone = {
   neutral: "bg-graphite text-cream",
