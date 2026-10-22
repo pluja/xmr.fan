@@ -2,7 +2,7 @@
 import PixelIcon from "../PixelIcon.astro";
 import { localePath, pickStrings, useTranslations, type Locale } from "../../i18n/ui";
 import { MONERO_LOGO } from "../../lib/qr";
-import { button, chip, cx, tone } from "../ui/styles";
+import { button, chip, cx, link, tone } from "../ui/styles";
 
 interface Props { lang: Locale }
 const { lang } = Astro.props;
@@ -32,11 +32,9 @@ const LOGOS = {
   public: pixelSvg(BITCOIN_LOGO, { "#": "#f7931a", w: "#fff" }),
   sealed: pixelSvg(MONERO_LOGO, { o: "#ff6600", k: "#4c4c4c", w: "#fff" }),
 };
-const TRY = [
-  { href: localePath(lang, "/uri"), label: t("el_try_uri"), icon: "qr" },
-  { href: localePath(lang, "/live"), label: t("el_try_live"), icon: "notes" },
-  { href: localePath(lang, "/donate"), label: t("el_try_donate"), icon: "heart" },
-] as const;
+const WALLETS = "getmonero.org";
+const [tryBefore, tryAfter] = t("el_try_b").split(WALLETS);
+const sceneBox = "block w-full border-2 border-graphite bg-ink shadow-[8px_8px_0_var(--color-shade)] [aspect-ratio:96/54] [image-rendering:pixelated]";
 const ledgerButton = "flex min-h-11 cursor-pointer items-center gap-2 px-4 text-ash transition-colors hover:text-cream aria-pressed:bg-graphite [&_svg]:opacity-55 [&_svg]:grayscale [&_svg]:transition aria-pressed:[&_svg]:opacity-100 aria-pressed:[&_svg]:grayscale-0";
 ---
 <div id="eli5-tool" class="grid gap-12 sm:gap-14" data-strings={strings}>
@@ -45,33 +43,37 @@ const ledgerButton = "flex min-h-11 cursor-pointer items-center gap-2 px-4 text-
   {CHAPTERS.map(({ n, scene, ...rest }) => (
     <section class="grid items-center gap-5 md:grid-cols-2 md:gap-10" aria-labelledby={`el-${n}`}>
       <div class:list={["grid content-center gap-3", n % 2 === 0 && "md:order-last"]}>
-        <p class="font-pixel text-sm tracking-[0.2em] text-orange" aria-hidden="true">{String(n).padStart(2, "0")}<span class="text-line"> / {String(CHAPTERS.length).padStart(2, "0")}</span></p>
+        <p class="font-pixel text-sm tracking-[0.2em] text-orange" aria-hidden="true">{String(n).padStart(2, "0")}<span class="text-ash/60"> / {String(CHAPTERS.length).padStart(2, "0")}</span></p>
         <h2 id={`el-${n}`} class="font-pixel text-xl leading-snug text-cream sm:text-2xl">{t(`el_${n}_t`)}</h2>
-        <p class="max-w-[52ch] text-ash">{t(`el_${n}_b`)}</p>
+        <p class="max-w-[52ch] leading-relaxed text-cream/80">{t(`el_${n}_b`)}</p>
         {"term" in rest && (
           <p class="flex flex-wrap items-center gap-2 text-sm text-ash">
             {t("el_term")}:
             <span class={cx(chip, tone.accent, "font-mono text-sm normal-case tracking-normal")}>{t(rest.term)}</span>
           </p>
         )}
+      </div>
+      <div class="grid gap-4">
         {scene === "ledger" && (
-          <div class="mt-1 flex w-fit border-2 border-graphite font-pixel" role="group">
+          <div class="flex w-fit border-2 border-graphite font-pixel" role="group" aria-label={t("el_3_t")}>
             <button type="button" data-ledger="public" aria-pressed="true" class={cx(ledgerButton, "aria-pressed:text-[#f7931a]")}><Fragment set:html={LOGOS.public} />{t("el_btc")}</button>
-            <button type="button" data-ledger="sealed" aria-pressed="false" class={cx(ledgerButton, "border-l-2 border-graphite aria-pressed:text-flame")}><Fragment set:html={LOGOS.sealed} />{t("el_xmr")}</button>
+            <button type="button" data-ledger="sealed" aria-pressed="false" class={cx(ledgerButton, "border-l-2 border-graphite aria-pressed:text-orange")}><Fragment set:html={LOGOS.sealed} />{t("el_xmr")}</button>
           </div>
         )}
-        {scene === "ring" && <p data-ring-message class="flex items-center gap-2 font-pixel text-sm text-peach" aria-live="polite"><span class="size-2 shrink-0 bg-orange motion-safe:animate-blink" aria-hidden="true"></span><span data-ring-text>{t("el_4_hint")}</span></p>}
+        {scene === "ring" ? (
+          <canvas data-scene={scene} tabindex="0" role="button" aria-label={t("el_4_hint")} class={cx(sceneBox, "cursor-pointer hover:border-orange focus-visible:border-orange focus-visible:outline-none")}></canvas>
+        ) : (
+          <canvas data-scene={scene} class={sceneBox}></canvas>
+        )}
+        {scene === "ring" && <p data-ring-message class="flex items-center gap-2.5 font-pixel text-base text-peach" aria-live="polite"><span class="size-2 shrink-0 bg-orange motion-safe:animate-blink" aria-hidden="true"></span><span data-ring-text>{t("el_4_hint")}</span></p>}
       </div>
-      <canvas data-scene={scene} class:list={["block w-full border-2 border-graphite bg-ink shadow-[8px_8px_0_var(--color-shade)] [aspect-ratio:96/54] [image-rendering:pixelated]", scene === "ring" && "cursor-pointer"]}></canvas>
     </section>
   ))}
 
   <section class="grid gap-4 border-t-2 border-graphite pt-8" aria-labelledby="el-try">
-    <h2 id="el-try" class="flex items-center gap-2.5 font-pixel text-sm tracking-[0.2em] text-cream uppercase"><span class="size-2 bg-orange"></span>{t("el_try_t")}</h2>
-    <p class="text-ash">{t("el_try_b")}</p>
-    <div class="flex flex-wrap gap-3">
-      {TRY.map((l) => <a href={l.href} class={button.ghost}><PixelIcon name={l.icon} size={16} class="text-orange" /><span>{l.label}</span></a>)}
-    </div>
+    <h2 id="el-try" class="font-pixel text-xl leading-snug text-cream sm:text-2xl">{t("el_try_t")}</h2>
+    <p class="leading-relaxed text-cream/80">{tryBefore}<a href="https://www.getmonero.org/downloads/" target="_blank" rel="noopener noreferrer" class={cx(link, "text-base")}>{WALLETS}</a>{tryAfter}</p>
+    <a href={localePath(lang, "/uri")} class={cx(button.primary, "w-fit max-sm:w-full")}><PixelIcon name="qr" size={18} /><span>{t("el_try_uri")}</span></a>
   </section>
 </div>
 
@@ -103,12 +105,19 @@ const ledgerButton = "flex min-h-11 cursor-pointer items-center gap-2 px-4 text-
   const ringStage = new Scene(canvas("ring"), ring.draw);
   const message = root.querySelector<HTMLElement>("[data-ring-text]")!;
   let guesses = 0;
-  canvas("ring").addEventListener("click", (e) => {
-    const { x, y } = ringStage.point(e);
-    const i = ring.hit(x, y);
-    if (i < 0) return;
+  const pick = (i: number) => {
     ring.state.picked = i;
     ring.state.pickedAt = ringStage.time;
     message.textContent = t(`el_4_guess_${(guesses++ % 3) + 1}`);
+  };
+  canvas("ring").addEventListener("click", (e) => {
+    const { x, y } = ringStage.point(e);
+    const i = ring.hit(x, y);
+    if (i >= 0) pick(i);
+  });
+  canvas("ring").addEventListener("keydown", (e) => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    e.preventDefault();
+    pick(Math.floor(Math.random() * ring.count));
   });
 </script>
