@@ -9,9 +9,9 @@ const btn = "grid w-10 cursor-pointer place-items-center bg-graphite font-pixel 
 <label class={cx("grid gap-1.5", cls)} data-stepper>
   <span class="text-sm text-ash">{label}</span>
   <span class="flex h-11 border-2 border-graphite bg-well focus-within:border-orange">
-    <button type="button" class={btn} data-step="-1" aria-label={`${label} −1`}>−</button>
+    <button type="button" class={btn} data-step="-1" aria-label={`${label} −1`}><svg viewBox="0 0 5 5" width="10" height="10" aria-hidden="true" shape-rendering="crispEdges"><path d="M0 2h5v1H0z" fill="currentColor" /></svg></button>
     <input name={name} type="number" inputmode="numeric" min={min} max={max} value={value} class="w-14 min-w-0 flex-1 bg-transparent text-center font-mono text-lg text-cream outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none" />
-    <button type="button" class={btn} data-step="1" aria-label={`${label} +1`}>+</button>
+    <button type="button" class={btn} data-step="1" aria-label={`${label} +1`}><svg viewBox="0 0 5 5" width="10" height="10" aria-hidden="true" shape-rendering="crispEdges"><path d="M2 0h1v2h2v1H3v2H2V3H0V2h2z" fill="currentColor" /></svg></button>
   </span>
 </label>
 

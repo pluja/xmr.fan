@@ -23,7 +23,7 @@ const next = nextTool(tool);
         <PixelIcon name="back" size={18} />
         <span class="group-hover:underline">{t("back")}</span>
       </a>
-      <a href={localePath(lang, toolPath(next))} class="group hidden items-center gap-2 font-pixel text-sm text-ash no-underline hover:text-orange sm:inline-flex">
+      <a href={localePath(lang, toolPath(next))} class="group hidden items-center gap-2 font-pixel text-sm text-peach no-underline hover:text-orange sm:inline-flex">
         <span class="group-hover:underline">{t("next_tool", { tool: t(titleKey(next)) })}</span>
         <svg viewBox="0 0 3 5" width="6" height="10" aria-hidden="true" shape-rendering="crispEdges"><path d="M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z" fill="currentColor" /></svg>
       </a>

@@ -7,5 +7,5 @@ const { label, class: cls, ...attrs } = Astro.props;
 ---
 <div class={cx("grid gap-1 bg-slip-tile px-3.5 py-2.5", cls)} {...attrs}>
   <span class={labelClass}>{label}</span>
-  <span class="font-pixel text-lg leading-tight"><slot /></span>
+  <span class="font-mono text-lg leading-tight font-medium"><slot /></span>
 </div>

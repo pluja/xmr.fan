@@ -9,6 +9,8 @@ const { lang, current } = Astro.props;
 const t = useTranslations(lang);
 const all = TOOLS.filter((tool) => tool.live && tool.group);
 const related = all.filter((tool) => tool.group === current.group && tool.id !== current.id).slice(0, 3);
+/** The "all tools" card takes whatever the row has left, so it never ends in a gap. */
+const SPAN = ["lg:col-span-4", "lg:col-span-3", "lg:col-span-2", ""];
 ---
 <nav class="mt-14" aria-labelledby="related-tools">
   <h2 id="related-tools" class="mb-4 flex items-center gap-2.5 border-b-2 border-dashed border-graphite pb-2.5 font-pixel text-xs uppercase tracking-[0.2em] text-peach">
@@ -16,7 +18,7 @@ const related = all.filter((tool) => tool.group === current.group && tool.id !==
   </h2>
   <ul class="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-4">
     {related.map((tool) => <ToolCard lang={lang} tool={tool} />)}
-    <li>
+    <li class={SPAN[related.length]}>
       <a href={localePath(lang, "/")} class="flex h-full min-h-16 items-center gap-3 border-2 border-dashed border-line px-5 py-3 font-pixel text-orange no-underline hover:border-orange">
         {t("all_tools", { n: all.length })}
         <svg viewBox="0 0 3 5" width="6" height="10" aria-hidden="true" shape-rendering="crispEdges"><path d="M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z" fill="currentColor" /></svg>

@@ -17,7 +17,7 @@ const t = useTranslations(lang);
       <i data-dot class="inline-block size-2 bg-ash" aria-hidden="true"></i>
       <span data-status aria-live="polite">{t("live_connecting")}</span>
     </span>
-    {prices && <span>· {t("price_from")}</span>}
+    {prices && <span>{t("price_from")}</span>}
     <button type="button" data-own-toggle class:list={["cursor-pointer underline", dark && "text-orange"]} aria-expanded="false">{t("live_own")}</button>
   </p>
   <form data-own class:list={["grid gap-2 border-2 p-3", dark ? "border-graphite bg-well" : "border-ink bg-paper"]} hidden novalidate>
