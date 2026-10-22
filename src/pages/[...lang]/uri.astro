@@ -83,6 +83,7 @@ const pageUrl = new URL(localePath(lang, toolPath(tool)), Astro.site).href;
     noindex={fromServer}
     jsonLd={[toolLd(pageUrl, t(seoTitleKey(tool)), t(seoDescKey(tool)), lang), breadcrumbLd([{ name: "xmr.fan", url: new URL(localePath(lang, "/"), Astro.site).href }, { name: t(titleKey(tool)), url: pageUrl }])]}
     active="tools"
+    wide={!fromServer}
   >
     {!fromServer && <script is:inline>if (/(^#|&)c=/.test(location.hash)) document.documentElement.classList.add("card-view")</script>}
     <Container as="section" class:list={["grid flex-1 content-center justify-items-center gap-8 py-12", !fromServer && "uri-card"]}>
@@ -91,7 +92,7 @@ const pageUrl = new URL(localePath(lang, toolPath(tool)), Astro.site).href;
     </Container>
     {!fromServer && (
       <div class="uri-form flex flex-1 flex-col">
-        <ToolFrame lang={lang} tool={tool}>
+        <ToolFrame lang={lang} tool={tool} dark>
           <PaymentLink lang={lang} initial={input} />
           <UriApiDocs slot="after" lang={lang} />
         </ToolFrame>

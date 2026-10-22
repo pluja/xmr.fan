@@ -15,41 +15,66 @@ const PARAMS = [
   { param: "tx_description", field: "description", label: t("f_desc") },
 ];
 const MODES = [
-  { flag: "?raw", text: t("api_raw") },
-  { flag: "?rawqr", text: t("api_rawqr") },
-  { flag: "&style=plain", text: t("api_plain") },
-  { flag: "?embed", text: t("api_embed") },
+  { flag: "?raw", text: t("api_raw"), type: "text/plain" },
+  { flag: "?rawqr", text: t("api_rawqr"), type: "image/png" },
+  { flag: "&style=plain", text: t("api_plain"), type: "image/png" },
+  { flag: "?embed", text: t("api_embed"), type: "text/html" },
 ];
 const base = `${Astro.url.origin}/uri`;
 const example = `${base}?address=${EXAMPLE_ADDRESS}&tx_amount=1.5`;
 const exampleCode = encodeShare({ address: EXAMPLE_ADDRESS, amount: "1.5" });
-const code = "font-mono text-[13px] text-mint";
+const EXAMPLES = [
+  { id: "api-raw", href: `${example}&raw`, prefix: "curl \"", suffix: "\"" },
+  { id: "api-rawqr", href: `${example}&rawqr`, prefix: "curl \"", suffix: "\" -o qr.png" },
+  { id: "api-embed", href: `${base}?embed#c=${exampleCode}`, prefix: "", suffix: "" },
+];
+const row = "grid gap-x-6 gap-y-1 py-3 sm:grid-cols-[150px_1fr_auto] sm:items-center";
+const chip = "w-fit bg-ink-2 px-2 py-0.5 font-pixel text-[10px] uppercase tracking-wider text-ash";
 ---
-<section id="api" class="mt-12 max-w-[920px]" aria-labelledby="api-title" data-base={base} data-params={JSON.stringify(PARAMS.map(({ param, field }) => [param, field]))}>
+<section id="api" class="mt-14" aria-labelledby="api-title" data-base={base} data-params={JSON.stringify(PARAMS.map(({ param, field }) => [param, field]))}>
   <h2 id="api-title" class="mb-2 font-pixel text-2xl text-orange">{t("api_title")}</h2>
-  <p class="mb-6 max-w-[60ch]">{t("api_intro")}</p>
+  <p class="mb-6 max-w-[70ch] text-ash">{t("api_intro")}</p>
 
-  <dl class="mb-8 grid gap-x-6 gap-y-2 border-l-2 border-orange pl-4 sm:grid-cols-[auto_1fr]">
-    {MODES.map((m) => (<><dt class={code}>{m.flag}</dt><dd class="text-[15px]">{m.text}</dd></>))}
-  </dl>
+  <div class="border-l-4 border-orange bg-[#232126] px-6 py-3 shadow-[8px_8px_0_#1f1d22]">
+    <div class="divide-y-2 divide-ink-2">
+      {MODES.map((m) => (
+        <div class={row}>
+          <code class="font-mono text-[14px] text-[#5fd38a]">{m.flag}</code>
+          <span class="text-[15px] text-cream first-letter:uppercase">{m.text}</span>
+          <span class={chip}>{m.type}</span>
+        </div>
+      ))}
+    </div>
 
-  <h3 class="mb-3 font-pixel text-lg text-orange">{t("api_params")}</h3>
-  <dl class="mb-8 grid gap-x-6 gap-y-2 sm:grid-cols-[auto_1fr]">
-    <dt class={code}>c</dt>
-    <dd class="text-[15px]">{t("api_c")}</dd>
-    {PARAMS.map((p) => (
-      <>
-        <dt class={code}>{p.param}</dt>
-        <dd class="text-[15px]">{p.label}{p.required && <span class="ml-2 border border-orange px-1.5 font-pixel text-xs text-orange">{t("api_required")}</span>}</dd>
-      </>
-    ))}
-  </dl>
+    <h3 class="mb-1 mt-5 font-pixel text-[11px] uppercase tracking-[0.2em] text-line">{t("api_params")}</h3>
+    <div class="divide-y-2 divide-ink-2">
+      <div class={row}>
+        <code class="font-mono text-[14px] text-[#5fd38a]">c</code>
+        <span class="text-[15px] text-cream">{t("api_c")}</span>
+      </div>
+      {PARAMS.map((p) => (
+        <div class={row}>
+          <code class="font-mono text-[14px] text-[#5fd38a]">{p.param}</code>
+          <span class="text-[15px] text-cream">{p.label}</span>
+          {p.required && <span class="w-fit border border-orange px-1.5 font-pixel text-[10px] uppercase tracking-wider text-orange">{t("api_required")}</span>}
+        </div>
+      ))}
+    </div>
 
-  <h3 class="mb-3 font-pixel text-lg text-orange">{t("api_example")}</h3>
-  <div class="grid gap-2 bg-ink-2 p-4 font-mono text-[13px] leading-relaxed [word-break:break-all]">
-    <a id="api-raw" class="text-mint" href={`${example}&raw`} target="_blank" rel="noopener">{`${example}&raw`}</a>
-    <a id="api-rawqr" class="text-mint" href={`${example}&rawqr`} target="_blank" rel="noopener">{`${example}&rawqr`}</a>
-    <a id="api-embed" class="text-mint" href={`${base}?embed#c=${exampleCode}`} target="_blank" rel="noopener">{`${base}?embed#c=${exampleCode}`}</a>
+    <h3 class="mb-2 mt-5 font-pixel text-[11px] uppercase tracking-[0.2em] text-line">{t("api_example")}</h3>
+    <div class="grid gap-2 pb-3">
+      {EXAMPLES.map((e) => (
+        <div class="flex items-start gap-3">
+          <p class="min-w-0 flex-1 font-mono text-[13px] leading-relaxed text-cream [word-break:break-all]">
+            <span class="select-none text-orange">&gt;_ </span>{e.prefix}<a id={e.id} class="text-cream underline decoration-line underline-offset-4 hover:text-orange" href={e.href} target="_blank" rel="noopener">{e.href}</a>{e.suffix}
+          </p>
+          <button type="button" data-api-copy class="flex shrink-0 cursor-pointer items-center gap-1.5 bg-ink-2 px-2.5 py-1 font-pixel text-[10px] uppercase tracking-wider text-cream hover:text-orange">
+            <svg viewBox="0 0 8 8" width="10" height="10" class="text-orange" aria-hidden="true" shape-rendering="crispEdges"><path fill-rule="evenodd" d="M2 0h6v6H2zM3 1v4h4V1zM0 2h1v5h5v1H0z" fill="currentColor" /></svg>
+            <span>{t("share_copy")}</span>
+          </button>
+        </div>
+      ))}
+    </div>
   </div>
   <p class="mt-4 text-sm text-ash">{t("api_privacy")}</p>
 </section>
@@ -80,4 +105,8 @@ const code = "font-mono text-[13px] text-mint";
     const code = ok && encodeShare(input);
     embed.href = embed.textContent = code ? `${base}?embed#c=${code}` : initial.embed;
   });
+
+  for (const btn of section.querySelectorAll<HTMLButtonElement>("[data-api-copy]")) {
+    btn.addEventListener("click", () => navigator.clipboard.writeText(btn.previousElementSibling!.textContent!.replace(/^>_ /, "")).catch(() => {}));
+  }
 </script>

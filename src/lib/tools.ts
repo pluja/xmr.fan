@@ -14,6 +14,12 @@ export interface Tool {
   group?: ToolGroup;
 }
 
+/** The tool after this one in the list, wrapping around; the newsletter is skipped. */
+export function nextTool(tool: Tool): Tool {
+  const tools = TOOLS.filter((t) => t.live && t.id !== "gazette");
+  return tools[(tools.findIndex((t) => t.id === tool.id) + 1) % tools.length];
+}
+
 /** Social share card for a page, drawn by `npm run og`. */
 export const ogImage = (lang: string, page: string) => `/og/${lang}/${page}.png`;
 

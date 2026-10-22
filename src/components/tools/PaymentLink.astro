@@ -1,5 +1,4 @@
 ---
-import Field from "../Field.astro";
 import PixelIcon from "../PixelIcon.astro";
 import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
 import { LIMITS, type PaymentInput } from "../../lib/payment";
@@ -10,74 +9,163 @@ const t = useTranslations(lang);
 const strings = pickStrings(lang, [
   "ok_address", "type_standard", "type_subaddress", "type_integrated", "warn_network",
   "err_chars", "err_length", "err_checksum", "err_prefix", "err_amount", "err_payment_id",
-  "err_payment_id_integrated", "err_too_long", "copy", "copied", "qr_alt", "example_desc", "share_copy", "card_title",
+  "err_payment_id_integrated", "err_too_long", "copied", "qr_alt", "example_desc", "share_copy", "card_title",
+  "pl_check_ends", "pl_fiat", "pl_copy_link",
 ]);
+const step = (n: string, label: string) => ({ n, label });
+const STEPS = { address: step("01", t("pl_step_address")), details: step("02", t("pl_step_details")), link: step("03", t("pl_step_link")) };
 ---
-<form id="payment-link" class="grid gap-7 md:grid-cols-[minmax(0,1fr)_280px]" data-strings={strings} novalidate>
-  <div class="grid content-start gap-3.5">
-    <Field label={t("f_address")}>
-      <textarea name="address" rows="2" spellcheck="false" autocomplete="off" autocapitalize="off" class="field min-h-14 resize-y font-mono text-[13px] [word-break:break-all]" aria-describedby="address-status" autofocus>{initial.address}</textarea>
-    </Field>
-    <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+<form id="payment-link" class="grid gap-x-10 gap-y-8 lg:grid-cols-[minmax(0,1fr)_380px]" data-strings={strings} data-lang={lang} novalidate>
+  <div class="grid min-w-0 content-start gap-8">
+    <section class="grid gap-2.5">
+      <div class="flex items-baseline justify-between gap-4">
+        <label for="pl-address" class="step"><b>{STEPS.address.n}</b>{STEPS.address.label}</label>
+        <button type="button" id="example" class="cursor-pointer text-sm text-orange underline">{t("try_example")}</button>
+      </div>
+      <div id="address-box" class="dfield address-box relative p-0">
+        <div id="address-mirror" class="address-text pointer-events-none" aria-hidden="true"></div>
+        <textarea id="pl-address" name="address" rows="2" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="4… / 8…" class="address-text absolute inset-0 resize-none overflow-hidden bg-transparent text-transparent caret-cream outline-none placeholder:text-line" aria-describedby="address-status" autofocus>{initial.address}</textarea>
+        <button type="button" id="paste" class="absolute bottom-2 right-2 cursor-pointer bg-graphite px-2.5 py-1 font-pixel text-[11px] uppercase tracking-wider text-cream hover:bg-orange hover:text-ink" hidden>{t("pl_paste")}</button>
+      </div>
       <p id="address-status" class="text-sm empty:hidden" aria-live="polite"></p>
-      <button type="button" id="example" class="-my-1 cursor-pointer py-1 text-sm text-graphite underline">{t("try_example")}</button>
-    </div>
-    <div class="grid gap-3.5 sm:grid-cols-2">
-      <Field label={t("f_amount")} messageId="amount-message">
-        <input type="text" name="amount" value={initial.amount} inputmode="decimal" placeholder="0.05" autocomplete="off" class="field" aria-describedby="amount-message" />
-      </Field>
-      <Field label={t("f_name")} messageId="name-message">
-        <input type="text" name="name" value={initial.name} maxlength={LIMITS.name} autocomplete="off" class="field" aria-describedby="name-message" />
-      </Field>
-    </div>
-    <Field label={t("f_desc")} messageId="description-message">
-      <input type="text" name="description" value={initial.description} maxlength={LIMITS.description} autocomplete="off" class="field" aria-describedby="description-message" />
-    </Field>
-    {initial.paymentId && (
-      <Field label={t("f_payment_id")} messageId="paymentId-message">
-        <input type="text" name="paymentId" value={initial.paymentId} spellcheck="false" autocomplete="off" class="field font-mono text-[13px]" aria-describedby="paymentId-message" />
-      </Field>
-    )}
-    <output id="uri" class="block bg-ink p-3 font-mono text-xs leading-normal text-mint [word-break:break-all] empty:hidden"></output>
+    </section>
+
+    <section class="grid gap-4">
+      <h2 class="step"><b>{STEPS.details.n}</b>{STEPS.details.label}<span class="ml-3 font-sans text-sm normal-case tracking-normal text-line">{t("pl_optional")}</span></h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div class="grid content-start gap-1.5">
+          <label for="pl-amount" class="text-sm text-ash">{t("f_amount")}</label>
+          <div class="relative">
+            <input id="pl-amount" type="text" name="amount" value={initial.amount} inputmode="decimal" placeholder="0.05" autocomplete="off" class="dfield pr-20 font-mono" aria-describedby="amount-message amount-fiat" />
+            <span class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 bg-graphite px-2.5 py-1 font-pixel text-xs text-orange">XMR</span>
+          </div>
+          <p id="amount-message" class="text-sm text-[#ff8a75] empty:hidden"></p>
+          <p id="amount-fiat" class="text-sm text-line empty:hidden"></p>
+        </div>
+        <div class="grid content-start gap-1.5">
+          <label for="pl-name" class="text-sm text-ash">{t("f_name")}</label>
+          <input id="pl-name" type="text" name="name" value={initial.name} maxlength={LIMITS.name} autocomplete="off" class="dfield" aria-describedby="name-message" />
+          <p id="name-message" class="text-sm text-[#ff8a75] empty:hidden"></p>
+        </div>
+      </div>
+      <div class="grid gap-1.5">
+        <label for="pl-description" class="text-sm text-ash">{t("f_desc")}</label>
+        <div class="relative">
+          <input id="pl-description" type="text" name="description" value={initial.description} maxlength={LIMITS.description} autocomplete="off" class="dfield pr-24" aria-describedby="description-message" />
+          <span id="description-count" class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-xs text-line"></span>
+        </div>
+        <p id="description-message" class="text-sm text-[#ff8a75] empty:hidden"></p>
+      </div>
+      {initial.paymentId && (
+        <div class="grid gap-1.5">
+          <label for="pl-payment-id" class="text-sm text-ash">{t("f_payment_id")}</label>
+          <input id="pl-payment-id" type="text" name="paymentId" value={initial.paymentId} spellcheck="false" autocomplete="off" class="dfield font-mono text-[13px]" aria-describedby="paymentId-message" />
+          <p id="paymentId-message" class="text-sm text-[#ff8a75] empty:hidden"></p>
+        </div>
+      )}
+    </section>
+
+    <section class="grid gap-2.5">
+      <div class="flex items-center justify-between gap-4">
+        <h2 class="step"><b>{STEPS.link.n}</b>{STEPS.link.label}</h2>
+        <div class="flex bg-[#232126] p-0.5 font-pixel text-[11px] uppercase" role="group">
+          <button type="button" data-view="pretty" aria-pressed="true" class="view-btn">{t("pl_pretty")}</button>
+          <button type="button" data-view="raw" aria-pressed="false" class="view-btn">{t("pl_raw")}</button>
+        </div>
+      </div>
+      <output id="uri" class="block min-h-24 border-l-4 border-orange bg-[#232126] px-5 py-4 font-mono text-[13px] leading-relaxed text-ash [word-break:break-all]"><span class="text-orange">monero:</span></output>
+    </section>
+
+    <p class="flex items-center gap-2.5 text-sm text-ash">
+      <svg viewBox="0 0 8 8" width="14" height="14" class="shrink-0 text-[#5fd38a]" aria-hidden="true" shape-rendering="crispEdges"><path fill-rule="evenodd" d="M2 0h4v1H2zM1 1h1v2H1zM6 1h1v2H6zM0 3h8v5H0zM3 5h2v2H3z" fill="currentColor" /></svg>
+      {t("pl_local")}
+    </p>
   </div>
 
-  <div class="grid max-w-[300px] content-start gap-3 md:max-w-none">
-    <figure class="border-2 border-ink bg-paper shadow-[6px_6px_0_var(--color-ink)]">
-      <div id="qr" class="grid aspect-square place-items-center">
-        <PixelIcon name="qr" size={56} class="text-peach" />
+  <div class="grid max-w-[420px] content-start gap-5 lg:max-w-none">
+    <figure class="slip relative bg-paper text-ink shadow-[8px_8px_0_#1f1d22]">
+      <div class="grid gap-4 border-t-[6px] border-orange px-6 pb-5 pt-5">
+        <div class="flex items-baseline justify-between gap-3 font-pixel text-[11px] uppercase tracking-[0.18em] text-[#8a8492]">
+          <span>{t("pl_request")}</span><span>{t("scan_to_pay")}</span>
+        </div>
+        <p id="slip-name" class="-mt-2 text-lg font-bold leading-tight empty:hidden"></p>
+        <div id="qr" class="grid aspect-square place-items-center">
+          <div class="grid justify-items-center gap-3 px-8 text-center text-sm text-[#8a8492]">
+            <PixelIcon name="qr" size={56} class="text-peach" />
+            <span>{t("pl_waiting")}</span>
+          </div>
+        </div>
+        <div id="slip-amount-row" class="flex flex-wrap items-baseline justify-between gap-x-3" hidden>
+          <span id="slip-amount" class="font-pixel text-3xl"></span>
+          <span id="slip-fiat" class="text-sm text-[#8a8492]"></span>
+        </div>
+        <p id="slip-desc" class="-mt-2 text-[15px] text-graphite empty:hidden"></p>
       </div>
-      <figcaption class="flex items-baseline justify-between gap-3 border-t-2 border-ink px-3 py-2 font-pixel text-sm">
-        <span>{t("scan_to_pay")}</span>
-        <span id="qr-amount" class="text-right"></span>
+      <div class="perforation" aria-hidden="true"></div>
+      <figcaption class="flex items-center gap-3 px-6 pb-4 pt-3">
+        <span class="font-pixel text-[11px] uppercase tracking-[0.18em] text-[#8a8492]">{t("pl_to")}</span>
+        <span id="slip-to" class="min-w-0 truncate font-mono text-[13px] font-bold">…</span>
+        <span class="ml-auto font-pixel text-[11px] text-[#8a8492]">xmr.fan</span>
       </figcaption>
     </figure>
-    <button type="button" id="copy" class="btn mt-2" disabled><PixelIcon name="copy" size={16} /><span>{t("copy")}</span></button>
-    <button type="button" id="download" class="btn btn-ghost" disabled><PixelIcon name="download" size={16} /><span>{t("download_qr")}</span></button>
-    <button type="button" id="share" class="btn btn-ghost" disabled aria-expanded="false" aria-controls="share-box"><PixelIcon name="share" size={16} /><span>{t("share_btn")}</span></button>
+
+    <button type="button" id="copy" class="copy-main" disabled>
+      <PixelIcon name="copy" size={18} /><span>{t("pl_copy_link")}</span>
+      <kbd id="copy-kbd" class="absolute right-4 hidden font-pixel text-[11px] text-[#7a3510] sm:block">Ctrl C</kbd>
+    </button>
+    <div class="grid grid-cols-2 gap-3">
+      <button type="button" id="download" class="btn-dark" disabled><PixelIcon name="download" size={16} class="text-orange" /><span>{t("pl_download")}</span></button>
+      <button type="button" id="share" class="btn-dark" disabled aria-expanded="false" aria-controls="share-box"><PixelIcon name="share" size={16} class="text-orange" /><span>{t("share_btn")}</span></button>
+    </div>
   </div>
 
-  <section id="share-box" class="grid gap-4 border-2 border-ink bg-paper p-4 md:col-span-2" hidden>
-    <h2 class="font-pixel text-lg">{t("share_t")}</h2>
+  <section id="share-box" class="grid gap-4 border-l-4 border-orange bg-[#232126] p-5 lg:col-span-2" hidden>
+    <h2 class="font-pixel text-lg text-orange">{t("share_t")}</h2>
     <div class="grid gap-1.5">
-      <label for="share-link" class="font-pixel text-sm">{t("share_link")}</label>
+      <label for="share-link" class="text-sm text-ash">{t("share_link")}</label>
       <div class="flex flex-wrap gap-2">
-        <input id="share-link" readonly class="field min-w-0 flex-1 basis-64 font-mono text-[13px]" />
-        <button type="button" class="btn" data-copy="share-link"><span>{t("share_copy")}</span></button>
-        <a id="share-preview" class="btn btn-ghost" target="_blank" rel="noopener">{t("share_preview")}</a>
+        <input id="share-link" readonly class="dfield min-w-0 flex-1 basis-64 font-mono text-[13px]" />
+        <button type="button" class="btn-dark px-4" data-copy="share-link"><span>{t("share_copy")}</span></button>
+        <a id="share-preview" class="btn-dark px-4" target="_blank" rel="noopener">{t("share_preview")}</a>
       </div>
     </div>
     <div class="grid gap-1.5">
-      <label for="share-embed" class="font-pixel text-sm">{t("share_embed")}</label>
+      <label for="share-embed" class="text-sm text-ash">{t("share_embed")}</label>
       <div class="flex flex-wrap items-start gap-2">
-        <textarea id="share-embed" readonly rows="3" class="field min-w-0 flex-1 basis-64 resize-none font-mono text-[12px] [word-break:break-all]"></textarea>
-        <button type="button" class="btn" data-copy="share-embed"><span>{t("share_copy")}</span></button>
+        <textarea id="share-embed" readonly rows="3" class="dfield min-w-0 flex-1 basis-64 resize-none font-mono text-[12px] [word-break:break-all]"></textarea>
+        <button type="button" class="btn-dark px-4" data-copy="share-embed"><span>{t("share_copy")}</span></button>
       </div>
     </div>
-    <p class="text-sm text-graphite">{t("share_note")}</p>
+    <p class="text-sm text-ash">{t("share_note")}</p>
   </section>
 </form>
 
 <style>
+  .step { display: flex; align-items: baseline; gap: 0.9rem; font-family: var(--font-pixel); font-size: 14px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--color-cream); }
+  .step b { font-weight: 400; color: var(--color-orange); letter-spacing: 0.1em; }
+  .dfield { display: block; width: 100%; background: #232126; border: 2px solid var(--color-graphite); padding: 0.8rem 1rem; color: var(--color-cream); font-size: 16px; }
+  .dfield:focus, .dfield:focus-within { outline: none; border-color: var(--color-orange); }
+  .dfield[aria-invalid="true"], .address-box[data-state="error"] { border-color: #ff8a75; }
+  .address-box[data-state="ok"] { border-color: #5fd38a; }
+  .address-text { display: block; width: 100%; min-height: 4.6rem; padding: 0.9rem 1rem 2.8rem; font-family: var(--font-mono); font-size: 14px; line-height: 1.75; white-space: pre-wrap; word-break: break-all; color: var(--color-cream); }
+  @media (min-width: 640px) { .address-text { padding: 0.9rem 6rem 0.9rem 1.1rem; } }
+  textarea.address-text { color: transparent; }
+  textarea.address-text::selection { color: transparent; background: rgb(251 140 60 / 0.35); }
+  #address-mirror :global(mark) { background: none; color: #ffb27a; font-weight: 700; }
+  .view-btn { cursor: pointer; padding: 0.3rem 0.8rem; color: var(--color-line); }
+  .view-btn[aria-pressed="true"] { background: var(--color-graphite); color: var(--color-cream); }
+  #uri :global(.k) { color: var(--color-line); }
+  #uri :global(.v) { color: #5fd38a; }
+  .perforation { position: relative; height: 2px; margin: 0 1.25rem; background: repeating-linear-gradient(90deg, #d9cfc2 0 6px, transparent 6px 12px); }
+  .perforation::before, .perforation::after { content: ""; position: absolute; top: -5px; width: 10px; height: 12px; background: var(--color-ink-2); }
+  .perforation::before { left: -1.25rem; }
+  .perforation::after { right: -1.25rem; }
+  .copy-main { position: relative; display: flex; align-items: center; justify-content: center; gap: 0.75rem; padding: 1rem; background: var(--color-orange); color: var(--color-ink); font-family: var(--font-pixel); font-size: 17px; cursor: pointer; box-shadow: 6px 6px 0 #7a3510; }
+  .copy-main:not(:disabled):hover { background: var(--color-peach); }
+  .copy-main:not(:disabled):active { transform: translate(3px, 3px); box-shadow: 3px 3px 0 #7a3510; }
+  .btn-dark { display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem; padding: 0.75rem 0.5rem; border: 2px solid var(--color-line); color: var(--color-cream); font-family: var(--font-pixel); font-size: 14px; cursor: pointer; text-decoration: none; }
+  .btn-dark:not(:disabled):hover { border-color: var(--color-orange); color: var(--color-orange); }
+  .copy-main:disabled, .btn-dark:disabled { cursor: not-allowed; opacity: 0.4; }
   /* The QR prints in like an old dot-matrix: top to bottom, in steps. */
   @media (prefers-reduced-motion: no-preference) {
     :global(#qr.reveal svg) { animation: qr-print 480ms steps(12) both; }
@@ -87,29 +175,63 @@ const strings = pickStrings(lang, [
 
 <script>
   import { readStrings } from "../../i18n/format";
+  import type { Locale } from "../../i18n/ui";
+  import { formatMoney } from "../../lib/currency";
   import { EXAMPLE_ADDRESS, EXAMPLE_AMOUNT, EXAMPLE_NAME } from "../../lib/monero";
-  import { validatePayment, type PaymentField, type PaymentInput } from "../../lib/payment";
+  import { LIMITS, validatePayment, type PaymentField, type PaymentInput } from "../../lib/payment";
   import { publishPayment } from "../../lib/payment-store";
+  import { chosenCurrency, getPrices } from "../../lib/price-client";
   import { drawQr, qrPng, qrSvg } from "../../lib/qr";
   import { encodeShare } from "../../lib/share";
 
   const form = document.getElementById("payment-link") as HTMLFormElement;
   const t = readStrings(form);
+  const lang = form.dataset.lang as Locale;
   const $ = (id: string) => document.getElementById(id);
-  const status = $("address-status")!, out = $("uri")!, qrBox = $("qr")!, qrAmount = $("qr-amount")!;
+  const status = $("address-status")!, out = $("uri")!, qrBox = $("qr")!;
+  const addressBox = $("address-box")!, mirror = $("address-mirror")!, addressField = $("pl-address") as HTMLTextAreaElement;
   const copyBtn = $("copy") as HTMLButtonElement, dlBtn = $("download") as HTMLButtonElement, shareBtn = $("share") as HTMLButtonElement;
   const shareBox = $("share-box")!, shareLink = $("share-link") as HTMLInputElement, shareEmbed = $("share-embed") as HTMLTextAreaElement;
   const copyLabel = copyBtn.querySelector("span")!;
   const placeholder = qrBox.innerHTML;
   const FIELDS: PaymentField[] = ["address", "amount", "paymentId", "name", "description"];
-  let uri = "";
+  const START = 6, END = 7;
+  let uri = "", view: "pretty" | "raw" = "pretty", price: number | undefined;
 
   const value = (name: string) => (form.elements.namedItem(name) as HTMLInputElement | null)?.value ?? "";
+  const escape = (s: string) => s.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
 
-  function setStatus(text: string, tone: "ok" | "error" | "") {
-    status.textContent = text;
-    status.classList.toggle("text-ok", tone === "ok");
-    status.classList.toggle("text-danger", tone === "error");
+  function setStatus(html: string, tone: "ok" | "error" | "") {
+    status.innerHTML = html;
+    status.style.color = tone === "ok" ? "#5fd38a" : tone === "error" ? "#ff8a75" : "";
+    addressBox.dataset.state = tone;
+  }
+
+  /** The textarea's text is invisible; this copy behind it shows the start and end of a valid address highlighted. */
+  function paintAddress(valid: boolean) {
+    const text = addressField.value;
+    const trimmed = text.trim();
+    mirror.innerHTML = valid && trimmed.length > START + END
+      ? escape(text.slice(0, text.indexOf(trimmed))) + `<mark>${escape(trimmed.slice(0, START))}</mark>${escape(trimmed.slice(START, -END))}<mark>${escape(trimmed.slice(-END))}</mark>`
+      : escape(text) + "\u200b";
+  }
+
+  function renderLink() {
+    if (!uri) { out.innerHTML = `<span class="text-orange">monero:</span>`; return; }
+    if (view === "raw") { out.textContent = uri; return; }
+    const [base, query = ""] = uri.split("?");
+    const params = query ? query.split("&").map((pair, i) => {
+      const [k, v = ""] = pair.split("=");
+      return `<br><span class="k">${i ? "&amp;" : "?"}${escape(k)}=</span><span class="v">${escape(v)}</span>`;
+    }) : [];
+    out.innerHTML = `<span class="text-orange">monero:</span><span class="text-cream">${escape(base.slice("monero:".length))}</span>${params.join("")}`;
+  }
+
+  function renderFiat(amount: string) {
+    const n = Number(amount);
+    const text = price && amount && n > 0 ? formatMoney(n * price, chosenCurrency(lang), lang) : "";
+    $("amount-fiat")!.textContent = text ? t("pl_fiat", { value: text }) : "";
+    $("slip-fiat")!.textContent = text ? `≈ ${text}` : "";
   }
 
   function render() {
@@ -118,14 +240,14 @@ const strings = pickStrings(lang, [
     const errors = result.ok ? [] : result.errors;
     const errorFor = (f: PaymentField) => errors.find((e) => e.field === f);
 
-    // Address: an empty field is just empty, not an error.
     const addressError = input.address.trim() ? errorFor("address") : undefined;
     const parsed = result.address;
     if (!input.address.trim()) setStatus("", "");
-    else if (addressError) setStatus(t(addressError.key, addressError.vars), "error");
-    else if (parsed?.ok && parsed.network !== "mainnet") setStatus(t("warn_network", { net: parsed.network }), "error");
-    else if (parsed?.ok) setStatus(t("ok_address", { type: t(`type_${parsed.type}`) }), "ok");
-    (form.elements.namedItem("address") as HTMLTextAreaElement).setAttribute("aria-invalid", String(!!addressError));
+    else if (addressError) setStatus(escape(t(addressError.key, addressError.vars)), "error");
+    else if (parsed?.ok && parsed.network !== "mainnet") setStatus(escape(t("warn_network", { net: parsed.network })), "error");
+    else if (parsed?.ok) setStatus(`✓ ${escape(t("ok_address", { type: t(`type_${parsed.type}`) }))} <span style="color:var(--color-line)">· ${escape(t("pl_check_ends"))}</span>`, "ok");
+    addressField.setAttribute("aria-invalid", String(!!addressError));
+    paintAddress(!!parsed?.ok && !addressError);
 
     for (const f of FIELDS.slice(1)) {
       const el = form.elements.namedItem(f) as HTMLInputElement | null;
@@ -134,14 +256,24 @@ const strings = pickStrings(lang, [
       el?.setAttribute("aria-invalid", String(!!err));
       if (msg) msg.textContent = err ? t(err.key, err.vars) : "";
     }
+    $("description-count")!.textContent = `${input.description?.length ?? 0} / ${LIMITS.description}`;
 
     const wasEmpty = !uri;
     uri = result.ok ? result.uri : "";
     copyBtn.disabled = dlBtn.disabled = shareBtn.disabled = !uri;
     renderShare(input);
-    out.textContent = uri;
-    const amount = new URLSearchParams(uri.split("?")[1] ?? "").get("tx_amount");
-    qrAmount.textContent = amount ? `${amount} XMR` : "";
+    renderLink();
+
+    const amount = new URLSearchParams(uri.split("?")[1] ?? "").get("tx_amount") ?? "";
+    $("slip-amount-row")!.hidden = !amount;
+    $("slip-amount")!.textContent = amount ? `${amount} XMR` : "";
+    $("slip-name")!.textContent = uri ? input.name?.trim() ?? "" : "";
+    $("slip-desc")!.textContent = uri ? input.description?.trim() ?? "" : "";
+    const address = input.address.trim();
+    $("slip-to")!.innerHTML = uri ? `${escape(address.slice(0, START))}<span class="font-normal">…</span>${escape(address.slice(-END))}` : "…";
+    if (amount && !price) getPrices().then((p) => { price = p[chosenCurrency(lang)]; renderFiat(value("amount")); }).catch(() => {});
+    renderFiat(errorFor("amount") ? "" : input.amount ?? "");
+
     if (!uri) {
       qrBox.innerHTML = placeholder;
       qrBox.classList.remove("reveal");
@@ -150,7 +282,7 @@ const strings = pickStrings(lang, [
       // Module gaps need at least ~7 physical pixels per module, or they blur into gray.
       const gaps = (qrBox.clientWidth / drawing.size) * devicePixelRatio >= 7;
       qrBox.innerHTML = qrSvg(drawing, t("qr_alt"), { gaps });
-      qrBox.classList.toggle("reveal", wasEmpty); // animate only when the code first appears
+      qrBox.classList.toggle("reveal", wasEmpty);
     }
     publishPayment({ input, ok: result.ok });
   }
@@ -167,6 +299,17 @@ const strings = pickStrings(lang, [
   }
   const EMBED_HEIGHT = 820;
 
+  async function copyLink() {
+    try {
+      await navigator.clipboard.writeText(uri);
+    } catch {
+      getSelection()?.selectAllChildren(out);
+      return;
+    }
+    copyLabel.textContent = t("copied");
+    setTimeout(() => (copyLabel.textContent = t("pl_copy_link")), 1400);
+  }
+
   shareBtn.addEventListener("click", () => {
     shareBox.hidden = !shareBox.hidden;
     shareBtn.setAttribute("aria-expanded", String(!shareBox.hidden));
@@ -182,6 +325,14 @@ const strings = pickStrings(lang, [
     });
   }
 
+  for (const btn of form.querySelectorAll<HTMLButtonElement>("[data-view]")) {
+    btn.addEventListener("click", () => {
+      view = btn.dataset.view as typeof view;
+      form.querySelectorAll("[data-view]").forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+      renderLink();
+    });
+  }
+
   form.addEventListener("input", render);
   form.addEventListener("submit", (e) => e.preventDefault());
 
@@ -193,16 +344,24 @@ const strings = pickStrings(lang, [
     render();
   });
 
-  copyBtn.addEventListener("click", async () => {
-    try {
-      await navigator.clipboard.writeText(uri);
-    } catch {
-      // Clipboard API unavailable (e.g. insecure context): select the text instead.
-      getSelection()?.selectAllChildren(out);
-      return;
-    }
-    copyLabel.textContent = t("copied");
-    setTimeout(() => (copyLabel.textContent = t("copy")), 1400);
+  // Reading the clipboard needs a browser that allows it (not Firefox); otherwise the button stays hidden.
+  const paste = $("paste") as HTMLButtonElement;
+  paste.hidden = !navigator.clipboard?.readText;
+  paste.addEventListener("click", async () => {
+    try { addressField.value = (await navigator.clipboard.readText()).trim(); } catch { return; }
+    render();
+    addressField.focus();
+  });
+
+  copyBtn.addEventListener("click", copyLink);
+  const mac = /Mac|iP(hone|ad)/.test(navigator.platform);
+  $("copy-kbd")!.textContent = mac ? "⌘C" : "Ctrl C";
+  // Ctrl/⌘+C with nothing selected and no field focused copies the payment link.
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "c" || !(mac ? e.metaKey : e.ctrlKey) || !uri) return;
+    if (getSelection()?.toString() || /^(INPUT|TEXTAREA)$/.test((document.activeElement as HTMLElement)?.tagName)) return;
+    e.preventDefault();
+    copyLink();
   });
 
   dlBtn.addEventListener("click", async () => {
