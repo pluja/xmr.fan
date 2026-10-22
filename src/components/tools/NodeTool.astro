@@ -42,11 +42,14 @@ const heading = "font-pixel text-sm tracking-[0.2em] text-cream uppercase";
         <Stamp class="mt-1 mr-2 shrink-0" />
       </div>
       <div data-details class="grid grid-cols-1 gap-x-10 gap-y-5 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
-        <div class="grid grid-cols-2 content-start gap-2">
-          <StatTile label={t("n_height")}><span data-height></span></StatTile>
-          <StatTile label={t("n_response")}><span data-ms></span></StatTile>
-          <StatTile label={t("n_network_l")}><span data-network class="capitalize"></span></StatTile>
-          <StatTile label={t("n_lag")}><span data-lag class="flex items-center gap-2 whitespace-nowrap"></span></StatTile>
+        <div class="grid content-start gap-4">
+          <div class="grid grid-cols-2 gap-2">
+            <StatTile label={t("n_height")}><span data-height></span></StatTile>
+            <StatTile label={t("n_response")}><span data-ms></span></StatTile>
+            <StatTile label={t("n_network_l")}><span data-network class="capitalize"></span></StatTile>
+            <StatTile label={t("n_lag")}><span data-lag class="flex items-center gap-2 whitespace-nowrap"></span></StatTile>
+          </div>
+          <button type="button" data-copy-node class="flex w-full cursor-pointer items-center justify-center gap-2.5 border-2 border-ink px-4 py-2.5 font-pixel text-sm text-ink hover:bg-ink hover:text-paper"><PixelIcon name="copy" size={14} /><span>{t("n_copy")}</span></button>
         </div>
         <div class="grid content-start gap-1">
           <div class="flex items-baseline justify-between gap-3">
@@ -57,14 +60,10 @@ const heading = "font-pixel text-sm tracking-[0.2em] text-cream uppercase";
         </div>
       </div>
       <Fragment slot="footer">
-        <span data-checked-at class={label}></span>
+        <span class={label}>{t("n_node")} · {t("n_check")}</span>
         <span class={cx(label, "ml-auto")}>xmr.fan</span>
       </Fragment>
     </Receipt>
-    <div data-actions class="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2">
-      <Button variant="ghost" data-copy-node><PixelIcon name="copy" size={16} class="text-orange" /><span>{t("n_copy")}</span></Button>
-      <p class="text-sm text-ash">{t("n_paste_tip")}</p>
-    </div>
   </Printer>
 
   <section class="grid gap-4" aria-labelledby="n-list">
@@ -126,8 +125,7 @@ const heading = "font-pixel text-sm tracking-[0.2em] text-cream uppercase";
 
   function showCheck(c: NodeCheck, address: string) {
     $("[data-node]").textContent = address;
-    $("[data-checked-at]").textContent = t("n_checked_at", { when: when.format(c.checkedAt ?? Date.now()) });
-    $("[data-details]").hidden = $("[data-actions]").hidden = !c.ok;
+    $("[data-details]").hidden = !c.ok;
     if (!c.ok) {
       $("[data-sub]").textContent = t(`n_err_${c.error ?? "unreachable"}`);
       stamp("bad", t("n_offline_t"));
@@ -153,7 +151,7 @@ const heading = "font-pixel text-sm tracking-[0.2em] text-cream uppercase";
     const passed = renderChecks($("[data-checks]"), checks);
     $("[data-passed]").textContent = t("n_passed", { n: passed, total: checks.length });
     $("[data-passed]").className = `text-sm ${passed === checks.length ? "text-ok" : "text-flame"}`;
-    print.set(c.synced ? "ok" : "warn", `${c.synced ? "✓ " : ""}${t(c.synced ? "n_online_t" : "n_behind_t")} · ${t("n_passed", { n: passed, total: checks.length })}`, { feed: true });
+    print.set(c.synced ? "ok" : "warn", t("n_checked_at", { when: when.format(c.checkedAt ?? Date.now()) }), { feed: true });
   }
 
   async function check(value: string) {
@@ -189,7 +187,7 @@ const heading = "font-pixel text-sm tracking-[0.2em] text-cream uppercase";
     return `<li class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-1 border-l-4 px-4 py-2.5 sm:grid-cols-[minmax(0,1fr)_88px_80px_44px_44px_32px] ${hit ? "border-orange bg-[#3d2b22]" : "border-transparent bg-ink"}">
       <button type="button" data-check-node="${escape(address)}" class="flex min-w-0 cursor-pointer items-center gap-2.5 text-left" title="${t("n_check_this")}">
         <i class="size-2 shrink-0 ${!c.ok ? "bg-bad" : c.synced ? "bg-good" : "bg-flame"}"></i>
-        <span class="truncate font-mono text-[0.875rem] ${hit ? "text-apricot" : "text-cream"} hover:text-orange hover:underline">${escape(address)}</span>
+        <span class="font-mono text-[0.875rem] break-all sm:truncate ${hit ? "text-apricot" : "text-cream"} hover:text-orange hover:underline">${escape(address)}</span>
         ${hit ? `<span class="${tone.accent} shrink-0 px-1.5 py-0.5 font-pixel text-xs uppercase">${t("n_checked_badge")}</span>` : ""}
       </button>
       <button type="button" data-copy-node="${escape(address)}" class="cursor-pointer p-1.5 text-slip-ink hover:text-orange sm:order-last" aria-label="${t("share_copy")} ${escape(address)}" title="${t("share_copy")}"><svg viewBox="0 0 8 8" width="14" height="14" aria-hidden="true" shape-rendering="crispEdges"><path fill-rule="evenodd" d="M2 0h6v6H2zM3 1v4h4V1zM0 2h1v5h5v1H0z" fill="currentColor"/></svg></button>
