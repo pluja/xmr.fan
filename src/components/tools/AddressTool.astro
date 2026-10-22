@@ -4,7 +4,9 @@ import AddressInput from "../ui/AddressInput.astro";
 import Button from "../ui/Button.astro";
 import Disclosure from "../ui/Disclosure.astro";
 import QrCode from "../ui/QrCode.astro";
-import Slip from "../ui/Slip.astro";
+import Printer from "../ui/Printer.astro";
+import Receipt from "../ui/Receipt.astro";
+import Stamp from "../ui/Stamp.astro";
 import TrustNote from "../ui/TrustNote.astro";
 import { button, chip, code, cx, field, fieldLabel, label, link, message, tone } from "../ui/styles";
 import { localePath, pickStrings, useTranslations, type Locale } from "../../i18n/ui";
@@ -13,7 +15,7 @@ interface Props { lang: Locale }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const strings = pickStrings(lang, [
-  "a_oa_host_bad", "a_type_standard", "a_type_subaddress", "a_type_integrated", "a_pid_bad", "a_chars", "a_same", "a_diff", "a_alias_l",
+  "a_oa_host_bad", "a_valid_t", "a_valid_sub", "a_type_standard", "a_type_subaddress", "a_type_integrated", "a_pid_bad", "a_chars", "a_same", "a_diff", "a_alias_l",
   "a_oa_looking", "a_oa_none", "a_oa_error", "a_oa_unsigned", "a_oa_invalid", "a_dnssec_ok", "a_dnssec_no", "a_chip_alias", "a_chip_address",
   "err_chars", "err_length", "err_checksum", "err_prefix", "warn_network", "qr_alt", "type_standard", "type_subaddress", "type_integrated", "copied",
 ]);
@@ -32,7 +34,7 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
     <AddressInput id="a-q" name="q" placeholder={t("a_placeholder")} paste={t("pl_paste")} describedby="a-status" autofocus>
       <span data-chip class={cx(chip, tone.accent, "absolute bottom-2 left-3 sm:top-3 sm:right-3 sm:bottom-auto sm:left-auto")} hidden></span>
     </AddressInput>
-    <p id="a-status" class={message} aria-live="polite"></p>
+    <p id="a-status" class="sr-only"></p>
 
     <div data-oa class="grid gap-2" hidden>
       <div data-oa-bar class="flex flex-wrap items-center gap-x-3 gap-y-2 border-l-4 border-graphite bg-ink px-5 py-3 text-[13px]">
@@ -50,33 +52,34 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
     </div>
   </section>
 
-  <section data-card class="grid grid-cols-1 gap-5" hidden>
-    <Slip dither>
+  <Printer idle={t("a_printer_idle")} aria-live="polite">
+    <Receipt>
       <div class="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_220px]">
         <div class="grid min-w-0 content-start gap-4">
-          <div class="flex flex-wrap items-center gap-x-3.5 gap-y-3 border-b-2 border-slip-tile pb-4">
-            <span class="pixel-corners grid size-10 shrink-0 place-items-center bg-ok text-paper"><PixelIcon name="check" size={24} class="block" /></span>
-            <div class="grid min-w-0 flex-1 gap-0.5">
-              <b class="font-pixel text-xl font-normal tracking-[0.12em] text-ok uppercase">{t("a_valid_t")}</b>
-              <span class="text-[13px] text-graphite">{t("a_valid_sub")}</span>
+          <div class="flex flex-wrap items-start justify-between gap-x-6 gap-y-3">
+            <div class="grid gap-2">
+              <span data-chars class={label}></span>
+              <div class="flex gap-2">
+                <span data-network class="border-2 border-ink px-2 py-0.5 font-pixel text-xs tracking-wider uppercase"></span>
+                <span data-type-badge class="bg-ink px-2.5 py-1 font-pixel text-xs tracking-wider text-orange uppercase"></span>
+              </div>
             </div>
-            <div class="flex shrink-0 gap-2 max-sm:basis-full">
-              <span data-network class="border-2 border-ink px-2 py-0.5 font-pixel text-[10px] tracking-wider uppercase"></span>
-              <span data-type-badge class="bg-ink px-2.5 py-1 font-pixel text-[10px] tracking-wider text-orange uppercase"></span>
-            </div>
+            <Stamp class="mt-1 mr-2">{t("a_valid_t")}</Stamp>
           </div>
-          <p data-chars class={cx(label, "text-[10px]")}></p>
           <div data-chunks class="grid grid-cols-4 gap-1.5 font-mono text-[15px] sm:grid-cols-6 xl:grid-cols-8"></div>
-          <p data-type class="text-[13px] text-graphite"></p>
+          <p data-type class="text-sm text-graphite"></p>
         </div>
         <QrCode brackets={t("a_scan")} data-qr-box class="mx-auto w-full max-w-[220px] self-start" />
       </div>
       <Fragment slot="footer">
         <span data-footer-label class={label}></span>
         <span data-footer class="min-w-0 truncate font-mono text-[13px]"></span>
-        <span class="ml-auto font-pixel text-[11px] text-slip-ink">xmr.fan</span>
+        <span class={cx(label, "ml-auto")}>xmr.fan</span>
       </Fragment>
-    </Slip>
+    </Receipt>
+  </Printer>
+
+  <section data-card class="-mt-3 grid grid-cols-1 gap-5" hidden>
 
     <div class="flex flex-wrap gap-3">
       <Button data-copy-from="[data-address-full]"><PixelIcon name="copy" size={16} /><span>{t("a_copy_address")}</span></Button>
@@ -152,9 +155,9 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
         <div class="relative grid gap-3 border-l-4 border-orange bg-well px-5 py-4">
           <p data-record-wait class="text-sm text-slip-ink">{t("a_record_wait")}</p>
           <dl data-record class="grid grid-cols-[52px_1fr] items-baseline gap-x-3 gap-y-2.5 pr-16" hidden>
-            <dt class={cx(label, "text-[10px]")}>{t("a_rec_type")}</dt><dd class="font-mono text-[13px] text-good">TXT</dd>
-            <dt class={cx(label, "text-[10px]")}>{t("a_rec_host")}</dt><dd data-record-host class="font-mono text-[13px] break-all text-cream"></dd>
-            <dt class={cx(label, "text-[10px]")}>{t("a_rec_value")}</dt><dd data-record-value class="font-mono text-[13px] leading-relaxed break-all text-cream"></dd>
+            <dt class={label}>{t("a_rec_type")}</dt><dd class="font-mono text-[13px] text-good">TXT</dd>
+            <dt class={label}>{t("a_rec_host")}</dt><dd data-record-host class="font-mono text-[13px] break-all text-cream"></dd>
+            <dt class={label}>{t("a_rec_value")}</dt><dd data-record-value class="font-mono text-[13px] leading-relaxed break-all text-cream"></dd>
           </dl>
           <span id="oa-record" hidden></span>
           <button type="button" data-copy-from="#oa-record" data-record-copy class={cx(copyChip, "absolute top-3 right-3")} hidden><PixelIcon name="copy" size={10} class="text-orange" /><span>{t("share_copy")}</span></button>
@@ -175,6 +178,7 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
 <script>
   import { addressInput, shortAddressHtml } from "../ui/address-input";
   import { bindCopyButtons } from "../ui/copy";
+  import { printer } from "../ui/printer";
   import { qrBox } from "../ui/qr";
   import { tone } from "../ui/styles";
   import { readStrings } from "../../i18n/format";
@@ -190,6 +194,7 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
   const oaAddress = addressInput(oaBox, () => renderRecord());
   const pid = $<HTMLInputElement>("input[name=pid]");
   const status = $("#a-status");
+  const print = printer($("[data-printer]"));
   const showQr = qrBox($("[data-qr-box]"));
   const escape = (s: string) => s.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
   let current = "";
@@ -200,6 +205,7 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
     const parsed = parseAddress(address);
     $("[data-card]").hidden = !parsed.ok;
     if (!parsed.ok) return false;
+    print.set("ok", `✓ ${t("a_valid_t")} · ${t("a_valid_sub")}`);
     current = address.trim();
     $("[data-network]").textContent = parsed.network;
     $("[data-type-badge]").textContent = t(`type_${parsed.type}`);
@@ -230,11 +236,15 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
     renderIntegrated();
     renderCompare();
     if (!oaAddress.field.value) { oaAddress.set(current); renderRecord(); }
-    if (parsed.network !== "mainnet") setStatus(t("warn_network", { net: parsed.network }));
+    if (parsed.network !== "mainnet") print.set("warn", t("warn_network", { net: parsed.network }));
     return true;
   }
 
-  function setStatus(text: string) { status.textContent = text; }
+  /** Problems with the input show in the printer slot (and are read out with the field). */
+  function setStatus(text: string) {
+    status.textContent = text;
+    if (text) print.set("error", text);
+  }
 
   function setChip(kind: "alias" | "address" | null) {
     const el = $("[data-chip]");
@@ -304,12 +314,13 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
     $("[data-oa-chain]").hidden = seal.hidden = $("[data-oa-warning]").hidden = true;
     bar.classList.remove("border-good", "border-bad");
     msg.textContent = t("a_oa_looking", { name: domain });
+    print.set("working", t("a_oa_looking", { name: domain }));
     try {
       const { aliases, dnssec } = await resolveOpenAlias(domain);
       if (run !== lookup) return;
       const found = aliases[0];
-      if (!found) { msg.textContent = t("a_oa_none", { name: domain }); bar.classList.add("border-bad"); return; }
-      if (!found.valid) { msg.textContent = t("a_oa_invalid"); bar.classList.add("border-bad"); return; }
+      if (!found) { msg.textContent = t("a_oa_none", { name: domain }); bar.classList.add("border-bad"); setStatus(msg.textContent); return; }
+      if (!found.valid) { msg.textContent = t("a_oa_invalid"); bar.classList.add("border-bad"); setStatus(msg.textContent); return; }
       msg.textContent = "";
       $("[data-oa-chain]").hidden = false;
       $("[data-oa-domain]").textContent = domain;
@@ -322,8 +333,9 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
       bar.classList.add(dnssec ? "border-good" : "border-bad");
       alias = { typed, name: found.name };
       showAddress(found.address);
+      if (!dnssec) print.set("warn", t("a_dnssec_no"));
     } catch {
-      if (run === lookup) { msg.textContent = t("a_oa_error", { name: domain }); bar.classList.add("border-bad"); }
+      if (run === lookup) { msg.textContent = t("a_oa_error", { name: domain }); bar.classList.add("border-bad"); setStatus(msg.textContent); }
     }
   }
 
@@ -336,7 +348,7 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
     $("[data-oa]").hidden = true;
     const value = query.field.value.trim();
     query.field.setAttribute("aria-invalid", "false");
-    if (!value) { setChip(null); query.show(""); showAddress(""); return; }
+    if (!value) { setChip(null); query.show(""); showAddress(""); print.set("idle"); return; }
     if (showAddress(value)) { setChip("address"); query.show("ok"); return; }
     query.show("");
     const domain = openAliasDomain(value);

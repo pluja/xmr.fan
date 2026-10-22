@@ -53,7 +53,7 @@ const FILTERS = [{ value: "all", name: t("c_all") }, { value: "gui", name: "GUI"
     <Receipt>
       <div class="flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
         <div class="grid min-w-0 flex-1 basis-64 gap-1">
-          <span class={cx(label, "text-[10px]")}>{t("c_file")}</span>
+          <span class={label}>{t("c_file")}</span>
           <span data-file class="font-pixel text-lg leading-snug break-all sm:text-xl"></span>
           <span data-status-sub class="text-[14px] text-graphite"></span>
         </div>
@@ -69,20 +69,20 @@ const FILTERS = [{ value: "all", name: t("c_all") }, { value: "gui", name: "GUI"
       <div class="grid gap-4 md:grid-cols-2">
         <div class="grid content-start gap-1.5">
           <div class="flex items-center justify-between gap-3">
-            <span class={cx(label, "text-[10px]")}>{t("c_your_hash")}</span>
-            <span data-badge class="px-2 py-0.5 font-pixel text-[10px] tracking-wider text-paper uppercase"></span>
+            <span class={label}>{t("c_your_hash")}</span>
+            <span data-badge class="px-2 py-0.5 font-pixel text-xs tracking-wider text-paper uppercase"></span>
           </div>
-          <p data-yours class="border-b-2 pb-1 font-mono text-[12px] leading-relaxed break-all"></p>
+          <p data-yours class="border-b-2 pb-1 font-mono text-[13px] leading-relaxed break-all"></p>
         </div>
         <div data-official-row class="grid content-start gap-1.5">
-          <span class={cx(label, "text-[10px]")}>{t("c_official")}</span>
-          <p data-official class="border-b-2 pb-1 font-mono text-[12px] leading-relaxed break-all"></p>
+          <span class={label}>{t("c_official")}</span>
+          <p data-official class="border-b-2 pb-1 font-mono text-[13px] leading-relaxed break-all"></p>
         </div>
       </div>
       <Fragment slot="footer">
         <svg viewBox="0 0 8 8" width="11" height="11" class="shrink-0 text-slip-ink" aria-hidden="true" shape-rendering="crispEdges"><path d="M0 2h4v4H0zM4 3h4v2H4zM6 5h1v2H6zM1 3v2h2V3z" fill="currentColor" fill-rule="evenodd" /></svg>
-        <span data-signed class={cx(label, "min-w-0 truncate text-[10px]")}>…</span>
-        <span class={cx(label, "ml-auto text-[10px]")}>{t("c_receipt")} · SHA-256 · xmr.fan</span>
+        <span data-signed class={cx(label, "min-w-0 truncate")}>…</span>
+        <span class={cx(label, "ml-auto")}>{t("c_receipt")} · SHA-256 · xmr.fan</span>
       </Fragment>
     </Receipt>
   </Printer>
@@ -193,10 +193,10 @@ const FILTERS = [{ value: "all", name: t("c_all") }, { value: "gui", name: "GUI"
   function row(f: HashEntry) {
     const info = describeFile(f.name), hit = f.sha256 === matched;
     return `<li class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 border-l-4 px-3 py-2 sm:grid-cols-[110px_minmax(0,1fr)_auto_150px_auto] ${hit ? "border-good bg-[#1f3a2a]" : "border-transparent bg-ink"}">
-      <span class="w-fit px-2 py-0.5 font-pixel text-[10px] tracking-wider uppercase max-sm:col-span-2 ${hit ? "bg-ok text-paper" : "bg-graphite text-cream"}">${escape(info.platform)}${info.installer ? ` · ${t("c_installer")}` : ""}</span>
-      <a href="${downloadUrl(f.name)}" class="min-w-0 truncate font-mono text-[12px] ${hit ? "text-good" : "text-cream"} hover:text-orange hover:underline" title="${t("c_download")} ${escape(f.name)}">${escape(f.name)}</a>
-      <span class="hidden font-pixel text-[10px] tracking-wider text-good uppercase sm:inline">${hit ? "✓" : ""}</span>
-      <code class="hidden font-mono text-[12px] sm:block ${hit ? "text-good" : "text-ash"}">${f.sha256.slice(0, 8)}…${f.sha256.slice(-8)}</code>
+      <span class="w-fit px-2 py-0.5 font-pixel text-xs tracking-wider uppercase max-sm:col-span-2 ${hit ? "bg-ok text-paper" : "bg-graphite text-cream"}">${escape(info.platform)}${info.installer ? ` · ${t("c_installer")}` : ""}</span>
+      <a href="${downloadUrl(f.name)}" class="min-w-0 truncate font-mono text-[13px] ${hit ? "text-good" : "text-cream"} hover:text-orange hover:underline" title="${t("c_download")} ${escape(f.name)}">${escape(f.name)}</a>
+      <span class="hidden font-pixel text-xs tracking-wider text-good uppercase sm:inline">${hit ? "✓" : ""}</span>
+      <code class="hidden font-mono text-[13px] sm:block ${hit ? "text-good" : "text-ash"}">${f.sha256.slice(0, 8)}…${f.sha256.slice(-8)}</code>
       <button type="button" class="cursor-pointer p-1 ${hit ? "text-good" : "text-slip-ink"} hover:text-orange" data-copy-hash="${f.sha256}" aria-label="${t("share_copy")} SHA-256 ${escape(f.name)}"><svg viewBox="0 0 8 8" width="12" height="12" aria-hidden="true" shape-rendering="crispEdges"><path fill-rule="evenodd" d="M2 0h6v6H2zM3 1v4h4V1zM0 2h1v5h5v1H0z" fill="currentColor"/></svg></button>
     </li>`;
   }
@@ -212,7 +212,7 @@ const FILTERS = [{ value: "all", name: t("c_all") }, { value: "gui", name: "GUI"
     const rest = files.filter((f) => describeFile(f.name).kind !== "gui");
     const folded = kind === "all" && !query && !showAllCli && !rest.some((f) => f.sha256 === matched);
     const section = (title: string, items: HashEntry[], fold: boolean) => !items.length ? "" : `<div class="grid gap-1.5">
-      <p class="font-pixel text-[10px] tracking-[0.18em] text-slip-ink uppercase">${title} · ${items.length}</p>
+      <p class="font-pixel text-xs tracking-[0.18em] text-slip-ink uppercase">${title} · ${items.length}</p>
       ${fold
         ? `<button type="button" data-more class="flex cursor-pointer items-center gap-3 border-2 border-dashed border-line px-4 py-2.5 text-left hover:border-orange"><span class="font-pixel text-sm text-cream">› ${t("c_show_more", { n: items.length })}</span><span class="ml-auto hidden text-xs text-slip-ink sm:inline">${[...new Set(items.map((f) => describeFile(f.name).os))].join(" · ")}</span></button>`
         : `<ul class="grid gap-1">${items.map(row).join("")}</ul>`}

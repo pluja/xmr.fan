@@ -30,7 +30,7 @@ const DETAILS = [
   { key: "size", name: t("tx_size") },
   { key: "io", name: t("tx_io") },
   { key: "ring", name: t("tx_ring") },
-  { key: "extra", name: "" },
+  { key: "extra", name: t("a_type") },
 ];
 ---
 <div id="tx-tool" class="grid gap-8" data-strings={strings} data-lang={lang} data-verify={localePath(lang, "/verify")}>
@@ -67,13 +67,13 @@ const DETAILS = [
             {MILESTONES.map((m, i) => (
               <li class:list={["relative grid content-start gap-1", m.align, i === 1 ? "justify-items-center" : i === 2 ? "justify-items-end" : "justify-items-start"]}>
                 <span data-dot={m.key} class="grid size-4 place-items-center bg-slip-line"><i class="size-2 bg-paper"></i></span>
-                <span class={cx(label, "mt-2 text-[10px]")}>{m.name}</span>
-                <span data-sub={m.key} class="text-xs text-ink sm:text-[13px]">–</span>
+                <span class={cx(label, "mt-2")}>{m.name}</span>
+                <span data-sub={m.key} class="text-[13px] text-ink sm:text-sm">–</span>
               </li>
             ))}
           </ol>
           <div class="grid gap-2">
-            <div class={cx(label, "flex justify-between text-[10px]")}>
+            <div class={cx(label, "flex justify-between")}>
               <span>{t("tx_unlock")}</span><span data-blocks>{t("tx_blocks", { n: 0 })}</span>
             </div>
             <ol data-pips class="grid grid-cols-10 gap-1" aria-hidden="true">
@@ -84,22 +84,22 @@ const DETAILS = [
         </div>
         <dl aria-label={t("tx_details")}>
           <div class="flex items-baseline justify-between gap-4 border-b-2 border-dotted border-slip-line pb-2">
-            <dt class={cx(label, "text-[10px]")}>{t("tx_confirmations")}</dt>
+            <dt class={label}>{t("tx_confirmations")}</dt>
             <dd data-confirmations class="font-pixel text-lg"></dd>
           </div>
           {DETAILS.map((d) => (
             <div data-row={d.key} class="flex items-baseline justify-between gap-4 border-b-2 border-dotted border-slip-line py-2 last:border-0">
-              <dt class="text-[13px] text-graphite">{d.name}</dt>
-              <dd data-value={d.key} class="text-right font-mono text-[13px] text-ink"></dd>
+              <dt class="text-sm text-graphite">{d.name}</dt>
+              <dd data-value={d.key} class="text-right font-mono text-sm text-ink"></dd>
             </div>
           ))}
         </dl>
       </div>
 
       <Fragment slot="footer">
-        <span class={cx(label, "text-[10px]")}>TX</span>
-        <span data-tx class="min-w-0 truncate font-mono text-[12px]">…</span>
-        <span class={cx(label, "ml-auto text-[10px]")}>xmr.fan</span>
+        <span class={label}>TX</span>
+        <span data-tx class="min-w-0 truncate font-mono text-[13px]">…</span>
+        <span class={cx(label, "ml-auto")}>xmr.fan</span>
       </Fragment>
     </Receipt>
 
@@ -144,7 +144,7 @@ const DETAILS = [
   const REFRESH_MS = 30_000;
   const DONE = "bg-ok", NOW = "bg-flame", TODO = "bg-slip-line";
 
-  interface Found { as_json: string; as_hex: string; in_pool: boolean; block_height: number; block_timestamp: number; double_spend_seen: boolean }
+  interface Found { as_json: string; as_hex: string; pruned_as_hex?: string; in_pool: boolean; block_height: number; block_timestamp: number; double_spend_seen: boolean }
 
   let current = "", timer: ReturnType<typeof setTimeout> | undefined;
   const baseTitle = document.title;
@@ -251,15 +251,15 @@ const DETAILS = [
     lastDouble = found.double_spend_seen;
     $("[data-warning]").hidden = !found.double_spend_seen;
 
-    const bytes = found.as_hex.length / 2;
+    const bytes = (found.as_hex || found.pruned_as_hex || "").length / 2;
     const extra = summary.coinbase ? t("tx_coinbase")
       : summary.unlockTime > 500_000_000 ? t("tx_locked_time", { date: dateTime.format(summary.unlockTime * 1000) })
       : summary.unlockTime > 0 ? t("tx_locked", { height: num.format(summary.unlockTime) }) : "";
     const values: Record<string, string> = {
       mined: found.in_pool ? "" : dateTime.format(found.block_timestamp * 1000),
       height: found.in_pool ? "" : `#${num.format(found.block_height)}`,
-      fee: summary.coinbase ? "–" : `<span class="text-slip-ink">${num.format(Math.round(summary.fee / bytes))} pico/B · </span>${picoToXmr(String(summary.fee))} XMR`,
-      size: `${num.format(bytes)} B`,
+      fee: summary.coinbase || !bytes ? "" : `<span class="text-slip-ink">${num.format(Math.round(summary.fee / bytes))} pico/B · </span>${picoToXmr(String(summary.fee))} XMR`,
+      size: bytes ? `${num.format(bytes)} B` : "",
       io: `${summary.inputs} / ${summary.outputs}`,
       ring: summary.ringSize ? String(summary.ringSize) : "",
       extra,

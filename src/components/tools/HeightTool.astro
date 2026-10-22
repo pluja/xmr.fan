@@ -51,13 +51,13 @@ const pick = "cursor-pointer border-2 border-line px-3 py-1 font-pixel text-xs t
     </div>
 
     <Slip dither aria-live="polite">
-      <span class={cx(label, "text-[10px]")}>{t("h_restore")}</span>
+      <span class={label}>{t("h_restore")}</span>
       <div class="-mt-2 flex flex-wrap items-center justify-between gap-3">
         <output data-height class="font-pixel text-[clamp(36px,6vw,52px)] leading-none">…</output>
         <span id="restore-height" hidden></span>
         <Button data-copy-from="#restore-height" class="px-4 py-2 text-sm"><PixelIcon name="copy" size={14} /><span>{t("h_copy")}</span></Button>
       </div>
-      <p data-from class="-mt-1 text-[13px] text-graphite"></p>
+      <p data-from class="-mt-1 text-sm text-graphite"></p>
 
       <div class="grid gap-2 border-t-2 border-slip-tile pt-4">
         <div class="relative mt-2 flex h-3.5">
@@ -67,18 +67,18 @@ const pick = "cursor-pointer border-2 border-line px-3 py-1 font-pixel text-xs t
           <i data-tick class="absolute -top-2 h-7.5 w-1 -translate-x-1/2 bg-ink"></i>
           <i class="absolute -top-1.5 right-0 h-6.5 w-1 bg-ink"></i>
         </div>
-        <div class={cx(label, "mt-2 flex flex-wrap gap-x-5 gap-y-1 text-[10px]")}>
+        <div class={cx(label, "mt-2 flex flex-wrap gap-x-5 gap-y-1")}>
           <span class="flex items-center gap-1.5"><i class="size-2.5 bg-[repeating-linear-gradient(45deg,var(--color-orange)_0_2px,var(--color-peach)_2px_4px)]"></i><span data-margin-label class="text-flame"></span></span>
           <span class="flex items-center gap-1.5"><i class="size-2.5 bg-ok"></i><span data-created></span></span>
         </div>
         <div class="mt-1 flex justify-between gap-4">
-          <div class="grid"><span class={cx(label, "text-[10px]")}>{t("h_start")}</span><span data-start class="font-mono text-[13px]"></span></div>
-          <div class="grid text-right"><span class={cx(label, "text-[10px]")}>{t("h_now")}</span><span data-now class="font-mono text-[13px]">…</span></div>
+          <div class="grid"><span class={label}>{t("h_start")}</span><span data-start class="font-mono text-[13px]"></span></div>
+          <div class="grid text-right"><span class={label}>{t("h_now")}</span><span data-now class="font-mono text-[13px]">…</span></div>
         </div>
       </div>
 
       <Fragment slot="footer">
-        <span data-foot class={cx(label, "text-[10px]")}>{t("h_foot_estimate")}</span>
+        <span data-foot class={label}>{t("h_foot_estimate")}</span>
         <span class="ml-auto font-pixel text-[11px] text-slip-ink">xmr.fan</span>
       </Fragment>
     </Slip>

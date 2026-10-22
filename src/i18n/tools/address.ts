@@ -66,6 +66,7 @@ export default defineStrings({
     a_test_now: "Test now",
     a_shown: "Shown to payers",
     a_oa_host_bad: "Use your domain, like donate@yourdomain.com.",
+    a_printer_idle: "Waiting for an address or a name",
   },
   es: {
     a_oa_make_t: "Tu propio nombre Monero",
@@ -132,6 +133,7 @@ export default defineStrings({
     a_test_now: "Probar ahora",
     a_shown: "Visible para quienes pagan",
     a_oa_host_bad: "Usa tu dominio, por ejemplo donate@tudominio.com.",
+    a_printer_idle: "Esperando una dirección o un nombre",
   },
   ru: {
     a_oa_make_t: "Своё имя для Monero",
@@ -198,6 +200,7 @@ export default defineStrings({
     a_test_now: "Проверить",
     a_shown: "Видно плательщикам",
     a_oa_host_bad: "Укажите свой домен, например donate@вашдомен.com.",
+    a_printer_idle: "Ждём адрес или имя",
   },
   fr: {
     a_oa_make_t: "Votre propre nom Monero",
@@ -264,6 +267,7 @@ export default defineStrings({
     a_test_now: "Tester maintenant",
     a_shown: "Visible par les payeurs",
     a_oa_host_bad: "Utilise ton domaine, par exemple donate@tondomaine.com.",
+    a_printer_idle: "En attente d'une adresse ou d'un nom",
   },
   pt: {
     a_oa_make_t: "Seu próprio nome Monero",
@@ -330,6 +334,7 @@ export default defineStrings({
     a_test_now: "Testar agora",
     a_shown: "Visível para quem paga",
     a_oa_host_bad: "Use seu domínio, como donate@seudominio.com.",
+    a_printer_idle: "Aguardando um endereço ou um nome",
   },
   ja: {
     a_oa_make_t: "自分の Monero 名",
@@ -396,5 +401,6 @@ export default defineStrings({
     a_test_now: "今すぐテスト",
     a_shown: "支払う人に表示されます",
     a_oa_host_bad: "donate@yourdomain.com のように、自分のドメインを使ってください。",
+    a_printer_idle: "アドレスか名前を待っています",
   },
 });

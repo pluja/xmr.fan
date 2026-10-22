@@ -66,7 +66,7 @@ const mono = "font-mono text-[13px]";
     <Receipt>
       <div class="flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
         <div class="grid min-w-0 flex-1 basis-64 gap-1">
-          <span class={cx(label, "text-[10px]")}>{t("v_receipt")} · <span data-via></span></span>
+          <span class={label}>{t("v_receipt")} · <span data-via></span></span>
           <p data-show="ok" class="flex items-baseline gap-2.5"><span data-amount class="font-pixel text-5xl leading-none"></span><span class="font-pixel text-xl text-flame">XMR</span></p>
           <p data-show="ok" class="text-[14px] text-graphite">{t("v_received_by")} <span data-recipient class="font-mono text-ink"></span> · <span data-subtitle></span></p>
           <p data-show="fail" data-reason class="text-[16px] text-danger"></p>
@@ -80,9 +80,9 @@ const mono = "font-mono text-[13px]";
         <StatTile label={t("v_st_spendable")}><span data-spendable class="flex items-center gap-2 text-[15px]"></span></StatTile>
       </div>
       <Fragment slot="footer">
-        <span class={cx(label, "text-[10px]")}>TX</span>
-        <span data-tx class="min-w-0 truncate font-mono text-[12px]">…</span>
-        <span class={cx(label, "ml-auto text-[10px]")}>xmr.fan</span>
+        <span class={label}>TX</span>
+        <span data-tx class="min-w-0 truncate font-mono text-[13px]">…</span>
+        <span class={cx(label, "ml-auto")}>xmr.fan</span>
       </Fragment>
     </Receipt>
     <div data-share class="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2" hidden>
