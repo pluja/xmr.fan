@@ -24,15 +24,15 @@ const strings = pickStrings(lang, ["lv_listen", "lv_stop", "lv_height", "lv_wait
       </button>
     </div>
     <div class="flex flex-wrap items-center gap-x-4 gap-y-3">
-      <button type="button" data-listen class={button.primary}><PixelIcon name="sound" size={16} /><span>{t("lv_listen")}</span></button>
+      <button type="button" data-listen class={cx(button.primary, "min-w-32 max-sm:w-full")} hidden><PixelIcon name="sound" size={16} /><span>{t("lv_listen")}</span></button>
       <div class="grid gap-1 text-sm text-ash">
         <p>{t("lv_legend")}</p>
         <p class="flex flex-wrap items-center gap-x-4 gap-y-1">
           {FEE_LEGEND.map(([key, color]) => <span class="flex items-center gap-1.5"><span class="size-2.5" style={`background:${color}`}></span>{t(key)}</span>)}
         </p>
       </div>
-      <div class="ml-auto flex items-center gap-3">
-        <label class="flex items-center gap-2"><PixelIcon name="sound" size={16} class="text-orange" /><Range name="volume" label={t("bt_volume")} value={0.5} /></label>
+      <div class="ml-auto flex items-center gap-3 max-sm:ml-0 max-sm:w-full">
+        <label class="flex items-center gap-2 max-sm:flex-1"><PixelIcon name="sound" size={16} class="text-orange" /><Range name="volume" label={t("bt_volume")} value={0.5} class="max-sm:w-auto max-sm:flex-1" /></label>
         <button type="button" data-fullscreen class={cx(button.ghost, "px-3")} aria-label={t("bt_fullscreen")} title={t("bt_fullscreen")}><PixelIcon name="expand" size={16} /></button>
       </div>
     </div>
@@ -113,6 +113,7 @@ const strings = pickStrings(lang, ["lv_listen", "lv_stop", "lv_height", "lv_wait
     if (m.playing) m.stop(); else m.start(Number(volume.value));
     $("[data-listen] span").textContent = t(m.playing ? "lv_stop" : "lv_listen");
     $("[data-start]").hidden = true;
+    $("[data-listen]").hidden = false;
   }
   $("[data-listen]").addEventListener("click", toggleMusic);
   $("[data-start]").addEventListener("click", toggleMusic);
