@@ -1,0 +1,19 @@
+---
+/* A numbered step heading: "01 YOUR ADDRESS". As a <summary> inside a details.group/fold, it folds
+   its step on small screens; wide screens keep every step open. */
+interface Props { n: string; label: string; as?: "h2" | "label" | "summary"; for?: string; optional?: string; class?: string }
+const { n, label, as: Tag = "h2", for: htmlFor, optional, class: cls } = Astro.props;
+const summary = Tag === "summary";
+---
+<Tag
+  class:list={[
+    "flex items-baseline gap-3.5 font-pixel text-sm uppercase tracking-[0.2em] text-cream",
+    summary && "cursor-pointer list-none lg:pointer-events-none [&::-webkit-details-marker]:hidden",
+    cls,
+  ]}
+  for={htmlFor}
+>
+  <b class="font-normal tracking-widest text-orange">{n}</b>{label}
+  {optional && <span class="ml-1 font-sans text-sm normal-case tracking-normal text-line">{optional}</span>}
+  {summary && <i class="ml-auto size-2.5 rotate-45 self-center border-r-2 border-b-2 border-orange group-open/fold:-rotate-135 lg:hidden" aria-hidden="true"></i>}
+</Tag>

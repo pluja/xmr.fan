@@ -1,0 +1,8 @@
+---
+/* A one-line privacy promise with a green lock. */
+interface Props { class?: string }
+---
+<p class:list={["flex items-start gap-2.5 text-sm text-ash", Astro.props.class]}>
+  <svg viewBox="0 0 8 8" width="14" height="14" class="mt-0.5 shrink-0 text-good" aria-hidden="true" shape-rendering="crispEdges"><path fill-rule="evenodd" d="M2 0h4v1H2zM1 1h1v2H1zM6 1h1v2H6zM0 3h8v5H0zM3 5h2v2H3z" fill="currentColor" /></svg>
+  <span><slot /></span>
+</p>

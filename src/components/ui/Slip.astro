@@ -1,0 +1,12 @@
+---
+/* A cream receipt on a dark panel: orange top edge, body, a perforated tear line and a footer row. */
+interface Props { dither?: boolean; class?: string; [attr: string]: unknown }
+const { dither = false, class: cls, ...attrs } = Astro.props;
+---
+<figure class:list={["relative m-0 bg-paper text-ink shadow-[8px_8px_0_var(--color-shade)]", cls]} {...attrs}>
+  <div class="h-1.5 bg-orange"></div>
+  {dither && <div class="h-2 bg-[conic-gradient(var(--color-orange)_25%,transparent_0_50%,var(--color-orange)_0_75%,transparent_0)] bg-size-[8px_8px]" aria-hidden="true"></div>}
+  <div class="grid gap-4 px-6 pt-5 pb-5"><slot /></div>
+  <div class="relative mx-5 h-0.5 bg-[repeating-linear-gradient(90deg,var(--color-slip-line)_0_6px,transparent_6px_12px)] before:absolute before:-top-[5px] before:-left-5 before:h-3 before:w-2.5 before:bg-ink-2 after:absolute after:-top-[5px] after:-right-5 after:h-3 after:w-2.5 after:bg-ink-2" aria-hidden="true"></div>
+  <figcaption class="flex items-center gap-3 px-6 pt-3 pb-4"><slot name="footer" /></figcaption>
+</figure>

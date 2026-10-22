@@ -14,10 +14,25 @@
   --color-mint: #a8e6c1;
   --color-ok: #1d6b3a;
   --color-danger: #9e2a14;
+  /* Dark panels */
+  --color-well: #232126;     /* inputs and code wells */
+  --color-shade: #1f1d22;    /* hard drop shadows */
+  --color-ember: #7a3510;    /* shadow under orange buttons */
+  --color-good: #5fd38a;
+  --color-bad: #ff8a75;
+  --color-apricot: #ffb27a;  /* highlighted characters */
+  /* Slips (cream receipts on dark panels) */
+  --color-slip-ink: #8a8492;
+  --color-slip-tile: #f4ece1;
+  --color-slip-line: #d9cfc2;
 
   --font-pixel: "DotGothic16", ui-monospace, monospace;
   --font-sans: "Manrope Variable", system-ui, "Hiragino Sans", "Noto Sans JP", sans-serif;
   --font-mono: ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  /* A QR code printing in like an old dot-matrix: top to bottom, in steps. */
+  --animate-qr-print: qr-print 480ms steps(12) both;
+  @keyframes qr-print { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0); } }
 }
 
 @layer base {
@@ -59,6 +74,11 @@
   .btn-ghost { @apply bg-transparent text-ink; }
   .btn:disabled { @apply cursor-not-allowed opacity-40; }
   .btn:not(:disabled):active { transform: translate(2px, 2px); }
+}
+
+/* Pixel corners: 4px notches cut from each corner. */
+@utility pixel-corners {
+  clip-path: polygon(4px 0, calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 4px calc(100% - 4px), 0 calc(100% - 4px), 0 4px, 4px 4px);
 }
 
 /* Legend tier: pixel sparkles twinkle in the corners on hover, like rare loot. */

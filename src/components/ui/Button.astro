@@ -1,0 +1,9 @@
+---
+/* Orange primary or outlined ghost button; a link when given href. */
+import { button } from "./styles";
+
+interface Props { variant?: keyof typeof button; href?: string; class?: string; [attr: string]: unknown }
+const { variant = "primary", href, class: cls, ...attrs } = Astro.props;
+const Tag = href ? "a" : "button";
+---
+<Tag href={href} type={href ? undefined : "button"} class:list={[button[variant], cls]} {...attrs}><slot /></Tag>
