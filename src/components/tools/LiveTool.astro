@@ -8,7 +8,7 @@ interface Props { lang: Locale }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const FEE_LEGEND = [["lv_fee_low", FEE_TONES[0][0]], ["lv_fee_normal", FEE_TONES[1][0]], ["lv_fee_high", FEE_TONES[2][0]]] as const;
-const strings = pickStrings(lang, ["lv_listen", "lv_stop", "lv_height", "lv_waiting", "lv_ago", "lv_new_block", "lv_hint", "dur_s", "dur_min", "dur_h", "dur_d", "dur_y"]);
+const strings = pickStrings(lang, ["lv_listen", "lv_stop", "lv_height", "lv_waiting", "lv_ago", "lv_new_block", "dur_s", "dur_min", "dur_h", "dur_d", "dur_y"]);
 ---
 <div id="live-tool" class="grid gap-5" data-strings={strings} data-lang={lang} data-tx={localePath(lang, "/tx")}>
   <section data-stage class="live-stage grid gap-3 border-2 border-ink bg-ink p-3 text-cream shadow-[6px_6px_0_var(--color-graphite)] sm:p-4">
@@ -25,13 +25,11 @@ const strings = pickStrings(lang, ["lv_listen", "lv_stop", "lv_height", "lv_wait
       <p>{t("lv_legend")}</p>
       <p class="flex flex-wrap items-center gap-x-4 gap-y-1">
         {FEE_LEGEND.map(([key, color]) => <span class="flex items-center gap-1.5"><span class="size-2.5" style={`background:${color}`}></span>{t(key)}</span>)}
-        <span class="text-line">·</span>
-        <span>{t("lv_hint")}</span>
       </p>
     </div>
     <div class="flex flex-wrap items-center gap-x-4 gap-y-3">
-      <button type="button" data-listen class="btn min-w-32 border-orange bg-orange px-5 py-3 text-lg text-ink">
-        <PixelIcon name="sound" size={20} /><span>{t("lv_listen")}</span>
+      <button type="button" data-listen class="btn border-orange bg-orange text-ink">
+        <PixelIcon name="sound" size={16} /><span>{t("lv_listen")}</span>
       </button>
       <label class="ml-auto flex items-center gap-2">
         <PixelIcon name="sound" size={16} class="text-orange" />
