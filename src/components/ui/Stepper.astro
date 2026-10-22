@@ -1,0 +1,27 @@
+---
+/* A small whole-number field with − and + buttons. The input fires "input" events like any field. */
+import { cx } from "./styles";
+
+interface Props { name: string; label: string; value: number; min: number; max: number; class?: string }
+const { name, label, value, min, max, class: cls } = Astro.props;
+const btn = "grid w-10 cursor-pointer place-items-center bg-graphite font-pixel text-lg text-cream hover:bg-orange hover:text-ink disabled:cursor-not-allowed disabled:opacity-40";
+---
+<label class={cx("grid gap-1.5", cls)} data-stepper>
+  <span class="text-sm text-ash">{label}</span>
+  <span class="flex h-11 border-2 border-graphite bg-well focus-within:border-orange">
+    <button type="button" class={btn} data-step="-1" aria-label={`${label} −1`}>−</button>
+    <input name={name} type="number" inputmode="numeric" min={min} max={max} value={value} class="w-14 min-w-0 flex-1 bg-transparent text-center font-mono text-lg text-cream outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none" />
+    <button type="button" class={btn} data-step="1" aria-label={`${label} +1`}>+</button>
+  </span>
+</label>
+
+<script>
+  for (const box of document.querySelectorAll<HTMLElement>("[data-stepper]")) {
+    const input = box.querySelector("input")!;
+    box.querySelectorAll<HTMLButtonElement>("[data-step]").forEach((b) => b.addEventListener("click", () => {
+      const next = Math.min(Number(input.max), Math.max(Number(input.min), (Number(input.value) || 0) + Number(b.dataset.step)));
+      input.value = String(next);
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    }));
+  }
+</script>
