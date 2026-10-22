@@ -1,8 +1,10 @@
 ---
-import Field from "../Field.astro";
 import PixelIcon from "../PixelIcon.astro";
-import TryExample from "../TryExample.astro";
 import NodeSource from "../live/NodeSource.astro";
+import Button from "../ui/Button.astro";
+import Slip from "../ui/Slip.astro";
+import TrustNote from "../ui/TrustNote.astro";
+import { field, label, link, message } from "../ui/styles";
 import { localePath, pickStrings, useTranslations, type Locale } from "../../i18n/ui";
 import { UNLOCK_BLOCKS } from "../../lib/tx";
 
@@ -10,53 +12,123 @@ interface Props { lang: Locale }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const strings = pickStrings(lang, [
-  "tx_pool", "tx_pool_note", "tx_confirming", "tx_confirming_note", "tx_spendable", "tx_spendable_note", "tx_coinbase", "tx_locked", "tx_locked_time",
-  "tx_not_found", "v_err_txid", "tx_n_notify", "tx_n_note", "tx_n_on", "tx_n_off", "tx_n_denied", "tx_n_mined", "tx_n_spendable", "tx_n_double", "tx_confirming", "live_error", "dur_s", "dur_min", "dur_h", "dur_d", "dur_y",
+  "tx_t_pool", "tx_t_confirming", "tx_t_fail", "tx_t_spendable", "tx_pool_note", "tx_confirming_note", "tx_spendable_sub", "tx_m_waiting", "tx_m_in", "tx_m_pool_sub", "tx_m_unlocked_sub",
+  "tx_block", "tx_blocks", "tx_coinbase", "tx_locked", "tx_locked_time", "tx_not_found", "v_err_txid", "tx_n_notify", "tx_n_note", "tx_n_off", "tx_n_denied",
+  "tx_n_mined", "tx_n_spendable", "tx_n_double", "tx_confirming", "live_error", "dur_s", "dur_min", "dur_h", "dur_d", "dur_y",
 ]);
-const row = "grid grid-cols-[140px_1fr] gap-4 border-b-2 border-dotted border-graphite/40 py-2";
+const MILESTONES = [
+  { key: "pool", name: t("tx_m_pool"), align: "text-left" },
+  { key: "mined", name: t("tx_m_mined"), align: "text-center" },
+  { key: "unlocked", name: t("tx_m_unlocked"), align: "text-right" },
+];
+const DETAILS = [
+  { key: "mined", name: t("tx_mined") },
+  { key: "height", name: t("tx_block_height") },
+  { key: "fee", name: t("tx_fee") },
+  { key: "size", name: t("tx_size") },
+  { key: "io", name: t("tx_io") },
+  { key: "ring", name: t("tx_ring") },
+  { key: "extra", name: "" },
+];
 ---
-<div id="tx-tool" class="grid gap-6" data-strings={strings} data-lang={lang} data-verify={localePath(lang, "/verify")}>
-  <form data-form class="flex flex-wrap items-end gap-2" novalidate>
-    <Field label={t("tx_id")} messageId="tx-message" class="min-w-0 flex-1 basis-80">
-      <input name="txid" spellcheck="false" autocomplete="off" autocapitalize="off" class="field font-mono text-[13px]" aria-describedby="tx-message" autofocus />
-    </Field>
-    <button class="btn mb-px" type="submit">{t("tx_track")}</button>
-    <TryExample lang={lang} class="basis-full" />
+<div id="tx-tool" class="grid gap-8" data-strings={strings} data-lang={lang} data-verify={localePath(lang, "/verify")}>
+  <form data-form class="grid gap-2.5" novalidate>
+    <div class="flex items-baseline justify-between gap-4">
+      <label for="tx-id" class="font-pixel text-sm tracking-[0.2em] text-cream uppercase">{t("tx_id")}</label>
+      <button type="button" data-example class={link}>{t("try_example")}</button>
+    </div>
+    <div class="flex flex-col gap-3 sm:flex-row">
+      <input id="tx-id" name="txid" spellcheck="false" autocomplete="off" autocapitalize="off" class:list={[field, "min-w-0 flex-1 font-mono text-[13px]"]} aria-describedby="tx-message" autofocus />
+      <Button type="submit" class="sm:w-36">{t("tx_track")}</Button>
+    </div>
+    <p id="tx-message" class={message}></p>
   </form>
 
-  <p data-failure class="result bad" hidden></p>
+  <div data-board data-state="idle" class="group/tx grid items-start gap-x-8 gap-y-6 lg:grid-cols-2">
+    <div class="grid content-start gap-4 max-lg:group-data-[state=idle]/tx:hidden">
+      <Slip dither aria-live="polite">
+        <div class="grid grid-cols-[auto_1fr] items-center gap-x-3.5 gap-y-3 border-b-2 border-slip-tile pb-4 sm:grid-cols-[auto_1fr_auto]">
+          <span data-badge class="pixel-corners grid size-10 shrink-0 place-items-center bg-graphite text-paper">
+            <span data-icon="wait"><PixelIcon name="hourglass" size={22} class="block" /></span>
+            <span data-icon="ok" hidden><PixelIcon name="check" size={24} class="block" /></span>
+          </span>
+          <div class="grid min-w-0 gap-0.5">
+            <b data-title class="font-pixel text-xl font-normal tracking-[0.12em] uppercase">{t("tx_track")}</b>
+            <span data-subtitle class="text-[13px] text-graphite">{t("tx_idle")}</span>
+          </div>
+          <div class="col-span-2 flex items-baseline justify-between gap-3 sm:col-span-1 sm:grid sm:text-right group-data-[state=fail]/tx:hidden group-data-[state=idle]/tx:hidden">
+            <span class:list={[label, "text-[10px]"]}>{t("tx_confirmations")}</span>
+            <span data-confirmations class="font-pixel text-lg"></span>
+          </div>
+        </div>
 
-  <section data-result class="grid gap-5" hidden>
-    <div class="grid gap-3 border-2 border-ink bg-paper p-4 shadow-[4px_4px_0_var(--color-ink)]">
-      <p data-stage class="font-pixel text-[clamp(20px,3.4vw,28px)]"></p>
-      <ol data-pips class="flex gap-1.5" aria-hidden="true">
-        {Array.from({ length: UNLOCK_BLOCKS }, () => <li class="h-4 flex-1 border-2 border-ink"></li>)}
-      </ol>
-      <p data-stage-note class="text-[15px]"></p>
-      <p data-warning class="text-[15px] text-danger" hidden>{t("tx_double")}</p>
-    </div>
-    <dl class="border-t-[3px] border-ink text-[15px]">
-      <div class={row} data-row="mined"><dt class="font-semibold">{t("tx_mined")}</dt><dd data-mined></dd></div>
-      <div class={row}><dt class="font-semibold">{t("tx_fee")}</dt><dd data-fee class="font-mono"></dd></div>
-      <div class={row}><dt class="font-semibold">{t("tx_size")}</dt><dd data-size class="font-mono"></dd></div>
-      <div class={row}><dt class="font-semibold">{t("tx_io")}</dt><dd data-io class="font-mono"></dd></div>
-      <div class={row} data-row="ring"><dt class="font-semibold">{t("tx_ring")}</dt><dd data-ring class="font-mono"></dd></div>
-      <div class={row} data-row="extra" hidden><dt></dt><dd data-extra></dd></div>
-    </dl>
-    <div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm">
-      <button type="button" data-notify class="btn" aria-pressed="false"><PixelIcon name="sound" size={16} /><span>{t("tx_n_notify")}</span></button>
-      <a data-verify-link class="btn btn-ghost">{t("tx_check")}</a>
-      <span data-live class="text-graphite">{t("tx_live")}</span>
-    </div>
-    <p data-notify-note class="-mt-2 text-sm text-graphite" hidden></p>
-  </section>
+        <ol class="relative grid grid-cols-3 pt-1 group-data-[state=fail]/tx:hidden" aria-hidden="true">
+          <li class="absolute top-[11px] right-2 left-2 grid grid-cols-2 gap-0">
+            <span data-line="0" class="h-1 bg-slip-line"></span>
+            <span data-line="1" class="h-1 bg-slip-line"></span>
+          </li>
+          {MILESTONES.map((m, i) => (
+            <li class:list={["relative grid content-start gap-1", m.align, i === 1 ? "justify-items-center" : i === 2 ? "justify-items-end" : "justify-items-start"]}>
+              <span data-dot={m.key} class="grid size-4 place-items-center bg-slip-line"><i class="size-2 bg-paper"></i></span>
+              <span class:list={[label, "mt-2 text-[10px]"]}>{m.name}</span>
+              <span data-sub={m.key} class="text-xs text-ink sm:text-[13px]">–</span>
+            </li>
+          ))}
+        </ol>
 
-  <p class="text-sm text-graphite">{t("tx_privacy")}</p>
-  <NodeSource lang={lang} />
+        <div class="grid gap-2 group-data-[state=fail]/tx:hidden">
+          <div class:list={[label, "flex justify-between text-[10px]"]}>
+            <span>{t("tx_unlock")}</span><span data-blocks>{t("tx_blocks", { n: 0 })}</span>
+          </div>
+          <ol data-pips class="grid grid-cols-10 gap-1" aria-hidden="true">
+            {Array.from({ length: UNLOCK_BLOCKS }, () => <li class="h-3.5 bg-slip-tile"></li>)}
+          </ol>
+        </div>
+        <p data-warning class="text-[14px] text-danger" hidden>{t("tx_double")}</p>
+        <p data-failure class="text-[15px] text-danger" hidden></p>
+
+        <Fragment slot="footer">
+          <span class={label}>TX</span>
+          <span data-tx class="min-w-0 truncate font-mono text-[13px]">…</span>
+          <span class="ml-auto font-pixel text-[11px] text-slip-ink">xmr.fan</span>
+        </Fragment>
+      </Slip>
+
+      <div data-alerts class="grid gap-2 group-data-[state=idle]/tx:hidden group-data-[state=fail]/tx:hidden">
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <Button variant="ghost" data-notify aria-pressed="false"><PixelIcon name="sound" size={16} class="text-orange" /><span>{t("tx_n_notify")}</span></Button>
+          <span data-live class="text-sm text-ash">{t("tx_live")}</span>
+        </div>
+        <p data-notify-note class="text-sm text-ash" hidden></p>
+      </div>
+    </div>
+
+    <section class="grid gap-0 group-data-[state=fail]/tx:hidden group-data-[state=idle]/tx:hidden" aria-labelledby="tx-details">
+      <h2 id="tx-details" class="flex items-center gap-2.5 border-b-2 border-line pb-3 font-pixel text-sm tracking-[0.2em] text-cream uppercase"><span class="size-2 bg-orange"></span>{t("tx_details")}</h2>
+      <dl>
+        {DETAILS.map((d) => (
+          <div data-row={d.key} class="flex items-baseline justify-between gap-4 border-b-2 border-dotted border-graphite py-2.5">
+            <dt class="text-sm text-ash">{d.name}</dt>
+            <dd data-value={d.key} class="text-right font-mono text-[13px] text-cream"></dd>
+          </div>
+        ))}
+      </dl>
+      <a data-verify-link class="mt-4 flex items-center justify-between gap-4 border-l-4 border-orange bg-ink px-5 py-3 text-sm text-ash no-underline hover:text-cream">
+        <span>{t("tx_hidden_amounts")}</span>
+        <span class="flex shrink-0 items-center gap-2 font-pixel text-orange">{t("tx_check")}<svg viewBox="0 0 3 5" width="6" height="10" aria-hidden="true" shape-rendering="crispEdges"><path d="M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z" fill="currentColor" /></svg></span>
+      </a>
+    </section>
+  </div>
+
+  <div class="grid gap-3 border-t-2 border-graphite pt-5">
+    <TrustNote>{t("tx_privacy")}</TrustNote>
+    <NodeSource lang={lang} dark />
+  </div>
 </div>
 
 <script>
   import { liveTask } from "../live/live";
+  import { shortAddressHtml } from "../ui/address-input";
   import { readStrings } from "../../i18n/format";
   import type { Locale } from "../../i18n/ui";
   import { playChime, unlockChime } from "../../lib/chime";
@@ -72,11 +144,13 @@ const row = "grid grid-cols-[140px_1fr] gap-4 border-b-2 border-dotted border-gr
   const t = readStrings(root);
   const lang = root.dataset.lang as Locale;
   const form = root.querySelector<HTMLFormElement>("[data-form]")!;
+  const board = root.querySelector<HTMLElement>("[data-board]")!;
   const input = form.elements.namedItem("txid") as HTMLInputElement;
   const $ = <T extends HTMLElement = HTMLElement>(s: string) => root.querySelector<T>(s)!;
   const num = new Intl.NumberFormat(lang);
-  const dateTime = new Intl.DateTimeFormat(lang, { dateStyle: "long", timeStyle: "short" });
+  const dateTime = new Intl.DateTimeFormat(lang, { dateStyle: "medium", timeStyle: "short" });
   const REFRESH_MS = 30_000;
+  const DONE = "bg-ok", NOW = "bg-flame", TODO = "bg-slip-line";
 
   interface Found { as_json: string; as_hex: string; in_pool: boolean; block_height: number; block_timestamp: number; double_spend_seen: boolean }
 
@@ -92,7 +166,6 @@ const row = "grid grid-cols-[140px_1fr] gap-4 border-b-2 border-dotted border-gr
     notify = !notify;
     notifyBtn.setAttribute("aria-pressed", String(notify));
     notifyBtn.querySelector("span")!.textContent = t(notify ? "tx_n_off" : "tx_n_notify");
-    notifyBtn.classList.toggle("btn-ghost", notify);
     notifyNote.hidden = !notify;
     if (!notify) return;
     unlockChime();
@@ -111,8 +184,16 @@ const row = "grid grid-cols-[140px_1fr] gap-4 border-b-2 border-dotted border-gr
     }
   }
 
+  const paint = (el: Element, color: string) => { el.classList.remove(DONE, NOW, TODO, "bg-danger", "bg-graphite", "bg-slip-tile"); el.classList.add(color); };
+
   function fail(text: string) {
-    $("[data-result]").hidden = true;
+    board.dataset.state = "fail";
+    $("[data-title]").textContent = t("tx_t_fail");
+    $("[data-title]").classList.remove("text-ok");
+    $("[data-subtitle]").textContent = "";
+    paint($("[data-badge]"), "bg-danger");
+    $("[data-icon=ok]").hidden = true;
+    $("[data-icon=wait]").hidden = false;
     $("[data-failure]").textContent = text;
     $("[data-failure]").hidden = false;
   }
@@ -134,21 +215,40 @@ const row = "grid grid-cols-[140px_1fr] gap-4 border-b-2 border-dotted border-gr
 
     const confirmations = found.in_pool ? 0 : height - found.block_height;
     const stage = txStage(found.in_pool, confirmations);
-    $("[data-stage]").textContent = stage === "pool" ? t("tx_pool") : stage === "confirming" ? t("tx_confirming", { n: confirmations }) : t("tx_spendable");
-    $("[data-stage]").className = `font-pixel text-[clamp(20px,3.4vw,28px)] ${stage === "spendable" ? "text-ok" : "text-ink"}`;
-    $("[data-stage-note]").textContent = stage === "pool" ? t("tx_pool_note")
+    const done = Math.min(confirmations, UNLOCK_BLOCKS);
+    const spendable = stage === "spendable";
+    board.dataset.state = stage;
+
+    $("[data-title]").textContent = t(`tx_t_${stage}`);
+    $("[data-title]").classList.toggle("text-ok", spendable);
+    $("[data-subtitle]").textContent = stage === "pool" ? t("tx_pool_note")
       : stage === "confirming" ? t("tx_confirming_note", { time: formatDuration((UNLOCK_BLOCKS - confirmations) * BLOCK_SECONDS, t, lang) })
-      : t("tx_spendable_note", { n: num.format(confirmations) });
-    [...$("[data-pips]").children].forEach((pip, i) => {
-      pip.classList.toggle("bg-ink", stage !== "spendable" && i < confirmations);
-      pip.classList.toggle("bg-ok", stage === "spendable");
-    });
-    $("[data-live]").hidden = notifyBtn.hidden = stage === "spendable";
-    if (stage === "spendable") notifyNote.hidden = true;
-    document.title = stage === "spendable" ? `✓ ${baseTitle}` : `(${Math.min(confirmations, UNLOCK_BLOCKS)}/${UNLOCK_BLOCKS}) ${baseTitle}`;
+      : t("tx_spendable_sub");
+    paint($("[data-badge]"), spendable ? DONE : NOW);
+    $("[data-icon=ok]").hidden = !spendable;
+    $("[data-icon=wait]").hidden = spendable;
+    $("[data-confirmations]").textContent = num.format(confirmations);
+
+    // Timeline: in the mempool, mined, unlocked.
+    paint($("[data-dot=pool]"), found.in_pool ? NOW : DONE);
+    paint($("[data-dot=mined]"), found.in_pool ? TODO : DONE);
+    paint($("[data-dot=unlocked]"), spendable ? DONE : found.in_pool ? TODO : NOW);
+    paint($("[data-line='0']"), found.in_pool ? TODO : DONE);
+    paint($("[data-line='1']"), spendable ? DONE : TODO);
+    $("[data-sub=pool]").textContent = t("tx_m_pool_sub");
+    $("[data-sub=mined]").textContent = found.in_pool ? t("tx_m_waiting") : t("tx_block", { n: num.format(found.block_height) });
+    $("[data-sub=unlocked]").textContent = spendable ? t("tx_m_unlocked_sub")
+      : t("tx_m_in", { time: formatDuration((UNLOCK_BLOCKS - confirmations) * BLOCK_SECONDS, t, lang) });
+
+    $("[data-blocks]").textContent = t("tx_blocks", { n: done });
+    [...$("[data-pips]").children].forEach((pip, i) => paint(pip, i < done ? (spendable ? DONE : NOW) : "bg-slip-tile"));
+
+    $("[data-live]").hidden = notifyBtn.hidden = spendable;
+    if (spendable) notifyNote.hidden = true;
+    document.title = spendable ? `✓ ${baseTitle}` : `(${done}/${UNLOCK_BLOCKS}) ${baseTitle}`;
     if (lastStage && stage !== lastStage) {
-      const body = t("tx_confirming", { n: Math.min(confirmations, UNLOCK_BLOCKS) });
-      if (stage === "spendable") alertUser(t("tx_n_spendable"), body, true);
+      const body = t("tx_confirming", { n: done });
+      if (spendable) alertUser(t("tx_n_spendable"), body, true);
       else if (lastStage === "pool") alertUser(t("tx_n_mined"), body, false);
     }
     if (found.double_spend_seen && !lastDouble) alertUser(t("tx_n_double"), txid.slice(0, 16), false);
@@ -156,23 +256,26 @@ const row = "grid grid-cols-[140px_1fr] gap-4 border-b-2 border-dotted border-gr
     lastDouble = found.double_spend_seen;
     $("[data-warning]").hidden = !found.double_spend_seen;
 
-    $("[data-row=mined]").hidden = found.in_pool;
-    $("[data-mined]").textContent = found.in_pool ? "" : `${dateTime.format(found.block_timestamp * 1000)} · #${num.format(found.block_height)}`;
     const bytes = found.as_hex.length / 2;
-    $("[data-fee]").textContent = summary.coinbase ? "–" : `${picoToXmr(String(summary.fee))} XMR (${num.format(Math.round(summary.fee / bytes))} pico/B)`;
-    $("[data-size]").textContent = `${num.format(bytes)} B`;
-    $("[data-io]").textContent = `${summary.inputs} / ${summary.outputs}`;
-    $("[data-row=ring]").hidden = !summary.ringSize;
-    $("[data-ring]").textContent = String(summary.ringSize ?? "");
     const extra = summary.coinbase ? t("tx_coinbase")
       : summary.unlockTime > 500_000_000 ? t("tx_locked_time", { date: dateTime.format(summary.unlockTime * 1000) })
       : summary.unlockTime > 0 ? t("tx_locked", { height: num.format(summary.unlockTime) }) : "";
-    $("[data-row=extra]").hidden = !extra;
-    $("[data-extra]").textContent = extra;
+    const values: Record<string, string> = {
+      mined: found.in_pool ? "" : dateTime.format(found.block_timestamp * 1000),
+      height: found.in_pool ? "" : `#${num.format(found.block_height)}`,
+      fee: summary.coinbase ? "–" : `<span class="text-slip-ink">${num.format(Math.round(summary.fee / bytes))} pico/B · </span>${picoToXmr(String(summary.fee))} XMR`,
+      size: `${num.format(bytes)} B`,
+      io: `${summary.inputs} / ${summary.outputs}`,
+      ring: summary.ringSize ? String(summary.ringSize) : "",
+      extra,
+    };
+    for (const [key, value] of Object.entries(values)) {
+      $(`[data-row=${key}]`).hidden = !value;
+      $(`[data-value=${key}]`).innerHTML = value;
+    }
     $<HTMLAnchorElement>("[data-verify-link]").href = `${root.dataset.verify}#tx=${txid}`;
-    $("[data-result]").hidden = false;
 
-    if (stage !== "spendable") timer = setTimeout(() => load(txid), REFRESH_MS);
+    if (!spendable) timer = setTimeout(() => load(txid), REFRESH_MS);
   }
 
   function track() {
@@ -183,6 +286,7 @@ const row = "grid grid-cols-[140px_1fr] gap-4 border-b-2 border-dotted border-gr
     if (!ok) return;
     if (txid !== current) { lastStage = undefined; lastDouble = false; }
     current = txid;
+    $("[data-tx]").innerHTML = shortAddressHtml(txid);
     history.replaceState(null, "", `#${txid}`);
     return load(txid);
   }
