@@ -1,6 +1,8 @@
 ---
 import NodeSource from "../live/NodeSource.astro";
 import PixelIcon from "../PixelIcon.astro";
+import Range from "../ui/Range.astro";
+import { button, cx } from "../ui/styles";
 import { FEE_TONES } from "./live-visuals";
 import { localePath, pickStrings, useTranslations, type Locale } from "../../i18n/ui";
 
@@ -10,52 +12,33 @@ const t = useTranslations(lang);
 const FEE_LEGEND = [["lv_fee_low", FEE_TONES[0][0]], ["lv_fee_normal", FEE_TONES[1][0]], ["lv_fee_high", FEE_TONES[2][0]]] as const;
 const strings = pickStrings(lang, ["lv_listen", "lv_stop", "lv_height", "lv_waiting", "lv_ago", "lv_new_block", "dur_s", "dur_min", "dur_h", "dur_d", "dur_y"]);
 ---
-<div id="live-tool" class="grid gap-5" data-strings={strings} data-lang={lang} data-tx={localePath(lang, "/tx")}>
-  <section data-stage class="live-stage grid gap-3 border-2 border-ink bg-ink p-3 text-cream shadow-[6px_6px_0_var(--color-graphite)] sm:p-4">
+<div id="live-tool" class="grid grid-cols-1 gap-6" data-strings={strings} data-lang={lang} data-tx={localePath(lang, "/tx")}>
+  <section data-stage class="grid gap-4 border-2 border-graphite bg-ink p-3 shadow-[8px_8px_0_var(--color-shade)] sm:p-4 [&:fullscreen]:flex [&:fullscreen]:flex-col [&:fullscreen]:items-center [&:fullscreen]:justify-center [&:fullscreen]:border-0 [&:fullscreen]:px-[3vw] [&:fullscreen]:py-[2vh] [&:fullscreen]:shadow-none [&:fullscreen>*]:w-[min(100%,calc(85vh*var(--ratio,1.6)))]">
     <div class="relative">
-      <canvas data-viz class="block w-full border-2 border-graphite [image-rendering:pixelated]"></canvas>
-      <button type="button" data-start class="start absolute inset-0 grid cursor-pointer place-items-center bg-ink/55">
+      <canvas data-viz class="block w-full [image-rendering:pixelated]"></canvas>
+      <button type="button" data-start class="group absolute inset-0 grid cursor-pointer place-items-center bg-ink/55">
         <span class="flex flex-col items-center gap-3 font-pixel text-lg text-cream sm:text-xl">
-          <span class="start-disc grid size-16 place-items-center bg-orange text-ink sm:size-20"><PixelIcon name="play" size={36} /></span>
+          <span class="grid size-16 place-items-center bg-orange text-ink group-hover:bg-cream motion-safe:animate-beckon sm:size-20"><PixelIcon name="play" size={36} /></span>
           {t("lv_listen")}
         </span>
       </button>
     </div>
-    <div class="grid gap-1.5 font-pixel text-xs text-ash">
-      <p>{t("lv_legend")}</p>
-      <p class="flex flex-wrap items-center gap-x-4 gap-y-1">
-        {FEE_LEGEND.map(([key, color]) => <span class="flex items-center gap-1.5"><span class="size-2.5" style={`background:${color}`}></span>{t(key)}</span>)}
-      </p>
-    </div>
     <div class="flex flex-wrap items-center gap-x-4 gap-y-3">
-      <button type="button" data-listen class="btn border-orange bg-orange text-ink">
-        <PixelIcon name="sound" size={16} /><span>{t("lv_listen")}</span>
-      </button>
-      <label class="ml-auto flex items-center gap-2">
-        <PixelIcon name="sound" size={16} class="text-orange" />
-        <input type="range" name="volume" min="0" max="1" step="0.05" value="0.5" class="volume w-24" aria-label={t("bt_volume")} />
-      </label>
-      <button type="button" data-fullscreen class="btn btn-ghost border-cream px-3 py-2 text-cream" aria-label={t("bt_fullscreen")} title={t("bt_fullscreen")}><PixelIcon name="expand" size={18} /></button>
+      <button type="button" data-listen class={button.primary}><PixelIcon name="sound" size={16} /><span>{t("lv_listen")}</span></button>
+      <div class="grid gap-1 text-sm text-ash">
+        <p>{t("lv_legend")}</p>
+        <p class="flex flex-wrap items-center gap-x-4 gap-y-1">
+          {FEE_LEGEND.map(([key, color]) => <span class="flex items-center gap-1.5"><span class="size-2.5" style={`background:${color}`}></span>{t(key)}</span>)}
+        </p>
+      </div>
+      <div class="ml-auto flex items-center gap-3">
+        <label class="flex items-center gap-2"><PixelIcon name="sound" size={16} class="text-orange" /><Range name="volume" label={t("bt_volume")} value={0.5} /></label>
+        <button type="button" data-fullscreen class={cx(button.ghost, "px-3")} aria-label={t("bt_fullscreen")} title={t("bt_fullscreen")}><PixelIcon name="expand" size={16} /></button>
+      </div>
     </div>
   </section>
-  <NodeSource lang={lang} />
+  <div class="border-t-2 border-graphite pt-5"><NodeSource lang={lang} dark /></div>
 </div>
-
-<style>
-  .volume { appearance: none; height: 8px; background: var(--color-graphite); cursor: pointer; }
-  .volume::-webkit-slider-thumb { appearance: none; width: 10px; height: 16px; background: var(--color-orange); }
-  .volume::-moz-range-thumb { width: 10px; height: 16px; background: var(--color-orange); border: 0; border-radius: 0; }
-  .start-disc { box-shadow: 0 0 0 0 rgb(251 140 60 / 0.6); animation: ping 1.8s ease-out infinite; }
-  .start:hover .start-disc { background: var(--color-cream); }
-  @keyframes ping { to { box-shadow: 0 0 0 18px rgb(251 140 60 / 0); } }
-  @media (prefers-reduced-motion: reduce) { .start-disc { animation: none; } }
-  .live-stage:fullscreen { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2vh 3vw; border: 0; box-shadow: none; }
-  .start-disc { box-shadow: 0 0 0 0 rgb(251 140 60 / 0.6); animation: ping 1.8s ease-out infinite; }
-  .start:hover .start-disc { background: var(--color-cream); }
-  @keyframes ping { to { box-shadow: 0 0 0 18px rgb(251 140 60 / 0); } }
-  @media (prefers-reduced-motion: reduce) { .start-disc { animation: none; } }
-  .live-stage:fullscreen > * { width: min(100%, calc(85vh * var(--ratio, 1.6))); }
-</style>
 
 <script>
   import { liveTask } from "../live/live";

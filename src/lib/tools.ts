@@ -40,8 +40,8 @@ export const TOOLS: Tool[] = [
   { id: "dl", slug: "checksum", icon: "shield", live: true, added: "2026-10-20", group: "wallet", dark: true },
   { id: "node", slug: "node", icon: "server", live: true, added: "2026-10-20", group: "wallet", dark: true },
   { id: "mining", slug: "mining", icon: "pickaxe", live: true, added: "2026-10-20", group: "numbers", dark: true },
-  { id: "beat", slug: "beat", icon: "sound", live: true, added: "2026-10-21", group: "fun" },
-  { id: "live", slug: "live", icon: "notes", live: true, added: "2026-10-21", group: "fun" },
+  { id: "beat", slug: "beat", icon: "sound", live: true, added: "2026-10-21", group: "fun", dark: true },
+  { id: "live", slug: "live", icon: "notes", live: true, added: "2026-10-21", group: "fun", dark: true },
   { id: "donate", slug: "donate", icon: "heart", live: true, added: "2026-10-21", group: "fun", dark: true },
   { id: "gazette", slug: "news", icon: "paper", live: true, added: "2026-10-19" },
 ];

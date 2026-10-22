@@ -40,6 +40,9 @@
   --animate-stamp: stamp 260ms steps(4) 600ms both;
   @keyframes stamp { from { opacity: 0; scale: 1.8; } to { opacity: 0.9; scale: 1; } }
   --animate-blink: blink 1s steps(2) infinite;
+  /* A soft ring pulsing out of a call-to-action. */
+  --animate-beckon: beckon 1.8s ease-out infinite;
+  @keyframes beckon { from { box-shadow: 0 0 0 0 rgb(251 140 60 / 0.6); } to { box-shadow: 0 0 0 18px rgb(251 140 60 / 0); } }
   @keyframes blink { 50% { opacity: 0.25; } }
 }
 
