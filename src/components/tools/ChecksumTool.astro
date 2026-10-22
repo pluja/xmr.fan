@@ -176,7 +176,7 @@ const FILTERS = [{ value: "all", name: t("c_all") }, { value: "gui", name: "GUI"
     matched = ok ? entry!.sha256 : undefined;
     renderList(list);
     showParts(match.kind);
-    print.set(tone, ok ? `✓ ${t("c_matches")}` : t(`c_${match.kind}_t`));
+    print.set(tone, ok ? `✓ ${t("c_matches")}` : t(`c_${match.kind}_t`), { feed: true });
     if (box.getBoundingClientRect().bottom > innerHeight) box.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 

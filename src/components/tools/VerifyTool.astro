@@ -3,8 +3,9 @@ import PixelIcon from "../PixelIcon.astro";
 import NodeSource from "../live/NodeSource.astro";
 import AddressInput from "../ui/AddressInput.astro";
 import Button from "../ui/Button.astro";
-import ResultPlaceholder from "../ui/ResultPlaceholder.astro";
-import Slip from "../ui/Slip.astro";
+import Printer from "../ui/Printer.astro";
+import Receipt from "../ui/Receipt.astro";
+import Stamp from "../ui/Stamp.astro";
 import StatTile from "../ui/StatTile.astro";
 import Step from "../ui/Step.astro";
 import TrustNote from "../ui/TrustNote.astro";
@@ -16,41 +17,42 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 const ERRORS = ["bad-tx", "bad-key", "bad-address", "bad-signature-format", "bad-signature", "no-tx-pubkey", "no-outputs", "commitment-mismatch", "unsupported-tx-type"].map((e) => `v_err_${e}`);
 const strings = pickStrings(lang, [
-  "v_checking", "v_paid_t", "v_fail_t", "v_chip_key", "v_chip_out", "v_chip_in", "v_via", "v_paid_sub", "v_pool_sub", "v_st_yes", "v_st_in_blocks", "v_st_pending",
+  "v_checking", "v_printer_idle", "v_paid_t", "v_fail_t", "v_chip_key", "v_chip_out", "v_chip_in", "v_via", "v_paid_sub", "v_pool_sub", "v_st_yes", "v_st_in_blocks", "v_st_pending",
   "v_err_txid", "v_err_address", "v_err_secret", "v_err_network", "v_err_not_found", "live_error", "copied", "v_share", ...ERRORS,
 ] as never);
 const mono = "font-mono text-[13px]";
 ---
-<div id="verify-tool" class="grid gap-x-10 gap-y-8 lg:grid-cols-[minmax(0,1fr)_380px]" data-strings={strings} data-lang={lang}>
-  <div class="grid min-w-0 content-start gap-7">
-  <form data-form class="grid gap-7" novalidate>
+<div id="verify-tool" class="grid grid-cols-1 gap-8" data-strings={strings} data-lang={lang}>
+  <form data-form class="grid grid-cols-1 gap-7" novalidate>
     <section class="grid gap-2.5">
       <Step as="label" for="v-txid" n="01" label={t("v_txid")} />
       <input id="v-txid" name="txid" spellcheck="false" autocomplete="off" autocapitalize="off" class={cx(field, mono)} aria-describedby="txid-message" autofocus />
       <p id="txid-message" class={message}></p>
     </section>
 
-    <section class="grid gap-2.5">
-      <div class="flex items-baseline justify-between gap-4">
-        <Step as="label" for="v-address" n="02" label={t("v_address")} />
-        <span data-address-ok class="flex items-center gap-1.5 text-sm text-good" hidden><PixelIcon name="check" size={12} />{t("v_valid_address")}</span>
-      </div>
-      <AddressInput id="v-address" name="address" paste={t("pl_paste")} describedby="address-message" />
-      <p id="address-message" class={message}></p>
-    </section>
+    <div class="grid grid-cols-1 gap-7 lg:grid-cols-2">
+      <section class="grid content-start gap-2.5">
+        <div class="flex items-baseline justify-between gap-4">
+          <Step as="label" for="v-address" n="02" label={t("v_address")} />
+          <span data-address-ok class="flex items-center gap-1.5 text-sm text-good" hidden><PixelIcon name="check" size={12} />{t("v_valid_address")}</span>
+        </div>
+        <AddressInput id="v-address" name="address" paste={t("pl_paste")} describedby="address-message" />
+        <p id="address-message" class={message}></p>
+      </section>
 
-    <section class="grid gap-2.5">
-      <Step as="label" for="v-secret" n="03" label={t("v_secret")} />
-      <div class="relative">
-        <textarea id="v-secret" name="secret" rows="2" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder={t("v_secret_placeholder")} class={cx(field, mono, "min-h-14 resize-y pr-32 break-all")} aria-describedby="secret-message"></textarea>
-        <span data-kind class={cx(chip, tone.accent, "absolute top-3 right-3")} hidden><svg viewBox="0 0 8 8" width="10" height="10" aria-hidden="true" shape-rendering="crispEdges"><path d="M0 2h4v4H0zM4 3h4v2H4zM6 5h1v2H6zM1 3v2h2V3z" fill="currentColor" fill-rule="evenodd" /></svg><span></span></span>
-      </div>
-      <p id="secret-message" class={message}></p>
-      <div data-message-field class="grid gap-1.5" hidden>
-        <label for="v-message" class={fieldLabel}>{t("v_message")}</label>
-        <input id="v-message" name="message" autocomplete="off" class={field} />
-      </div>
-    </section>
+      <section class="grid content-start gap-2.5">
+        <Step as="label" for="v-secret" n="03" label={t("v_secret")} />
+        <div class="relative">
+          <textarea id="v-secret" name="secret" rows="3" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder={t("v_secret_placeholder")} class={cx(field, mono, "min-h-[4.6rem] resize-y pr-32 break-all")} aria-describedby="secret-message"></textarea>
+          <span data-kind class={cx(chip, tone.accent, "absolute top-3 right-3")} hidden><svg viewBox="0 0 8 8" width="10" height="10" aria-hidden="true" shape-rendering="crispEdges"><path d="M0 2h4v4H0zM4 3h4v2H4zM6 5h1v2H6zM1 3v2h2V3z" fill="currentColor" fill-rule="evenodd" /></svg><span></span></span>
+        </div>
+        <p id="secret-message" class={message}></p>
+        <div data-message-field class="grid gap-1.5" hidden>
+          <label for="v-message" class={fieldLabel}>{t("v_message")}</label>
+          <input id="v-message" name="message" autocomplete="off" class={field} />
+        </div>
+      </section>
+    </div>
 
     <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
       <Button type="submit">{t("v_check")}</Button>
@@ -60,65 +62,45 @@ const mono = "font-mono text-[13px]";
     <p id="where" class="-mt-3 border-l-4 border-orange bg-well px-5 py-4 text-[15px] text-ash" hidden>{t("v_where")}</p>
   </form>
 
-    <div class="grid gap-3 border-t-2 border-graphite pt-5">
-      <TrustNote>{t("v_privacy")}</TrustNote>
-      <NodeSource lang={lang} dark />
-    </div>
-  </div>
-
-  <aside data-state="idle" class="max-lg:data-[state=idle]:hidden grid w-full max-w-[420px] content-start gap-4 justify-self-center lg:max-w-none" data-receipt aria-live="polite">
-    <ResultPlaceholder data-show="idle" icon="check" text={t("v_idle")} />
-    <Slip dither data-show="checking ok fail" hidden>
-      <div data-show="checking" class="grid min-h-60 place-items-center text-sm text-slip-ink" hidden>
-        <span class="animate-pulse font-pixel">{t("v_checking")}</span>
+  <Printer idle={t("v_printer_idle")} aria-live="polite">
+    <Receipt>
+      <div class="flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
+        <div class="grid min-w-0 flex-1 basis-64 gap-1">
+          <span class={cx(label, "text-[10px]")}>{t("v_receipt")} · <span data-via></span></span>
+          <p data-show="ok" class="flex items-baseline gap-2.5"><span data-amount class="font-pixel text-5xl leading-none"></span><span class="font-pixel text-xl text-flame">XMR</span></p>
+          <p data-show="ok" class="text-[14px] text-graphite">{t("v_received_by")} <span data-recipient class="font-mono text-ink"></span> · <span data-subtitle></span></p>
+          <p data-show="fail" data-reason class="text-[16px] text-danger"></p>
+        </div>
+        <Stamp class="mt-1 mr-2 shrink-0" />
       </div>
-
-      <div data-show="ok fail" class="flex items-center gap-3.5 border-b-2 border-slip-tile pb-4" hidden>
-        <span data-badge class="pixel-corners grid size-10 shrink-0 place-items-center text-paper">
-          <span data-icon="ok"><PixelIcon name="check" size={24} class="block" /></span>
-          <svg viewBox="0 0 5 5" width="20" height="20" data-icon="fail" aria-hidden="true" shape-rendering="crispEdges"><path d="M0 0h1v1H0zM4 0h1v1H4zM1 1h1v1H1zM3 1h1v1H3zM2 2h1v1H2zM1 3h1v1H1zM3 3h1v1H3zM0 4h1v1H0zM4 4h1v1H4z" fill="currentColor" /></svg>
-        </span>
-        <div class="grid min-w-0 gap-0.5">
-          <b data-title class="font-pixel text-xl font-normal tracking-[0.12em] uppercase"></b>
-          <span data-subtitle class="text-[13px] text-graphite"></span>
-        </div>
-        <div class={cx(label, "ml-auto hidden text-right text-[10px] sm:grid")}>
-          <span>{t("v_receipt")}</span><span data-via></span>
-        </div>
+      <div data-show="ok" class="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <StatTile label={t("v_st_confirmations")}><span data-confirmations></span></StatTile>
+        <StatTile label={t("v_st_outputs")}><span data-outputs></span></StatTile>
+        <StatTile label={t("v_st_mined")}><span data-mined class="text-[15px]"></span></StatTile>
+        <StatTile label={t("v_st_spendable")}><span data-spendable class="flex items-center gap-2 text-[15px]"></span></StatTile>
       </div>
-
-      <div data-show="ok" class="grid gap-4" hidden>
-        <div>
-          <p class="flex items-baseline gap-2.5"><span data-amount class="font-pixel text-5xl leading-none"></span><span class="font-pixel text-xl text-flame">XMR</span></p>
-          <p class="mt-2 text-[13px] text-graphite">{t("v_received_by")} <span data-recipient class="font-mono text-ink"></span></p>
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <StatTile label={t("v_st_confirmations")}><span data-confirmations></span></StatTile>
-          <StatTile label={t("v_st_outputs")}><span data-outputs></span></StatTile>
-          <StatTile label={t("v_st_mined")}><span data-mined class="text-[15px]"></span></StatTile>
-          <StatTile label={t("v_st_spendable")}><span data-spendable class="flex items-center gap-2 text-[15px]"></span></StatTile>
-        </div>
-      </div>
-
-      <p data-show="fail" data-reason class="text-[15px] text-danger" hidden></p>
-
       <Fragment slot="footer">
-        <span class={label}>TX</span>
-        <span data-tx class="min-w-0 truncate font-mono text-[13px]">…</span>
-        <span class="ml-auto font-pixel text-[11px] text-slip-ink">xmr.fan</span>
+        <span class={cx(label, "text-[10px]")}>TX</span>
+        <span data-tx class="min-w-0 truncate font-mono text-[12px]">…</span>
+        <span class={cx(label, "ml-auto text-[10px]")}>xmr.fan</span>
       </Fragment>
-    </Slip>
-
-    <div data-share class="grid gap-2" hidden>
+    </Receipt>
+    <div data-share class="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2" hidden>
       <Button variant="ghost" data-copy-check><PixelIcon name="copy" size={16} class="text-orange" /><span>{t("v_share")}</span></Button>
-      <p class="text-center text-xs text-slip-ink">{t("v_share_note")}</p>
+      <p class="text-xs text-slip-ink">{t("v_share_note")}</p>
     </div>
-  </aside>
+  </Printer>
+
+  <div class="grid gap-3 border-t-2 border-graphite pt-5">
+    <TrustNote>{t("v_privacy")}</TrustNote>
+    <NodeSource lang={lang} dark />
+  </div>
 </div>
 
 <script>
   import { liveTask } from "../live/live";
   import { addressInput, shortAddressHtml } from "../ui/address-input";
+  import { printer } from "../ui/printer";
   import { readStrings } from "../../i18n/format";
   import type { Locale } from "../../i18n/ui";
   import { EXAMPLE_PAYMENT } from "../../lib/examples";
@@ -130,7 +112,8 @@ const mono = "font-mono text-[13px]";
   const t = readStrings(root);
   const lang = root.dataset.lang as Locale;
   const form = root.querySelector<HTMLFormElement>("[data-form]")!;
-  const receipt = root.querySelector<HTMLElement>("[data-receipt]")!;
+  const box = root.querySelector<HTMLElement>("[data-printer]")!;
+  const print = printer(box);
   const $ = <T extends HTMLElement = HTMLElement>(s: string) => root.querySelector<T>(s)!;
   const field = (name: string) => form.elements.namedItem(name) as HTMLInputElement;
   const num = new Intl.NumberFormat(lang);
@@ -169,25 +152,21 @@ const mono = "font-mono text-[13px]";
     return !!key;
   }
 
-  /** Which parts of the receipt are visible: idle, checking, ok or fail. */
+  /** Drives the printer: idle, checking, or a printed ok / fail receipt. */
   function show(state: "idle" | "checking" | "ok" | "fail") {
-    receipt.dataset.state = state;
-    receipt.querySelectorAll<HTMLElement>("[data-show]").forEach((el) => (el.hidden = !el.dataset.show!.split(" ").includes(state)));
+    root.querySelectorAll<HTMLElement>("[data-show]").forEach((el) => (el.hidden = !el.dataset.show!.split(" ").includes(state)));
     $("[data-share]").hidden = state !== "ok";
-    const ok = state === "ok";
-    $("[data-badge]").classList.toggle("bg-ok", ok);
-    $("[data-badge]").classList.toggle("bg-danger", !ok);
-    $("[data-title]").classList.toggle("text-ok", ok);
-    $("[data-title]").classList.toggle("text-danger", !ok);
-    $("[data-icon=ok]").toggleAttribute("hidden", !ok);
-    $("[data-icon=fail]").toggleAttribute("hidden", ok);
-    // On small screens the receipt sits under the form; bring it into view.
-    if ((ok || state === "fail") && receipt.getBoundingClientRect().top > innerHeight) receipt.scrollIntoView({ behavior: "smooth", block: "start" });
+    const stamp = $("[data-stamp]");
+    stamp.dataset.tone = state === "ok" ? "ok" : "bad";
+    stamp.textContent = t(state === "ok" ? "v_paid_t" : "v_fail_t");
+    if (state === "idle") return print.set("idle");
+    if (state === "checking") return print.set("working", t("v_checking"));
+    print.set(state === "ok" ? "ok" : "bad", state === "ok" ? `✓ ${$("[data-subtitle]").textContent}` : t("v_fail_t"), { feed: true });
+    if (box.getBoundingClientRect().bottom > innerHeight) box.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
+
   function fail(key: string, kind: Kind | null, vars?: Record<string, string>) {
-    $("[data-title]").textContent = t("v_fail_t");
-    $("[data-subtitle]").textContent = "";
     $("[data-via]").textContent = kind ? t("v_via", { kind: t(`v_chip_${kind}`) }) : "";
     $("[data-reason]").textContent = t(key, vars);
     show("fail");
@@ -237,7 +216,6 @@ const mono = "font-mono text-[13px]";
 
     const confirmations = found.in_pool ? 0 : height - found.block_height;
     const left = Math.max(0, UNLOCK_BLOCKS - confirmations);
-    $("[data-title]").textContent = t("v_paid_t");
     $("[data-subtitle]").textContent = t(found.in_pool ? "v_pool_sub" : "v_paid_sub");
     $("[data-via]").textContent = t("v_via", { kind: t(`v_chip_${kind}`) });
     $("[data-amount]").textContent = picoToXmr(result.total.toString())!;

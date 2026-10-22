@@ -9,6 +9,6 @@ const tear = "bg-[linear-gradient(var(--color-paper),var(--color-paper)),linear-
 ---
 <figure class={cx("relative m-0 drop-shadow-[6px_6px_0_var(--color-shade)]", cls)} {...attrs}>
   <div class="relative grid gap-5 bg-paper bg-[repeating-linear-gradient(0deg,transparent_0_27px,#f4ece1_27px_28px)] px-5 pt-6 pb-5 text-ink sm:px-8"><slot /></div>
-  <figcaption class="flex flex-wrap items-center gap-x-3 gap-y-1 border-t-2 border-dashed border-slip-line bg-paper px-5 pt-3 pb-2 sm:px-8"><slot name="footer" /></figcaption>
+  <figcaption class="flex flex-wrap items-center gap-x-3 gap-y-1 border-t-2 border-dashed border-slip-line bg-paper px-5 pt-3 pb-2 text-ink sm:px-8"><slot name="footer" /></figcaption>
   <div class={cx("h-2", tear)} aria-hidden="true"></div>
 </figure>

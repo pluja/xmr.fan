@@ -55,6 +55,7 @@ export default defineStrings({
     v_chip_key: "Tx key",
     v_chip_out: "Out proof",
     v_chip_in: "In proof",
+    v_printer_idle: "Waiting for a payment to check",
   },
   es: {
     v_txid: "ID de la transacción",
@@ -110,6 +111,7 @@ export default defineStrings({
     v_chip_key: "Clave de tx",
     v_chip_out: "Prueba de salida",
     v_chip_in: "Prueba de entrada",
+    v_printer_idle: "Esperando un pago para comprobar",
   },
   ru: {
     v_txid: "ID транзакции",
@@ -165,6 +167,7 @@ export default defineStrings({
     v_chip_key: "Ключ транзакции",
     v_chip_out: "Доказательство отправки",
     v_chip_in: "Доказательство получения",
+    v_printer_idle: "Ждём платёж для проверки",
   },
   fr: {
     v_txid: "ID de la transaction",
@@ -220,6 +223,7 @@ export default defineStrings({
     v_chip_key: "Clé de tx",
     v_chip_out: "Preuve d'envoi",
     v_chip_in: "Preuve de réception",
+    v_printer_idle: "En attente d'un paiement à vérifier",
   },
   pt: {
     v_txid: "ID da transação",
@@ -275,6 +279,7 @@ export default defineStrings({
     v_chip_key: "Chave da tx",
     v_chip_out: "Prova de envio",
     v_chip_in: "Prova de recebimento",
+    v_printer_idle: "Aguardando um pagamento para verificar",
   },
   ja: {
     v_txid: "トランザクション ID",
@@ -330,5 +335,6 @@ export default defineStrings({
     v_chip_key: "トランザクションキー",
     v_chip_out: "送金証明",
     v_chip_in: "受取証明",
+    v_printer_idle: "確認する支払いを待っています",
   },
 });
