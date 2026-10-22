@@ -10,7 +10,15 @@ const strings = pickStrings(lang, ["lv_listen", "lv_stop", "lv_height", "lv_wait
 ---
 <div id="live-tool" class="grid gap-5" data-strings={strings} data-lang={lang} data-tx={localePath(lang, "/tx")}>
   <section data-stage class="live-stage grid gap-3 border-2 border-ink bg-ink p-3 text-cream shadow-[6px_6px_0_var(--color-graphite)] sm:p-4">
-    <canvas data-viz class="block w-full border-2 border-graphite [image-rendering:pixelated]"></canvas>
+    <div class="relative">
+      <canvas data-viz class="block w-full border-2 border-graphite [image-rendering:pixelated]"></canvas>
+      <button type="button" data-start class="start absolute inset-0 grid cursor-pointer place-items-center bg-ink/55">
+        <span class="flex flex-col items-center gap-3 font-pixel text-lg text-cream sm:text-xl">
+          <span class="start-disc grid size-16 place-items-center bg-orange text-ink sm:size-20"><PixelIcon name="play" size={36} /></span>
+          {t("lv_listen")}
+        </span>
+      </button>
+    </div>
     <p class="font-pixel text-xs text-ash">{t("lv_hint")}</p>
     <div class="flex flex-wrap items-center gap-x-4 gap-y-3">
       <button type="button" data-listen class="btn min-w-32 border-orange bg-orange px-5 py-3 text-lg text-ink">
@@ -30,7 +38,15 @@ const strings = pickStrings(lang, ["lv_listen", "lv_stop", "lv_height", "lv_wait
   .volume { appearance: none; height: 8px; background: var(--color-graphite); cursor: pointer; }
   .volume::-webkit-slider-thumb { appearance: none; width: 10px; height: 16px; background: var(--color-orange); }
   .volume::-moz-range-thumb { width: 10px; height: 16px; background: var(--color-orange); border: 0; border-radius: 0; }
+  .start-disc { box-shadow: 0 0 0 0 rgb(251 140 60 / 0.6); animation: ping 1.8s ease-out infinite; }
+  .start:hover .start-disc { background: var(--color-cream); }
+  @keyframes ping { to { box-shadow: 0 0 0 18px rgb(251 140 60 / 0); } }
+  @media (prefers-reduced-motion: reduce) { .start-disc { animation: none; } }
   .live-stage:fullscreen { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2vh 3vw; border: 0; box-shadow: none; }
+  .start-disc { box-shadow: 0 0 0 0 rgb(251 140 60 / 0.6); animation: ping 1.8s ease-out infinite; }
+  .start:hover .start-disc { background: var(--color-cream); }
+  @keyframes ping { to { box-shadow: 0 0 0 18px rgb(251 140 60 / 0); } }
+  @media (prefers-reduced-motion: reduce) { .start-disc { animation: none; } }
   .live-stage:fullscreen > * { width: min(100%, calc(85vh * var(--ratio, 1.6))); }
 </style>
 
@@ -88,11 +104,14 @@ const strings = pickStrings(lang, ["lv_listen", "lv_stop", "lv_height", "lv_wait
     setInterval(() => poll().catch(() => {}), POLL_SECONDS * 1000);
   });
 
-  $("[data-listen]").addEventListener("click", () => {
+  function toggleMusic() {
     const m = ensureMusic();
     if (m.playing) m.stop(); else m.start(Number(volume.value));
     $("[data-listen] span").textContent = t(m.playing ? "lv_stop" : "lv_listen");
-  });
+    $("[data-start]").hidden = true;
+  }
+  $("[data-listen]").addEventListener("click", toggleMusic);
+  $("[data-start]").addEventListener("click", toggleMusic);
 
   /** Hovering a transaction plays it; browsers only allow sound once the visitor has interacted with the page. */
   let hovered: string | undefined, armed: string | undefined;
