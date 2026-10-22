@@ -13,7 +13,7 @@ interface Props { lang: Locale }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const strings = pickStrings(lang, [
-  "a_type_standard", "a_type_subaddress", "a_type_integrated", "a_pid_bad", "a_chars", "a_same", "a_diff", "a_alias_l",
+  "a_oa_host_bad", "a_type_standard", "a_type_subaddress", "a_type_integrated", "a_pid_bad", "a_chars", "a_same", "a_diff", "a_alias_l",
   "a_oa_looking", "a_oa_none", "a_oa_error", "a_oa_unsigned", "a_oa_invalid", "a_dnssec_ok", "a_dnssec_no", "a_chip_alias", "a_chip_address",
   "err_chars", "err_length", "err_checksum", "err_prefix", "warn_network", "qr_alt", "type_standard", "type_subaddress", "type_integrated", "copied",
 ]);
@@ -138,7 +138,8 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
         <div class="grid gap-4 sm:grid-cols-2">
           <div class="grid content-start gap-2">
             <label for="oa-host" class={heading}>{t("a_oa_host")}</label>
-            <input id="oa-host" name="oa-host" placeholder="donate@example.com" autocomplete="off" spellcheck="false" class:list={[field, "font-mono text-[14px]"]} />
+            <input id="oa-host" name="oa-host" placeholder="donate@example.com" autocomplete="off" spellcheck="false" class:list={[field, "font-mono text-[14px]"]} aria-describedby="oa-host-message" />
+            <p id="oa-host-message" class={message}></p>
           </div>
           <div class="grid content-start gap-2">
             <label for="oa-name" class="flex items-baseline justify-between gap-2"><span class={heading}>{t("a_shown")}</span><span class="text-xs text-slip-ink">{t("pl_optional")}</span></label>
@@ -273,7 +274,11 @@ const chevron = "M0 0h1v1H0zM1 1h1v1H1zM2 2h1v1H2zM1 3h1v1H1zM0 4h1v1H0z";
 
   function renderRecord() {
     const address = oaAddress.field.value.trim();
-    const host = openAliasDomain($<HTMLInputElement>("input[name=oa-host]").value);
+    const hostField = $<HTMLInputElement>("input[name=oa-host]");
+    const host = openAliasDomain(hostField.value);
+    const badHost = !!hostField.value.trim() && !host;
+    hostField.setAttribute("aria-invalid", String(badHost));
+    $("#oa-host-message").textContent = badHost ? t("a_oa_host_bad") : "";
     const valid = parseAddress(address).ok;
     oaAddress.show(address ? (valid ? "ok" : "error") : "");
     const ready = valid && !!host;

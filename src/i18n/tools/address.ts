@@ -65,6 +65,7 @@ export default defineStrings({
     a_step_test: "Test your name in the box above",
     a_test_now: "Test now",
     a_shown: "Shown to payers",
+    a_oa_host_bad: "Use your domain, like donate@yourdomain.com.",
   },
   es: {
     a_oa_make_t: "Tu propio nombre Monero",
@@ -130,6 +131,7 @@ export default defineStrings({
     a_step_test: "Prueba tu nombre en el cuadro de arriba",
     a_test_now: "Probar ahora",
     a_shown: "Visible para quienes pagan",
+    a_oa_host_bad: "Usa tu dominio, por ejemplo donate@tudominio.com.",
   },
   ru: {
     a_oa_make_t: "Своё имя для Monero",
@@ -195,6 +197,7 @@ export default defineStrings({
     a_step_test: "Проверьте своё имя в поле выше",
     a_test_now: "Проверить",
     a_shown: "Видно плательщикам",
+    a_oa_host_bad: "Укажите свой домен, например donate@вашдомен.com.",
   },
   fr: {
     a_oa_make_t: "Votre propre nom Monero",
@@ -260,6 +263,7 @@ export default defineStrings({
     a_step_test: "Testez votre nom dans le champ ci-dessus",
     a_test_now: "Tester maintenant",
     a_shown: "Visible par les payeurs",
+    a_oa_host_bad: "Utilise ton domaine, par exemple donate@tondomaine.com.",
   },
   pt: {
     a_oa_make_t: "Seu próprio nome Monero",
@@ -325,6 +329,7 @@ export default defineStrings({
     a_step_test: "Teste seu nome na caixa acima",
     a_test_now: "Testar agora",
     a_shown: "Visível para quem paga",
+    a_oa_host_bad: "Use seu domínio, como donate@seudominio.com.",
   },
   ja: {
     a_oa_make_t: "自分の Monero 名",
@@ -390,5 +395,6 @@ export default defineStrings({
     a_step_test: "上の入力欄で名前をテストします",
     a_test_now: "今すぐテスト",
     a_shown: "支払う人に表示されます",
+    a_oa_host_bad: "donate@yourdomain.com のように、自分のドメインを使ってください。",
   },
 });
