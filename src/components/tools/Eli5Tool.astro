@@ -2,6 +2,7 @@
 import PixelIcon from "../PixelIcon.astro";
 import { localePath, pickStrings, useTranslations, type Locale } from "../../i18n/ui";
 import { MONERO_LOGO } from "../../lib/qr";
+import { button, chip, cx, tone } from "../ui/styles";
 
 interface Props { lang: Locale }
 const { lang } = Astro.props;
@@ -36,41 +37,40 @@ const TRY = [
   { href: localePath(lang, "/live"), label: t("el_try_live"), icon: "notes" },
   { href: localePath(lang, "/donate"), label: t("el_try_donate"), icon: "heart" },
 ] as const;
+const ledgerButton = "flex min-h-11 cursor-pointer items-center gap-2 px-4 text-ash transition-colors hover:text-cream aria-pressed:bg-graphite [&_svg]:opacity-55 [&_svg]:grayscale [&_svg]:transition aria-pressed:[&_svg]:opacity-100 aria-pressed:[&_svg]:grayscale-0";
 ---
-<div id="eli5-tool" class="grid gap-10" data-strings={strings}>
-  <p class="max-w-[60ch] text-lg">{t("el_intro")}</p>
+<div id="eli5-tool" class="grid gap-12 sm:gap-14" data-strings={strings}>
+  <p class="max-w-[60ch] text-lg text-cream">{t("el_intro")}</p>
 
   {CHAPTERS.map(({ n, scene, ...rest }) => (
-    <section class="grid items-center gap-4 md:grid-cols-2 md:gap-8">
-      <div class:list={["grid gap-2", n % 2 === 0 && "md:order-last"]}>
-        <h2 class="flex items-baseline gap-3 font-pixel text-xl leading-tight">
-          <span class="grid size-8 shrink-0 place-items-center bg-ink text-base text-orange">{n}</span>
-          {t(`el_${n}_t`)}
-        </h2>
-        <p class="max-w-[52ch]">{t(`el_${n}_b`)}</p>
+    <section class="grid items-center gap-5 md:grid-cols-2 md:gap-10" aria-labelledby={`el-${n}`}>
+      <div class:list={["grid content-center gap-3", n % 2 === 0 && "md:order-last"]}>
+        <p class="font-pixel text-sm tracking-[0.2em] text-orange" aria-hidden="true">{String(n).padStart(2, "0")}<span class="text-line"> / {String(CHAPTERS.length).padStart(2, "0")}</span></p>
+        <h2 id={`el-${n}`} class="font-pixel text-xl leading-snug text-cream sm:text-2xl">{t(`el_${n}_t`)}</h2>
+        <p class="max-w-[52ch] text-ash">{t(`el_${n}_b`)}</p>
         {"term" in rest && (
-          <p class="flex flex-wrap items-center gap-2 text-sm">
-            <span class="font-pixel text-xs text-graphite">{t("el_term")}:</span>
-            <span class="bg-ink px-2 py-0.5 font-pixel text-orange">{t(rest.term)}</span>
+          <p class="flex flex-wrap items-center gap-2 text-sm text-ash">
+            {t("el_term")}:
+            <span class={cx(chip, tone.accent, "font-mono text-sm normal-case tracking-normal")}>{t(rest.term)}</span>
           </p>
         )}
         {scene === "ledger" && (
-          <div class="mt-1 flex w-fit border-2 border-ink bg-cream font-pixel shadow-[3px_3px_0_var(--color-ink)]" role="group">
-            <button type="button" data-ledger="public" aria-pressed="true" class="flex cursor-pointer items-center gap-2 px-3.5 py-1.5 text-graphite transition-colors aria-pressed:bg-ink [&_svg]:opacity-55 [&_svg]:grayscale [&_svg]:transition aria-pressed:[&_svg]:opacity-100 aria-pressed:[&_svg]:grayscale-0 aria-pressed:text-[#f7931a]"><Fragment set:html={LOGOS.public} />{t("el_btc")}</button>
-            <button type="button" data-ledger="sealed" aria-pressed="false" class="flex cursor-pointer items-center gap-2 px-3.5 py-1.5 text-graphite transition-colors aria-pressed:bg-ink [&_svg]:opacity-55 [&_svg]:grayscale [&_svg]:transition aria-pressed:[&_svg]:opacity-100 aria-pressed:[&_svg]:grayscale-0 border-l-2 border-ink aria-pressed:text-flame"><Fragment set:html={LOGOS.sealed} />{t("el_xmr")}</button>
+          <div class="mt-1 flex w-fit border-2 border-graphite font-pixel" role="group">
+            <button type="button" data-ledger="public" aria-pressed="true" class={cx(ledgerButton, "aria-pressed:text-[#f7931a]")}><Fragment set:html={LOGOS.public} />{t("el_btc")}</button>
+            <button type="button" data-ledger="sealed" aria-pressed="false" class={cx(ledgerButton, "border-l-2 border-graphite aria-pressed:text-flame")}><Fragment set:html={LOGOS.sealed} />{t("el_xmr")}</button>
           </div>
         )}
-        {scene === "ring" && <p data-ring-message class="font-pixel text-sm text-graphite" aria-live="polite">{t("el_4_hint")}</p>}
+        {scene === "ring" && <p data-ring-message class="flex items-center gap-2 font-pixel text-sm text-peach" aria-live="polite"><span class="size-2 shrink-0 bg-orange motion-safe:animate-blink" aria-hidden="true"></span><span data-ring-text>{t("el_4_hint")}</span></p>}
       </div>
-      <canvas data-scene={scene} class:list={["block w-full border-2 border-ink bg-ink shadow-[6px_6px_0_var(--color-graphite)] [aspect-ratio:96/54] [image-rendering:pixelated]", scene === "ring" && "cursor-pointer"]}></canvas>
+      <canvas data-scene={scene} class:list={["block w-full border-2 border-graphite bg-ink shadow-[8px_8px_0_var(--color-shade)] [aspect-ratio:96/54] [image-rendering:pixelated]", scene === "ring" && "cursor-pointer"]}></canvas>
     </section>
   ))}
 
-  <section class="grid gap-3 border-t-2 border-dashed border-ink pt-8">
-    <h2 class="font-pixel text-xl">{t("el_try_t")}</h2>
-    <p>{t("el_try_b")}</p>
-    <div class="flex flex-wrap gap-2">
-      {TRY.map((l) => <a href={l.href} class="btn"><PixelIcon name={l.icon} size={16} /><span>{l.label}</span></a>)}
+  <section class="grid gap-4 border-t-2 border-graphite pt-8" aria-labelledby="el-try">
+    <h2 id="el-try" class="flex items-center gap-2.5 font-pixel text-sm tracking-[0.2em] text-cream uppercase"><span class="size-2 bg-orange"></span>{t("el_try_t")}</h2>
+    <p class="text-ash">{t("el_try_b")}</p>
+    <div class="flex flex-wrap gap-3">
+      {TRY.map((l) => <a href={l.href} class={button.ghost}><PixelIcon name={l.icon} size={16} class="text-orange" /><span>{l.label}</span></a>)}
     </div>
   </section>
 </div>
@@ -101,7 +101,7 @@ const TRY = [
 
   const ring = ringScene({ valid: t("el_valid") });
   const ringStage = new Scene(canvas("ring"), ring.draw);
-  const message = root.querySelector<HTMLElement>("[data-ring-message]")!;
+  const message = root.querySelector<HTMLElement>("[data-ring-text]")!;
   let guesses = 0;
   canvas("ring").addEventListener("click", (e) => {
     const { x, y } = ringStage.point(e);

@@ -29,7 +29,7 @@ export const TOOL_GROUPS = ["paid", "wallet", "numbers", "fun"] as const;
 export type ToolGroup = (typeof TOOL_GROUPS)[number];
 
 export const TOOLS: Tool[] = [
-  { id: "eli5", slug: "eli5", icon: "bulb", live: true, added: "2026-10-22", group: "fun" },
+  { id: "eli5", slug: "eli5", icon: "bulb", live: true, added: "2026-10-22", group: "fun", dark: true },
   { id: "uri", slug: "uri", icon: "qr", live: true, added: "2026-10-19", group: "paid" },
   { id: "proof", slug: "verify", icon: "check", live: true, added: "2026-10-20", group: "paid", dark: true },
   { id: "tx", slug: "tx", icon: "hourglass", live: true, added: "2026-10-20", group: "paid", dark: true },
