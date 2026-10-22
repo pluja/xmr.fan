@@ -1,0 +1,97 @@
+---
+import PixelIcon from "../PixelIcon.astro";
+import { localePath, pickStrings, useTranslations, type Locale } from "../../i18n/ui";
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const strings = pickStrings(lang, ["el_btc", "el_xmr", "el_3_guess_1", "el_3_guess_2", "el_3_guess_3", "el_7_min"]);
+const CHAPTERS = [
+  { n: 1, scene: "note" },
+  { n: 2, scene: "wall" },
+  { n: 3, scene: "ring" },
+  { n: 4, scene: "stealth" },
+  { n: 5, scene: "balance" },
+  { n: 6, scene: "fungible" },
+  { n: 7, scene: "network" },
+  { n: 8, scene: "keys" },
+] as const;
+const TRY = [
+  { href: localePath(lang, "/uri"), label: t("el_try_uri"), icon: "qr" },
+  { href: localePath(lang, "/live"), label: t("el_try_live"), icon: "notes" },
+  { href: localePath(lang, "/donate"), label: t("el_try_donate"), icon: "heart" },
+] as const;
+---
+<div id="eli5-tool" class="grid gap-10" data-strings={strings}>
+  <p class="max-w-[60ch] text-lg">{t("el_intro")}</p>
+
+  {CHAPTERS.map(({ n, scene }) => (
+    <section class="grid items-center gap-4 md:grid-cols-2 md:gap-8">
+      <div class:list={["grid gap-2", n % 2 === 0 && "md:order-last"]}>
+        <h2 class="flex items-baseline gap-3 font-pixel text-xl leading-tight">
+          <span class="grid size-8 shrink-0 place-items-center bg-ink text-base text-orange">{n}</span>
+          {t(`el_${n}_t`)}
+        </h2>
+        <p class="max-w-[52ch]">{t(`el_${n}_b`)}</p>
+        {scene === "wall" && (
+          <div class="mt-1 flex w-fit border-2 border-ink font-pixel text-sm" role="group">
+            <button type="button" data-wall="glass" aria-pressed="true" class="wall-btn px-3 py-1">{t("el_btc")}</button>
+            <button type="button" data-wall="sealed" aria-pressed="false" class="wall-btn px-3 py-1">{t("el_xmr")}</button>
+          </div>
+        )}
+        {scene === "ring" && <p data-ring-message class="font-pixel text-sm text-graphite" aria-live="polite">{t("el_3_hint")}</p>}
+      </div>
+      <canvas data-scene={scene} class:list={["block w-full border-2 border-ink bg-ink shadow-[6px_6px_0_var(--color-graphite)] [aspect-ratio:96/54] [image-rendering:pixelated]", scene === "ring" && "cursor-pointer"]}></canvas>
+    </section>
+  ))}
+
+  <section class="grid gap-3 border-t-2 border-dashed border-ink pt-8">
+    <h2 class="font-pixel text-xl">{t("el_try_t")}</h2>
+    <p>{t("el_try_b")}</p>
+    <div class="flex flex-wrap gap-2">
+      {TRY.map((l) => <a href={l.href} class="btn"><PixelIcon name={l.icon} size={16} /><span>{l.label}</span></a>)}
+    </div>
+  </section>
+</div>
+
+<style>
+  .wall-btn { cursor: pointer; }
+  .wall-btn[aria-pressed="true"] { background: var(--color-ink); color: var(--color-orange); }
+</style>
+
+<script>
+  import { balanceScene, fungibleScene, keysScene, networkScene, noteScene, ringScene, Scene, stealthScene, wallScene } from "./eli5-scenes";
+  import { readStrings } from "../../i18n/format";
+
+  const root = document.getElementById("eli5-tool")!;
+  const t = readStrings(root);
+  const canvas = (name: string) => root.querySelector<HTMLCanvasElement>(`[data-scene=${name}]`)!;
+
+  new Scene(canvas("note"), noteScene());
+  new Scene(canvas("stealth"), stealthScene());
+  new Scene(canvas("balance"), balanceScene());
+  new Scene(canvas("fungible"), fungibleScene({ btc: t("el_btc"), xmr: t("el_xmr") }));
+  new Scene(canvas("network"), networkScene(t("el_7_min")));
+  new Scene(canvas("keys"), keysScene());
+
+  const wall = wallScene();
+  new Scene(canvas("wall"), wall.draw);
+  const wallButtons = root.querySelectorAll<HTMLButtonElement>("[data-wall]");
+  wallButtons.forEach((b) => b.addEventListener("click", () => {
+    wall.state.sealed = b.dataset.wall === "sealed";
+    wallButtons.forEach((other) => other.setAttribute("aria-pressed", String(other === b)));
+  }));
+
+  const ring = ringScene();
+  const ringScene_ = new Scene(canvas("ring"), ring.draw);
+  const message = root.querySelector<HTMLElement>("[data-ring-message]")!;
+  let guesses = 0;
+  canvas("ring").addEventListener("click", (e) => {
+    const { x, y } = ringScene_.point(e);
+    const i = ring.hit(x, y);
+    if (i < 0) return;
+    ring.state.picked = i;
+    ring.state.pickedAt = ringScene_.time;
+    message.textContent = t(`el_3_guess_${(guesses++ % 3) + 1}`);
+  });
+</script>

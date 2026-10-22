@@ -21,6 +21,7 @@ No trackers, no accounts. Available in English, Spanish, Russian, French, Portug
 | [`/donate`](https://xmr.fan/donate) | Donation roulette: a random privacy, free software or Monero project to support |
 | [`/beat`](https://xmr.fan/beat) | Address beat: any Monero address as a looping chiptune with a pixel visualizer |
 | [`/live`](https://xmr.fan/live) | Monero live: the mempool and new blocks as pixel art and calm background music |
+| [`/eli5`](https://xmr.fan/eli5) | Monero ELI5: what Monero is, in eight short animated pictures |
 | [`/news`](https://xmr.fan/news) | The xmr.fan Times |
 
 ### Privacy model

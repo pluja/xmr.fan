@@ -2,7 +2,7 @@ import type { Key } from "../i18n/ui.ts";
 import type { IconName } from "./pixel.ts";
 
 export interface Tool {
-  id: "uri" | "proof" | "addr" | "units" | "gazette" | "dl" | "fee" | "node" | "height" | "mining" | "tx" | "donate" | "beat" | "live";
+  id: "uri" | "proof" | "addr" | "units" | "gazette" | "dl" | "fee" | "node" | "height" | "mining" | "tx" | "donate" | "beat" | "live" | "eli5";
   /** Short, shareable URL: xmr.fan/<slug> (and xmr.fan/<lang>/<slug>). */
   slug: string;
   icon: IconName;
@@ -13,6 +13,7 @@ export interface Tool {
 }
 
 export const TOOLS: Tool[] = [
+  { id: "eli5", slug: "eli5", icon: "bulb", live: true, added: "2026-10-22" },
   { id: "uri", slug: "uri", icon: "qr", live: true, added: "2026-10-19" },
   { id: "proof", slug: "verify", icon: "check", live: true, added: "2026-10-20" },
   { id: "tx", slug: "tx", icon: "hourglass", live: true, added: "2026-10-20" },
