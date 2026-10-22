@@ -2,7 +2,8 @@
 import PixelIcon from "../PixelIcon.astro";
 import NodeSource from "../live/NodeSource.astro";
 import Button from "../ui/Button.astro";
-import Slip from "../ui/Slip.astro";
+import Printer from "../ui/Printer.astro";
+import Receipt from "../ui/Receipt.astro";
 import Step from "../ui/Step.astro";
 import TrustNote from "../ui/TrustNote.astro";
 import { cx, field, label, message } from "../ui/styles";
@@ -19,70 +20,70 @@ const strings = pickStrings(lang, [
 const today = new Date().toISOString().slice(0, 10);
 const days = (n: number) => (n === 1 ? t("h_one_day") : t("h_n_days", { n }));
 const PICKS = [{ days: 0, name: t("h_today") }, { days: 30, name: t("h_month") }, { days: 365, name: t("h_year") }];
-const pick = "cursor-pointer border-2 border-line px-3 py-1 font-pixel text-xs text-cream hover:border-orange aria-pressed:border-orange aria-pressed:bg-[#4a2a18] aria-pressed:text-orange";
+const pick = "cursor-pointer border-2 border-line px-3 py-1.5 font-pixel text-sm text-cream hover:border-orange aria-pressed:border-orange aria-pressed:bg-[#4a2a18] aria-pressed:text-orange";
 ---
 <div id="height-tool" class="grid grid-cols-1 gap-8" data-strings={strings} data-lang={lang}>
-  <div class="grid grid-cols-1 items-start gap-x-10 gap-y-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-    <div class="grid content-start gap-8">
-      <section class="grid gap-3">
-        <Step as="label" for="h-date" n="01" label={t("h_created")} />
-        <input id="h-date" name="date" type="date" min="2014-04-18" max={today} value={today} class={cx(field, "font-mono text-lg [color-scheme:dark]")} />
-        <div class="flex flex-wrap gap-2">
-          {PICKS.map((p) => <button type="button" data-pick={p.days} aria-pressed="false" class={pick}>{p.name}</button>)}
-          <button type="button" data-unsure aria-expanded="false" aria-controls="h-unsure" class={cx(pick, "border-dashed text-ash")}>{t("h_unsure")}</button>
-        </div>
-        <p id="h-unsure" class="border-l-4 border-orange bg-ink px-5 py-3 text-sm text-ash" hidden>{t("h_unsure_help")}</p>
-      </section>
-
-      <section class="grid gap-3">
-        <Step n="02" label={t("h_margin")} />
-        <div class="grid grid-cols-3 border-2 border-graphite bg-well p-0.5" role="radiogroup" aria-label={t("h_margin")}>
-          {SAFETY_CHOICES.map((n) => (
-            <label class="cursor-pointer py-2 text-center font-pixel text-sm text-ash has-checked:bg-orange has-checked:text-ink has-focus-visible:outline-2 has-focus-visible:outline-orange">
-              <input type="radio" name="margin" value={n} checked={n === SAFETY_DAYS} class="sr-only" />{days(n)}
-            </label>
-          ))}
-        </div>
-        <div class="border-l-4 border-good bg-ink px-5 py-3">
-          <p class="text-[15px] text-cream">{t("h_margin_t")}</p>
-          <p class="text-sm text-ash">{t("h_margin_sub")}</p>
-        </div>
-      </section>
-    </div>
-
-    <Slip dither aria-live="polite">
-      <span class={label}>{t("h_restore")}</span>
-      <div class="-mt-2 flex flex-wrap items-center justify-between gap-3">
-        <output data-height class="font-pixel text-[clamp(36px,6vw,52px)] leading-none">…</output>
-        <span id="restore-height" hidden></span>
-        <Button data-copy-from="#restore-height" class="px-4 py-2 text-sm"><PixelIcon name="copy" size={14} /><span>{t("h_copy")}</span></Button>
+  <div class="grid grid-cols-1 items-start gap-x-10 gap-y-8 lg:grid-cols-2">
+    <section class="grid gap-3">
+      <Step as="label" for="h-date" n="01" label={t("h_created")} />
+      <input id="h-date" name="date" type="date" min="2014-04-18" max={today} value={today} class={cx(field, "font-mono text-lg [color-scheme:dark]")} />
+      <div class="flex flex-wrap gap-2">
+        {PICKS.map((p) => <button type="button" data-pick={p.days} aria-pressed="false" class={pick}>{p.name}</button>)}
+        <button type="button" data-unsure aria-expanded="false" aria-controls="h-unsure" class={cx(pick, "border-dashed text-ash")}>{t("h_unsure")}</button>
       </div>
-      <p data-from class="-mt-1 text-sm text-graphite"></p>
+      <p id="h-unsure" class="border-l-4 border-orange bg-ink px-5 py-3 text-sm text-ash" hidden>{t("h_unsure_help")}</p>
+    </section>
 
-      <div class="grid gap-2 border-t-2 border-slip-tile pt-4">
-        <div class="relative mt-2 flex h-3.5">
-          <span data-margin class="bg-[repeating-linear-gradient(45deg,var(--color-orange)_0_2px,var(--color-peach)_2px_4px)]"></span>
-          <span class="flex-1 bg-ok"></span>
-          <i class="absolute -top-1.5 left-0 h-6.5 w-1 bg-ink"></i>
-          <i data-tick class="absolute -top-2 h-7.5 w-1 -translate-x-1/2 bg-ink"></i>
-          <i class="absolute -top-1.5 right-0 h-6.5 w-1 bg-ink"></i>
-        </div>
-        <div class={cx(label, "mt-2 flex flex-wrap gap-x-5 gap-y-1")}>
-          <span class="flex items-center gap-1.5"><i class="size-2.5 bg-[repeating-linear-gradient(45deg,var(--color-orange)_0_2px,var(--color-peach)_2px_4px)]"></i><span data-margin-label class="text-flame"></span></span>
-          <span class="flex items-center gap-1.5"><i class="size-2.5 bg-ok"></i><span data-created></span></span>
-        </div>
-        <div class="mt-1 flex justify-between gap-4">
-          <div class="grid"><span class={label}>{t("h_start")}</span><span data-start class="font-mono text-[13px]"></span></div>
-          <div class="grid text-right"><span class={label}>{t("h_now")}</span><span data-now class="font-mono text-[13px]">…</span></div>
-        </div>
+    <section class="grid gap-3">
+      <Step n="02" label={t("h_margin")} />
+      <div class="grid grid-cols-3 border-2 border-graphite bg-well p-0.5" role="radiogroup" aria-label={t("h_margin")}>
+        {SAFETY_CHOICES.map((n) => (
+          <label class="cursor-pointer py-2 text-center font-pixel text-sm text-ash has-checked:bg-orange has-checked:text-ink has-focus-visible:outline-2 has-focus-visible:outline-orange">
+            <input type="radio" name="margin" value={n} checked={n === SAFETY_DAYS} class="sr-only" />{days(n)}
+          </label>
+        ))}
       </div>
-
-      <Fragment slot="footer">
-        <span data-foot class={label}>{t("h_foot_estimate")}</span>
-        <span class="ml-auto font-pixel text-[11px] text-slip-ink">xmr.fan</span>
-      </Fragment>
-    </Slip>
+      <div class="border-l-4 border-good bg-ink px-5 py-3">
+        <p class="text-[15px] text-cream">{t("h_margin_t")}</p>
+        <p class="text-sm text-ash">{t("h_margin_sub")}</p>
+      </div>
+    </section>
   </div>
+
+  <Printer idle={t("h_foot_estimate")} aria-live="polite">
+    <Receipt>
+      <span class={label}>{t("h_restore")}</span>
+        <div class="-mt-2 flex flex-wrap items-center justify-between gap-3">
+          <output data-height class="font-pixel text-[clamp(40px,7vw,64px)] leading-none">…</output>
+          <span id="restore-height" hidden></span>
+          <Button data-copy-from="#restore-height" class="px-4 py-2 text-sm"><PixelIcon name="copy" size={14} /><span>{t("h_copy")}</span></Button>
+        </div>
+        <p data-from class="-mt-1 text-sm text-graphite"></p>
+
+        <div class="grid gap-2 border-t-2 border-slip-tile pt-4">
+          <div class="relative mt-2 flex h-3.5">
+            <span data-margin class="bg-[repeating-linear-gradient(45deg,var(--color-orange)_0_2px,var(--color-peach)_2px_4px)]"></span>
+            <span class="flex-1 bg-ok"></span>
+            <i class="absolute -top-1.5 left-0 h-6.5 w-1 bg-ink"></i>
+            <i data-tick class="absolute -top-2 h-7.5 w-1 -translate-x-1/2 bg-ink"></i>
+            <i class="absolute -top-1.5 right-0 h-6.5 w-1 bg-ink"></i>
+          </div>
+          <div class={cx(label, "mt-2 flex flex-wrap gap-x-5 gap-y-1")}>
+            <span class="flex items-center gap-1.5"><i class="size-2.5 bg-[repeating-linear-gradient(45deg,var(--color-orange)_0_2px,var(--color-peach)_2px_4px)]"></i><span data-margin-label class="text-flame"></span></span>
+            <span class="flex items-center gap-1.5"><i class="size-2.5 bg-ok"></i><span data-created></span></span>
+          </div>
+          <div class="mt-1 flex justify-between gap-4">
+            <div class="grid"><span class={label}>{t("h_start")}</span><span data-start class="font-mono text-sm"></span></div>
+            <div class="grid text-right"><span class={label}>{t("h_now")}</span><span data-now class="font-mono text-sm">…</span></div>
+          </div>
+        </div>
+
+        <Fragment slot="footer">
+          <span data-foot class={label}>{t("h_foot_estimate")}</span>
+          <span class={cx(label, "ml-auto")}>xmr.fan</span>
+        </Fragment>
+    </Receipt>
+  </Printer>
 
   <section class="grid grid-cols-1 items-center gap-x-6 gap-y-3 border-l-4 border-orange bg-ink px-5 py-4 md:grid-cols-[minmax(0,1fr)_260px_minmax(0,1fr)]">
     <div>
@@ -105,6 +106,7 @@ const pick = "cursor-pointer border-2 border-line px-3 py-1 font-pixel text-xs t
 <script>
   import { liveTask } from "../live/live";
   import { bindCopyButtons } from "../ui/copy";
+  import { printer } from "../ui/printer";
   import { readStrings } from "../../i18n/format";
   import type { Locale } from "../../i18n/ui";
   import samples from "../../data/heights.json";
@@ -126,6 +128,7 @@ const pick = "cursor-pointer border-2 border-line px-3 py-1 font-pixel text-xs t
   const DAY = 86_400;
 
   let tip: number | undefined;
+  const print = printer($("[data-printer]"));
   const margin = () => Number(root.querySelector<HTMLInputElement>("input[name=margin]:checked")!.value);
   const daysText = (n: number) => (n === 1 ? t("h_one_day") : t("h_n_days", { n }));
 
@@ -173,6 +176,7 @@ const pick = "cursor-pointer border-2 border-line px-3 py-1 font-pixel text-xs t
       $("[data-height]").textContent = num.format(height);
       $("[data-from]").innerHTML = t("h_from", { date: `<b class="font-semibold text-ink">${longDate.format((time - days * DAY) * 1000)}</b>`, days: daysText(days) });
       $("[data-foot]").textContent = t(checked ? "h_foot_exact" : "h_foot_estimate");
+      print.set("ok", t(checked ? "h_foot_exact" : "h_foot_estimate"));
       paintTimeline(time, exact, days);
     };
     show(guess, false);
