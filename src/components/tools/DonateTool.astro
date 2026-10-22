@@ -19,11 +19,11 @@ const descriptions = Object.fromEntries(list.map((d) => [d.id, d.description[lan
 const categories = Object.fromEntries(DONATION_CATEGORIES.map((c) => [c, t(`dn_cat_${c}`)]));
 const strings = pickStrings(lang, ["dn_source", "qr_alt", "dn_tx_desc", "copied"]);
 const site = (url: string) => new URL(url).hostname.replace(/^www\./, "");
-const tab = "cursor-pointer px-3 py-2 font-pixel text-sm text-ash has-checked:bg-graphite has-checked:text-cream has-focus-visible:outline-2 has-focus-visible:outline-orange";
+const tab = "relative inline-flex min-h-11 shrink-0 cursor-pointer items-center whitespace-nowrap px-3 font-pixel text-sm text-ash has-checked:bg-graphite has-checked:text-cream has-focus-visible:outline-2 has-focus-visible:outline-orange";
 ---
 <div id="donate-tool" class="grid grid-cols-1 gap-8" data-strings={strings} data-lang={lang} data-list={JSON.stringify(list)} data-descriptions={JSON.stringify(descriptions)} data-categories={JSON.stringify(categories)}>
   <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
-    <fieldset class="flex flex-wrap bg-well p-0.5" aria-label={t("dn_all")}>
+    <fieldset class="flex flex-wrap bg-well p-0.5 min-w-0 max-sm:w-full max-sm:flex-nowrap max-sm:overflow-x-auto" aria-label={t("dn_all")}>
       <label class={tab}><input type="radio" name="category" value="" class="sr-only" checked />{t("dn_all")}</label>
       {DONATION_CATEGORIES.map((c) => <label class={tab}><input type="radio" name="category" value={c} class="sr-only" />{categories[c]}</label>)}
     </fieldset>
@@ -40,8 +40,8 @@ const tab = "cursor-pointer px-3 py-2 font-pixel text-sm text-ash has-checked:bg
           <p data-desc class="text-[0.9375rem] text-graphite"></p>
           <p data-address class="grid grid-cols-4 gap-1 font-mono text-[0.875rem] sm:grid-cols-6 lg:grid-cols-8"></p>
           <div class="mt-1 flex flex-wrap gap-2">
-            <a data-open class="inline-flex items-center gap-2 bg-ink px-4 py-2.5 font-pixel text-sm text-orange no-underline hover:bg-graphite"><PixelIcon name="heart" size={14} />{t("card_open")}</a>
-            <button type="button" data-copy-from="#donate-address" class="inline-flex cursor-pointer items-center gap-2 border-2 border-ink px-4 py-2 font-pixel text-sm text-ink hover:bg-ink hover:text-paper"><PixelIcon name="copy" size={14} /><span>{t("card_copy_address")}</span></button>
+            <a data-open class="inline-flex min-h-11 items-center justify-center gap-2 border-2 border-ink bg-ink px-4 font-pixel text-sm text-orange no-underline hover:bg-graphite max-sm:w-full"><PixelIcon name="heart" size={14} />{t("card_open")}</a>
+            <button type="button" data-copy-from="#donate-address" class="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 border-2 border-ink px-4 font-pixel text-sm text-ink hover:bg-ink hover:text-paper max-sm:w-full"><PixelIcon name="copy" size={14} /><span>{t("card_copy_address")}</span></button>
             <span id="donate-address" hidden></span>
             <a data-source rel="noopener noreferrer" target="_blank" class="inline-flex items-center gap-1.5 self-center px-2 text-sm text-graphite underline underline-offset-3 hover:text-ink"><span data-source-site></span><PixelIcon name="external" size={10} /></a>
           </div>
