@@ -51,7 +51,7 @@ const sponsor = latest ? (await sponsorsFor(latest.data.week))[0] : undefined;
     <Container class="pb-12 pt-6">
       <GazetteBanner lang={lang} class="mb-5" />
       <h2 class="sr-only">{t("nav_tools")}</h2>
-      <ul id="tools" class="grid grid-cols-1 gap-2 sm:grid-cols-[repeat(auto-fill,minmax(230px,1fr))] sm:gap-4">
+      <ul id="tools" class="grid grid-cols-1 gap-2 sm:grid-cols-[repeat(auto-fill,minmax(240px,1fr))] sm:gap-3">
         {TOOLS.filter((tool) => tool.id !== "gazette").map((tool) => <ToolCard lang={lang} tool={tool} />)}
       </ul>
       <p id="no-results" class="mt-4 font-pixel text-ash" hidden>{t("no_results")}</p>
