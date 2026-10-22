@@ -31,3 +31,27 @@ export function matchHash(sha256: string, fileName: string | undefined, files: H
   const named = fileName ? files.find((f) => f.name === fileName) : undefined;
   return named ? { kind: "mismatch", entry: named } : { kind: "unknown" };
 }
+
+export const DOWNLOADS_PAGE = "https://www.getmonero.org/downloads/";
+export const VERIFY_GUIDE = "https://www.getmonero.org/resources/user-guides/verification-allos-advanced.html";
+
+const OS: Record<string, string> = { win: "Windows", mac: "macOS", linux: "Linux", android: "Android", freebsd: "FreeBSD" };
+const ARCH: Record<string, string> = { x64: "x64", x86: "x86", armv7: "ARMv7", armv8: "ARM64", riscv64: "RISC-V" };
+
+export interface FileInfo { kind: "gui" | "cli" | "source"; os: string; platform: string; installer: boolean }
+
+/** "monero-gui-install-win-x64-v0.18.5.4.exe" -> GUI, Windows, "Windows x64", installer. */
+export function describeFile(name: string): FileInfo {
+  const parts = name.replace(/-v\d[\d.]*\..*$/, "").split("-").slice(1);
+  const gui = parts[0] === "gui";
+  if (gui) parts.shift();
+  const installer = parts[0] === "install";
+  if (installer) parts.shift();
+  if (parts[0] === "source") return { kind: "source", os: "Source", platform: "Source", installer: false };
+  const os = OS[parts[0]] ?? parts[0];
+  const arch = parts[0] === "mac" && parts[1] === "armv8" ? "Apple silicon" : parts[0] === "mac" && parts[1] === "x64" ? "Intel" : ARCH[parts[1]] ?? parts[1] ?? "";
+  return { kind: gui ? "gui" : "cli", os, platform: `${os} ${arch}`.trim(), installer };
+}
+
+/** The official mirror keeps CLI files under /cli/ and GUI files under /gui/. */
+export const downloadUrl = (name: string) => `https://downloads.getmonero.org/${name.startsWith("monero-gui-") ? "gui" : "cli"}/${name}`;

@@ -1,92 +1,252 @@
 ---
-import Disclosure from "../Disclosure.astro";
-import Field from "../Field.astro";
 import PixelIcon from "../PixelIcon.astro";
+import Corners from "../ui/Corners.astro";
+import Slip from "../ui/Slip.astro";
+import StatTile from "../ui/StatTile.astro";
+import StatusHead from "../ui/StatusHead.astro";
+import Step from "../ui/Step.astro";
+import { button, cx, field, label, link } from "../ui/styles";
 import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
+import { DOWNLOADS_PAGE, VERIFY_GUIDE } from "../../lib/hashes";
 
 interface Props { lang: Locale }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const strings = pickStrings(lang, [
-  "c_hashing", "c_hash", "c_genuine", "c_genuine_detail", "c_mismatch", "c_mismatch_detail", "c_unknown", "c_unknown_detail", "c_list_t", "c_list_error", "c_how",
+  "c_hashing", "c_mismatch_detail", "c_unknown_detail", "c_list_error", "c_matches", "c_no_match", "c_genuine_t", "c_genuine_sub", "c_mismatch_t", "c_mismatch", "c_unknown_t", "c_unknown",
+  "c_kind_gui", "c_kind_cli", "c_kind_source", "c_latest", "c_match_badge", "c_differs", "c_signed", "c_count", "c_show_more", "c_installer", "c_trust", "c_download", "copied", "share_copy",
 ]);
-const cell = "border-b-2 border-dotted border-graphite/40 py-1.5 pr-3";
+const FILTERS = [{ value: "all", name: t("c_all") }, { value: "gui", name: "GUI" }, { value: "cli", name: "CLI" }, { value: "source", name: t("c_kind_source") }];
 ---
-<div id="checksum-tool" class="grid gap-6" data-strings={strings}>
-  <label data-drop class="grid cursor-pointer place-items-center gap-2 border-2 border-dashed border-ink bg-paper px-4 py-10 text-center hover:bg-cream [&.over]:border-solid [&.over]:bg-peach">
-    <PixelIcon name="download" size={32} />
-    <span class="font-pixel text-lg">{t("c_drop")}</span>
-    <span class="text-sm text-graphite">{t("c_drop_hint")}</span>
-    <input type="file" class="sr-only" />
-  </label>
-  <div data-progress class="grid gap-1" hidden>
-    <p data-progress-text class="text-sm" aria-live="polite"></p>
-    <div class="h-3 border-2 border-ink bg-paper"><div data-bar class="h-full w-0 bg-ink"></div></div>
+<div id="checksum-tool" class="grid grid-cols-1 gap-10" data-strings={strings} data-lang={lang}>
+  <div class="grid grid-cols-1 items-start gap-x-10 gap-y-8 lg:grid-cols-2">
+    <div class="grid content-start gap-5">
+      <section class="grid gap-3">
+        <Step n="01" label={t("c_step_drop")} />
+        <label data-drop class="group/drop relative grid cursor-pointer place-items-center gap-2 border-2 border-dashed border-line bg-ink px-6 py-9 text-center hover:border-orange [&.over]:border-solid [&.over]:border-orange [&.over]:bg-well">
+          <Corners inset="10px" />
+          <PixelIcon name="download" size={32} class="text-orange" />
+          <span class="font-pixel text-[15px] text-cream">{t("c_drop_t")}</span>
+          <span class="text-sm text-ash"><span class="text-orange underline underline-offset-3">{t("c_drop_or")}</span> · .exe .dmg .zip .tar.bz2</span>
+          <input type="file" class="sr-only" />
+          <span data-progress class="grid w-full max-w-sm gap-1.5" hidden>
+            <span data-progress-text class="truncate text-xs text-ash" aria-live="polite"></span>
+            <span class="block h-2 bg-graphite"><span data-bar class="block h-full w-0 bg-orange"></span></span>
+          </span>
+        </label>
+      </section>
+
+      <div class="flex items-center gap-4 font-pixel text-[11px] tracking-[0.2em] text-slip-ink uppercase"><span class="h-0.5 flex-1 bg-graphite"></span>{t("c_or")}<span class="h-0.5 flex-1 bg-graphite"></span></div>
+
+      <section class="grid gap-2.5">
+        <Step as="label" for="c-hash" n="02" label={t("c_step_paste")} />
+        <input id="c-hash" name="hash" spellcheck="false" autocomplete="off" maxlength="64" placeholder="44cd1489…" class={cx(field, "font-mono text-[13px]")} aria-describedby="c-hash-status" />
+        <p id="c-hash-status" class="text-sm empty:hidden" aria-live="polite"></p>
+      </section>
+
+      <div class="grid gap-3 sm:grid-cols-2">
+        <div class="border-l-4 border-good bg-ink px-4 py-3">
+          <p class="flex items-center gap-2 text-[15px] text-cream"><svg viewBox="0 0 8 8" width="13" height="13" class="shrink-0 text-good" aria-hidden="true" shape-rendering="crispEdges"><path fill-rule="evenodd" d="M2 0h4v1H2zM1 1h1v2H1zM6 1h1v2H6zM0 3h8v5H0zM3 5h2v2H3z" fill="currentColor" /></svg>{t("c_local_t")}</p>
+          <p class="mt-1 text-sm text-ash">{t("c_local_sub")}</p>
+        </div>
+        <div class="grid content-center justify-items-start gap-2 border-l-4 border-orange bg-ink px-4 py-3">
+          <p class="text-sm text-ash">{t("c_get_t")}</p>
+          <a href={DOWNLOADS_PAGE} target="_blank" rel="noopener" class={cx(button.ghost, "px-3 py-2")}><PixelIcon name="download" size={14} class="text-orange" />{t("c_get_link")}<PixelIcon name="external" size={10} /></a>
+        </div>
+      </div>
+    </div>
+
+    <aside data-receipt data-state="idle" class="grid grid-cols-1 max-lg:data-[state=idle]:hidden" aria-live="polite">
+      <Slip dither>
+        <div data-show="idle" class="grid min-h-60 place-items-center content-center gap-3 px-6 text-center text-sm text-slip-ink">
+          <PixelIcon name="shield" size={48} class="text-peach" />
+          <span>{t("c_idle")}</span>
+        </div>
+        <StatusHead data-show="done" hidden>
+          <Fragment slot="aside"><span>{t("c_receipt")}</span><span>SHA-256</span></Fragment>
+        </StatusHead>
+        <div data-show="done" class="grid gap-1" hidden>
+          <span class={cx(label, "text-[10px]")}>{t("c_file")}</span>
+          <span data-file class="font-pixel text-[17px] break-all"></span>
+        </div>
+        <div data-show="genuine" class="grid grid-cols-2 gap-2 sm:grid-cols-4" hidden>
+          <StatTile label={t("c_version")}><span data-version class="text-[15px]"></span></StatTile>
+          <StatTile label={t("c_type")}><span data-kind class="text-[15px]"></span></StatTile>
+          <StatTile label={t("c_platform")}><span data-platform class="text-[15px]"></span></StatTile>
+          <StatTile label={t("c_release")}><span class="flex items-center gap-1.5 text-[15px] text-ok"><i class="size-2 bg-ok"></i>{t("c_latest")}</span></StatTile>
+        </div>
+        <p data-show="mismatch unknown" data-detail class="text-[15px] text-graphite" hidden></p>
+        <div data-show="done" class="grid gap-3" hidden>
+          <div class="grid gap-1.5">
+            <div class="flex items-center justify-between gap-3">
+              <span class={cx(label, "text-[10px]")}>{t("c_your_hash")}</span>
+              <span data-badge class="px-2 py-0.5 font-pixel text-[10px] tracking-wider text-paper uppercase"></span>
+            </div>
+            <p data-yours class="border-b-2 pb-1 font-mono text-[12px] leading-relaxed break-all"></p>
+          </div>
+          <div data-official-row class="grid gap-1.5">
+            <span class={cx(label, "text-[10px]")}>{t("c_official")}</span>
+            <p data-official class="border-b-2 pb-1 font-mono text-[12px] leading-relaxed break-all"></p>
+          </div>
+        </div>
+        <Fragment slot="footer">
+          <svg viewBox="0 0 8 8" width="11" height="11" class="shrink-0 text-slip-ink" aria-hidden="true" shape-rendering="crispEdges"><path d="M0 2h4v4H0zM4 3h4v2H4zM6 5h1v2H6zM1 3v2h2V3z" fill="currentColor" fill-rule="evenodd" /></svg>
+          <span data-signed class={cx(label, "min-w-0 truncate text-[10px]")}>…</span>
+          <span class="ml-auto font-pixel text-[11px] text-slip-ink">xmr.fan</span>
+        </Fragment>
+      </Slip>
+    </aside>
   </div>
 
-  <Field label={t("c_or_paste")}>
-    <input name="hash" spellcheck="false" autocomplete="off" maxlength="64" class="field font-mono text-[13px]" />
-  </Field>
-
-  <section data-result class="result" hidden>
-    <p class="flex items-baseline gap-2 font-pixel text-[clamp(18px,3vw,24px)]"><span data-mark aria-hidden="true"></span><span data-title></span></p>
-    <p data-detail class="text-[15px]"></p>
-    <p data-hash class="break-all font-mono text-xs text-graphite"></p>
+  <section data-list-box class="grid gap-4" aria-labelledby="c-list" hidden>
+    <div class="flex flex-wrap items-center gap-x-4 gap-y-3 border-b-2 border-line pb-3">
+      <h2 id="c-list" class="flex items-center gap-2.5 font-pixel text-sm tracking-[0.2em] text-cream uppercase"><span class="size-2 bg-orange"></span>{t("c_official_t")}</h2>
+      <span data-count class="text-sm text-slip-ink"></span>
+      <a href={DOWNLOADS_PAGE} target="_blank" rel="noopener" class={cx(link, "inline-flex items-center gap-1.5")}>{t("c_get_link")}<PixelIcon name="external" size={10} /></a>
+      <div class="flex w-full flex-wrap gap-2 sm:ml-auto sm:w-auto">
+        <div class="flex bg-well p-0.5 font-pixel text-[11px] uppercase" role="radiogroup">
+          {FILTERS.map((f) => (
+            <label class="cursor-pointer px-3 py-1 text-slip-ink has-checked:bg-graphite has-checked:text-cream has-focus-visible:outline-2 has-focus-visible:outline-orange">
+              <input type="radio" name="kind" value={f.value} checked={f.value === "all"} class="sr-only" />{f.name}
+            </label>
+          ))}
+        </div>
+        <input name="os" type="search" placeholder={t("c_filter")} autocomplete="off" class={cx(field, "w-40 flex-1 px-3 py-1 text-sm sm:flex-none")} />
+      </div>
+    </div>
+    <div data-groups class="grid gap-5"></div>
   </section>
 
-  <p data-how class="text-sm text-graphite"></p>
-  <Disclosure title="" data-list-box hidden>
-    <div class="overflow-x-auto">
-      <table class="w-full min-w-[560px] text-left text-xs"><tbody data-list></tbody></table>
-    </div>
-  </Disclosure>
-  <template id="hash-row"><tr><td class:list={[cell, "font-mono"]}></td><td class:list={[cell, "break-all font-mono text-graphite"]}></td></tr></template>
+  <p data-trust class="flex flex-wrap items-start gap-x-4 gap-y-2 border-t-2 border-graphite pt-5 text-sm text-ash">
+    <svg viewBox="0 0 8 8" width="14" height="14" class="mt-0.5 shrink-0 text-good" aria-hidden="true" shape-rendering="crispEdges"><path d="M0 2h4v4H0zM4 3h4v2H4zM6 5h1v2H6zM1 3v2h2V3z" fill="currentColor" fill-rule="evenodd" /></svg>
+    <span data-trust-text class="min-w-64 flex-1 [overflow-wrap:anywhere]"></span>
+    <a href={VERIFY_GUIDE} target="_blank" rel="noopener" class={cx(link, "inline-flex items-center gap-1.5")}>{t("c_verify_yourself")}<PixelIcon name="external" size={10} /></a>
+  </p>
 </div>
 
 <script>
   import { sha256 } from "@noble/hashes/sha2.js";
+  import { bindCopyButtons } from "../ui/copy";
   import { readStrings } from "../../i18n/format";
-  import { matchHash, type HashList } from "../../lib/hashes";
+  import { describeFile, downloadUrl, matchHash, type HashEntry, type HashList } from "../../lib/hashes";
 
   const root = document.getElementById("checksum-tool")!;
   const t = readStrings(root);
   const $ = <T extends HTMLElement = HTMLElement>(s: string) => root.querySelector<T>(s)!;
+  const receipt = $("[data-receipt]");
   const drop = $("[data-drop]"), fileInput = $<HTMLInputElement>("input[type=file]"), hashInput = $<HTMLInputElement>("input[name=hash]");
   const hex = (b: Uint8Array) => Array.from(b, (x) => x.toString(16).padStart(2, "0")).join("");
+  const escape = (s: string) => s.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
+  const HASH = /^[0-9a-fA-F]{64}$/;
+  let matched: string | undefined;
 
   const listReady: Promise<HashList | null> = fetch("/api/hashes").then((r) => (r.ok ? r.json() : null)).catch(() => null);
 
-  listReady.then((list) => {
-    if (!list) { $("[data-how]").textContent = t("c_list_error"); return; }
-    $("[data-how]").textContent = t("c_how", { fingerprint: list.fingerprint.replace(/(.{4})/g, "$1 ").trim() });
-    $("[data-list-box] summary span:last-child").textContent = t("c_list_t", { version: list.version });
-    const row = root.querySelector<HTMLTemplateElement>("#hash-row")!;
-    $("[data-list]").replaceChildren(...list.files.map((f) => {
-      const tr = row.content.firstElementChild!.cloneNode(true) as HTMLTableRowElement;
-      tr.cells[0].textContent = f.name;
-      tr.cells[1].textContent = f.sha256;
-      return tr;
-    }));
-    $("[data-list-box]").hidden = false;
-  });
-
-  async function show(hash: string, fileName?: string) {
-    const list = await listReady;
-    if (!list) return;
-    const match = matchHash(hash, fileName, list.files);
-    const box = $("[data-result]");
-    const tone = { genuine: ["✓", "ok"], mismatch: ["×", "bad"], unknown: ["!", "warn"] }[match.kind];
-    box.className = `result ${tone[1]}`;
-    $("[data-mark]").textContent = tone[0];
-    const vars = { name: match.kind === "unknown" ? fileName ?? "" : match.entry.name, version: list.version, group: match.kind === "genuine" ? match.entry.group : "", signer: list.signer };
-    $("[data-title]").textContent = t(`c_${match.kind}`, vars);
-    $("[data-detail]").textContent = t(`c_${match.kind}_detail`, vars);
-    $("[data-hash]").textContent = t("c_hash", { hash: hash.toLowerCase() });
-    box.hidden = false;
+  /** Which parts of the receipt show: idle, or a result (genuine, mismatch, unknown). */
+  function show(state: "idle" | "genuine" | "mismatch" | "unknown") {
+    receipt.dataset.state = state;
+    receipt.querySelectorAll<HTMLElement>("[data-show]").forEach((el) => {
+      const on = el.dataset.show!.split(" ");
+      el.hidden = !(on.includes(state) || (on.includes("done") && state !== "idle"));
+    });
   }
 
+  /** The hash in groups of eight; with `other`, groups that differ are marked. */
+  const groups = (hash: string, other?: string) => hash.match(/.{8}/g)!.map((g, i) =>
+    other && other.slice(i * 8, i * 8 + 8) !== g ? `<mark class="bg-danger px-0.5 text-paper">${g}</mark>` : g).join(" ");
+
+  async function check(hash: string, fileName?: string) {
+    const list = await listReady;
+    if (!list) return;
+    hash = hash.toLowerCase();
+    const match = matchHash(hash, fileName, list.files);
+    const entry = match.kind === "unknown" ? undefined : match.entry;
+    const status = $("[data-tone]");
+    status.dataset.tone = { genuine: "ok", mismatch: "bad", unknown: "warn" }[match.kind];
+    $("[data-status-title]").textContent = t(`c_${match.kind}_t`);
+    $("[data-status-sub]").textContent = match.kind === "genuine" ? t("c_genuine_sub") : t(`c_${match.kind}`, { version: list.version });
+    $("[data-file]").textContent = entry?.name ?? fileName ?? "–";
+    const vars = { name: entry?.name ?? fileName ?? "", version: list.version };
+    $("[data-detail]").textContent = match.kind === "genuine" ? "" : t(`c_${match.kind}_detail`, vars);
+    if (entry) {
+      const info = describeFile(entry.name);
+      $("[data-version]").textContent = list.version;
+      $("[data-kind]").textContent = t(`c_kind_${info.kind}`);
+      $("[data-platform]").textContent = info.platform;
+    }
+    const ok = match.kind === "genuine";
+    $("[data-yours]").innerHTML = groups(hash, entry?.sha256);
+    $("[data-official]").innerHTML = entry ? groups(entry.sha256) : "";
+    $("[data-official-row]").hidden = !entry;
+    for (const el of [$("[data-yours]"), $("[data-official]")]) el.classList.toggle("border-ok", ok), el.classList.toggle("border-danger", !ok);
+    const badge = $("[data-badge]");
+    badge.textContent = ok ? t("c_match_badge") : t("c_differs");
+    badge.className = badge.className.replace(/ bg-\S+$/, "") + (ok ? " bg-ok" : " bg-danger");
+    $("#c-hash-status").textContent = ok ? `✓ ${t("c_matches")}` : `× ${t("c_no_match")}`;
+    $("#c-hash-status").className = `text-sm ${ok ? "text-good" : "text-bad"}`;
+    hashInput.dataset.state = ok ? "ok" : "error";
+    matched = ok ? entry!.sha256 : undefined;
+    renderList(list);
+    show(match.kind);
+    if (receipt.getBoundingClientRect().top > innerHeight) receipt.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function clear() {
+    hashInput.dataset.state = "";
+    $("#c-hash-status").textContent = "";
+    matched = undefined;
+    show("idle");
+    listReady.then((list) => list && renderList(list));
+  }
+
+  /* ---------- the official list ---------- */
+  let showAllCli = false;
+  function row(f: HashEntry) {
+    const info = describeFile(f.name), hit = f.sha256 === matched;
+    return `<li class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 border-l-4 px-3 py-2 sm:grid-cols-[110px_minmax(0,1fr)_auto_150px_auto] ${hit ? "border-good bg-[#1f3a2a]" : "border-transparent bg-ink"}">
+      <span class="w-fit px-2 py-0.5 font-pixel text-[10px] tracking-wider uppercase max-sm:col-span-2 ${hit ? "bg-ok text-paper" : "bg-graphite text-cream"}">${escape(info.platform)}${info.installer ? ` · ${t("c_installer")}` : ""}</span>
+      <a href="${downloadUrl(f.name)}" class="min-w-0 truncate font-mono text-[12px] ${hit ? "text-good" : "text-cream"} hover:text-orange hover:underline" title="${t("c_download")} ${escape(f.name)}">${escape(f.name)}</a>
+      <span class="hidden font-pixel text-[10px] tracking-wider text-good uppercase sm:inline">${hit ? "✓" : ""}</span>
+      <code class="hidden font-mono text-[12px] sm:block ${hit ? "text-good" : "text-ash"}">${f.sha256.slice(0, 8)}…${f.sha256.slice(-8)}</code>
+      <button type="button" class="cursor-pointer p-1 ${hit ? "text-good" : "text-slip-ink"} hover:text-orange" data-copy-hash="${f.sha256}" aria-label="${t("share_copy")} SHA-256 ${escape(f.name)}"><svg viewBox="0 0 8 8" width="12" height="12" aria-hidden="true" shape-rendering="crispEdges"><path fill-rule="evenodd" d="M2 0h6v6H2zM3 1v4h4V1zM0 2h1v5h5v1H0z" fill="currentColor"/></svg></button>
+    </li>`;
+  }
+
+  function renderList(list: HashList) {
+    const kind = root.querySelector<HTMLInputElement>("input[name=kind]:checked")!.value;
+    const query = $<HTMLInputElement>("input[name=os]").value.trim().toLowerCase();
+    const files = list.files.filter((f) => {
+      const info = describeFile(f.name);
+      return (kind === "all" || info.kind === kind) && (!query || `${info.platform} ${f.name}`.toLowerCase().includes(query));
+    });
+    const gui = files.filter((f) => describeFile(f.name).kind === "gui");
+    const rest = files.filter((f) => describeFile(f.name).kind !== "gui");
+    const folded = kind === "all" && !query && !showAllCli && !rest.some((f) => f.sha256 === matched);
+    const section = (title: string, items: HashEntry[], fold: boolean) => !items.length ? "" : `<div class="grid gap-1.5">
+      <p class="font-pixel text-[10px] tracking-[0.18em] text-slip-ink uppercase">${title} · ${items.length}</p>
+      ${fold
+        ? `<button type="button" data-more class="flex cursor-pointer items-center gap-3 border-2 border-dashed border-line px-4 py-2.5 text-left hover:border-orange"><span class="font-pixel text-sm text-cream">› ${t("c_show_more", { n: items.length })}</span><span class="ml-auto hidden text-xs text-slip-ink sm:inline">${[...new Set(items.map((f) => describeFile(f.name).os))].join(" · ")}</span></button>`
+        : `<ul class="grid gap-1">${items.map(row).join("")}</ul>`}
+    </div>`;
+    $("[data-groups]").innerHTML = section(t("c_kind_gui"), gui, false) + section(`CLI · ${t("c_kind_source")}`, rest, folded);
+    $("[data-groups] [data-more]")?.addEventListener("click", () => { showAllCli = true; renderList(list); });
+    $("[data-groups]").querySelectorAll<HTMLButtonElement>("[data-copy-hash]").forEach((b) => b.addEventListener("click", () => navigator.clipboard.writeText(b.dataset.copyHash!).catch(() => {})));
+  }
+
+  listReady.then((list) => {
+    if (!list) { $("[data-trust-text]").textContent = t("c_list_error"); return; }
+    const fingerprint = list.fingerprint.replace(/(.{4})/g, "$1 ").trim();
+    $("[data-trust-text]").innerHTML = escape(t("c_trust", { signer: list.signer, fingerprint: "\u0000" })).replace("\u0000", `<span class="font-mono text-cream">${fingerprint}</span>`);
+    $("[data-signed]").textContent = `${t("c_signed", { signer: list.signer })} · ${list.fingerprint.slice(0, 4)}…${list.fingerprint.slice(-4)}`;
+    $("[data-count]").textContent = t("c_count", { version: list.version, n: list.files.length });
+    renderList(list);
+    $("[data-list-box]").hidden = false;
+    root.querySelectorAll("input[name=kind]").forEach((r) => r.addEventListener("change", () => renderList(list)));
+    $("input[name=os]").addEventListener("input", () => renderList(list));
+  });
+
   async function hashFile(file: File) {
-    $("[data-result]").hidden = true;
+    show("idle");
     const progress = $("[data-progress]"), bar = $("[data-bar]"), text = $("[data-progress-text]");
     progress.hidden = false;
     const hasher = sha256.create();
@@ -108,7 +268,7 @@ const cell = "border-b-2 border-dotted border-graphite/40 py-1.5 pr-3";
     progress.hidden = true;
     const hash = hex(hasher.digest());
     hashInput.value = hash;
-    show(hash, file.name);
+    check(hash, file.name);
   }
 
   fileInput.addEventListener("change", () => { const f = fileInput.files?.[0]; if (f) hashFile(f); });
@@ -122,8 +282,9 @@ const cell = "border-b-2 border-dotted border-graphite/40 py-1.5 pr-3";
   });
   hashInput.addEventListener("input", () => {
     const value = hashInput.value.trim();
-    hashInput.setAttribute("aria-invalid", String(!!value && !/^[0-9a-fA-F]{64}$/.test(value)));
-    if (/^[0-9a-fA-F]{64}$/.test(value)) show(value);
-    else $("[data-result]").hidden = true;
+    hashInput.setAttribute("aria-invalid", String(!!value && value.length === 64 && !HASH.test(value)));
+    if (HASH.test(value)) check(value);
+    else clear();
   });
+  bindCopyButtons(root, t("copied"));
 </script>
