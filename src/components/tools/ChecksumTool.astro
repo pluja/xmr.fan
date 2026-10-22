@@ -93,9 +93,9 @@ const FILTERS = [{ value: "all", name: t("c_all") }, { value: "gui", name: "GUI"
       <span data-count class="text-sm text-slip-ink"></span>
       <a href={DOWNLOADS_PAGE} target="_blank" rel="noopener" class={cx(link, "inline-flex items-center gap-1.5")}>{t("c_get_link")}<PixelIcon name="external" size={10} /></a>
       <div class="flex w-full flex-wrap gap-2 sm:ml-auto sm:w-auto">
-        <div class="flex bg-well p-0.5 font-pixel text-[11px] uppercase" role="radiogroup">
+        <div class="flex bg-well p-0.5 font-pixel text-xs uppercase" role="radiogroup">
           {FILTERS.map((f) => (
-            <label class="cursor-pointer px-3 py-1 text-slip-ink has-checked:bg-graphite has-checked:text-cream has-focus-visible:outline-2 has-focus-visible:outline-orange">
+            <label class="cursor-pointer px-3 py-1.5 text-ash has-checked:bg-graphite has-checked:text-cream has-focus-visible:outline-2 has-focus-visible:outline-orange">
               <input type="radio" name="kind" value={f.value} checked={f.value === "all"} class="sr-only" />{f.name}
             </label>
           ))}
@@ -190,16 +190,18 @@ const FILTERS = [{ value: "all", name: t("c_all") }, { value: "gui", name: "GUI"
 
   /* ---------- the official list ---------- */
   let showAllCli = false;
+  /** One official file: what it's for, its name (a download link), the short hash, and copy. */
   function row(f: HashEntry) {
     const info = describeFile(f.name), hit = f.sha256 === matched;
-    return `<li class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 border-l-4 px-3 py-2 sm:grid-cols-[110px_minmax(0,1fr)_auto_150px_auto] ${hit ? "border-good bg-[#1f3a2a]" : "border-transparent bg-ink"}">
-      <span class="w-fit px-2 py-0.5 font-pixel text-xs tracking-wider uppercase max-sm:col-span-2 ${hit ? "bg-ok text-paper" : "bg-graphite text-cream"}">${escape(info.platform)}${info.installer ? ` · ${t("c_installer")}` : ""}</span>
-      <a href="${downloadUrl(f.name)}" class="min-w-0 truncate font-mono text-[13px] ${hit ? "text-good" : "text-cream"} hover:text-orange hover:underline" title="${t("c_download")} ${escape(f.name)}">${escape(f.name)}</a>
-      <span class="hidden font-pixel text-xs tracking-wider text-good uppercase sm:inline">${hit ? "✓" : ""}</span>
-      <code class="hidden font-mono text-[13px] sm:block ${hit ? "text-good" : "text-ash"}">${f.sha256.slice(0, 8)}…${f.sha256.slice(-8)}</code>
-      <button type="button" class="cursor-pointer p-1 ${hit ? "text-good" : "text-slip-ink"} hover:text-orange" data-copy-hash="${f.sha256}" aria-label="${t("share_copy")} SHA-256 ${escape(f.name)}"><svg viewBox="0 0 8 8" width="12" height="12" aria-hidden="true" shape-rendering="crispEdges"><path fill-rule="evenodd" d="M2 0h6v6H2zM3 1v4h4V1zM0 2h1v5h5v1H0z" fill="currentColor"/></svg></button>
+    const what = `${info.platform}${info.installer ? ` · ${t("c_installer")}` : ""}`;
+    return `<li class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-0.5 border-l-4 px-4 py-2.5 sm:grid-cols-[minmax(0,13rem)_minmax(0,1fr)_auto_auto] ${hit ? "border-good bg-[#1f3a2a]" : "border-transparent bg-ink"}">
+      <span class="truncate text-[15px] ${hit ? "text-good" : "text-cream"}">${hit ? "✓ " : ""}${escape(what)}</span>
+      <button type="button" class="row-span-2 cursor-pointer self-center p-1.5 ${hit ? "text-good" : "text-slip-ink"} hover:text-orange sm:order-last sm:row-span-1" data-copy-hash="${f.sha256}" aria-label="${t("share_copy")} SHA-256 ${escape(f.name)}" title="${t("share_copy")} SHA-256"><svg viewBox="0 0 8 8" width="14" height="14" aria-hidden="true" shape-rendering="crispEdges"><path fill-rule="evenodd" d="M2 0h6v6H2zM3 1v4h4V1zM0 2h1v5h5v1H0z" fill="currentColor"/></svg></button>
+      <a href="${downloadUrl(f.name)}" class="min-w-0 font-mono text-[13px] break-all text-ash sm:truncate underline decoration-graphite underline-offset-3 hover:text-orange hover:decoration-orange" title="${t("c_download")} ${escape(f.name)}">${escape(f.name)}</a>
+      <code class="hidden font-mono text-[13px] sm:block ${hit ? "text-good" : "text-slip-ink"}">${f.sha256.slice(0, 8)}…${f.sha256.slice(-8)}</code>
     </li>`;
   }
+
 
   function renderList(list: HashList) {
     const kind = root.querySelector<HTMLInputElement>("input[name=kind]:checked")!.value;
@@ -212,9 +214,9 @@ const FILTERS = [{ value: "all", name: t("c_all") }, { value: "gui", name: "GUI"
     const rest = files.filter((f) => describeFile(f.name).kind !== "gui");
     const folded = kind === "all" && !query && !showAllCli && !rest.some((f) => f.sha256 === matched);
     const section = (title: string, items: HashEntry[], fold: boolean) => !items.length ? "" : `<div class="grid gap-1.5">
-      <p class="font-pixel text-xs tracking-[0.18em] text-slip-ink uppercase">${title} · ${items.length}</p>
+      <p class="mt-1 font-pixel text-xs tracking-[0.14em] text-ash uppercase">${title} · ${items.length}</p>
       ${fold
-        ? `<button type="button" data-more class="flex cursor-pointer items-center gap-3 border-2 border-dashed border-line px-4 py-2.5 text-left hover:border-orange"><span class="font-pixel text-sm text-cream">› ${t("c_show_more", { n: items.length })}</span><span class="ml-auto hidden text-xs text-slip-ink sm:inline">${[...new Set(items.map((f) => describeFile(f.name).os))].join(" · ")}</span></button>`
+        ? `<button type="button" data-more class="flex cursor-pointer items-center gap-3 border-2 border-dashed border-line px-4 py-2.5 text-left hover:border-orange"><span class="font-pixel text-sm text-cream">› ${t("c_show_more", { n: items.length })}</span><span class="ml-auto hidden text-sm text-ash sm:inline">${[...new Set(items.map((f) => describeFile(f.name).os))].join(" · ")}</span></button>`
         : `<ul class="grid gap-1">${items.map(row).join("")}</ul>`}
     </div>`;
     $("[data-groups]").innerHTML = section(t("c_kind_gui"), gui, false) + section(`CLI · ${t("c_kind_source")}`, rest, folded);
