@@ -30,22 +30,21 @@ const PRESETS = ["getmonero", "torproject", "grapheneos", "privacyguides", "p2po
   </section>
 
   <section data-stage class="grid gap-4 border-2 border-graphite bg-ink p-3 shadow-[8px_8px_0_var(--color-shade)] sm:p-4 [&:fullscreen]:flex [&:fullscreen]:flex-col [&:fullscreen]:items-center [&:fullscreen]:justify-center [&:fullscreen]:border-0 [&:fullscreen]:px-[3vw] [&:fullscreen]:py-[2vh] [&:fullscreen]:shadow-none [&:fullscreen>*]:w-[min(100%,calc(80vh*var(--ratio,1.78)))]" hidden>
-    <canvas data-viz class="block w-full [image-rendering:pixelated]"></canvas>
-    <div class="flex flex-wrap items-center gap-x-4 gap-y-3">
-      <button type="button" data-play class={cx(button.primary, "min-w-32 max-sm:w-full")}>
+    <canvas data-viz class="block mx-auto w-full max-w-[max(560px,calc(46vh*1.6))] [:fullscreen>&]:max-w-none [image-rendering:pixelated]"></canvas>
+    <div class="flex flex-wrap items-center gap-3">
+      <button type="button" data-play class={cx(button.primary, "min-w-32 max-sm:w-full")} title={t("bt_keys")}>
         <PixelIcon name="play" size={18} class="icon-play" /><PixelIcon name="pause" size={18} class="icon-pause hidden" /><span>{t("bt_play")}</span>
       </button>
-      <p data-info class="font-pixel text-sm text-orange max-sm:hidden"></p>
-      <div class="ml-auto flex items-center gap-3 max-sm:ml-0 max-sm:w-full">
+      <p data-info class="ml-1 font-pixel text-sm text-orange max-xl:hidden"></p>
+      <div class="ml-auto flex flex-wrap gap-2 max-sm:ml-0 max-sm:w-full">
+        <button type="button" data-video class={cx(button.ghost, "whitespace-nowrap max-sm:grow")}><PixelIcon name="download" size={16} class="text-orange" /><span>{t("bt_video")}</span></button>
+        <button type="button" data-copy-from="#bt-link" class={cx(button.ghost, "whitespace-nowrap max-sm:grow")}><PixelIcon name="copy" size={16} class="text-orange" /><span>{t("bt_copy_link")}</span></button>
+        <span id="bt-link" hidden></span>
+      </div>
+      <div class="flex items-center gap-3 sm:ml-2 max-sm:w-full">
         <label class="flex items-center gap-2 max-sm:flex-1"><PixelIcon name="sound" size={16} class="text-orange" /><Range name="volume" label={t("bt_volume")} class="max-sm:w-auto max-sm:flex-1" /></label>
         <button type="button" data-fullscreen class={cx(button.ghost, "px-3")} aria-label={t("bt_fullscreen")} title={t("bt_fullscreen")}><PixelIcon name="expand" size={16} /></button>
       </div>
-    </div>
-    <div class="flex flex-wrap items-center gap-2 border-t-2 border-graphite pt-4">
-      <button type="button" data-video class={button.ghost}><PixelIcon name="download" size={16} class="text-orange" /><span>{t("bt_video")}</span></button>
-      <button type="button" data-copy-from="#bt-link" class={button.ghost}><PixelIcon name="copy" size={16} class="text-orange" /><span>{t("bt_copy_link")}</span></button>
-      <span id="bt-link" hidden></span>
-      <span class="ml-auto hidden text-sm text-ash sm:inline">{t("bt_keys")}</span>
     </div>
   </section>
 
