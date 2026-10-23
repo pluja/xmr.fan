@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import data from "../data/donations.json" with { type: "json" };
-import { DONATION_CATEGORIES, spin } from "./donations.ts";
+import { DONATION_CATEGORIES, listed, spin } from "./donations.ts";
 import { LOCALES } from "../i18n/ui.ts";
 import { parseAddress } from "./monero.ts";
 
@@ -24,4 +24,12 @@ test("spin never repeats the current project when it can avoid it", () => {
   for (const r of [0, 0.5, 0.99]) assert.equal(spin(list, "a", () => r)?.id, "b");
   assert.equal(spin([{ id: "a" }], "a")?.id, "a");
   assert.equal(spin([], "a"), undefined);
+});
+
+test("projects drop out when their address goes missing or isn't confirmed for months", () => {
+  const today = new Date("2026-10-23T12:00:00Z");
+  assert.equal(listed({ checked: "2026-10-20" }, today), true);
+  assert.equal(listed({ checked: "2026-10-20", missing: true }, today), false);
+  assert.equal(listed({ checked: "2026-07-26" }, today), true);
+  assert.equal(listed({ checked: "2026-07-20" }, today), false);
 });

@@ -9,12 +9,12 @@ import TrustNote from "../ui/TrustNote.astro";
 import { cx, label } from "../ui/styles";
 import data from "../../data/donations.json";
 import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
-import { DONATION_CATEGORIES, type Donation } from "../../lib/donations";
+import { DONATION_CATEGORIES, listed, type Donation } from "../../lib/donations";
 
 interface Props { lang: Locale }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const list = data as Donation[];
+const list = (data as Donation[]).filter((d) => listed(d));
 const descriptions = Object.fromEntries(list.map((d) => [d.id, d.description[lang]]));
 const categories = Object.fromEntries(DONATION_CATEGORIES.map((c) => [c, t(`dn_cat_${c}`)]));
 const strings = pickStrings(lang, ["dn_source", "qr_alt", "dn_tx_desc", "copied"]);
