@@ -31,10 +31,11 @@ export type ToolGroup = (typeof TOOL_GROUPS)[number];
 export const TOOLS: Tool[] = [
   { id: "eli5", slug: "eli5", icon: "bulb", live: true, added: "2026-10-22", group: "fun", dark: true },
   { id: "uri", slug: "uri", icon: "qr", live: true, added: "2026-10-19", group: "paid" },
-  { id: "badge", slug: "badge", icon: "badge", live: true, added: "2026-10-23", group: "paid", dark: true },
   { id: "proof", slug: "verify", icon: "check", live: true, added: "2026-10-20", group: "paid", dark: true },
   { id: "tx", slug: "tx", icon: "hourglass", live: true, added: "2026-10-20", group: "paid", dark: true },
+  { id: "badge", slug: "badge", icon: "badge", live: true, added: "2026-10-23", group: "paid", dark: true },
   { id: "addr", slug: "address", icon: "lens", live: true, added: "2026-10-20", group: "wallet", dark: true },
+  { id: "art", slug: "art", icon: "critter", live: true, added: "2026-10-23", group: "wallet", dark: true },
   { id: "units", slug: "units", icon: "swap", live: true, added: "2026-10-19", group: "numbers", dark: true },
   { id: "fee", slug: "fee", icon: "tag", live: true, added: "2026-10-20", group: "numbers", dark: true },
   { id: "height", slug: "height", icon: "calendar", live: true, added: "2026-10-20", group: "wallet", dark: true },
@@ -46,7 +47,6 @@ export const TOOLS: Tool[] = [
   { id: "beat", slug: "beat", icon: "sound", live: true, added: "2026-10-21", group: "fun", dark: true },
   { id: "live", slug: "live", icon: "notes", live: true, added: "2026-10-21", group: "fun", dark: true },
   { id: "ring", slug: "ring", icon: "ring", live: true, added: "2026-10-23", group: "fun", dark: true },
-  { id: "art", slug: "art", icon: "critter", live: true, added: "2026-10-23", group: "fun", dark: true },
   { id: "donate", slug: "donate", icon: "heart", live: true, added: "2026-10-21", group: "fun", dark: true },
   { id: "gazette", slug: "news", icon: "paper", live: true, added: "2026-10-19" },
 ];

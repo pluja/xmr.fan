@@ -248,7 +248,7 @@ export default defineStrings({
   },
   ja: {
     t_timeline: "Moneroの年表",
-    d_timeline: "CryptoNoteからFCMP++まで、順を追って。",
+    d_timeline: "CryptoNote から FCMP++ まで、順を追って。",
     tl_intro: "Moneroは立ち止まったことがありません。以下のアップグレードはどれも、支払いをより匿名に、より小さく、マイニングをより公平にしました。すべてのノードが一緒に対応しました。",
     tl_all: "すべて",
     tl_topic_privacy: "プライバシー",

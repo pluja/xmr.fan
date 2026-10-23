@@ -55,7 +55,7 @@ export default defineStrings({
   },
   ru: {
     t_badge: "Значки Monero",
-    d_badge: "Значок «Принимаем Monero» для вашего сайта.",
+    d_badge: "Значок «Принимаем Monero» на сайт.",
     bd_wording: "Текст",
     bd_text_accepted: "Принимаем Monero",
     bd_text_pay: "Платите Monero",

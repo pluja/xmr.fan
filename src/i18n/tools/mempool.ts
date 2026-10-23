@@ -168,7 +168,7 @@ export default defineStrings({
   },
   ja: {
     t_pool: "メムプールの混雑度",
-    d_pool: "Moneroネットワークの混み具合をライブで表示。",
+    d_pool: "Monero ネットワークの混雑をライブで表示。",
     mp_fill: "採掘待ち",
     mp_fill_sub: "ブロックに入る{cap} kBのうち{kb} kB",
     mp_n_blocks: "{n}ブロック",
