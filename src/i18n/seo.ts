@@ -3,6 +3,8 @@ import { defineStrings } from "./define.ts";
 /** Search-friendly page titles and descriptions. Visible headings stay short; these name Monero and say what the page does. */
 export default defineStrings({
   en: {
+    seo_title_timeline: "Monero timeline: history, hard forks and upgrades",
+    seo_desc_timeline: "Monero's history in pixel cards: the CryptoNote paper, the 2014 launch, RingCT, Bulletproofs, RandomX, CLSAG, tail emission, view tags and the planned FCMP++.",
     seo_title_art: "Monero address art: a pixel critter for every address",
     seo_desc_art: "Turn any Monero address into its own pixel critter. Change one character and you get a different one, so look-alike addresses are easy to spot. Drawn in your browser.",
     seo_title_ring: "Monero ring signature game: can you find the real coin?",
@@ -43,6 +45,8 @@ export default defineStrings({
     seo_desc_gazette: "The week in Monero, every Monday: development, ecosystem, community and privacy news, price and network numbers, with sources and a podcast.",
   },
   es: {
+    seo_title_timeline: "Cronología de Monero: historia, hard forks y actualizaciones",
+    seo_desc_timeline: "La historia de Monero en tarjetas pixeladas: el paper de CryptoNote, el lanzamiento en 2014, RingCT, Bulletproofs, RandomX, CLSAG, la emisión de cola, las view tags y el futuro FCMP++.",
     seo_title_art: "Arte de direcciones Monero: una criatura pixelada para cada dirección",
     seo_desc_art: "Convierte cualquier dirección de Monero en su propia criatura pixelada. Cambia un carácter y obtendrás otra distinta, así es fácil detectar direcciones parecidas. Se dibuja en tu navegador.",
     seo_title_ring: "Juego de firmas de anillo de Monero: ¿encuentras la moneda real?",
@@ -83,6 +87,8 @@ export default defineStrings({
     seo_desc_gazette: "La semana de Monero cada lunes: desarrollo, ecosistema, comunidad y privacidad, precio y red, con fuentes y un podcast.",
   },
   ru: {
+    seo_title_timeline: "Хронология Monero: история, хардфорки и обновления",
+    seo_desc_timeline: "История Monero в пиксельных карточках: статья CryptoNote, запуск в 2014 году, RingCT, Bulletproofs, RandomX, CLSAG, хвостовая эмиссия, view-теги и будущий FCMP++.",
     seo_title_art: "Арт адресов Monero: пиксельный зверёк для каждого адреса",
     seo_desc_art: "Превратите любой адрес Monero в своего пиксельного зверька. Измените один символ — получится другой, так что похожие адреса легко заметить. Рисуется в вашем браузере.",
     seo_title_ring: "Игра о кольцевых подписях Monero: найдёте настоящую монету?",
@@ -123,6 +129,8 @@ export default defineStrings({
     seo_desc_gazette: "Неделя Monero каждый понедельник: разработка, экосистема, сообщество и приватность, цена и сеть, с источниками и подкастом.",
   },
   fr: {
+    seo_title_timeline: "Chronologie de Monero : histoire, hard forks et mises à jour",
+    seo_desc_timeline: "L'histoire de Monero en cartes pixel : le papier CryptoNote, le lancement en 2014, RingCT, Bulletproofs, RandomX, CLSAG, l'émission résiduelle, les view tags et le futur FCMP++.",
     seo_title_art: "Art d'adresse Monero : une bestiole en pixels pour chaque adresse",
     seo_desc_art: "Transformez toute adresse Monero en sa propre bestiole en pixels. Changez un caractère et vous en obtenez une autre : les adresses sosies se repèrent facilement. Dessiné dans votre navigateur.",
     seo_title_ring: "Jeu de signatures en anneau Monero : saurez-vous trouver la vraie pièce ?",
@@ -163,6 +171,8 @@ export default defineStrings({
     seo_desc_gazette: "La semaine Monero chaque lundi : développement, écosystème, communauté et vie privée, prix et réseau, avec les sources et un podcast.",
   },
   pt: {
+    seo_title_timeline: "Linha do tempo do Monero: história, hard forks e atualizações",
+    seo_desc_timeline: "A história do Monero em cartões pixelados: o artigo do CryptoNote, o lançamento em 2014, RingCT, Bulletproofs, RandomX, CLSAG, a emissão de cauda, as view tags e o futuro FCMP++.",
     seo_title_art: "Arte de endereço Monero: um bichinho pixelado para cada endereço",
     seo_desc_art: "Transforme qualquer endereço Monero em um bichinho pixelado só dele. Mude um caractere e surge outro, então endereços parecidos são fáceis de notar. Desenhado no seu navegador.",
     seo_title_ring: "Jogo de assinaturas em anel do Monero: você acha a moeda real?",
@@ -203,6 +213,8 @@ export default defineStrings({
     seo_desc_gazette: "A semana do Monero toda segunda-feira: desenvolvimento, ecossistema, comunidade e privacidade, preço e rede, com fontes e podcast.",
   },
   ja: {
+    seo_title_timeline: "Moneroの年表：歴史、ハードフォーク、アップグレード",
+    seo_desc_timeline: "ピクセルカードで見るMoneroの歴史：CryptoNote論文、2014年のローンチ、RingCT、Bulletproofs、RandomX、CLSAG、テールエミッション、ビュータグ、そして計画中のFCMP++。",
     seo_title_art: "Moneroアドレスアート:アドレスごとのドット絵の生き物",
     seo_desc_art: "Moneroアドレスを、そのアドレスだけのドット絵の生き物に変えます。1文字変えると別の生き物になるので、よく似たアドレスも見分けやすくなります。ブラウザ内で描画します。",
     seo_title_ring: "Moneroリング署名ゲーム:本物のコインを見つけられる?",

@@ -14,6 +14,7 @@ import LiveTool from "../../components/tools/LiveTool.astro";
 import RingTool from "../../components/tools/RingTool.astro";
 import NodeTool from "../../components/tools/NodeTool.astro";
 import VerifyTool from "../../components/tools/VerifyTool.astro";
+import TimelineTool from "../../components/tools/TimelineTool.astro";
 import TxTool from "../../components/tools/TxTool.astro";
 import UnitConverter from "../../components/tools/UnitConverter.astro";
 import { langFromParams, localeParams } from "../../i18n/ui";
@@ -23,7 +24,7 @@ export const getStaticPaths = () =>
   localeParams().flatMap(({ lang }) =>
     TOOL_PAGES.map((tool) => ({ params: { lang, tool: tool.slug }, props: { tool } })));
 
-const COMPONENTS = { units: UnitConverter, addr: AddressTool, fee: FeeTool, height: HeightTool, node: NodeTool, mining: MiningTool, proof: VerifyTool, dl: ChecksumTool, tx: TxTool, donate: DonateTool, beat: BeatTool, live: LiveTool, eli5: Eli5Tool, pool: MempoolTool, ring: RingTool, art: ArtTool } as const;
+const COMPONENTS = { units: UnitConverter, addr: AddressTool, fee: FeeTool, height: HeightTool, node: NodeTool, mining: MiningTool, proof: VerifyTool, dl: ChecksumTool, tx: TxTool, donate: DonateTool, beat: BeatTool, live: LiveTool, eli5: Eli5Tool, pool: MempoolTool, ring: RingTool, art: ArtTool, timeline: TimelineTool } as const;
 
 const { tool } = Astro.props as { tool: Tool };
 const lang = langFromParams(Astro.params);

@@ -1,0 +1,93 @@
+---
+import PixelIcon from "../PixelIcon.astro";
+import TrustNote from "../ui/TrustNote.astro";
+import { chip, cx, tone } from "../ui/styles";
+import { useTranslations, type Key, type Locale } from "../../i18n/ui";
+import { MILESTONES, TOPICS } from "../../lib/timeline";
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const month = new Intl.DateTimeFormat(lang, { month: "short", timeZone: "UTC" });
+const number = new Intl.NumberFormat(lang);
+const RINGS = MILESTONES.filter((m) => m.ring !== undefined);
+const tab = "relative inline-flex min-h-11 shrink-0 cursor-pointer items-center whitespace-nowrap px-3 font-pixel text-sm text-ash has-checked:bg-graphite has-checked:text-cream has-focus-visible:outline-2 has-focus-visible:outline-orange";
+const nowIndex = MILESTONES.findIndex((m) => m.planned);
+---
+<div id="timeline-tool" class="grid grid-cols-1 gap-8">
+  <p class="max-w-[70ch] leading-relaxed text-cream/80">{t("tl_intro")}</p>
+
+  <section class="grid gap-3" aria-labelledby="tl-ring-t">
+    <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+      <h2 id="tl-ring-t" class="flex items-center gap-2.5 font-pixel text-sm tracking-[0.2em] text-cream uppercase"><span class="size-2 bg-orange"></span>{t("tl_ring_t")}</h2>
+      <p class="text-sm text-ash">{t("tl_ring_help")}</p>
+    </div>
+    <ol class="grid grid-cols-6 items-end gap-1.5 border-2 border-graphite bg-ink px-3 pt-4 pb-3 sm:gap-3 sm:px-5">
+      {RINGS.map((m) => {
+        const all = m.ring === "all";
+        const height = all ? 100 : Math.round(10 + (Number(m.ring) / 16) * 75);
+        return (
+          <li class="grid content-end justify-items-center gap-1.5">
+            <span class={cx("font-pixel text-lg leading-none sm:text-2xl", all ? "text-orange" : "text-cream")}>{all ? t("tl_ring_all") : m.ring}</span>
+            <span class={cx("block w-full", all ? "bg-[repeating-linear-gradient(135deg,var(--color-orange)_0_6px,transparent_6px_10px)]" : "bg-orange/80")} style={`height:${height * 0.9}px`}></span>
+            <span class="font-mono text-xs text-ash">{m.planned ? t("tl_planned") : m.date.slice(0, 4)}</span>
+          </li>
+        );
+      })}
+    </ol>
+  </section>
+
+  <section class="grid gap-5">
+    <fieldset class="flex w-fit min-w-0 flex-wrap bg-well p-0.5 max-sm:w-full max-sm:flex-nowrap max-sm:overflow-x-auto" aria-label={t("t_timeline")}>
+      <label class={tab}><input type="radio" name="topic" value="" class="sr-only" checked />{t("tl_all")}</label>
+      {TOPICS.map((topic) => <label class={tab}><input type="radio" name="topic" value={topic} class="sr-only" />{t(`tl_topic_${topic}`)}</label>)}
+    </fieldset>
+
+    <ol data-list class="relative grid gap-4 before:absolute before:top-2 before:bottom-2 before:left-[calc(3.625rem-1px)] before:w-0.5 before:bg-graphite sm:before:left-[calc(6.75rem-1px)]">
+      {MILESTONES.map((m, i) => (
+        <>
+          {i === nowIndex && (
+            <li data-now class="relative grid grid-cols-[3rem_minmax(0,1fr)] items-center gap-x-5 sm:grid-cols-[6rem_minmax(0,1fr)] sm:gap-x-6">
+              <span class="text-right font-pixel text-xs text-good sm:text-sm">{t("tl_now")}</span>
+              <span class="relative h-0.5 bg-good/60 before:absolute before:top-1/2 before:-left-[calc(0.625rem+6px)] before:size-3 sm:before:-left-[calc(0.75rem+6px)] before:-translate-y-1/2 before:bg-good"></span>
+            </li>
+          )}
+          <li data-topic={m.topic} class="relative grid grid-cols-[3rem_minmax(0,1fr)] gap-x-5 sm:grid-cols-[6rem_minmax(0,1fr)] sm:gap-x-6">
+            <p class="grid content-start justify-items-end pt-3 text-right">
+              {m.planned ? (
+                <span class="font-pixel text-xs text-orange sm:text-sm">{t("tl_planned")}</span>
+              ) : (
+                <>
+                  <span class="font-pixel text-base leading-none text-cream sm:text-xl">{m.date.slice(0, 4)}</span>
+                  <span class="font-mono text-xs text-ash uppercase">{month.format(new Date(`${m.date}-01T00:00:00Z`))}</span>
+                </>
+              )}
+            </p>
+            <article class={cx("relative grid gap-2 border-2 bg-ink px-4 py-3.5 sm:px-5", m.planned ? "border-dashed border-orange/70" : "border-graphite")}>
+              <span class={cx("absolute top-4 -left-[calc(0.625rem+8px)] size-3 sm:-left-[calc(0.75rem+8px)]", m.planned ? "border-2 border-orange bg-ink-2" : m.fork ? "bg-orange" : "bg-ash")} aria-hidden="true"></span>
+              <h3 class="flex items-center gap-2.5 font-pixel text-lg leading-snug text-cream">
+                <PixelIcon name={m.icon} size={18} class="shrink-0 text-orange" />{t(`tl_${m.id}_t` as Key)}
+              </h3>
+              <p class="max-w-[65ch] leading-relaxed text-cream/80">{t(`tl_${m.id}_b` as Key)}</p>
+              <p class="flex flex-wrap gap-2 empty:hidden">
+                {m.fork && <span class={cx(chip, tone.accent, "font-mono text-xs normal-case tracking-normal")}>{t("tl_fork", { version: m.fork.version, height: number.format(m.fork.height) })}</span>}
+                <span class={cx(chip, tone.neutral, "text-xs")}>{t(`tl_topic_${m.topic}`)}</span>
+              </p>
+            </article>
+          </li>
+        </>
+      ))}
+    </ol>
+  </section>
+
+  <TrustNote icon="info" class="border-t-2 border-graphite pt-4">{t("tl_sources")}</TrustNote>
+</div>
+
+<script>
+  const root = document.getElementById("timeline-tool")!;
+  const items = root.querySelectorAll<HTMLElement>("[data-topic]");
+  root.querySelectorAll<HTMLInputElement>("input[name=topic]").forEach((r) => r.addEventListener("change", () => {
+    items.forEach((li) => (li.hidden = !!r.value && li.dataset.topic !== r.value));
+    root.querySelector<HTMLElement>("[data-now]")!.hidden = !!r.value && r.value !== "privacy";
+  }));
+</script>

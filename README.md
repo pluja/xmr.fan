@@ -22,6 +22,7 @@ No trackers, no accounts. Available in English, Spanish, Russian, French, Portug
 | [`/ring`](https://xmr.fan/ring) | Ring game: spot the real coin among decoys under 2015, today's and FCMP++ rules |
 | [`/art`](https://xmr.fan/art) | Address art: a pixel critter hatched from any address, to spot look-alike addresses |
 | [`/donate`](https://xmr.fan/donate) | Donation roulette: a random privacy, free software or Monero project to support |
+| [`/timeline`](https://xmr.fan/timeline) | Monero timeline: milestones and network upgrades from CryptoNote to FCMP++ |
 | [`/beat`](https://xmr.fan/beat) | Address beat: any Monero address as a looping chiptune with a pixel visualizer |
 | [`/live`](https://xmr.fan/live) | Monero live: the mempool and new blocks as pixel art and calm background music |
 | [`/eli5`](https://xmr.fan/eli5) | Monero ELI5: what Monero is, in eight short animated pictures |
