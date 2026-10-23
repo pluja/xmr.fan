@@ -143,6 +143,7 @@ const PRESETS = ["getmonero", "torproject", "grapheneos", "privacyguides", "p2po
     a.href = out.toDataURL("image/png");
     a.click();
   });
+  box.field.addEventListener("input", load);
   root.querySelectorAll<HTMLButtonElement>("[data-preset]").forEach((b) => b.addEventListener("click", () => { box.set(b.dataset.preset!); load(); }));
   bindCopyButtons(root, t("copied"));
 
