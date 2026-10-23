@@ -1,20 +1,63 @@
 ---
 import Container from "./Container.astro";
 import PixelIcon from "./PixelIcon.astro";
+import PixelText from "./PixelText.astro";
 import { localePath, useTranslations, type Locale } from "../i18n/ui";
+import { ONION_HOST } from "../lib/site";
+
 const lang = Astro.props.lang as Locale;
 const t = useTranslations(lang);
+const heading = "font-pixel text-xs tracking-[0.18em] text-ash uppercase";
+const item = "text-[15px] text-cream/80 no-underline hover:text-orange";
+const onionShort = `${ONION_HOST.slice(0, 10)}…${ONION_HOST.slice(-12)}`;
 ---
-<footer class="on-ink bg-ink py-6 font-pixel text-sm text-orange">
-  <Container class="flex flex-wrap justify-between gap-4">
-    <p class="flex flex-wrap gap-x-4 gap-y-1">
-      <span>{t("footer")}</span>
-      <span set:html={t("footer_by", { name: '<a class="text-orange" href="https://kycnot.me" rel="noopener">KYCnot.me</a>' })} />
-    </p>
-    <nav class="flex flex-wrap gap-x-5 gap-y-2">
-      <a class="text-orange" href={localePath(lang, "/sponsor")}>{t("sp_become")}</a>
-      <a class="text-orange" href={localePath(lang, "/sponsors")}>{t("sp_all_t")}</a>
-      <a class="inline-flex items-center gap-1.5 text-orange" href={localePath(lang, "/feeds")}><PixelIcon name="rss" size={14} />{t("feeds")}</a>
+<footer id="site-footer" class="on-ink bg-ink text-cream" data-copied={t("copied")}>
+  <Container class="grid grid-cols-2 gap-x-6 gap-y-10 pt-12 pb-8 md:grid-cols-[minmax(0,1.5fr)_minmax(0,0.8fr)_minmax(0,0.8fr)_minmax(0,1.6fr)] md:gap-x-10">
+    <div class="col-span-2 grid content-start gap-3 md:col-span-1">
+      <a href={localePath(lang, "/")} class="w-fit text-orange" aria-label="xmr.fan"><PixelText text="xmr.fan" class="block h-7 w-auto" /></a>
+      <p class="font-pixel text-sm text-cream">{t("tagline")}</p>
+      <p class="max-w-[30ch] text-sm leading-relaxed text-ash">{t("footer")}</p>
+      <p class="mt-1 font-pixel text-base text-cream [&_a]:border-b-2 [&_a]:border-orange [&_a]:text-orange [&_a]:no-underline [&_a:hover]:border-cream [&_a:hover]:text-cream" set:html={t("footer_by", { name: '<a href="https://kycnot.me" rel="noopener">KYCnot.me</a>' })} />
+    </div>
+
+    <nav class="grid content-start gap-3" aria-labelledby="ft-explore">
+      <h2 id="ft-explore" class={heading}>{t("ft_explore")}</h2>
+      <a class={item} href={localePath(lang, "/")}>{t("nav_tools")}</a>
+      <a class={item} href={localePath(lang, "/news")}>{t("nav_gazette")}</a>
+      <a class:list={[item, "inline-flex items-center gap-2"]} href={localePath(lang, "/feeds")}><PixelIcon name="rss" size={12} class="text-orange" />{t("feeds")}</a>
     </nav>
+
+    <nav class="grid content-start gap-3" aria-labelledby="ft-support">
+      <h2 id="ft-support" class={heading}>{t("ft_support")}</h2>
+      <a class={item} href={localePath(lang, "/sponsor")}>{t("sp_become")}</a>
+      <a class={item} href={localePath(lang, "/sponsors")}>{t("sp_all_t")}</a>
+    </nav>
+
+    <div class="col-span-2 grid content-start gap-3 md:col-span-1">
+      <h2 class:list={[heading, "flex items-center gap-2"]}><PixelIcon name="onion" size={12} class="text-[#b48ce6]" />{t("ft_onion_t")}</h2>
+      <p class="text-sm text-ash">{t("ft_onion_b")}</p>
+      <div class="flex min-w-0 items-stretch border-2 border-graphite bg-well">
+        <a href={`http://${ONION_HOST}`} title={ONION_HOST} class="min-w-0 flex-1 truncate px-3 py-2.5 font-mono text-[13px] text-cream no-underline hover:text-orange">
+          {onionShort}
+        </a>
+        <span id="ft-onion" hidden>{`http://${ONION_HOST}`}</span>
+        <button type="button" data-copy-from="#ft-onion" class="flex shrink-0 cursor-pointer items-center gap-1.5 border-l-2 border-graphite px-3 font-pixel text-xs text-orange hover:bg-graphite" aria-label={t("ft_copy_onion")}>
+          <PixelIcon name="copy" size={12} /><span>{t("ft_copy_onion")}</span>
+        </button>
+      </div>
+    </div>
+  </Container>
+
+  <Container>
+    <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t-2 border-graphite py-5 font-pixel text-xs text-ash">
+      <span>© {new Date().getFullYear()} xmr.fan</span>
+    </div>
   </Container>
 </footer>
+
+<script>
+  import { bindCopyButtons } from "./ui/copy";
+
+  const footer = document.getElementById("site-footer")!;
+  bindCopyButtons(footer, footer.dataset.copied!);
+</script>
