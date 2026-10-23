@@ -211,7 +211,7 @@
   },
   "no": 1,
   "week": "2026-10-12",
-  "draft": true,
+  "draft": false,
   "sample": false,
   "network": {
     "hash": 6.04,
@@ -299,6 +299,7 @@
   "podcast": {
     "file": "/podcast/2026-10-12.mp3",
     "duration": 639,
+    "bytes": 5109385,
     "hosts": [
       "Chris",
       "Jessica"
@@ -576,13 +577,13 @@
         "host": "Jessica",
         "text": "Update your node, ask where your invoices go, and we'll see you next week."
       }
-    ],
-    "bytes": 5109385
+    ]
   },
   "podcasts": {
     "es": {
       "file": "/podcast/2026-10-12.es.mp3",
       "duration": 647,
+      "bytes": 5178348,
       "hosts": [
         "Chris",
         "Jessica"
@@ -824,8 +825,7 @@
           "host": "Chris",
           "text": "¡Hasta la próxima!"
         }
-      ],
-      "bytes": 5178348
+      ]
     }
   },
   "generated": {
