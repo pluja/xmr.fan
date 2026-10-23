@@ -4,12 +4,14 @@ import AddressInput from "../ui/AddressInput.astro";
 import TrustNote from "../ui/TrustNote.astro";
 import { button, cx, message } from "../ui/styles";
 import donations from "../../data/donations.json";
+import { RARITIES, RARITY_ODDS } from "../../lib/critter";
 import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
 
 interface Props { lang: Locale }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const strings = pickStrings(lang, ["ar_error", "ar_meet", "copied"]);
+const strings = pickStrings(lang, ["ar_error", "ar_meet", "ar_from", "ar_card_alt", "ar_rarity_common", "ar_rarity_rare", "ar_rarity_epic", "ar_rarity_legendary", "copied"]);
+const ODDS_COLOR = { common: "bg-[#8c8494]", rare: "bg-[#4f8dff]", epic: "bg-[#b46bff]", legendary: "bg-[#ffc83d]" } as const;
 const PRESETS = ["getmonero", "torproject", "grapheneos", "privacyguides", "p2pool", "wikileaks"]
   .map((id) => donations.find((d) => d.id === id))
   .filter((d): d is (typeof donations)[number] => !!d);
@@ -25,18 +27,22 @@ const PRESETS = ["getmonero", "torproject", "grapheneos", "privacyguides", "p2po
     </div>
   </section>
 
-  <section data-result data-empty class="group/art grid grid-cols-1 items-center gap-6 md:grid-cols-[auto_minmax(0,1fr)] md:gap-10">
-    <figure class="mx-auto grid w-full max-w-72 gap-3 border-2 border-graphite bg-ink p-3 shadow-[8px_8px_0_var(--color-shade)]">
-      <canvas data-art width="256" height="256" class="block aspect-square w-full [image-rendering:pixelated]"></canvas>
-      <figcaption class="grid gap-0.5 px-1 pb-1">
-        <span data-name class="font-pixel text-xl leading-tight text-cream group-data-empty/art:text-ash">???</span>
-        <span data-short class="font-mono text-xs text-ash [&_b]:font-medium [&_b]:text-apricot">—</span>
-      </figcaption>
-    </figure>
+  <section data-result data-empty data-rarity="common" class="group/art grid grid-cols-1 items-center gap-6 md:grid-cols-[auto_minmax(0,1fr)] md:gap-10">
+    <canvas data-card class="mx-auto block w-full max-w-[300px] [image-rendering:pixelated] drop-shadow-[8px_8px_0_var(--color-shade)]" role="img" aria-label={t("ar_empty_t")}></canvas>
     <div class="grid content-center gap-4">
       <h2 data-heading class="font-pixel text-xl leading-snug text-cream sm:text-2xl">{t("ar_empty_t")}</h2>
       <p class="max-w-[58ch] leading-relaxed text-cream/80">{t("ar_how")}</p>
-      <p class="flex max-w-[58ch] items-start gap-2.5 border-l-4 border-orange bg-well px-4 py-3 text-sm leading-relaxed text-cream/80">{t("ar_tip")}</p>
+      <div class="grid gap-2">
+        <p class="font-pixel text-xs tracking-[0.14em] text-ash uppercase">{t("ar_odds")}</p>
+        <ul class="flex flex-wrap gap-2">
+          {RARITIES.map((r, i) => (
+            <li data-odds={r} class="flex items-center gap-2 border-2 border-graphite px-2.5 py-1.5 text-sm text-ash data-on:border-current data-on:text-cream">
+              <span class={cx("size-2.5", ODDS_COLOR[r])} aria-hidden="true"></span>{t(`ar_rarity_${r}`)}<span class="font-mono text-xs text-ash">{RARITY_ODDS[i] * 100}%</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <p class="max-w-[58ch] border-l-4 border-orange bg-well px-4 py-3 text-sm leading-relaxed text-cream/80">{t("ar_tip")}</p>
       <div class="flex flex-wrap gap-3 group-data-empty/art:hidden">
         <button type="button" data-download class={button.primary}><PixelIcon name="download" size={16} /><span>{t("ar_download")}</span></button>
         <button type="button" data-copy-from="#ar-link" class={button.ghost}><PixelIcon name="copy" size={16} class="text-orange" /><span>{t("bt_copy_link")}</span></button>
@@ -49,41 +55,53 @@ const PRESETS = ["getmonero", "torproject", "grapheneos", "privacyguides", "p2po
 </div>
 
 <script>
-  import { addressInput, shortAddressHtml } from "../ui/address-input";
+  import { addressInput } from "../ui/address-input";
   import { bindCopyButtons } from "../ui/copy";
   import { readStrings } from "../../i18n/format";
-  import { critterFromAddress, drawCritter, SIZE, type Critter } from "../../lib/critter";
+  import { critterFromAddress, SIZE, type Critter } from "../../lib/critter";
+  import { CARD_H, CARD_W, drawCard } from "../../lib/critter-card";
   import { parseAddress } from "../../lib/monero";
 
   const root = document.getElementById("art-tool")!;
   const t = readStrings(root);
   const $ = <T extends HTMLElement = HTMLElement>(s: string) => root.querySelector<T>(s)!;
-  const result = $("[data-result]"), canvas = $<HTMLCanvasElement>("[data-art]");
-  const g = canvas.getContext("2d")!;
+  const result = $("[data-result]"), canvas = $<HTMLCanvasElement>("[data-card]");
   const box = addressInput($("[data-address-input]"), () => load());
   const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let current = "", critter: Critter | undefined, hatch = 0;
+  const SCALE = 2;
+  canvas.width = CARD_W * SCALE; canvas.height = CARD_H * SCALE;
+  const g = canvas.getContext("2d")!;
+  g.scale(SCALE, SCALE);
+  /** Russian uses Pixelify Sans: DotGothic16 has no Cyrillic. */
+  const font = document.documentElement.lang === "ru" ? '"Pixelify Sans", monospace' : '"DotGothic16", monospace';
+  let current = "", critter: Critter | undefined, born = 0, frame = 0;
 
-  /** A grey "?" egg, shown until there's a valid address. */
-  function drawEgg() {
-    g.fillStyle = "#1f1d22"; g.fillRect(0, 0, 256, 256);
+  const cardOptions = (time: number) => ({
+    address: current,
+    rarityLabel: t(`ar_rarity_${critter!.rarity}`),
+    fromLabel: t("ar_from"),
+    font,
+    time,
+    // A short blink every few seconds.
+    blink: time % 3.6 > 3.45,
+    hidden: Math.max(0, SIZE - Math.floor(time * 40)),
+  });
+
+  /** The back of a card, until there's a valid address. */
+  function drawBack() {
+    g.clearRect(0, 0, CARD_W, CARD_H);
+    g.fillStyle = "#4a4450"; g.fillRect(0, 0, CARD_W, CARD_H);
+    g.fillStyle = "#2b282d"; g.fillRect(6, 6, CARD_W - 12, CARD_H - 12);
+    for (let y = 12; y < CARD_H - 12; y += 12) for (let x = 12 + ((y / 12) % 2) * 6; x < CARD_W - 12; x += 12) { g.fillStyle = "#36323a"; g.fillRect(x, y, 4, 4); }
     const egg = ["....oooo....", "...o....o...", "..o......o..", "..o..oo..o..", ".o..o..o..o.", ".o.....o..o.", ".o....o...o.", ".o...o....o.", ".o........o.", ".o...o....o.", "..o......o..", "...oooooo..."];
-    g.fillStyle = "#4a454f";
-    egg.forEach((row, y) => [...row].forEach((p, x) => p === "o" && g.fillRect((x + 2) * 16, (y + 2) * 16, 16, 16)));
+    g.fillStyle = "#6f6874";
+    egg.forEach((row, y) => [...row].forEach((p, x) => p === "o" && g.fillRect(48 + x * 12, 96 + y * 12, 12, 12)));
   }
 
-  /** Pops the critter in row by row, like it's hatching. */
-  function show(c: Critter) {
-    const run = ++hatch;
-    const scale = 256 / SIZE;
-    if (still) return drawCritter(g, c, scale);
-    let row = 0;
-    const step = () => {
-      if (run !== hatch) return;
-      drawCritter(g, { ...c, rows: c.rows.map((r, y) => (y < SIZE - row ? ".".repeat(SIZE) : r)) }, scale);
-      if (++row <= SIZE) setTimeout(step, 28);
-    };
-    step();
+  function tick(now: number) {
+    if (!critter) return;
+    drawCard(g, critter, cardOptions(still ? 99 : (now - born) / 1000));
+    if (!still) frame = requestAnimationFrame(tick);
   }
 
   function load() {
@@ -93,28 +111,33 @@ const PRESETS = ["getmonero", "torproject", "grapheneos", "privacyguides", "p2po
     box.show(!value ? "" : ok ? "ok" : "error");
     $("#ar-message").textContent = value && !ok ? t("ar_error") : "";
     if (!ok) {
-      current = ""; critter = undefined; hatch++;
+      current = ""; critter = undefined;
+      cancelAnimationFrame(frame);
       result.toggleAttribute("data-empty", true);
-      $("[data-name]").textContent = "???"; $("[data-short]").textContent = "—";
-      return drawEgg();
+      root.querySelectorAll("[data-odds]").forEach((li) => li.removeAttribute("data-on"));
+      return drawBack();
     }
     if (value === current) return;
     current = value;
     critter = critterFromAddress(value);
     result.toggleAttribute("data-empty", false);
-    $("[data-name]").textContent = critter.name;
-    $("[data-short]").innerHTML = shortAddressHtml(value);
+    root.querySelectorAll<HTMLElement>("[data-odds]").forEach((li) => li.toggleAttribute("data-on", li.dataset.odds === critter!.rarity));
     $("[data-heading]").textContent = t("ar_meet", { name: critter.name });
+    canvas.setAttribute("aria-label", t("ar_card_alt", { name: critter.name, rarity: t(`ar_rarity_${critter.rarity}`) }));
     $("#ar-link").textContent = `${location.origin}${location.pathname}#${value}`;
     history.replaceState(null, "", `#${value}`);
-    show(critter);
+    cancelAnimationFrame(frame);
+    born = performance.now();
+    document.fonts.load(`17px ${font}`, critter.name).finally(() => (frame = requestAnimationFrame(tick)));
   }
 
   $("[data-download]").addEventListener("click", () => {
     if (!critter) return;
     const out = document.createElement("canvas");
-    out.width = out.height = 512;
-    drawCritter(out.getContext("2d")!, critter, 512 / SIZE);
+    out.width = CARD_W * 3; out.height = CARD_H * 3;
+    const o = out.getContext("2d")!;
+    o.scale(3, 3);
+    drawCard(o, critter, { ...cardOptions(99), blink: false, time: 1.5 });
     const a = document.createElement("a");
     a.download = `${critter.name.toLowerCase().replace(/\s+/g, "-")}.png`;
     a.href = out.toDataURL("image/png");
