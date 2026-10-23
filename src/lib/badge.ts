@@ -1,186 +1,173 @@
-/* "Monero accepted" badges, drawn on a canvas: a classic two-part badge, a pill and a pixel sticker. */
-import { MONERO_LOGO } from "./qr.ts";
+/* "We accept Monero" badges in pixel art: a dark tab with the pixel Monero logo and a panel with
+   bitmap lettering. Built pixel by pixel, so they export as crisp SVG that needs no font. */
+import { glyph, GLYPH_W, textWidth } from "./pixel-font.ts";
 
-export const BADGE_STYLES = ["classic", "pill", "pixel"] as const;
-export type BadgeStyle = (typeof BADGE_STYLES)[number];
+export const BADGE_SIZES = ["normal", "medium", "compact"] as const;
+export type BadgeSize = (typeof BADGE_SIZES)[number];
 export const BADGE_THEMES = ["light", "dark", "orange"] as const;
 export type BadgeTheme = (typeof BADGE_THEMES)[number];
 export const BADGE_TEXTS = ["accepted", "pay", "donate"] as const;
 export type BadgeText = (typeof BADGE_TEXTS)[number];
+export const BADGE_LANGS = ["en", "es", "fr", "pt", "ru"] as const;
+export type BadgeLang = (typeof BADGE_LANGS)[number];
 
-const PIXEL_THEMES: Record<BadgeTheme, { bg: string; fg: string; edge: string; shadow: string }> = {
-  orange: { bg: "#fb8c3c", fg: "#2b282d", edge: "#2b282d", shadow: "#7a3510" },
-  dark: { bg: "#2b282d", fg: "#fff1e4", edge: "#fb8c3c", shadow: "#151317" },
-  light: { bg: "#fffaf5", fg: "#2b282d", edge: "#2b282d", shadow: "#fb8c3c" },
+/** Normal badges show a small label over MONERO; medium ones a single line. */
+export const BADGE_WORDS: Record<BadgeLang, Record<BadgeText, { label: string; line: string }>> = {
+  en: { accepted: { label: "WE ACCEPT", line: "MONERO ACCEPTED" }, pay: { label: "PAY WITH", line: "PAY WITH MONERO" }, donate: { label: "DONATE WITH", line: "DONATE MONERO" } },
+  es: { accepted: { label: "ACEPTAMOS", line: "SE ACEPTA MONERO" }, pay: { label: "PAGA CON", line: "PAGA CON MONERO" }, donate: { label: "DONA CON", line: "DONA CON MONERO" } },
+  fr: { accepted: { label: "NOUS ACCEPTONS", line: "MONERO ACCEPTÉ" }, pay: { label: "PAYEZ EN", line: "PAYEZ EN MONERO" }, donate: { label: "DONS EN", line: "DONS EN MONERO" } },
+  pt: { accepted: { label: "ACEITAMOS", line: "MONERO ACEITO" }, pay: { label: "PAGUE COM", line: "PAGUE COM MONERO" }, donate: { label: "DOE COM", line: "DOE COM MONERO" } },
+  ru: { accepted: { label: "ПРИНИМАЕМ", line: "ПРИНИМАЕМ MONERO" }, pay: { label: "ОПЛАТА В", line: "ОПЛАТА В MONERO" }, donate: { label: "ДОНАТЫ В", line: "ДОНАТЫ В MONERO" } },
 };
-const ORANGE = "#f26822", GRAY = "#4c4c4c";
-/** Body, the big MONERO word and the line under it. */
-const THEMES: Record<BadgeTheme, { body: string; big: string; sub: string; edgeTop: string; edgeBottom: string }> = {
-  light: { body: "#f9f7f4", big: ORANGE, sub: GRAY, edgeTop: ORANGE, edgeBottom: GRAY },
-  dark: { body: "#232126", big: ORANGE, sub: "#f3ece4", edgeTop: ORANGE, edgeBottom: "#4c4950" },
-  orange: { body: ORANGE, big: "#ffffff", sub: "#2b282d", edgeTop: "#ffffff", edgeBottom: GRAY },
-};
-const LOGO_COLORS: Record<string, string> = { o: "#ff6600", k: "#4c4c4c", w: "#ffffff" };
 
-export interface BadgeOptions {
-  style: BadgeStyle;
-  theme: BadgeTheme;
-  /** The whole phrase, for the pixel style. */
+const LOGO = [
+  "....oooo....",
+  "..oooooooo..",
+  ".oooooooooo.",
+  "oowwoooowwoo",
+  "oowwwoowwwoo",
+  "oowwkwwkwwoo",
+  "oowwkkkkwwoo",
+  "oowwkkkkwwoo",
+  "wwwwkkkkwwww",
+  ".kkkkkkkkkk.",
+  "..kkkkkkkk..",
+  "....kkkk....",
+];
+const LOGO_COLORS: Record<string, string> = { o: "#ff8e3c", k: "#77717e", w: "#ffffff" };
+const CHECK = ["........", ".......#", "#.....##", "##...##.", ".##.##..", "..###...", "...#...."];
+const HEART = [".......", ".##.##.", "#######", "#######", ".#####.", "..###..", "...#..."];
+
+interface Theme {
+  /** The logo tab and the frame around the panel. */
+  tab: string;
+  panel: string;
+  /** Lit top edge and shaded bottom edge of the panel. */
+  light: string;
+  shade: string;
+  label: string;
   text: string;
-  /** The line under MONERO, for the classic and pill styles. */
-  sub: string;
-  pixelFont: string;
-  font: string;
+  accent: string;
+  /** Whether the panel sits inside a frame, or runs to the edges. */
+  framed: boolean;
 }
 
-/** The Monero logo with a one-pixel outline, so it stands out on any background. */
-function drawLogo(g: CanvasRenderingContext2D, x: number, y: number, px: number, outline: string) {
-  const n = MONERO_LOGO.length;
-  const lit = (cx: number, cy: number) => MONERO_LOGO[cy]?.[cx] !== undefined && MONERO_LOGO[cy][cx] !== ".";
-  g.fillStyle = outline;
-  for (let cy = -1; cy <= n; cy++) for (let cx = -1; cx <= n; cx++) {
-    if (lit(cx, cy)) continue;
-    if (lit(cx + 1, cy) || lit(cx - 1, cy) || lit(cx, cy + 1) || lit(cx, cy - 1)) g.fillRect(x + cx * px, y + cy * px, px, px);
+const THEMES: Record<BadgeTheme, Theme> = {
+  light: { tab: "#2e2c32", panel: "#fffaf3", light: "#ffffff", shade: "#ebe1d4", label: "#8a8492", text: "#2e2c32", accent: "#e8711f", framed: true },
+  dark: { tab: "#1f1d22", panel: "#36333b", light: "#45414b", shade: "#2b2930", label: "#a9a4ae", text: "#f4f0ea", accent: "#ff8e3c", framed: false },
+  orange: { tab: "#2e2c32", panel: "#ff8e3c", light: "#ffb070", shade: "#e8711f", label: "#5a3418", text: "#2e2c32", accent: "#fffaf3", framed: true },
+};
+
+export interface BadgeOptions { size: BadgeSize; theme: BadgeTheme; text: BadgeText; lang: BadgeLang }
+
+/** A grid of colored pixels; null is transparent. */
+export class Pixels {
+  readonly w: number;
+  readonly h: number;
+  readonly data: (string | null)[];
+  constructor(w: number, h: number) { this.w = w; this.h = h; this.data = Array(w * h).fill(null); }
+  set(x: number, y: number, color: string | null) { if (x >= 0 && y >= 0 && x < this.w && y < this.h) this.data[y * this.w + x] = color; }
+  get(x: number, y: number) { return this.data[y * this.w + x]; }
+  fill(x: number, y: number, w: number, h: number, color: string | null) { for (let j = y; j < y + h; j++) for (let i = x; i < x + w; i++) this.set(i, j, color); }
+  bitmap(rows: string[], x: number, y: number, scale: number, color: (ch: string) => string | null) {
+    rows.forEach((row, j) => [...row].forEach((ch, i) => { if (ch !== ".") this.fill(x + i * scale, y + j * scale, scale, scale, color(ch)); }));
   }
-  MONERO_LOGO.forEach((row, cy) => [...row].forEach((ch, cx) => {
-    if (!LOGO_COLORS[ch]) return;
-    g.fillStyle = LOGO_COLORS[ch];
-    g.fillRect(x + cx * px, y + cy * px, px, px);
-  }));
-}
-
-/* The Monero symbol on a 100-unit square: a white M line whose feet run out to the edges, orange above it, gray below. */
-const M_WHITE = [[-60, 63], [17, 63], [17, 22], [50, 55], [83, 22], [83, 63], [160, 63], [160, 75], [71, 75], [71, 51], [50, 72], [29, 51], [29, 75], [-60, 75]];
-const M_GRAY = [[-60, 75], [29, 75], [29, 51], [50, 72], [71, 51], [71, 75], [160, 75], [160, 200], [-60, 200]];
-
-function paintSymbol(g: CanvasRenderingContext2D, x: number, y: number, unit: number, w: number, h: number) {
-  const poly = (points: number[][], color: string) => {
-    g.beginPath();
-    points.forEach(([px, py], i) => (i ? g.lineTo : g.moveTo).call(g, x + px * unit, y + py * unit));
-    g.closePath();
-    g.fillStyle = color;
-    g.fill();
-  };
-  g.fillStyle = ORANGE;
-  g.fillRect(x - 60 * unit, y - 60 * unit, w + 120 * unit, h + 120 * unit);
-  poly(M_GRAY, GRAY);
-  poly(M_WHITE, "#ffffff");
-}
-
-/** The round Monero logo. */
-function drawSymbol(g: CanvasRenderingContext2D, cx: number, cy: number, r: number) {
-  g.save();
-  g.beginPath(); g.arc(cx, cy, r, 0, Math.PI * 2); g.clip();
-  paintSymbol(g, cx - r, cy - r, (r * 2) / 100, r * 2, r * 2);
-  g.restore();
-}
-
-/** A border that is orange on top and gray below, like the logo. */
-function splitStroke(g: CanvasRenderingContext2D, top: number, height: number, t: (typeof THEMES)[BadgeTheme], split = 0.62) {
-  const grad = g.createLinearGradient(0, top, 0, top + height);
-  grad.addColorStop(0, t.edgeTop); grad.addColorStop(split, t.edgeTop);
-  grad.addColorStop(split, t.edgeBottom); grad.addColorStop(1, t.edgeBottom);
-  return grad;
-}
-
-const MARGIN = 14;
-const BIG = (size: number, font: string) => `800 ${size}px ${font}`;
-const SUB = (size: number, font: string) => `italic 800 ${size}px ${font}`;
-
-function measure(g: CanvasRenderingContext2D, font: string, text: string, spacing = "0px") {
-  g.font = font;
-  g.letterSpacing = spacing;
-  const w = g.measureText(text).width;
-  g.letterSpacing = "0px";
-  return w;
-}
-
-/** Size of the classic and pill badges in CSS pixels, margin for the shadow included. */
-export function badgeSize(style: Exclude<BadgeStyle, "pixel">, bigWidth: number, subWidth: number) {
-  if (style === "classic") return { w: Math.ceil(176 + Math.max(bigWidth, subWidth) + 30) + MARGIN * 2, h: 120 + MARGIN * 2 };
-  return { w: Math.ceil(68 + Math.max(bigWidth, subWidth) + 26) + MARGIN * 2, h: 56 + MARGIN * 2 };
-}
-
-function drawClassic(canvas: HTMLCanvasElement, o: BadgeOptions, scale: number) {
-  const g = canvas.getContext("2d")!;
-  const big = measure(g, BIG(46, o.font), "MONERO", "2px"), sub = measure(g, SUB(21, o.font), o.sub.toUpperCase());
-  const { w, h } = badgeSize("classic", big, sub);
-  canvas.width = w * scale; canvas.height = h * scale;
-  g.setTransform(scale, 0, 0, scale, 0, 0);
-  const t = THEMES[o.theme], x = MARGIN, y = MARGIN, bw = w - MARGIN * 2, bh = h - MARGIN * 2, panel = 132;
-  g.save();
-  g.shadowColor = "rgba(0, 0, 0, 0.28)"; g.shadowBlur = 12; g.shadowOffsetY = 4;
-  g.beginPath(); g.roundRect(x, y, bw, bh, 26); g.fillStyle = t.body; g.fill();
-  g.restore();
-  // The logo panel: a big crop of the symbol behind a chevron.
-  g.save();
-  g.beginPath(); g.roundRect(x, y, bw, bh, 26); g.clip();
-  g.beginPath(); g.moveTo(x, y); g.lineTo(x + panel, y); g.lineTo(x + panel + 22, y + bh / 2); g.lineTo(x + panel, y + bh); g.lineTo(x, y + bh); g.closePath(); g.clip();
-  paintSymbol(g, x + 4, y - 8, 1.32, panel + 22, bh);
-  g.restore();
-  if (o.theme === "orange") {
-    // An orange body would melt into the orange panel, so the chevron gets a white edge.
-    g.save();
-    g.beginPath(); g.roundRect(x, y, bw, bh, 26); g.clip();
-    g.beginPath(); g.moveTo(x + panel, y); g.lineTo(x + panel + 22, y + bh / 2); g.lineTo(x + panel, y + bh);
-    g.lineWidth = 4; g.strokeStyle = "#ffffff"; g.stroke();
-    g.restore();
+  /** Letters with their cap tops at `y`; accents rise two font pixels above. */
+  text(text: string, x: number, y: number, scale: number, gap: number, color: (index: number) => string) {
+    [...text].forEach((ch, i) => {
+      const rows = glyph(ch);
+      if (rows) this.bitmap(rows, x + i * (GLYPH_W + gap) * scale, y - 2 * scale, scale, () => color(i));
+    });
   }
-  g.lineWidth = 5;
-  g.strokeStyle = splitStroke(g, y, bh, t);
-  g.beginPath(); g.roundRect(x + 2.5, y + 2.5, bw - 5, bh - 5, 24); g.stroke();
-  const tx = x + 176;
-  g.textBaseline = "alphabetic"; g.textAlign = "left";
-  g.font = BIG(46, o.font); g.letterSpacing = "2px"; g.fillStyle = t.big; g.fillText("MONERO", tx, y + 62);
-  g.letterSpacing = "0px";
-  g.font = SUB(21, o.font); g.fillStyle = t.sub; g.fillText(o.sub.toUpperCase(), tx, y + 94);
-  return { w, h };
 }
 
-function drawPill(canvas: HTMLCanvasElement, o: BadgeOptions, scale: number) {
+/** Whether character `i` of a line belongs to `word`, for coloring it. */
+function within(line: string, word: string) {
+  const at = line.indexOf(word);
+  return (i: number) => at >= 0 && i >= at && i < at + word.length;
+}
+
+export function drawBadge(o: BadgeOptions): Pixels {
+  const t = THEMES[o.theme];
+  const words = BADGE_WORDS[o.lang][o.text];
+  const mark = o.text === "donate" ? HEART : CHECK;
+  // Each size: height (also the logo tab's width), the panel's content width and its side padding.
+  let h: number, content: number, pad: number;
+  if (o.size === "normal") { h = 56; content = Math.max(textWidth(words.label, 1, 2), textWidth("MONERO", 2, 1)); pad = 30; }
+  else if (o.size === "medium") { h = 40; content = textWidth(words.line, 1, 2); pad = 18; }
+  else { h = 28; content = textWidth("XMR", 2, 1) + 6 + mark[0].length * 2; pad = 9; }
+  const tab = h, inset = t.framed ? 2 : 0;
+  const panelW = content + pad * 2;
+  const w = tab + panelW + inset;
+  const p = new Pixels(w, h);
+
+  p.fill(0, 0, w, h, t.tab);
+  const px = tab, py = inset, ph = h - inset * 2;
+  p.fill(px, py, panelW, ph, t.panel);
+  p.fill(px, py, panelW, 1, t.light);
+  p.fill(px, py + ph - 1, panelW, 1, t.shade);
+
+  const logoScale = o.size === "normal" ? 3 : 2;
+  const logo = 12 * logoScale;
+  p.bitmap(LOGO, Math.floor((tab - logo) / 2), Math.floor((h - logo) / 2), logoScale, (ch) => LOGO_COLORS[ch]);
+
+  const left = (width: number) => px + Math.floor((panelW - width) / 2);
+  if (o.size === "normal") {
+    // The label (7 px), a 7 px gap and MONERO (14 px), as one block centered in the panel.
+    const top = py + Math.floor((ph - 28) / 2);
+    p.text(words.label, left(textWidth(words.label, 1, 2)), top, 1, 2, () => t.label);
+    p.text("MONERO", left(textWidth("MONERO", 2, 1)), top + 14, 2, 1, () => t.text);
+  } else if (o.size === "medium") {
+    const lit = within(words.line, "MONERO");
+    p.text(words.line, left(content), py + Math.floor((ph - 7) / 2), 1, 2, (i) => (lit(i) ? t.accent : t.text));
+  } else {
+    const top = py + Math.floor((ph - 14) / 2);
+    const x = left(content);
+    p.text("XMR", x, top, 2, 1, () => t.text);
+    p.bitmap(mark, x + textWidth("XMR", 2, 1) + 6, top, 2, () => t.accent);
+  }
+
+  // Stepped corners, like the site's other pixel edges.
+  const steps = o.size === "normal" ? [[0, 0], [1, 0], [0, 1]] : [[0, 0]];
+  for (const [dx, dy] of steps) {
+    p.set(dx, dy, null); p.set(w - 1 - dx, dy, null); p.set(dx, h - 1 - dy, null); p.set(w - 1 - dx, h - 1 - dy, null);
+  }
+  return p;
+}
+
+/** The pixels as a small SVG: one path per color, one run per row. */
+export function badgeSvg(p: Pixels, scale: number, title: string): string {
+  const runs = new Map<string, string[]>();
+  for (let y = 0; y < p.h; y++) {
+    let x = 0;
+    while (x < p.w) {
+      const c = p.get(x, y);
+      let end = x + 1;
+      while (end < p.w && p.get(end, y) === c) end++;
+      if (c) runs.set(c, [...(runs.get(c) ?? []), `M${x} ${y}h${end - x}v1h-${end - x}z`]);
+      x = end;
+    }
+  }
+  const escape = (s: string) => s.replace(/[&<>"]/g, (ch) => `&#${ch.charCodeAt(0)};`);
+  const paths = [...runs].map(([c, d]) => `<path fill="${c}" d="${d.join("")}"/>`).join("");
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${p.w} ${p.h}" width="${p.w * scale}" height="${p.h * scale}" shape-rendering="crispEdges" role="img" aria-label="${escape(title)}"><title>${escape(title)}</title>${paths}</svg>`;
+}
+
+/** Paints the pixels on a canvas at `scale`. */
+export function paintBadge(canvas: HTMLCanvasElement, p: Pixels, scale: number) {
+  canvas.width = p.w * scale; canvas.height = p.h * scale;
   const g = canvas.getContext("2d")!;
-  const big = measure(g, BIG(21, o.font), "MONERO", "1px"), sub = measure(g, SUB(12, o.font), o.sub.toUpperCase());
-  const { w, h } = badgeSize("pill", big, sub);
-  canvas.width = w * scale; canvas.height = h * scale;
-  g.setTransform(scale, 0, 0, scale, 0, 0);
-  const t = THEMES[o.theme], x = MARGIN, y = MARGIN, bw = w - MARGIN * 2, bh = h - MARGIN * 2;
-  g.save();
-  g.shadowColor = "rgba(0, 0, 0, 0.25)"; g.shadowBlur = 8; g.shadowOffsetY = 3;
-  g.beginPath(); g.roundRect(x, y, bw, bh, bh / 2); g.fillStyle = t.body; g.fill();
-  g.restore();
-  g.lineWidth = 3;
-  g.strokeStyle = splitStroke(g, y, bh, t);
-  g.beginPath(); g.roundRect(x + 1.5, y + 1.5, bw - 3, bh - 3, bh / 2 - 1.5); g.stroke();
-  drawSymbol(g, x + 30, y + bh / 2, 20);
-  g.textAlign = "left"; g.textBaseline = "alphabetic";
-  g.font = BIG(21, o.font); g.letterSpacing = "1px"; g.fillStyle = t.big; g.fillText("MONERO", x + 62, y + 27);
-  g.letterSpacing = "0px";
-  g.font = SUB(12, o.font); g.fillStyle = t.sub; g.fillText(o.sub.toUpperCase(), x + 62, y + 43);
-  return { w, h };
+  for (let y = 0; y < p.h; y++) for (let x = 0; x < p.w; x++) {
+    const c = p.get(x, y);
+    if (!c) continue;
+    g.fillStyle = c;
+    g.fillRect(x * scale, y * scale, scale, scale);
+  }
 }
 
-/** Pixel sticker size in CSS pixels, shadow included. */
-export const pixelSize = (textWidth: number) => ({ w: Math.max(176, Math.ceil(textWidth) + 32) + 6, h: 118 });
-
-function drawPixel(canvas: HTMLCanvasElement, o: BadgeOptions, scale: number) {
-  const g = canvas.getContext("2d")!;
-  const font = `15px ${o.pixelFont}`;
-  g.font = font;
-  const { w, h } = pixelSize(g.measureText(o.text).width);
-  canvas.width = w * scale; canvas.height = h * scale;
-  g.setTransform(scale, 0, 0, scale, 0, 0);
-  g.imageSmoothingEnabled = false;
-  const c = PIXEL_THEMES[o.theme], bw = w - 6, bh = h - 6;
-  g.fillStyle = c.shadow; g.fillRect(6, 6, bw, bh);
-  g.fillStyle = c.edge; g.fillRect(0, 0, bw, bh);
-  g.fillStyle = c.bg; g.fillRect(3, 3, bw - 6, bh - 6);
-  drawLogo(g, Math.round(bw / 2 - 26), 16, 4, c.fg);
-  g.font = font; g.fillStyle = c.fg; g.textAlign = "center"; g.textBaseline = "middle";
-  g.fillText(o.text, bw / 2, 89);
-  return { w, h };
-}
-
-/** Draws the badge at `scale` times its size; returns the size in CSS pixels. */
-export function drawBadge(canvas: HTMLCanvasElement, o: BadgeOptions, scale: number) {
-  return o.style === "classic" ? drawClassic(canvas, o, scale) : o.style === "pill" ? drawPill(canvas, o, scale) : drawPixel(canvas, o, scale);
+/** Readable text for alt and title, like "We accept Monero". */
+export function badgeTitle(o: BadgeOptions) {
+  const words = BADGE_WORDS[o.lang][o.text];
+  const s = o.size === "medium" ? words.line : o.size === "normal" ? `${words.label} MONERO` : "XMR";
+  return (s.charAt(0) + s.slice(1).toLowerCase()).replace(/monero/gi, "Monero").replace(/xmr/gi, "XMR");
 }

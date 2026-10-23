@@ -2,61 +2,65 @@
 import PixelIcon from "../PixelIcon.astro";
 import TrustNote from "../ui/TrustNote.astro";
 import { button, code, cx, field } from "../ui/styles";
-import { LOCALE_NAMES, LOCALES, pickStrings, useTranslations, type Locale } from "../../i18n/ui";
-import { BADGE_STYLES, BADGE_TEXTS, BADGE_THEMES } from "../../lib/badge";
+import { LOCALE_NAMES, pickStrings, useTranslations, type Locale } from "../../i18n/ui";
+import { BADGE_LANGS, BADGE_SIZES, BADGE_TEXTS, BADGE_THEMES } from "../../lib/badge";
 
 interface Props { lang: Locale }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const strings = pickStrings(lang, ["copied"]);
-/** Badge wording in every language, so a Spanish page can make an English badge. */
-const texts = Object.fromEntries(LOCALES.map((l) => [l, Object.fromEntries(BADGE_TEXTS.map((k) => [k, { text: useTranslations(l)(`bd_text_${k}`), sub: useTranslations(l)(`bd_sub_${k}`) }]))]));
+const badgeLang = (BADGE_LANGS as readonly string[]).includes(lang) ? lang : "en";
 const tab = "relative inline-flex min-h-11 shrink-0 cursor-pointer items-center whitespace-nowrap px-3 font-pixel text-sm text-ash has-checked:bg-graphite has-checked:text-cream has-focus-visible:outline-2 has-focus-visible:outline-orange";
 const group = "flex w-fit min-w-0 flex-wrap bg-well p-0.5 max-sm:w-full max-sm:flex-nowrap max-sm:overflow-x-auto";
-const legend = "mb-2 font-pixel text-xs tracking-[0.14em] text-ash uppercase";
+const legend = "font-pixel text-xs tracking-[0.14em] text-ash uppercase";
+const heading = "flex items-center gap-2.5 font-pixel text-sm tracking-[0.2em] text-cream uppercase";
 ---
-<div id="badge-tool" class="grid grid-cols-1 gap-6" data-strings={strings} data-texts={JSON.stringify(texts)}>
+<div id="badge-tool" class="grid grid-cols-1 gap-6" data-strings={strings}>
   <form data-form class="grid grid-cols-1 gap-x-8 gap-y-5 lg:grid-cols-2" novalidate>
-    <fieldset class="min-w-0"><legend class={legend}>{t("bd_wording")}</legend>
+    <fieldset class="min-w-0"><legend class={cx(legend, "mb-2")}>{t("bd_wording")}</legend>
       <div class={group}>{BADGE_TEXTS.map((k, i) => <label class={tab}><input type="radio" name="text" value={k} class="sr-only" checked={i === 0} />{t(`bd_text_${k}`)}</label>)}</div>
     </fieldset>
-    <fieldset class="min-w-0"><legend class={legend}>{t("bd_style")}</legend>
-      <div class={group}>{BADGE_STYLES.map((k, i) => <label class={tab}><input type="radio" name="style" value={k} class="sr-only" checked={i === 0} />{t(`bd_style_${k}`)}</label>)}</div>
-    </fieldset>
-    <fieldset class="min-w-0"><legend class={legend}>{t("bd_theme")}</legend>
+    <fieldset class="min-w-0"><legend class={cx(legend, "mb-2")}>{t("bd_theme")}</legend>
       <div class={group}>{BADGE_THEMES.map((k, i) => <label class={tab}><input type="radio" name="theme" value={k} class="sr-only" checked={i === 0} />{t(`bd_theme_${k}`)}</label>)}</div>
     </fieldset>
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-[10rem_minmax(0,1fr)]">
+    <fieldset class="min-w-0"><legend class={cx(legend, "mb-2")}>{t("bd_size")}</legend>
+      <div class={group}>{BADGE_SIZES.map((k, i) => <label class={tab}><input type="radio" name="size" value={k} class="sr-only" checked={i === 0} />{t(`bd_size_${k}`)}</label>)}</div>
+    </fieldset>
+    <div class="grid grid-cols-2 gap-4 sm:grid-cols-[minmax(0,9rem)_minmax(0,6rem)_minmax(0,1fr)]">
       <label class="grid content-start gap-2">
-        <span class={legend.replace("mb-2 ", "")}>{t("bd_language")}</span>
+        <span class={legend}>{t("bd_language")}</span>
         <select name="lang" class={cx(field, "min-h-11 py-2 font-pixel text-sm")}>
-          {LOCALES.map((l) => <option value={l} selected={l === lang}>{LOCALE_NAMES[l]}</option>)}
+          {BADGE_LANGS.map((l) => <option value={l} selected={l === badgeLang}>{LOCALE_NAMES[l]}</option>)}
         </select>
       </label>
       <label class="grid content-start gap-2">
-        <span class={legend.replace("mb-2 ", "")}>{t("bd_link")}</span>
+        <span class={legend}>{t("bd_scale")}</span>
+        <select name="scale" class={cx(field, "min-h-11 py-2 font-pixel text-sm")}>
+          {[1, 2, 3].map((s) => <option value={s} selected={s === 1}>{s}×</option>)}
+        </select>
+      </label>
+      <label class="col-span-2 grid content-start gap-2 sm:col-span-1">
+        <span class={legend}>{t("bd_link")}</span>
         <input name="url" type="url" inputmode="url" placeholder="https://example.com/pay" autocomplete="off" spellcheck="false" class={cx(field, "min-h-11 py-2 font-mono text-sm")} />
       </label>
     </div>
   </form>
 
   <section class="grid gap-3" aria-labelledby="bd-preview-t">
-    <div class="flex flex-wrap items-center justify-between gap-3">
-      <h2 id="bd-preview-t" class="flex items-center gap-2.5 font-pixel text-sm tracking-[0.2em] text-cream uppercase"><span class="size-2 bg-orange"></span>{t("bd_preview")}</h2>
-      <button type="button" data-surface aria-pressed="false" class="cursor-pointer font-pixel text-sm text-orange underline underline-offset-3">{t("bd_surface")}</button>
-    </div>
-    <div data-stage class="group/stage grid min-h-56 place-items-center border-2 border-graphite bg-ink bg-[radial-gradient(var(--color-graphite)_1px,transparent_1px)] [background-size:12px_12px] p-8 transition-colors data-light:bg-paper data-light:bg-[radial-gradient(#e8ddd0_1px,transparent_1px)]">
-      <a data-preview-link class="block max-w-full" target="_blank" rel="noopener noreferrer"><canvas data-preview class="block max-w-full [image-rendering:pixelated]"></canvas></a>
+    <h2 id="bd-preview-t" class={heading}><span class="size-2 bg-orange"></span>{t("bd_preview")}</h2>
+    <div class="grid grid-cols-1 border-2 border-graphite md:grid-cols-2">
+      <div data-preview class="grid min-h-48 place-items-center overflow-x-auto bg-well bg-[radial-gradient(#3a363f_1px,transparent_1px)] [background-size:12px_12px] p-6 [&_svg]:block [&_svg]:h-auto [&_svg]:max-w-full"></div>
+      <div data-preview class="grid min-h-48 place-items-center overflow-x-auto bg-paper bg-[radial-gradient(#ebe1d4_1px,transparent_1px)] [background-size:12px_12px] p-6 [&_svg]:block [&_svg]:h-auto [&_svg]:max-w-full"></div>
     </div>
     <div class="flex flex-wrap gap-3">
-      <button type="button" data-download="2" class={button.primary}><PixelIcon name="download" size={16} /><span>{t("bd_download")}</span></button>
-      <button type="button" data-download="8" class={button.ghost}><PixelIcon name="download" size={16} class="text-orange" /><span>{t("bd_print")}</span></button>
+      <button type="button" data-download="svg" class={button.primary}><PixelIcon name="download" size={16} /><span>{t("bd_svg")}</span></button>
+      <button type="button" data-download="png" class={button.ghost}><PixelIcon name="download" size={16} class="text-orange" /><span>{t("bd_png")}</span></button>
     </div>
   </section>
 
   <section class="grid gap-3" aria-labelledby="bd-embed-t">
     <div class="flex flex-wrap items-center justify-between gap-3">
-      <h2 id="bd-embed-t" class="flex items-center gap-2.5 font-pixel text-sm tracking-[0.2em] text-cream uppercase"><span class="size-2 bg-orange"></span>{t("bd_embed")}</h2>
+      <h2 id="bd-embed-t" class={heading}><span class="size-2 bg-orange"></span>{t("bd_embed")}</h2>
       <button type="button" data-copy-from="#bd-code" class={cx(button.ghost, "py-2")}><PixelIcon name="copy" size={16} class="text-orange" /><span>{t("bd_copy")}</span></button>
     </div>
     <p class="text-sm text-ash">{t("bd_embed_help")}</p>
@@ -69,68 +73,46 @@ const legend = "mb-2 font-pixel text-xs tracking-[0.14em] text-ash uppercase";
 <script>
   import { bindCopyButtons } from "../ui/copy";
   import { readStrings } from "../../i18n/format";
-  import type { Locale } from "../../i18n/ui";
-  import { drawBadge, type BadgeOptions, type BadgeStyle, type BadgeTheme, type BadgeText } from "../../lib/badge";
+  import { badgeSvg, badgeTitle, drawBadge, paintBadge, type BadgeLang, type BadgeOptions, type BadgeSize, type BadgeText, type BadgeTheme } from "../../lib/badge";
 
   const root = document.getElementById("badge-tool")!;
   const t = readStrings(root);
-  const texts = JSON.parse(root.dataset.texts!) as Record<Locale, Record<BadgeText, { text: string; sub: string }>>;
   const $ = <T extends HTMLElement = HTMLElement>(s: string) => root.querySelector<T>(s)!;
   const form = $<HTMLFormElement>("[data-form]");
-  const preview = $<HTMLCanvasElement>("[data-preview]");
   const value = (name: string) => (form.elements.namedItem(name) as RadioNodeList | HTMLInputElement).value;
 
-  /** Russian uses Pixelify Sans: DotGothic16 has no Cyrillic. */
-  const pixelFont = (l: Locale) => (l === "ru" ? '"Pixelify Sans", monospace' : '"DotGothic16", monospace');
-  const FONT = '"Manrope Variable", "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif';
-
-  function options(): BadgeOptions {
-    const l = value("lang") as Locale;
-    const words = texts[l][value("text") as BadgeText];
-    return { style: value("style") as BadgeStyle, theme: value("theme") as BadgeTheme, text: words.text, sub: words.sub, pixelFont: pixelFont(l), font: FONT };
-  }
-
-  const fontsReady = (o: BadgeOptions) => Promise.all([
-    document.fonts.load(`15px ${o.pixelFont}`, o.text),
-    document.fonts.load(`800 20px ${o.font}`, `MONERO${o.sub}`),
-  ]);
-
+  const options = (): BadgeOptions => ({ size: value("size") as BadgeSize, theme: value("theme") as BadgeTheme, text: value("text") as BadgeText, lang: value("lang") as BadgeLang });
   const escape = (s: string) => s.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
   const safeUrl = () => { const u = value("url").trim(); return /^https?:\/\/\S+$/i.test(u) ? u : ""; };
+  const scale = () => Number(value("scale"));
 
-  async function render() {
+  function render() {
     const o = options();
-    await fontsReady(o);
-    const { w, h } = drawBadge(preview, o, o.style === "pixel" ? 4 : 3);
-    // The pixel sticker is shown at twice its size, so its pixels are easy to judge.
-    preview.style.width = `${o.style === "pixel" ? w * 2 : w * 1.5}px`;
+    const pixels = drawBadge(o), title = badgeTitle(o);
+    // The preview is never smaller than 2x, so the pixels are easy to judge.
+    const preview = badgeSvg(pixels, Math.max(2, scale()), title);
+    root.querySelectorAll("[data-preview]").forEach((el) => (el.innerHTML = preview));
+    const svg = badgeSvg(pixels, scale(), title);
     const url = safeUrl();
-    const link = $<HTMLAnchorElement>("[data-preview-link]");
-    if (url) link.href = url; else link.removeAttribute("href");
-    const full = document.createElement("canvas");
-    drawBadge(full, o, 2);
-    const img = `<img src="${full.toDataURL("image/png")}" width="${w}" height="${h}" alt="${escape(o.text)}">`;
-    $("#bd-code").textContent = url ? `<a href="${escape(url)}" rel="noopener">${img}</a>` : img;
+    $("#bd-code").textContent = url ? `<a href="${escape(url)}" rel="noopener">${svg}</a>` : svg;
   }
 
   form.addEventListener("input", render);
   form.addEventListener("submit", (e) => e.preventDefault());
-  root.querySelectorAll<HTMLButtonElement>("[data-download]").forEach((b) => b.addEventListener("click", async () => {
+  root.querySelectorAll<HTMLButtonElement>("[data-download]").forEach((b) => b.addEventListener("click", () => {
     const o = options();
-    await fontsReady(o);
-    const out = document.createElement("canvas");
-    drawBadge(out, o, Number(b.dataset.download));
+    const pixels = drawBadge(o);
     const a = document.createElement("a");
-    a.download = `monero-${value("text")}-${o.style}-${o.theme}.png`;
-    a.href = out.toDataURL("image/png");
+    a.download = `monero-${o.text}-${o.size}-${o.theme}.${b.dataset.download}`;
+    if (b.dataset.download === "svg") {
+      a.href = URL.createObjectURL(new Blob([badgeSvg(pixels, scale(), badgeTitle(o))], { type: "image/svg+xml" }));
+    } else {
+      const canvas = document.createElement("canvas");
+      paintBadge(canvas, pixels, Math.max(4, scale()));
+      a.href = canvas.toDataURL("image/png");
+    }
     a.click();
   }));
-  const surface = $("[data-surface]");
-  surface.addEventListener("click", () => {
-    const light = surface.getAttribute("aria-pressed") !== "true";
-    surface.setAttribute("aria-pressed", String(light));
-    $("[data-stage]").toggleAttribute("data-light", light);
-  });
   bindCopyButtons(root, t("copied"));
   render();
 </script>
