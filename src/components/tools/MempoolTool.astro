@@ -1,0 +1,144 @@
+---
+import NodeSource from "../live/NodeSource.astro";
+import Gauge from "../ui/Gauge.astro";
+import TrustNote from "../ui/TrustNote.astro";
+import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const strings = pickStrings(lang, [
+  "mp_fill_sub", "mp_of_block", "mp_fee_sub", "mp_fee_none", "mp_age_sub", "mp_recent_sub", "mp_ago", "mp_block_tip",
+  "mp_state_calm", "mp_state_busy", "mp_state_jam", "mp_state_flood", "mp_say_calm", "mp_say_busy", "mp_say_jam", "mp_say_flood",
+  "fee_low", "fee_medium", "fee_high", "fee_highest", "dur_s", "dur_min", "dur_h", "dur_d", "dur_y",
+]);
+const BLOCKS = 30;
+const stat = "grid gap-1 border-t-2 border-graphite pt-3";
+const statLabel = "font-pixel text-xs tracking-[0.14em] text-ash uppercase";
+---
+<div id="mempool-tool" class="grid grid-cols-1 gap-8" data-strings={strings} data-lang={lang} data-blocks={BLOCKS}>
+  <section class="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+    <Gauge size="lg" label={t("mp_fill")} min="0" max={t("mp_n_blocks", { n: 3 })} zones={[1 / 3, 2 / 3]} data-g="fill" />
+    <div data-verdict data-state="calm" class="group/verdict grid content-center gap-4 border-2 border-graphite bg-ink px-5 py-5 sm:px-6">
+      <p class="flex items-center gap-3">
+        <span class="size-4 shrink-0 bg-ash group-data-[state=busy]/verdict:bg-orange group-data-[state=calm]/verdict:bg-good group-data-[state=flood]/verdict:bg-bad group-data-[state=jam]/verdict:bg-flame motion-safe:group-data-[state=flood]/verdict:animate-blink" aria-hidden="true"></span>
+        <span data-state-name class="font-pixel text-3xl leading-none text-cream group-data-[state=busy]/verdict:text-orange group-data-[state=calm]/verdict:text-good group-data-[state=flood]/verdict:text-bad group-data-[state=jam]/verdict:text-flame">…</span>
+      </p>
+      <p data-say class="leading-relaxed text-cream/80" aria-live="polite"></p>
+      <dl class="grid grid-cols-2 gap-4">
+        <div class={stat}><dt class={statLabel}>{t("mp_waiting")}</dt><dd data-waiting class="font-mono text-base text-cream sm:text-lg">…</dd></div>
+        <div class={stat}><dt class={statLabel}>{t("mp_last_block")}</dt><dd data-last class="font-mono text-base text-cream sm:text-lg">…</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
+    <Gauge label={t("mp_fee")} min="1×" max="200×" zones={[0.26, 0.52]} data-g="fee" />
+    <Gauge label={t("mp_age")} min="0" max="30 min" zones={[1 / 3, 2 / 3]} data-g="age" />
+    <Gauge label={t("mp_recent")} min="0" max="100%" zones={[0.5, 0.9]} data-g="recent" class="max-sm:hidden" />
+  </section>
+
+  <section class="grid gap-4" aria-labelledby="mp-blocks-t">
+    <div class="grid gap-1">
+      <h2 id="mp-blocks-t" class="flex items-center gap-2.5 font-pixel text-sm tracking-[0.2em] text-cream uppercase"><span class="size-2 bg-orange"></span>{t("mp_blocks_t")}</h2>
+      <p class="text-sm text-ash">{t("mp_blocks_help", { n: BLOCKS })}</p>
+    </div>
+    <div class="grid gap-2 border-2 border-graphite bg-ink px-3 pt-8 pb-3 sm:px-4">
+      <div class="relative h-40">
+        <ol data-bars class="absolute inset-0 flex items-end gap-[2px] sm:gap-1"></ol>
+        <i class="pointer-events-none absolute inset-x-0 top-1/3 border-t-2 border-dashed border-cream/40" aria-hidden="true"></i>
+      </div>
+      <div class="flex justify-between font-pixel text-xs text-ash" aria-hidden="true"><span>{t("mp_hour_ago")}</span><span>{t("mp_now")}</span></div>
+    </div>
+  </section>
+
+  <div class="grid gap-3 border-t-2 border-graphite pt-5">
+    <TrustNote icon="info">{t("mp_why")}</TrustNote>
+    <TrustNote icon="info">{t("mp_refresh")}</TrustNote>
+    <NodeSource lang={lang} dark />
+  </div>
+</div>
+
+<script>
+  import { liveTask } from "../live/live";
+  import { setGauge } from "../ui/gauge";
+  import { readStrings } from "../../i18n/format";
+  import type { Locale } from "../../i18n/ui";
+  import { formatDuration } from "../../lib/duration";
+  import { formatNumber } from "../../lib/currency";
+  import { blocksToClear, PRIORITIES } from "../../lib/fees";
+  import { assessPool, recentFullness, type PoolStats } from "../../lib/mempool";
+  import { call, getFeeEstimate, getInfo, rpc } from "../../lib/node-client";
+  import { BLOCK_SECONDS, type BlockHeader } from "../../lib/nodes";
+
+  const root = document.getElementById("mempool-tool")!;
+  const t = readStrings(root);
+  const lang = root.dataset.lang as Locale;
+  const COUNT = Number(root.dataset.blocks);
+  const $ = (s: string) => root.querySelector<HTMLElement>(s)!;
+  const gauge = (name: string) => $(`[data-g=${name}]`);
+  const kb = (bytes: number) => formatNumber(bytes / 1000, lang, 1);
+  const pct = (n: number) => `${formatNumber(n * 100, lang, 0)}%`;
+  const ago = (seconds: number) => t("mp_ago", { time: formatDuration(Math.max(0, seconds), t, lang) });
+
+  let headers: BlockHeader[] = [], height = 0;
+
+  async function loadBlocks(top: number) {
+    const r = await rpc<{ headers: BlockHeader[] }>("get_block_headers_range", { start_height: top - COUNT, end_height: top - 1 });
+    headers = r.headers;
+  }
+
+  function drawBars(median: number) {
+    const bars = $("[data-bars]");
+    bars.replaceChildren(...headers.map((h) => {
+      const fill = h.block_weight / median;
+      const li = document.createElement("li");
+      li.className = "group relative flex h-full flex-1 items-end";
+      li.tabIndex = 0;
+      const tip = t("mp_block_tip", { height: formatNumber(h.height, lang), txs: h.num_txes, kb: kb(h.block_weight) });
+      li.setAttribute("aria-label", `${tip} (${pct(fill)})`);
+      const color = fill < 0.5 ? "bg-good" : fill < 0.9 ? "bg-orange" : "bg-bad";
+      li.innerHTML = `<span class="block w-full min-h-[3px] ${color} opacity-80 group-hover:opacity-100 group-focus-visible:opacity-100" style="height:${Math.min(1.5, fill) / 1.5 * 100}%"></span>`
+        + `<span class="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 hidden -translate-x-1/2 whitespace-nowrap border-2 border-graphite bg-well px-2 py-1 font-mono text-xs text-cream group-hover:block group-focus-visible:block">${tip}</span>`;
+      return li;
+    }));
+  }
+
+  async function load() {
+    const [info, estimate, pool] = await Promise.all([
+      getInfo(),
+      getFeeEstimate(),
+      call<{ pool_stats?: PoolStats }>("/get_transaction_pool_stats", {}),
+    ]);
+    if (info.height !== height) { await loadBlocks(info.height); height = info.height; }
+    const stats = pool.pool_stats ?? { bytes_total: 0, fee_total: 0, txs_total: 0, oldest: 0 };
+    const median = info.block_weight_median;
+    const fees = estimate.fees?.length ? estimate.fees : [estimate.fee];
+    const recent = recentFullness(headers.slice(-10), median);
+    const a = assessPool(stats, median, fees, recent);
+
+    setGauge(gauge("fill"), a.fill / 3, a.fill < 1 ? pct(a.fill) : t("mp_n_blocks", { n: formatNumber(a.fill, lang, 1) }),
+      t("mp_fill_sub", { kb: kb(stats.bytes_total), cap: kb(median) }));
+    setGauge(gauge("fee"), a.feeLevel, a.feeMultiple ? `${formatNumber(a.feeMultiple, lang, 1)}×` : "–",
+      a.feeMultiple ? t("mp_fee_sub", { priority: t(`fee_${PRIORITIES[a.priority]}`).replace(/\s*[(（].*[)）]\s*$/, "").toLowerCase() }) : t("mp_fee_none"));
+    const now = Date.now() / 1000;
+    const oldest = stats.txs_total && stats.oldest ? Math.max(0, now - stats.oldest) : 0;
+    setGauge(gauge("age"), oldest / 1800, stats.txs_total ? formatDuration(oldest, t, lang) : "–", t("mp_age_sub"));
+    setGauge(gauge("recent"), recent, pct(recent), t("mp_recent_sub"));
+
+    const n = blocksToClear(stats.bytes_total, median);
+    $("[data-verdict]").dataset.state = a.state;
+    $("[data-state-name]").textContent = t(`mp_state_${a.state}`);
+    $("[data-say]").textContent = t(`mp_say_${a.state}`, { n, min: Math.round((n * BLOCK_SECONDS) / 60) });
+    $("[data-waiting]").textContent = formatNumber(stats.txs_total, lang);
+    const last = headers.at(-1);
+    $("[data-last]").textContent = last ? ago(now - last.timestamp) : "–";
+    drawBars(median);
+  }
+
+  let polling = false;
+  liveTask(async () => {
+    await load();
+    if (!polling) { polling = true; setInterval(() => load().catch(() => {}), 20_000); }
+  });
+</script>

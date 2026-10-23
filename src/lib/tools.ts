@@ -2,7 +2,7 @@ import type { Key } from "../i18n/ui.ts";
 import type { IconName } from "./pixel.ts";
 
 export interface Tool {
-  id: "uri" | "proof" | "addr" | "units" | "gazette" | "dl" | "fee" | "node" | "height" | "mining" | "tx" | "donate" | "beat" | "live" | "eli5";
+  id: "uri" | "proof" | "addr" | "units" | "gazette" | "dl" | "fee" | "node" | "height" | "mining" | "tx" | "donate" | "beat" | "live" | "eli5" | "pool";
   /** Short, shareable URL: xmr.fan/<slug> (and xmr.fan/<lang>/<slug>). */
   slug: string;
   icon: IconName;
@@ -39,6 +39,7 @@ export const TOOLS: Tool[] = [
   { id: "height", slug: "height", icon: "calendar", live: true, added: "2026-10-20", group: "wallet", dark: true },
   { id: "dl", slug: "checksum", icon: "shield", live: true, added: "2026-10-20", group: "wallet", dark: true },
   { id: "node", slug: "node", icon: "server", live: true, added: "2026-10-20", group: "wallet", dark: true },
+  { id: "pool", slug: "mempool", icon: "gauge", live: true, added: "2026-10-23", group: "numbers", dark: true },
   { id: "mining", slug: "mining", icon: "pickaxe", live: true, added: "2026-10-20", group: "numbers", dark: true },
   { id: "beat", slug: "beat", icon: "sound", live: true, added: "2026-10-21", group: "fun", dark: true },
   { id: "live", slug: "live", icon: "notes", live: true, added: "2026-10-21", group: "fun", dark: true },

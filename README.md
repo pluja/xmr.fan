@@ -17,6 +17,7 @@ No trackers, no accounts. Available in English, Spanish, Russian, French, Portug
 | [`/height`](https://xmr.fan/height) | Wallet restore height from a date, and when a block was mined |
 | [`/checksum`](https://xmr.fan/checksum) | Checks a Monero download against the official hashes signed by binaryFate |
 | [`/node`](https://xmr.fan/node) | Checks any node, and lists healthy public nodes |
+| [`/mempool`](https://xmr.fan/mempool) | Mempool stress: live gauges for waiting transactions, fees paid, the oldest wait and recent block fullness |
 | [`/mining`](https://xmr.fan/mining) | Mining income for your CPU, and which P2Pool chain fits you |
 | [`/donate`](https://xmr.fan/donate) | Donation roulette: a random privacy, free software or Monero project to support |
 | [`/beat`](https://xmr.fan/beat) | Address beat: any Monero address as a looping chiptune with a pixel visualizer |

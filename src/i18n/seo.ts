@@ -3,6 +3,8 @@ import { defineStrings } from "./define.ts";
 /** Search-friendly page titles and descriptions. Visible headings stay short; these name Monero and say what the page does. */
 export default defineStrings({
   en: {
+    seo_title_pool: "Monero mempool stress gauge: is the network busy?",
+    seo_desc_pool: "Live gauges for the Monero mempool: how many transactions are waiting, how full recent blocks were, what fees people pay and how long the oldest payment has waited.",
     seo_title_eli5: "Monero explained simply: what is Monero (ELI5)",
     seo_desc_eli5: "What Monero is and how it keeps payments private, explained like you're five with tiny pixel animations: hidden senders, receivers and amounts.",
     seo_title_live: "Monero live: watch and hear the network in real time",
@@ -37,6 +39,8 @@ export default defineStrings({
     seo_desc_gazette: "The week in Monero, every Monday: development, ecosystem, community and privacy news, price and network numbers, with sources and a podcast.",
   },
   es: {
+    seo_title_pool: "Medidor de estrés del mempool de Monero: ¿está saturada la red?",
+    seo_desc_pool: "Medidores en vivo del mempool de Monero: cuántas transacciones esperan, qué tan llenos estuvieron los bloques recientes, qué comisiones se pagan y cuánto lleva esperando el pago más antiguo.",
     seo_title_eli5: "Monero explicado fácil: qué es Monero (ELI5)",
     seo_desc_eli5: "Qué es Monero y cómo mantiene privados los pagos, explicado como para un niño de cinco años con pequeñas animaciones pixeladas: remitentes, destinatarios y montos ocultos.",
     seo_title_live: "Monero en vivo: mira y escucha la red en tiempo real",
@@ -71,6 +75,8 @@ export default defineStrings({
     seo_desc_gazette: "La semana de Monero cada lunes: desarrollo, ecosistema, comunidad y privacidad, precio y red, con fuentes y un podcast.",
   },
   ru: {
+    seo_title_pool: "Нагрузка на мемпул Monero: сеть занята?",
+    seo_desc_pool: "Живые показатели мемпула Monero: сколько транзакций ждут, насколько заполнены последние блоки, какие комиссии платят и как долго ждёт самый старый платёж.",
     seo_title_eli5: "Monero простыми словами: что такое Monero (ELI5)",
     seo_desc_eli5: "Что такое Monero и как он сохраняет платежи приватными — объяснение для пятилетних с пиксельными анимациями: скрытые отправители, получатели и суммы.",
     seo_title_live: "Monero вживую: смотрите и слушайте сеть в реальном времени",
@@ -105,6 +111,8 @@ export default defineStrings({
     seo_desc_gazette: "Неделя Monero каждый понедельник: разработка, экосистема, сообщество и приватность, цена и сеть, с источниками и подкастом.",
   },
   fr: {
+    seo_title_pool: "Jauge de charge du mempool Monero : le réseau est-il chargé ?",
+    seo_desc_pool: "Jauges en direct du mempool Monero : transactions en attente, remplissage des derniers blocs, frais payés et attente du plus ancien paiement.",
     seo_title_eli5: "Monero expliqué simplement : c'est quoi Monero (ELI5)",
     seo_desc_eli5: "Ce qu'est Monero et comment il garde les paiements privés, expliqué comme à un enfant de cinq ans avec de petites animations en pixels : expéditeurs, destinataires et montants cachés.",
     seo_title_live: "Monero en direct : voyez et écoutez le réseau",
@@ -139,6 +147,8 @@ export default defineStrings({
     seo_desc_gazette: "La semaine Monero chaque lundi : développement, écosystème, communauté et vie privée, prix et réseau, avec les sources et un podcast.",
   },
   pt: {
+    seo_title_pool: "Medidor de estresse do mempool do Monero: a rede está cheia?",
+    seo_desc_pool: "Medidores ao vivo do mempool do Monero: quantas transações esperam, quão cheios estavam os blocos recentes, quais taxas são pagas e há quanto tempo o pagamento mais antigo espera.",
     seo_title_eli5: "Monero explicado de forma simples: o que é Monero (ELI5)",
     seo_desc_eli5: "O que é Monero e como ele mantém os pagamentos privados, explicado como para uma criança de cinco anos com pequenas animações em pixel: remetentes, destinatários e valores ocultos.",
     seo_title_live: "Monero ao vivo: veja e ouça a rede em tempo real",
@@ -173,6 +183,8 @@ export default defineStrings({
     seo_desc_gazette: "A semana do Monero toda segunda-feira: desenvolvimento, ecossistema, comunidade e privacidade, preço e rede, com fontes e podcast.",
   },
   ja: {
+    seo_title_pool: "Moneroメムプール混雑ゲージ:ネットワークは混んでいる?",
+    seo_desc_pool: "Moneroメムプールのライブゲージ。待機中のトランザクション数、最近のブロックの埋まり具合、支払われている手数料、最も古い支払いの待ち時間を表示します。",
     seo_title_eli5: "Monero をやさしく解説:Monero とは?(ELI5)",
     seo_desc_eli5: "Monero とは何か、どうやって支払いをプライベートに保つのかを、小さなピクセルアニメで5歳にもわかるように解説。送り手・受け手・金額はすべて秘密。",
     seo_title_live: "Monero ライブ：ネットワークをリアルタイムで見て聴く",

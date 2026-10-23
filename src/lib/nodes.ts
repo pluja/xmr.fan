@@ -82,6 +82,7 @@ export interface BlockHeader {
   difficulty: number;
   reward: number;
   num_txes: number;
+  block_weight: number;
   hash: string;
 }
 
