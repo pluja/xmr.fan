@@ -1,18 +1,17 @@
-# Caddy in front of the site. Podcast audio is served straight from MEDIA_DIR,
-# where the weekly job writes it (set MEDIA_DIR=/srv/xmr.fan-media in .env).
+# The site's block for the shared Caddy (it reaches the container as `xmrfan` on the `caddy` network).
 xmr.fan {
 	encode zstd gzip
-
-	handle /podcast/* {
-		root * /srv/xmr.fan-media
-		file_server
-	}
-
-	handle {
-		reverse_proxy localhost:4321
-	}
+	reverse_proxy xmrfan:4321
 }
 
 www.xmr.fan {
 	redir https://xmr.fan{uri} permanent
+}
+
+uri.xmr.fan {
+	redir https://xmr.fan/uri{?query} permanent
+}
+
+pod.xmr.fan {
+	redir https://xmr.fan/news permanent
 }

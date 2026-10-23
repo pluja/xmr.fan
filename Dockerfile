@@ -5,7 +5,13 @@ RUN npm ci
 COPY . .
 RUN npm run build && npm prune --omit=dev
 
-FROM node:22-alpine
+# The scheduled jobs (ops/job.sh) run in this image with the repository mounted at /app.
+FROM node:22-alpine AS jobs
+RUN apk add --no-cache ffmpeg
+ENV HOME=/tmp
+WORKDIR /app
+
+FROM node:22-alpine AS app
 RUN apk add --no-cache tini
 WORKDIR /app
 ENV HOST=0.0.0.0 PORT=4321 NODE_ENV=production

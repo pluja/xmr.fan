@@ -6,7 +6,8 @@ After=network-online.target
 
 [Service]
 Type=oneshot
+# The user that owns the checkout and may use Docker.
 User=xmrfan
-WorkingDirectory=/srv/xmr.fan
-ExecStart=/srv/xmr.fan/ops/job.sh %i
+WorkingDirectory=/opt/stacks/xmrfan
+ExecStart=/opt/stacks/xmrfan/ops/job.sh %i
 TimeoutStartSec=2h

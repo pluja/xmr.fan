@@ -56,13 +56,13 @@ npm run build
 HOST=0.0.0.0 PORT=4321 node dist/server/entry.mjs
 ```
 
-Or with Docker Compose (`compose.yaml`), which is what the scheduled jobs redeploy:
+Or with Docker Compose (`compose.yaml`), which is what the scheduled jobs redeploy. It expects a reverse proxy on an external Docker network called `caddy` (create one with `docker network create caddy`):
 
 ```sh
 docker compose up -d --build
 ```
 
-Put it behind a reverse proxy for HTTPS (`ops/Caddyfile` is a ready config, including the podcast audio). The proxy must send the visitor's address in `X-Forwarded-For` and replace any value the visitor sent, because the node checker's rate limit is per IP. Caddy does this by default:
+Put it behind a reverse proxy for HTTPS (`ops/Caddyfile` is the block for a Caddy container on the same network). The proxy must send the visitor's address in `X-Forwarded-For` and replace any value the visitor sent, because the node checker's rate limit is per IP. Caddy does this by default:
 
 ```
 xmr.fan {
@@ -124,7 +124,7 @@ npm run gazette:translate -- 2026-10-12  # translate the text (es, ru, fr, pt, j
 
 ## Automation
 
-On the server, systemd timers run `ops/job.sh`, which pulls, runs one job, commits the data it changed, pushes, and redeploys with Docker Compose. Results and failures go to your phone through [ntfy](https://ntfy.sh) (`NOTIFY_URL`).
+On the server, systemd timers run `ops/job.sh`. It pulls, runs one job in the compose `jobs` container (Node and ffmpeg, so the host only needs Docker and git), commits the data the job changed, pushes, and redeploys with Docker Compose. Results and failures go to your phone through [ntfy](https://ntfy.sh) (`NOTIFY_URL`).
 
 | Job | When (UTC) | What it does |
 |---|---|---|
@@ -141,12 +141,12 @@ npm run gazette:hold -- 2026-10-19             # hold it; edit src/data/gazette/
 npm run gazette:hold -- 2026-10-19 --release   # it goes live at the next hourly check
 ```
 
-**Setup on a VPS** (Debian or Ubuntu, with Docker, Node.js 22, ffmpeg and git):
+**Setup on a VPS** (with Docker, git, and a Caddy container on an external Docker network called `caddy`):
 
-1. Create a user `xmrfan` that can run `docker`. Clone the repository to `/srv/xmr.fan` with a deploy key that can push.
-2. Copy `.env.example` to `.env` and fill it in. Set `NOTIFY_URL` and `MEDIA_DIR=/srv/xmr.fan-media`, a directory `xmrfan` can write and Caddy can read.
-3. Start the site with `docker compose up -d --build`, and put `ops/Caddyfile` in front of it.
-4. Install the timers:
+1. Clone the repository to `/opt/stacks/xmrfan` as a user that can run `docker`, using a deploy key that can push.
+2. Copy `.env.example` to `.env` and fill it in. Set `NOTIFY_URL` and `MEDIA_DIR` (for example `/opt/stacks/xmrfan-media`) for the podcast audio; the site serves it from there.
+3. Start the site with `docker compose up -d --build`, and add `ops/Caddyfile` to the Caddy config.
+4. Install the timers. Set `User=` in `xmr-fan-job@.service` to the user from step 1.
 
    ```sh
    sudo cp ops/systemd/* /etc/systemd/system/

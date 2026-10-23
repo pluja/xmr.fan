@@ -1,11 +1,12 @@
-# The site. Run behind Caddy (ops/Caddyfile), which also serves podcast audio from MEDIA_DIR.
-# Scheduled jobs run on the host and redeploy with `docker compose up -d --build` (ops/job.sh).
+# The site, behind the shared Caddy on the external `caddy` network (ops/Caddyfile).
+# `jobs` only runs on demand: ops/job.sh uses it for the scheduled jobs, with the repository mounted.
+# MEDIA_DIR (in .env) holds the podcast audio; the site serves it from there.
 services:
   app:
-    build: .
+    build:
+      context: .
+      target: app
     restart: unless-stopped
-    ports:
-      - "127.0.0.1:4321:4321"
     env_file:
       - path: .env
         required: false
@@ -13,3 +14,26 @@ services:
       SPONSOR_REQUESTS_DIR: /app/sponsor-requests
     volumes:
       - ./sponsor-requests:/app/sponsor-requests
+      - ${MEDIA_DIR:-./public}/podcast:/app/dist/client/podcast:ro
+    networks:
+      caddy:
+        aliases: [xmrfan]
+
+  jobs:
+    profiles: [jobs]
+    build:
+      context: .
+      target: jobs
+    user: "${JOBS_UID:-1000}:${JOBS_GID:-1000}"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      MEDIA_DIR: /media
+    volumes:
+      - .:/app
+      - ${MEDIA_DIR:-./public}:/media
+
+networks:
+  caddy:
+    external: true

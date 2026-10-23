@@ -1,5 +1,5 @@
 #!/bin/sh
-# Runs one scheduled job on the server: pull, run, commit the data it changed, push, redeploy.
+# Runs one scheduled job on the server: pull, run it in the jobs container, commit the data it changed, push, redeploy.
 #   ops/job.sh weekly | publish | donations | nodes | heights
 # Started by the systemd timers in ops/systemd/. Failures are reported to NOTIFY_URL (ntfy).
 set -eu
@@ -34,16 +34,22 @@ fail() { notify "xmr.fan: $job failed" "$1
 $(tail -n 25 "$log")"; exit 1; }
 
 git pull --ff-only --quiet >>"$log" 2>&1 || fail "git pull failed"
+# Jobs run in the compose `jobs` container (Node and ffmpeg) as this user, so the files they write stay ours.
+export JOBS_UID JOBS_GID
+JOBS_UID="$(id -u)" JOBS_GID="$(id -g)"
+in_jobs() { docker compose run --rm -T jobs "$@"; }
+docker compose --profile jobs build -q jobs >>"$log" 2>&1 || fail "building the jobs image failed"
+
 # Reinstall only when the lockfile changed since the last install.
 lock_hash="$(sha256sum package-lock.json | cut -d' ' -f1)"
 if [ "$(cat node_modules/.lock-hash 2>/dev/null)" != "$lock_hash" ]; then
-	npm ci --silent >>"$log" 2>&1 || fail "npm ci failed"
+	in_jobs npm ci --silent >>"$log" 2>&1 || fail "npm ci failed"
 	echo "$lock_hash" >node_modules/.lock-hash
 fi
 
 set +e
 # shellcheck disable=SC2086
-npm run --silent $cmd >>"$log" 2>&1
+in_jobs npm run --silent $cmd >>"$log" 2>&1
 status=$?
 set -e
 cat "$log"
@@ -55,5 +61,5 @@ if [ -n "$(git status --porcelain -- $paths)" ]; then
 	git add -- $paths
 	git commit --quiet -m "$msg" >>"$log" 2>&1 || fail "git commit failed"
 	git push --quiet >>"$log" 2>&1 || fail "git push failed"
-	if [ "$deploy" = yes ]; then docker compose up -d --build --quiet-pull >>"$log" 2>&1 || fail "redeploy failed"; fi
+	if [ "$deploy" = yes ]; then docker compose up -d --build app >>"$log" 2>&1 || fail "redeploy failed"; fi
 fi
