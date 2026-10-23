@@ -3,6 +3,8 @@ import { defineStrings } from "./define.ts";
 /** Search-friendly page titles and descriptions. Visible headings stay short; these name Monero and say what the page does. */
 export default defineStrings({
   en: {
+    seo_title_ring: "Monero ring signature game: can you find the real coin?",
+    seo_desc_ring: "A small game about Monero's ring signatures: spot the real coin among decoys in 2015, today and after FCMP++, and see why a blockchain spy can't beat luck.",
     seo_title_pool: "Monero mempool stress gauge: is the network busy?",
     seo_desc_pool: "Live gauges for the Monero mempool: how many transactions are waiting, how full recent blocks were, what fees people pay and how long the oldest payment has waited.",
     seo_title_eli5: "Monero explained simply: what is Monero (ELI5)",
@@ -39,6 +41,8 @@ export default defineStrings({
     seo_desc_gazette: "The week in Monero, every Monday: development, ecosystem, community and privacy news, price and network numbers, with sources and a podcast.",
   },
   es: {
+    seo_title_ring: "Juego de firmas de anillo de Monero: ¿encuentras la moneda real?",
+    seo_desc_ring: "Un pequeño juego sobre las firmas de anillo de Monero: encuentra la moneda real entre los señuelos en 2015, hoy y tras FCMP++, y descubre por qué un espía de la blockchain no puede superar al azar.",
     seo_title_pool: "Medidor de estrés del mempool de Monero: ¿está saturada la red?",
     seo_desc_pool: "Medidores en vivo del mempool de Monero: cuántas transacciones esperan, qué tan llenos estuvieron los bloques recientes, qué comisiones se pagan y cuánto lleva esperando el pago más antiguo.",
     seo_title_eli5: "Monero explicado fácil: qué es Monero (ELI5)",
@@ -75,6 +79,8 @@ export default defineStrings({
     seo_desc_gazette: "La semana de Monero cada lunes: desarrollo, ecosistema, comunidad y privacidad, precio y red, con fuentes y un podcast.",
   },
   ru: {
+    seo_title_ring: "Игра о кольцевых подписях Monero: найдёте настоящую монету?",
+    seo_desc_ring: "Небольшая игра о кольцевых подписях Monero: найдите настоящую монету среди ложных в 2015 году, сегодня и после FCMP++ и узнайте, почему шпион блокчейна не обыграет случай.",
     seo_title_pool: "Нагрузка на мемпул Monero: сеть занята?",
     seo_desc_pool: "Живые показатели мемпула Monero: сколько транзакций ждут, насколько заполнены последние блоки, какие комиссии платят и как долго ждёт самый старый платёж.",
     seo_title_eli5: "Monero простыми словами: что такое Monero (ELI5)",
@@ -111,6 +117,8 @@ export default defineStrings({
     seo_desc_gazette: "Неделя Monero каждый понедельник: разработка, экосистема, сообщество и приватность, цена и сеть, с источниками и подкастом.",
   },
   fr: {
+    seo_title_ring: "Jeu de signatures en anneau Monero : saurez-vous trouver la vraie pièce ?",
+    seo_desc_ring: "Un petit jeu sur les signatures en anneau de Monero : repérez la vraie pièce parmi les leurres en 2015, aujourd'hui et après FCMP++, et voyez pourquoi un espion de la blockchain ne bat pas le hasard.",
     seo_title_pool: "Jauge de charge du mempool Monero : le réseau est-il chargé ?",
     seo_desc_pool: "Jauges en direct du mempool Monero : transactions en attente, remplissage des derniers blocs, frais payés et attente du plus ancien paiement.",
     seo_title_eli5: "Monero expliqué simplement : c'est quoi Monero (ELI5)",
@@ -147,6 +155,8 @@ export default defineStrings({
     seo_desc_gazette: "La semaine Monero chaque lundi : développement, écosystème, communauté et vie privée, prix et réseau, avec les sources et un podcast.",
   },
   pt: {
+    seo_title_ring: "Jogo de assinaturas em anel do Monero: você acha a moeda real?",
+    seo_desc_ring: "Um joguinho sobre as assinaturas em anel do Monero: ache a moeda real entre as iscas em 2015, hoje e depois do FCMP++, e veja por que um espião da blockchain não vence a sorte.",
     seo_title_pool: "Medidor de estresse do mempool do Monero: a rede está cheia?",
     seo_desc_pool: "Medidores ao vivo do mempool do Monero: quantas transações esperam, quão cheios estavam os blocos recentes, quais taxas são pagas e há quanto tempo o pagamento mais antigo espera.",
     seo_title_eli5: "Monero explicado de forma simples: o que é Monero (ELI5)",
@@ -183,6 +193,8 @@ export default defineStrings({
     seo_desc_gazette: "A semana do Monero toda segunda-feira: desenvolvimento, ecossistema, comunidade e privacidade, preço e rede, com fontes e podcast.",
   },
   ja: {
+    seo_title_ring: "Moneroリング署名ゲーム:本物のコインを見つけられる?",
+    seo_desc_ring: "Moneroのリング署名をテーマにした小さなゲーム。2015年、現在、FCMP++後の各時代で、おとりの中から本物のコインを探し、ブロックチェーンの監視者が運に勝てない理由を確かめよう。",
     seo_title_pool: "Moneroメムプール混雑ゲージ:ネットワークは混んでいる?",
     seo_desc_pool: "Moneroメムプールのライブゲージ。待機中のトランザクション数、最近のブロックの埋まり具合、支払われている手数料、最も古い支払いの待ち時間を表示します。",
     seo_title_eli5: "Monero をやさしく解説:Monero とは?(ELI5)",

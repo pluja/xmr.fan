@@ -19,6 +19,7 @@ No trackers, no accounts. Available in English, Spanish, Russian, French, Portug
 | [`/node`](https://xmr.fan/node) | Checks any node, and lists healthy public nodes |
 | [`/mempool`](https://xmr.fan/mempool) | Mempool stress: live gauges for waiting transactions, fees paid, the oldest wait and recent block fullness |
 | [`/mining`](https://xmr.fan/mining) | Mining income for your CPU, and which P2Pool chain fits you |
+| [`/ring`](https://xmr.fan/ring) | Ring game: spot the real coin among decoys under 2015, today's and FCMP++ rules |
 | [`/donate`](https://xmr.fan/donate) | Donation roulette: a random privacy, free software or Monero project to support |
 | [`/beat`](https://xmr.fan/beat) | Address beat: any Monero address as a looping chiptune with a pixel visualizer |
 | [`/live`](https://xmr.fan/live) | Monero live: the mempool and new blocks as pixel art and calm background music |

@@ -2,7 +2,7 @@ import type { Key } from "../i18n/ui.ts";
 import type { IconName } from "./pixel.ts";
 
 export interface Tool {
-  id: "uri" | "proof" | "addr" | "units" | "gazette" | "dl" | "fee" | "node" | "height" | "mining" | "tx" | "donate" | "beat" | "live" | "eli5" | "pool";
+  id: "uri" | "proof" | "addr" | "units" | "gazette" | "dl" | "fee" | "node" | "height" | "mining" | "tx" | "donate" | "beat" | "live" | "eli5" | "pool" | "ring";
   /** Short, shareable URL: xmr.fan/<slug> (and xmr.fan/<lang>/<slug>). */
   slug: string;
   icon: IconName;
@@ -43,6 +43,7 @@ export const TOOLS: Tool[] = [
   { id: "mining", slug: "mining", icon: "pickaxe", live: true, added: "2026-10-20", group: "numbers", dark: true },
   { id: "beat", slug: "beat", icon: "sound", live: true, added: "2026-10-21", group: "fun", dark: true },
   { id: "live", slug: "live", icon: "notes", live: true, added: "2026-10-21", group: "fun", dark: true },
+  { id: "ring", slug: "ring", icon: "ring", live: true, added: "2026-10-23", group: "fun", dark: true },
   { id: "donate", slug: "donate", icon: "heart", live: true, added: "2026-10-21", group: "fun", dark: true },
   { id: "gazette", slug: "news", icon: "paper", live: true, added: "2026-10-19" },
 ];

@@ -1,0 +1,197 @@
+---
+import PixelIcon from "../PixelIcon.astro";
+import Stamp from "../ui/Stamp.astro";
+import TrustNote from "../ui/TrustNote.astro";
+import { button, cx, link } from "../ui/styles";
+import { localePath, pickStrings, useTranslations, type Locale } from "../../i18n/ui";
+import { ERAS, ROUNDS } from "../../lib/ringgame";
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const strings = pickStrings(lang, [
+  "rg_round", "rg_age", "rg_score", "rg_hit", "rg_miss", "rg_next", "rg_won", "rg_lost", "rg_end_2015", "rg_end_today", "rg_fcmp_result",
+  "dur_s", "dur_min", "dur_h", "dur_d", "dur_y",
+]);
+const tab = "relative inline-flex min-h-11 shrink-0 cursor-pointer items-center whitespace-nowrap px-3 font-pixel text-sm text-ash has-checked:bg-graphite has-checked:text-cream has-focus-visible:outline-2 has-focus-visible:outline-orange";
+const scoreLabel = "font-pixel text-xs tracking-[0.14em] text-ash uppercase";
+---
+<div id="ring-tool" class="grid grid-cols-1 gap-6" data-strings={strings} data-lang={lang} data-rounds={ROUNDS}>
+  <p class="max-w-[70ch] leading-relaxed text-cream/80">{t("rg_intro")}</p>
+
+  <fieldset class="flex w-fit min-w-0 flex-wrap bg-well p-0.5 max-sm:w-full max-sm:flex-nowrap max-sm:overflow-x-auto" aria-label={t("t_ring")}>
+    {ERAS.map((era, i) => <label class={tab}><input type="radio" name="era" value={era} class="sr-only" checked={i === 0} />{t(`rg_era_${era}`)}</label>)}
+  </fieldset>
+
+  <section data-game class="grid gap-5 border-2 border-graphite bg-ink px-4 py-5 sm:px-6" aria-labelledby="rg-ask">
+    <div class="flex flex-wrap items-start justify-between gap-x-6 gap-y-3">
+      <div class="grid gap-1">
+        <p data-round class="font-pixel text-sm tracking-[0.2em] text-orange uppercase"></p>
+        <h2 id="rg-ask" class="font-pixel text-xl leading-snug text-cream sm:text-2xl">{t("rg_ask")}</h2>
+        <p class="text-sm text-ash">{t("rg_hint")}</p>
+      </div>
+      <dl class="flex gap-6 border-l-2 border-graphite pl-5">
+        <div class="grid gap-0.5"><dt class={scoreLabel}>{t("rg_you")}</dt><dd data-score class="font-mono text-lg text-cream"></dd></div>
+        <div class="grid gap-0.5"><dt class={scoreLabel}>{t("rg_luck")}</dt><dd data-luck class="font-mono text-lg text-ash"></dd></div>
+      </dl>
+    </div>
+
+    <ol data-ring class="grid gap-2 data-[size=3]:mx-auto data-[size=3]:w-full data-[size=3]:max-w-xl data-[size=3]:grid-cols-3 data-[size=3]:gap-4 data-[size=16]:grid-cols-4 sm:data-[size=16]:grid-cols-8"></ol>
+    <template data-coin>
+      <li>
+        <button type="button" class="group relative grid w-full cursor-pointer justify-items-center gap-1.5 border-2 border-graphite bg-well px-1 pt-3 pb-2 text-ash not-disabled:hover:border-orange not-disabled:hover:text-orange disabled:cursor-default data-picked:border-orange data-picked:text-orange data-real:border-good data-real:text-good">
+          <PixelIcon name="coin" size={28} />
+          <span data-age class="font-mono text-xs text-cream/80"></span>
+          <span class="absolute -top-2.5 hidden bg-good px-1.5 font-pixel text-xs text-ink uppercase group-data-real:block">{t("rg_real")}</span>
+        </button>
+      </li>
+    </template>
+
+    <div data-after class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t-2 border-graphite pt-4" hidden>
+      <p data-result class="text-cream/80" aria-live="polite"></p>
+      <button type="button" data-next class={cx(button.primary, "max-sm:w-full")}>{t("rg_next")}<PixelIcon name="next" size={16} /></button>
+    </div>
+  </section>
+
+  <section data-end class="grid justify-items-start gap-4 border-2 border-graphite bg-ink px-4 py-6 sm:px-6" hidden>
+    <Stamp data-verdict class="text-lg"></Stamp>
+    <p data-final class="font-pixel text-xl text-cream"></p>
+    <p data-lesson class="max-w-[65ch] leading-relaxed text-cream/80"></p>
+    <div class="flex flex-wrap gap-3">
+      <button type="button" data-again class={button.ghost}>{t("rg_again")}</button>
+      <button type="button" data-next-era class={button.primary}>{t("rg_next_era")}<PixelIcon name="next" size={16} /></button>
+    </div>
+  </section>
+
+  <section data-fcmp class="grid gap-4 border-2 border-graphite bg-ink px-4 py-5 sm:px-6" aria-labelledby="rg-fcmp-t" hidden>
+    <div class="grid gap-1">
+      <h2 id="rg-fcmp-t" class="font-pixel text-xl leading-snug text-cream sm:text-2xl">{t("rg_fcmp_t")}</h2>
+      <p class="max-w-[65ch] leading-relaxed text-cream/80">{t("rg_fcmp_b")}</p>
+    </div>
+    <canvas data-field class="block h-48 w-full cursor-crosshair [image-rendering:pixelated] sm:h-56" role="button" tabindex="0" aria-label={t("rg_fcmp_pick")}></canvas>
+    <p data-fcmp-result class="min-h-6 text-cream/80" aria-live="polite"></p>
+  </section>
+
+  <div class="grid gap-2.5 border-t-2 border-graphite pt-4">
+    <TrustNote icon="info">{t("rg_why")}</TrustNote>
+    <TrustNote icon="info"><a href={localePath(lang, "/eli5")} class={cx(link, "whitespace-normal text-sm")}>{t("rg_learn")}</a></TrustNote>
+  </div>
+</div>
+
+<script>
+  import { readStrings } from "../../i18n/format";
+  import type { Locale } from "../../i18n/ui";
+  import { formatDuration } from "../../lib/duration";
+  import { formatNumber } from "../../lib/currency";
+  import { ERAS, luck, makeRound, RING_SIZE, type Era, type Round } from "../../lib/ringgame";
+
+  type Played = Exclude<Era, "fcmp">;
+  const root = document.getElementById("ring-tool")!;
+  const t = readStrings(root);
+  const lang = root.dataset.lang as Locale;
+  const ROUNDS = Number(root.dataset.rounds);
+  const $ = <T extends HTMLElement = HTMLElement>(s: string) => root.querySelector<T>(s)!;
+  const ring = $("[data-ring]"), template = $<HTMLTemplateElement>("[data-coin]");
+  const radios = root.querySelectorAll<HTMLInputElement>("input[name=era]");
+
+  let era: Era = "2015", round: Round, played = 0, score = 0;
+
+  function showScore() {
+    $("[data-score]").textContent = played ? t("rg_score", { n: score, total: played }) : "–";
+    $("[data-luck]").textContent = played ? t("rg_score", { n: formatNumber(luck(era as Played, played), lang, 1), total: played }) : "–";
+  }
+
+  function deal() {
+    round = makeRound(era as Played);
+    $("[data-round]").textContent = t("rg_round", { n: played + 1, total: ROUNDS });
+    $("[data-after]").hidden = true;
+    ring.dataset.size = String(RING_SIZE[era as Played]);
+    ring.replaceChildren(...round.ages.map((age, i) => {
+      const li = template.content.firstElementChild!.cloneNode(true) as HTMLElement;
+      const b = li.querySelector("button")!;
+      b.querySelector("[data-age]")!.textContent = t("rg_age", { time: formatDuration(age, t, lang) });
+      b.addEventListener("click", () => pick(i));
+      return li;
+    }));
+    showScore();
+  }
+
+  function pick(i: number) {
+    const buttons = ring.querySelectorAll("button");
+    buttons.forEach((b) => (b.disabled = true));
+    buttons[i].toggleAttribute("data-picked", true);
+    buttons[round.real].toggleAttribute("data-real", true);
+    played++;
+    if (i === round.real) score++;
+    showScore();
+    $("[data-result]").textContent = t(i === round.real ? "rg_hit" : "rg_miss");
+    $("[data-after]").hidden = false;
+    $("[data-next]").focus();
+  }
+
+  function finish() {
+    const expected = luck(era as Played, ROUNDS);
+    const won = score >= Math.max(2, Math.ceil(expected * 2));
+    $("[data-game]").hidden = true;
+    $("[data-end]").hidden = false;
+    const stamp = $("[data-verdict]");
+    stamp.dataset.tone = won ? "ok" : "warn";
+    stamp.textContent = t(won ? "rg_won" : "rg_lost");
+    $("[data-final]").textContent = `${t("rg_score", { n: score, total: ROUNDS })}`;
+    $("[data-lesson]").textContent = t(`rg_end_${era}`);
+    // Restart the stamp animation.
+    stamp.style.animation = "none"; void stamp.offsetWidth; stamp.style.animation = "";
+  }
+
+  function start(next: Era) {
+    era = next;
+    radios.forEach((r) => (r.checked = r.value === era));
+    $("[data-end]").hidden = true;
+    $("[data-game]").hidden = era === "fcmp";
+    $("[data-fcmp]").hidden = era !== "fcmp";
+    if (era === "fcmp") return drawField();
+    played = score = 0;
+    deal();
+  }
+
+  $("[data-next]").addEventListener("click", () => (played < ROUNDS ? deal() : finish()));
+  $("[data-again]").addEventListener("click", () => start(era));
+  $("[data-next-era]").addEventListener("click", () => start(ERAS[ERAS.indexOf(era) + 1] ?? "2015"));
+  radios.forEach((r) => r.addEventListener("change", () => start(r.value as Era)));
+
+  // FCMP++: a field of tiny coins too dense to count, standing in for every output on the chain.
+  const field = $<HTMLCanvasElement>("[data-field]");
+  const CELL = 4;
+  let picked: { x: number; y: number } | undefined;
+  function drawField() {
+    const w = field.clientWidth, h = field.clientHeight;
+    if (!w) return;
+    field.width = w; field.height = h;
+    const g = field.getContext("2d")!;
+    g.fillStyle = "#1f1d22"; g.fillRect(0, 0, w, h);
+    let seed = 7;
+    const random = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 2 ** 32);
+    for (let y = 0; y < h; y += CELL) for (let x = 0; x < w; x += CELL) {
+      g.fillStyle = random() < 0.5 ? "#4a454f" : random() < 0.6 ? "#5b5560" : "#7a4a2c";
+      g.fillRect(x, y, CELL - 1, CELL - 1);
+    }
+    if (picked) {
+      g.fillStyle = "#fb8c3c"; g.fillRect(picked.x - CELL, picked.y - CELL, CELL * 3 - 1, CELL * 3 - 1);
+      g.strokeStyle = "#fff1e0"; g.lineWidth = 2; g.strokeRect(picked.x - CELL * 3, picked.y - CELL * 3, CELL * 7, CELL * 7);
+    }
+  }
+  function choose(x: number, y: number) {
+    picked = { x: Math.floor(x / CELL) * CELL, y: Math.floor(y / CELL) * CELL };
+    drawField();
+    $("[data-fcmp-result]").textContent = t("rg_fcmp_result");
+  }
+  field.addEventListener("click", (e) => { const r = field.getBoundingClientRect(); choose(e.clientX - r.left, e.clientY - r.top); });
+  field.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    e.preventDefault();
+    choose(Math.random() * field.clientWidth, Math.random() * field.clientHeight);
+  });
+  new ResizeObserver(() => era === "fcmp" && drawField()).observe(field);
+
+  start("2015");
+</script>
