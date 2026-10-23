@@ -143,8 +143,8 @@ npm run gazette:hold -- 2026-10-19 --release   # it goes live at the next hourly
 
 **Setup on a VPS** (with Docker, git, and a Caddy container on an external Docker network called `caddy`):
 
-1. Clone the repository to `/opt/stacks/xmrfan` as a user that can run `docker`, using a deploy key that can push.
-2. Copy `.env.example` to `.env` and fill it in. Set `NOTIFY_URL` and `MEDIA_DIR` (for example `/opt/stacks/xmrfan-media`) for the podcast audio; the site serves it from there.
+1. Clone the repository to `/opt/stacks/xmrfan` as a user that can run `docker`, using a deploy key that can push. Give the checkout a commit identity, for example `git config user.name "xmr.fan bot"` and `git config user.email bot@xmr.fan`.
+2. Copy `.env.example` to `.env` and fill it in. Set `NOTIFY_URL` (the full topic URL, `https://ntfy.sh/<topic>`) and `MEDIA_DIR` (for example `/opt/stacks/xmrfan-media`) for the podcast audio; the site serves it from there.
 3. Start the site with `docker compose up -d --build`, and add `ops/Caddyfile` to the Caddy config.
 4. Install the timers. Set `User=` in `xmr-fan-job@.service` to the user from step 1.
 
