@@ -2,7 +2,7 @@
 
 **Tiny tools for XMR fans.** Free, private Monero tools that run in your browser, plus *The xmr.fan Times*, a weekly AI-drafted, human-approved Monero newsletter with a podcast.
 
-Source code: [tig.cx/pluja/xmr.fan](https://tig.cx/pluja/xmr.fan)
+Source code: [tig.cx/pluja/xmr.fan](https://tig.cx/pluja/xmr.fan), mirrored on [GitHub](https://github.com/pluja/xmr.fan). Issues and pull requests go to GitHub.
 
 No trackers, no accounts. Available in English, Spanish, Russian, French, Portuguese and Japanese.
 
@@ -192,6 +192,8 @@ scripts/                newsletter pipeline, sponsor approval, data and image ge
 ```
 
 ## Contributing
+
+Open issues and pull requests on the [GitHub mirror](https://github.com/pluja/xmr.fan); the main repository on tig.cx is a single-user instance, and accepted changes land there first.
 
 **Add a tool**
 
