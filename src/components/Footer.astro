@@ -3,7 +3,7 @@ import Container from "./Container.astro";
 import PixelIcon from "./PixelIcon.astro";
 import PixelText from "./PixelText.astro";
 import { localePath, useTranslations, type Locale } from "../i18n/ui";
-import { ONION_HOST } from "../lib/site";
+import { ONION_HOST, SOURCE_URL } from "../lib/site";
 
 const lang = Astro.props.lang as Locale;
 const t = useTranslations(lang);
@@ -25,6 +25,7 @@ const onionShort = `${ONION_HOST.slice(0, 10)}…${ONION_HOST.slice(-12)}`;
       <a class={item} href={localePath(lang, "/")}>{t("nav_tools")}</a>
       <a class={item} href={localePath(lang, "/news")}>{t("nav_gazette")}</a>
       <a class:list={[item, "inline-flex items-center gap-2"]} href={localePath(lang, "/feeds")}><PixelIcon name="rss" size={12} class="text-orange" />{t("feeds")}</a>
+      <a class={item} href={SOURCE_URL} rel="noopener">{t("ft_source")}</a>
     </nav>
 
     <nav class="grid content-start gap-3" aria-labelledby="ft-support">
