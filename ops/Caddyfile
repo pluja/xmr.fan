@@ -1,6 +1,8 @@
 # The site's block for the shared Caddy (it reaches the container as `xmrfan` on the `caddy` network).
 xmr.fan {
 	encode zstd gzip
+	# Tor Browser offers the onion service (its address is in the tor container's volume).
+	header Onion-Location "http://qxdwqsz3u46jlbvue7hv5lqr4vndft7zoub6szfqucazoi7hzux6nsqd.onion{uri}"
 	reverse_proxy xmrfan:4321
 }
 
