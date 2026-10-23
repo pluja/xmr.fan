@@ -1,0 +1,18 @@
+# Caddy in front of the site. Podcast audio is served straight from MEDIA_DIR,
+# where the weekly job writes it (set MEDIA_DIR=/srv/xmr.fan-media in .env).
+xmr.fan {
+	encode zstd gzip
+
+	handle /podcast/* {
+		root * /srv/xmr.fan-media
+		file_server
+	}
+
+	handle {
+		reverse_proxy localhost:4321
+	}
+}
+
+www.xmr.fan {
+	redir https://xmr.fan{uri} permanent
+}

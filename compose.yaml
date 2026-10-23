@@ -1,0 +1,15 @@
+# The site. Run behind Caddy (ops/Caddyfile), which also serves podcast audio from MEDIA_DIR.
+# Scheduled jobs run on the host and redeploy with `docker compose up -d --build` (ops/job.sh).
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:4321:4321"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      SPONSOR_REQUESTS_DIR: /app/sponsor-requests
+    volumes:
+      - ./sponsor-requests:/app/sponsor-requests

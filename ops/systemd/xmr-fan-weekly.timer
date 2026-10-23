@@ -1,0 +1,12 @@
+# Drafts last week's issue on Monday morning; the later runs retry anything that failed.
+[Unit]
+Description=xmr.fan job: weekly
+
+[Timer]
+OnCalendar=Mon *-*-* 05,08,11:00:00 UTC
+Persistent=true
+RandomizedDelaySec=5min
+Unit=xmr-fan-job@weekly.service
+
+[Install]
+WantedBy=timers.target

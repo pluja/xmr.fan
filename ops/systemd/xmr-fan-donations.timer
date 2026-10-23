@@ -1,0 +1,12 @@
+# Checks every donation address against its project's page, weekly.
+[Unit]
+Description=xmr.fan job: donations
+
+[Timer]
+OnCalendar=Sun *-*-* 08:00:00 UTC
+Persistent=true
+RandomizedDelaySec=5min
+Unit=xmr-fan-job@donations.service
+
+[Install]
+WantedBy=timers.target

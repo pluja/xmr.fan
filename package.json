@@ -16,11 +16,14 @@
     "gazette:publish": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings scripts/gazette/publish.ts",
     "gazette:podcast": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings scripts/gazette/podcast.ts",
     "gazette:translate": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings scripts/gazette/translate.ts",
+    "gazette:auto": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings scripts/gazette/auto.ts",
+    "gazette:hold": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings scripts/gazette/hold.ts",
     "sponsor:list": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings scripts/sponsor.ts list",
     "sponsor:approve": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings scripts/sponsor.ts approve",
     "heights": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings scripts/heights.ts",
     "brand": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings scripts/brand-images.ts",
     "donations:check": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings scripts/donations.ts",
+    "nodes:check": "node --env-file-if-exists=.env --experimental-strip-types --no-warnings scripts/nodes.ts",
     "og": "node --experimental-strip-types --no-warnings scripts/og-images.ts"
   },
   "dependencies": {

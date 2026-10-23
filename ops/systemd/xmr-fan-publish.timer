@@ -1,0 +1,12 @@
+# Publishes the issue once its review window has passed, unless it's on hold.
+[Unit]
+Description=xmr.fan job: publish
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+RandomizedDelaySec=5min
+Unit=xmr-fan-job@publish.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,12 @@
+# One run of ops/job.sh. Install with the timers: see "Automation" in README.md.
+[Unit]
+Description=xmr.fan job: %i
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=xmrfan
+WorkingDirectory=/srv/xmr.fan
+ExecStart=/srv/xmr.fan/ops/job.sh %i
+TimeoutStartSec=2h

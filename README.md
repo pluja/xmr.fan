@@ -56,14 +56,13 @@ npm run build
 HOST=0.0.0.0 PORT=4321 node dist/server/entry.mjs
 ```
 
-Or with Docker:
+Or with Docker Compose (`compose.yaml`), which is what the scheduled jobs redeploy:
 
 ```sh
-docker build -t xmr.fan .
-docker run -p 4321:4321 -v ./sponsor-requests:/app/sponsor-requests xmr.fan
+docker compose up -d --build
 ```
 
-Put it behind a reverse proxy for HTTPS. The proxy must send the visitor's address in `X-Forwarded-For` and replace any value the visitor sent, because the node checker's rate limit is per IP. Caddy does this by default:
+Put it behind a reverse proxy for HTTPS (`ops/Caddyfile` is a ready config, including the podcast audio). The proxy must send the visitor's address in `X-Forwarded-For` and replace any value the visitor sent, because the node checker's rate limit is per IP. Caddy does this by default:
 
 ```
 xmr.fan {
@@ -107,7 +106,7 @@ A weekly issue every Monday, covering the previous week (Monday to Sunday, UTC).
 2. **Numbers:** network averages from public nodes; price, volume and a Bitcoin comparison from CoinGecko.
 3. **AI, in three steps:** triage scores every item; the editorial writes the lead, a feature, quotes checked word for word, and the news; a short price note cites its sources. The model cites items by id and links come from the sources, so it can't invent URLs.
 4. **Art and audio (optional):** pixel-art headline image (`scripts/gazette/art.ts`), and a two-host podcast voiced with text-to-speech and joined with ffmpeg.
-5. **Review:** everything is a draft until a person approves it. Drafts show only in `npm run dev`.
+5. **Review:** every issue starts as a draft, shown only in `npm run dev`. On the server it publishes itself after a review window, unless it is held (see [Automation](#automation)).
 6. **Transparency:** each issue records how many items every source had that week, and its page ends with a "What we read this week" list of the sources checked and every link cited.
 
 ```sh
@@ -121,7 +120,41 @@ npm run gazette:publish -- 2026-10-12    # approve the draft
 npm run gazette:translate -- 2026-10-12  # translate the text (es, ru, fr, pt, ja); --lang es,ja
 ```
 
-`.gazette/` keeps the sources, triage scores and podcast script of each issue for review. Rough cost per issue with nano-gpt: about $3 (X search, writing, art, 10 minutes of audio).
+`.gazette/` keeps the sources, triage scores and podcast script of each issue for review. Podcast audio goes to `MEDIA_DIR` (default `public/`) and stays out of git. Rough cost per issue with nano-gpt: about $3 (X search, writing, art, 10 minutes of audio), plus about $1–2 for each extra podcast language.
+
+## Automation
+
+On the server, systemd timers run `ops/job.sh`, which pulls, runs one job, commits the data it changed, pushes, and redeploys with Docker Compose. Results and failures go to your phone through [ntfy](https://ntfy.sh) (`NOTIFY_URL`).
+
+| Job | When (UTC) | What it does |
+|---|---|---|
+| `weekly` | Monday 05:00, retried 08:00 and 11:00 | Writes last week's issue, translates it, voices the podcast (`PODCAST_LANGS`, default `en,es`), then sends the headlines for review |
+| `publish` | hourly | Publishes the issue `GAZETTE_REVIEW_HOURS` (default 12) after the review notification, unless it is held |
+| `donations` | Sunday 08:00 | Checks every donation address against its project's page. Missing addresses, and those unconfirmed for 90 days, drop out of the roulette until they're found again. |
+| `nodes` | daily 06:30 | Checks every public node. After 3 failed days a node leaves the lists, and it returns when it works again. |
+| `heights` | 1st of the month | Refreshes the block height table |
+
+To stop an issue during its review window, from the site's directory on the server:
+
+```sh
+npm run gazette:hold -- 2026-10-19             # hold it; edit src/data/gazette/2026-10-19.json if needed
+npm run gazette:hold -- 2026-10-19 --release   # it goes live at the next hourly check
+```
+
+**Setup on a VPS** (Debian or Ubuntu, with Docker, Node.js 22, ffmpeg and git):
+
+1. Create a user `xmrfan` that can run `docker`. Clone the repository to `/srv/xmr.fan` with a deploy key that can push.
+2. Copy `.env.example` to `.env` and fill it in. Set `NOTIFY_URL` and `MEDIA_DIR=/srv/xmr.fan-media`, a directory `xmrfan` can write and Caddy can read.
+3. Start the site with `docker compose up -d --build`, and put `ops/Caddyfile` in front of it.
+4. Install the timers:
+
+   ```sh
+   sudo cp ops/systemd/* /etc/systemd/system/
+   sudo systemctl daemon-reload
+   sudo systemctl enable --now xmr-fan-weekly.timer xmr-fan-publish.timer xmr-fan-donations.timer xmr-fan-nodes.timer xmr-fan-heights.timer
+   ```
+
+5. Try a job by hand: `sudo systemctl start xmr-fan-job@nodes`, then `journalctl -u xmr-fan-job@nodes`.
 
 ## Sponsorships
 
@@ -168,6 +201,6 @@ scripts/                newsletter pipeline, sponsor approval, data and image ge
 
 **Add a language:** add its code to `LOCALES` and a dictionary to `src/i18n/ui.ts`, then to each module in `src/i18n/`. Check that the pixel font covers its script (see the Russian override in `src/styles/global.css`).
 
-**Donation roulette:** projects live in `src/data/donations.json`. Every address must be copied from the project's own donation page (`source`). `npm run donations:check` confirms each address still appears on its page (or in the project's OpenAlias record), and `-- --write` stores today's date as `checked`. Run it weekly, for example from cron, and fix or remove anything it reports.
+**Donation roulette:** projects live in `src/data/donations.json`. Every address must be copied from the project's own donation page (`source`). `npm run donations:check` confirms each address still appears on its page (or in the project's OpenAlias record). With `-- --write` it stores today's date as `checked` and marks vanished addresses `missing`, which hides them. The `donations` job does this weekly.
 
-**Maintenance:** run `npm run donations:check` weekly and `npm run heights` every few months, and prune `PUBLIC_NODES` and `WALLET_NODES` in `src/lib/nodes.ts` when nodes go away.
+**Maintenance:** the jobs above keep the data fresh. By hand, only add nodes to the candidate lists in `src/lib/nodes.ts` when the `nodes` job reports that few are left, and rerun `npm run og` after changing a tool's name or description.

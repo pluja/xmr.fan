@@ -1,0 +1,12 @@
+# Refreshes the block height table, monthly.
+[Unit]
+Description=xmr.fan job: heights
+
+[Timer]
+OnCalendar=*-*-01 04:00:00 UTC
+Persistent=true
+RandomizedDelaySec=5min
+Unit=xmr-fan-job@heights.service
+
+[Install]
+WantedBy=timers.target

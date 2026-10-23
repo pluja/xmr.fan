@@ -1,0 +1,12 @@
+# Checks the public node lists, daily.
+[Unit]
+Description=xmr.fan job: nodes
+
+[Timer]
+OnCalendar=*-*-* 06:30:00 UTC
+Persistent=true
+RandomizedDelaySec=5min
+Unit=xmr-fan-job@nodes.service
+
+[Install]
+WantedBy=timers.target
