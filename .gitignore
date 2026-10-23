@@ -7,7 +7,6 @@ dist/
 # Only whitelist what is necessary in the repo.
 *.md
 !README.md
-!spec/*.md
 sponsor-requests/
 .preview-build/
 
