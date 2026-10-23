@@ -1,0 +1,129 @@
+---
+import PixelIcon from "../PixelIcon.astro";
+import TrustNote from "../ui/TrustNote.astro";
+import { button, code, cx, field } from "../ui/styles";
+import { LOCALE_NAMES, LOCALES, pickStrings, useTranslations, type Locale } from "../../i18n/ui";
+import { BADGE_STYLES, BADGE_TEXTS, BADGE_THEMES } from "../../lib/badge";
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const strings = pickStrings(lang, ["copied"]);
+/** Badge wording in every language, so a Spanish page can make an English badge. */
+const texts = Object.fromEntries(LOCALES.map((l) => [l, Object.fromEntries(BADGE_TEXTS.map((k) => [k, useTranslations(l)(`bd_text_${k}`)]))]));
+const tab = "relative inline-flex min-h-11 shrink-0 cursor-pointer items-center whitespace-nowrap px-3 font-pixel text-sm text-ash has-checked:bg-graphite has-checked:text-cream has-focus-visible:outline-2 has-focus-visible:outline-orange";
+const group = "flex w-fit min-w-0 flex-wrap bg-well p-0.5 max-sm:w-full max-sm:flex-nowrap max-sm:overflow-x-auto";
+const legend = "mb-2 font-pixel text-xs tracking-[0.14em] text-ash uppercase";
+---
+<div id="badge-tool" class="grid grid-cols-1 gap-6" data-strings={strings} data-texts={JSON.stringify(texts)}>
+  <form data-form class="grid grid-cols-1 gap-x-8 gap-y-5 lg:grid-cols-2" novalidate>
+    <fieldset class="min-w-0"><legend class={legend}>{t("bd_wording")}</legend>
+      <div class={group}>{BADGE_TEXTS.map((k, i) => <label class={tab}><input type="radio" name="text" value={k} class="sr-only" checked={i === 0} />{t(`bd_text_${k}`)}</label>)}</div>
+    </fieldset>
+    <fieldset class="min-w-0"><legend class={legend}>{t("bd_style")}</legend>
+      <div class={group}>{BADGE_STYLES.map((k, i) => <label class={tab}><input type="radio" name="style" value={k} class="sr-only" checked={i === 0} />{t(`bd_style_${k}`)}</label>)}</div>
+    </fieldset>
+    <fieldset class="min-w-0"><legend class={legend}>{t("bd_theme")}</legend>
+      <div class={group}>{BADGE_THEMES.map((k, i) => <label class={tab}><input type="radio" name="theme" value={k} class="sr-only" checked={i === 0} />{t(`bd_theme_${k}`)}</label>)}</div>
+    </fieldset>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-[10rem_minmax(0,1fr)]">
+      <label class="grid content-start gap-2">
+        <span class={legend.replace("mb-2 ", "")}>{t("bd_language")}</span>
+        <select name="lang" class={cx(field, "min-h-11 py-2 font-pixel text-sm")}>
+          {LOCALES.map((l) => <option value={l} selected={l === lang}>{LOCALE_NAMES[l]}</option>)}
+        </select>
+      </label>
+      <label class="grid content-start gap-2">
+        <span class={legend.replace("mb-2 ", "")}>{t("bd_link")}</span>
+        <input name="url" type="url" inputmode="url" placeholder="https://example.com/pay" autocomplete="off" spellcheck="false" class={cx(field, "min-h-11 py-2 font-mono text-sm")} />
+      </label>
+    </div>
+  </form>
+
+  <section class="grid gap-3" aria-labelledby="bd-preview-t">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <h2 id="bd-preview-t" class="flex items-center gap-2.5 font-pixel text-sm tracking-[0.2em] text-cream uppercase"><span class="size-2 bg-orange"></span>{t("bd_preview")}</h2>
+      <button type="button" data-surface aria-pressed="false" class="cursor-pointer font-pixel text-sm text-orange underline underline-offset-3">{t("bd_surface")}</button>
+    </div>
+    <div data-stage class="group/stage grid min-h-56 place-items-center border-2 border-graphite bg-ink bg-[radial-gradient(var(--color-graphite)_1px,transparent_1px)] [background-size:12px_12px] p-8 transition-colors data-light:bg-paper data-light:bg-[radial-gradient(#e8ddd0_1px,transparent_1px)]">
+      <a data-preview-link class="block max-w-full" target="_blank" rel="noopener noreferrer"><canvas data-preview class="block max-w-full [image-rendering:pixelated]"></canvas></a>
+    </div>
+    <div class="flex flex-wrap gap-3">
+      <button type="button" data-download="2" class={button.primary}><PixelIcon name="download" size={16} /><span>{t("bd_download")}</span></button>
+      <button type="button" data-download="8" class={button.ghost}><PixelIcon name="download" size={16} class="text-orange" /><span>{t("bd_print")}</span></button>
+    </div>
+  </section>
+
+  <section class="grid gap-3" aria-labelledby="bd-embed-t">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <h2 id="bd-embed-t" class="flex items-center gap-2.5 font-pixel text-sm tracking-[0.2em] text-cream uppercase"><span class="size-2 bg-orange"></span>{t("bd_embed")}</h2>
+      <button type="button" data-copy-from="#bd-code" class={cx(button.ghost, "py-2")}><PixelIcon name="copy" size={16} class="text-orange" /><span>{t("bd_copy")}</span></button>
+    </div>
+    <p class="text-sm text-ash">{t("bd_embed_help")}</p>
+    <code id="bd-code" class={cx(code, "max-h-32 overflow-y-auto")}></code>
+  </section>
+
+  <TrustNote class="border-t-2 border-graphite pt-4">{t("bd_private")}</TrustNote>
+</div>
+
+<script>
+  import { bindCopyButtons } from "../ui/copy";
+  import { readStrings } from "../../i18n/format";
+  import type { Locale } from "../../i18n/ui";
+  import { drawBadge, type BadgeOptions, type BadgeStyle, type BadgeTheme, type BadgeText } from "../../lib/badge";
+
+  const root = document.getElementById("badge-tool")!;
+  const t = readStrings(root);
+  const texts = JSON.parse(root.dataset.texts!) as Record<Locale, Record<BadgeText, string>>;
+  const $ = <T extends HTMLElement = HTMLElement>(s: string) => root.querySelector<T>(s)!;
+  const form = $<HTMLFormElement>("[data-form]");
+  const preview = $<HTMLCanvasElement>("[data-preview]");
+  const value = (name: string) => (form.elements.namedItem(name) as RadioNodeList | HTMLInputElement).value;
+
+  /** Russian uses Pixelify Sans: DotGothic16 has no Cyrillic. */
+  const fontFor = (l: Locale) => (l === "ru" ? '"Pixelify Sans", monospace' : '"DotGothic16", monospace');
+
+  function options(): BadgeOptions {
+    const l = value("lang") as Locale;
+    return { style: value("style") as BadgeStyle, theme: value("theme") as BadgeTheme, text: texts[l][value("text") as BadgeText], font: fontFor(l) };
+  }
+
+  const escape = (s: string) => s.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
+  const safeUrl = () => { const u = value("url").trim(); return /^https?:\/\/\S+$/i.test(u) ? u : ""; };
+
+  async function render() {
+    const o = options();
+    await document.fonts.load(`15px ${o.font}`, o.text);
+    const { w, h } = drawBadge(preview, o, 4);
+    // Shown at twice its real size, so the pixels are easy to judge.
+    preview.style.width = `${w * 2}px`;
+    const url = safeUrl();
+    const link = $<HTMLAnchorElement>("[data-preview-link]");
+    if (url) link.href = url; else link.removeAttribute("href");
+    const full = document.createElement("canvas");
+    drawBadge(full, o, 2);
+    const img = `<img src="${full.toDataURL("image/png")}" width="${w}" height="${h}" alt="${escape(o.text)}">`;
+    $("#bd-code").textContent = url ? `<a href="${escape(url)}" rel="noopener">${img}</a>` : img;
+  }
+
+  form.addEventListener("input", render);
+  form.addEventListener("submit", (e) => e.preventDefault());
+  root.querySelectorAll<HTMLButtonElement>("[data-download]").forEach((b) => b.addEventListener("click", async () => {
+    const o = options();
+    await document.fonts.load(`15px ${o.font}`, o.text);
+    const out = document.createElement("canvas");
+    drawBadge(out, o, Number(b.dataset.download));
+    const a = document.createElement("a");
+    a.download = `monero-${value("text")}-${o.style}-${o.theme}.png`;
+    a.href = out.toDataURL("image/png");
+    a.click();
+  }));
+  const surface = $("[data-surface]");
+  surface.addEventListener("click", () => {
+    const light = surface.getAttribute("aria-pressed") !== "true";
+    surface.setAttribute("aria-pressed", String(light));
+    $("[data-stage]").toggleAttribute("data-light", light);
+  });
+  bindCopyButtons(root, t("copied"));
+  render();
+</script>

@@ -9,6 +9,7 @@ No trackers, no accounts. Available in English, Spanish, Russian, French, Portug
 | URL | What it does |
 |---|---|
 | [`/uri`](https://xmr.fan/uri) | Payment link and pixel QR code, shareable payment cards, an embed and an HTTP API |
+| [`/badge`](https://xmr.fan/badge) | “Monero accepted” badges for sites and shops: PNG downloads and a self-contained embed code |
 | [`/verify`](https://xmr.fan/verify) | Confirms a payment with its transaction key or an OutProof / InProof signature, and shows the amount |
 | [`/tx`](https://xmr.fan/tx) | Tracks a transaction until it's spendable, with sound and system notifications |
 | [`/address`](https://xmr.fan/address) | Checks an address, compares two addresses, makes integrated addresses, looks up and creates OpenAlias names |

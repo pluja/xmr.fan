@@ -2,7 +2,7 @@ import type { Key } from "../i18n/ui.ts";
 import type { IconName } from "./pixel.ts";
 
 export interface Tool {
-  id: "uri" | "proof" | "addr" | "units" | "gazette" | "dl" | "fee" | "node" | "height" | "mining" | "tx" | "donate" | "beat" | "live" | "eli5" | "pool" | "ring" | "art" | "timeline";
+  id: "uri" | "proof" | "addr" | "units" | "gazette" | "dl" | "fee" | "node" | "height" | "mining" | "tx" | "donate" | "beat" | "live" | "eli5" | "pool" | "ring" | "art" | "timeline" | "badge";
   /** Short, shareable URL: xmr.fan/<slug> (and xmr.fan/<lang>/<slug>). */
   slug: string;
   icon: IconName;
@@ -31,6 +31,7 @@ export type ToolGroup = (typeof TOOL_GROUPS)[number];
 export const TOOLS: Tool[] = [
   { id: "eli5", slug: "eli5", icon: "bulb", live: true, added: "2026-10-22", group: "fun", dark: true },
   { id: "uri", slug: "uri", icon: "qr", live: true, added: "2026-10-19", group: "paid" },
+  { id: "badge", slug: "badge", icon: "badge", live: true, added: "2026-10-23", group: "paid", dark: true },
   { id: "proof", slug: "verify", icon: "check", live: true, added: "2026-10-20", group: "paid", dark: true },
   { id: "tx", slug: "tx", icon: "hourglass", live: true, added: "2026-10-20", group: "paid", dark: true },
   { id: "addr", slug: "address", icon: "lens", live: true, added: "2026-10-20", group: "wallet", dark: true },

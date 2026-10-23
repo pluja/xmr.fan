@@ -1,6 +1,7 @@
 import seo from "../seo.ts";
 import address from "./address.ts";
 import art from "./art.ts";
+import badge from "./badge.ts";
 import beat from "./beat.ts";
 import checksum from "./checksum.ts";
 import donate from "./donate.ts";
@@ -20,7 +21,7 @@ import tx from "./tx.ts";
 import units from "./units.ts";
 import verify from "./verify.ts";
 
-export const STRING_MODULES = [live, fee, height, address, units, node, mining, verify, checksum, tx, donate, beat, liveNet, eli5, mempool, ring, art, timeline, home, pay, seo] as const;
+export const STRING_MODULES = [live, fee, height, address, units, node, mining, verify, checksum, tx, donate, beat, liveNet, eli5, mempool, ring, art, timeline, badge, home, pay, seo] as const;
 
 type Source = (typeof STRING_MODULES)[number];
 export type ModuleKey = Source extends infer S ? (S extends { en: infer E } ? keyof E : never) : never;
