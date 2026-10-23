@@ -35,7 +35,6 @@ const onionShort = `${ONION_HOST.slice(0, 10)}…${ONION_HOST.slice(-12)}`;
 
     <div class="col-span-2 grid content-start gap-3 md:col-span-1">
       <h2 class:list={[heading, "flex items-center gap-2"]}><PixelIcon name="onion" size={12} class="text-[#b48ce6]" />{t("ft_onion_t")}</h2>
-      <p class="text-sm text-ash">{t("ft_onion_b")}</p>
       <div class="flex min-w-0 items-stretch border-2 border-graphite bg-well">
         <a href={`http://${ONION_HOST}`} title={ONION_HOST} class="min-w-0 flex-1 truncate px-3 py-2.5 font-mono text-[13px] text-cream no-underline hover:text-orange">
           {onionShort}
