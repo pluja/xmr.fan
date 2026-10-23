@@ -77,7 +77,7 @@ export default defineStrings({
     m_p2pool_every: "шара каждые ~{time}",
   },
   fr: {
-    t_mining: "Calculateur de minage", d_mining: "Ce que votre CPU gagnerait en minant du Monero.",
+    t_mining: "Calculateur de minage", d_mining: "Ce que votre CPU gagnerait en Monero.",
     m_hashrate: "Hashrate",
     m_power: "Consommation (watts)",
     m_price: "Électricité par kWh",

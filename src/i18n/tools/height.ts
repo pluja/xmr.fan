@@ -72,7 +72,7 @@ export default defineStrings({
     h_privacy: "Se calcula en tu navegador. Solo la altura actual y las fechas de los bloques vienen de un nodo.",
   },
   ru: {
-    t_height: "Высота восстановления", d_height: "Найдите блок, с которого восстановить кошелёк.",
+    t_height: "Высота восстановления", d_height: "С какого блока восстановить кошелёк.",
     h_created: "Когда вы создали кошелёк?",
     h_restore: "Высота восстановления",
     h_copy: "Копировать",
@@ -107,7 +107,7 @@ export default defineStrings({
     h_privacy: "Вычисления выполняются в вашем браузере. С ноды берутся только текущая высота и даты блоков.",
   },
   fr: {
-    t_height: "Hauteur de restauration", d_height: "Trouvez le bloc d'où restaurer votre portefeuille.",
+    t_height: "Hauteur de restauration", d_height: "D'où restaurer votre portefeuille.",
     h_created: "Quand avez-vous créé votre portefeuille ?",
     h_restore: "Hauteur de restauration",
     h_copy: "Copier",
@@ -142,7 +142,7 @@ export default defineStrings({
     h_privacy: "Calculé dans votre navigateur. Seuls la hauteur actuelle et les dates des blocs viennent d'un nœud.",
   },
   pt: {
-    t_height: "Altura de restauração", d_height: "Descubra o bloco de onde restaurar sua carteira.",
+    t_height: "Altura de restauração", d_height: "De onde restaurar sua carteira.",
     h_created: "Quando você criou sua carteira?",
     h_restore: "Altura de restauração",
     h_copy: "Copiar",

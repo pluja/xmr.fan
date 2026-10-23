@@ -52,7 +52,7 @@ export default defineStrings({
   },
   es: {
     t_eli5: "Monero explicado fácil",
-    d_eli5: "Cómo Monero protege tus pagos, en palabras sencillas.",
+    d_eli5: "La privacidad de Monero, sin tecnicismos.",
     el_intro: "Monero es dinero digital que mantiene tus pagos privados. Así funciona, paso a paso.",
     el_1_t: "Dinero que puedes enviar a cualquiera",
     el_1_b: "Monero (XMR) es una moneda digital. Puedes enviarla a cualquier persona del mundo, en cualquier momento, sin un banco. Un pago se confirma en unos 2 minutos.",

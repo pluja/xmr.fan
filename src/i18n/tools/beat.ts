@@ -30,7 +30,7 @@ export default defineStrings({
     bt_video: "Descargar vídeo",
     bt_keys: "Barra espaciadora: reproducir y parar.",
     t_beat: "Ritmo de dirección",
-    d_beat: "Convierte una dirección de Monero en chiptune.",
+    d_beat: "Convierte una dirección en chiptune.",
     bt_address: "Dirección de Monero",
     bt_play: "Reproducir",
     bt_stop: "Detener",

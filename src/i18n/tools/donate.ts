@@ -3,7 +3,7 @@ import { defineStrings } from "../define.ts";
 export default defineStrings({
   en: {
     dn_tx_desc: "Donation to {name}",
-    t_donate: "Donation roulette", d_donate: "Support a random project that accepts Monero.",
+    t_donate: "Donation roulette", d_donate: "Support a random project that takes Monero.",
     dn_spin: "Spin", dn_all: "All",
     dn_cat_monero: "Monero", dn_cat_privacy: "Privacy", dn_cat_software: "Free software", dn_cat_press: "Free press", dn_cat_knowledge: "Knowledge",
     dn_source: "Address from {site}, checked {date}.",
@@ -48,7 +48,7 @@ export default defineStrings({
   },
   ja: {
     dn_tx_desc: "{name} への寄付",
-    t_donate: "寄付ルーレット", d_donate: "Monero を受け付けるプロジェクトをランダムに支援。",
+    t_donate: "寄付ルーレット", d_donate: "Monero 対応プロジェクトをランダムに支援。",
     dn_spin: "回す", dn_all: "すべて",
     dn_cat_monero: "Monero", dn_cat_privacy: "プライバシー", dn_cat_software: "自由ソフトウェア", dn_cat_press: "報道の自由", dn_cat_knowledge: "知識",
     dn_source: "{site} のアドレス（{date} に確認）。",
