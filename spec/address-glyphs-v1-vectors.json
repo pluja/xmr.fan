@@ -1,0 +1,263 @@
+{
+ "version": 1,
+ "salt": "AddressGlyphs-v1",
+ "argon2id": {
+  "t": 2,
+  "m_kib": 16384,
+  "p": 1,
+  "length": 32,
+  "version": 19
+ },
+ "vectors": [
+  {
+   "note": "Primary address (Monero General Fund)",
+   "namespace": "monero",
+   "input": "888tNkZrPN6JsEgekjMnABU4TBzc2Dt29EPAvkRxbANsAnjyPbb3iQ1YBRk1UXcdRsiKc9dhwMVgN5S9cQUiyoogDavup3H",
+   "normalized": "888tNkZrPN6JsEgekjMnABU4TBzc2Dt29EPAvkRxbANsAnjyPbb3iQ1YBRk1UXcdRsiKc9dhwMVgN5S9cQUiyoogDavup3H",
+   "message": "glyphs/1:monero:888tNkZrPN6JsEgekjMnABU4TBzc2Dt29EPAvkRxbANsAnjyPbb3iQ1YBRk1UXcdRsiKc9dhwMVgN5S9cQUiyoogDavup3H",
+   "argon2id": "402df7af50b28aaee1c2b955245326db7282ecc7d90fa44461d3383d35cb2420",
+   "indices": [
+    64,
+    45,
+    247,
+    175,
+    80,
+    178
+   ],
+   "emoji": "🥥🐪🥤🎮🥓🎸",
+   "names": [
+    "coconut",
+    "camel",
+    "soda",
+    "gamepad",
+    "bacon",
+    "guitar"
+   ]
+  },
+  {
+   "note": "Surrounding whitespace is ignored",
+   "namespace": "monero",
+   "input": "  888tNkZrPN6JsEgekjMnABU4TBzc2Dt29EPAvkRxbANsAnjyPbb3iQ1YBRk1UXcdRsiKc9dhwMVgN5S9cQUiyoogDavup3H\n",
+   "normalized": "888tNkZrPN6JsEgekjMnABU4TBzc2Dt29EPAvkRxbANsAnjyPbb3iQ1YBRk1UXcdRsiKc9dhwMVgN5S9cQUiyoogDavup3H",
+   "message": "glyphs/1:monero:888tNkZrPN6JsEgekjMnABU4TBzc2Dt29EPAvkRxbANsAnjyPbb3iQ1YBRk1UXcdRsiKc9dhwMVgN5S9cQUiyoogDavup3H",
+   "argon2id": "402df7af50b28aaee1c2b955245326db7282ecc7d90fa44461d3383d35cb2420",
+   "indices": [
+    64,
+    45,
+    247,
+    175,
+    80,
+    178
+   ],
+   "emoji": "🥥🐪🥤🎮🥓🎸",
+   "names": [
+    "coconut",
+    "camel",
+    "soda",
+    "gamepad",
+    "bacon",
+    "guitar"
+   ]
+  },
+  {
+   "note": "One character changed (not a valid address): the glyphs share nothing",
+   "namespace": "monero",
+   "input": "888tNkZrPN6JsEgekjMnABU4TBzc2Dt29EPAvkRxbANsAnjyPbb3iQ1YBRk1UXcdRsiKc9dhwMVgN5S9cQUiyoogDavup3h",
+   "normalized": "888tNkZrPN6JsEgekjMnABU4TBzc2Dt29EPAvkRxbANsAnjyPbb3iQ1YBRk1UXcdRsiKc9dhwMVgN5S9cQUiyoogDavup3h",
+   "message": "glyphs/1:monero:888tNkZrPN6JsEgekjMnABU4TBzc2Dt29EPAvkRxbANsAnjyPbb3iQ1YBRk1UXcdRsiKc9dhwMVgN5S9cQUiyoogDavup3h",
+   "argon2id": "dfef26625362332ca191d25ca5b468a7f37f3b19feb4ae57f20bf40dc5910a8e",
+   "indices": [
+    223,
+    239,
+    38,
+    98,
+    83,
+    98
+   ],
+   "emoji": "🔌🤖🐡🍭🍔🍭",
+   "names": [
+    "plug",
+    "robot",
+    "blowfish",
+    "lollipop",
+    "burger",
+    "lollipop"
+   ]
+  },
+  {
+   "note": "Native SegWit (bech32)",
+   "namespace": "bitcoin",
+   "input": "bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq",
+   "normalized": "bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq",
+   "message": "glyphs/1:bitcoin:bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq",
+   "argon2id": "d58dc2da5c1eae50ef74772fa5b5fabe3c00bb88ce43607063d852daed28eda1",
+   "indices": [
+    213,
+    141,
+    194,
+    218,
+    92,
+    30
+   ],
+   "emoji": "🏰🚦📡🎡🍦🦂",
+   "names": [
+    "castle",
+    "trafficlight",
+    "satellite",
+    "ferriswheel",
+    "icecream",
+    "scorpion"
+   ]
+  },
+  {
+   "note": "Upper-case bech32 normalizes to the same glyphs",
+   "namespace": "bitcoin",
+   "input": "BC1QAR0SRRR7XFKVY5L643LYDNW9RE59GTZZWF5MDQ",
+   "normalized": "bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq",
+   "message": "glyphs/1:bitcoin:bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq",
+   "argon2id": "d58dc2da5c1eae50ef74772fa5b5fabe3c00bb88ce43607063d852daed28eda1",
+   "indices": [
+    213,
+    141,
+    194,
+    218,
+    92,
+    30
+   ],
+   "emoji": "🏰🚦📡🎡🍦🦂",
+   "names": [
+    "castle",
+    "trafficlight",
+    "satellite",
+    "ferriswheel",
+    "icecream",
+    "scorpion"
+   ]
+  },
+  {
+   "note": "Legacy base58 is case-sensitive and kept as written",
+   "namespace": "bitcoin",
+   "input": "1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2",
+   "normalized": "1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2",
+   "message": "glyphs/1:bitcoin:1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2",
+   "argon2id": "b5ca7535f191a73e402bb5c3ea3bc692b79b2799d5534853c37e1cab550a0a2d",
+   "indices": [
+    181,
+    202,
+    117,
+    53,
+    241,
+    145
+   ],
+   "emoji": "🎻🏀☀️🦖🎠🎁",
+   "names": [
+    "violin",
+    "basketball",
+    "sun",
+    "dinosaur",
+    "carousel",
+    "gift"
+   ]
+  },
+  {
+   "note": "Litecoin bech32",
+   "namespace": "litecoin",
+   "input": "ltc1qg82tt8x0ch2t9fpkmx6lt7hzgpklx2zy2j4jhv",
+   "normalized": "ltc1qg82tt8x0ch2t9fpkmx6lt7hzgpklx2zy2j4jhv",
+   "message": "glyphs/1:litecoin:ltc1qg82tt8x0ch2t9fpkmx6lt7hzgpklx2zy2j4jhv",
+   "argon2id": "6f782623adf38c47b7946901e6bb8f602f55206938efd45a06c6a0481b7081a7",
+   "indices": [
+    111,
+    120,
+    38,
+    35,
+    173,
+    243
+   ],
+   "emoji": "🌊☁️🐡🐙📺🥔",
+   "names": [
+    "wave",
+    "cloud",
+    "blowfish",
+    "octopus",
+    "television",
+    "potato"
+   ]
+  },
+  {
+   "note": "EIP-55 mixed case",
+   "namespace": "evm",
+   "input": "0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed",
+   "normalized": "0x5aaeb6053f3e94c9b9a09f33669435e7ef1beaed",
+   "message": "glyphs/1:evm:0x5aaeb6053f3e94c9b9a09f33669435e7ef1beaed",
+   "argon2id": "99c14efc4b653e44b874a9d44f9e59372ab43bf60d6e8bdb7cd77da73c81059d",
+   "indices": [
+    153,
+    193,
+    78,
+    252,
+    75,
+    101
+   ],
+   "emoji": "💍🔭🥚💼🥐🍵",
+   "names": [
+    "ring",
+    "telescope",
+    "egg",
+    "briefcase",
+    "croissant",
+    "tea"
+   ]
+  },
+  {
+   "note": "Same address in lower case: same glyphs",
+   "namespace": "evm",
+   "input": "0x5aaeb6053f3e94c9b9a09f33669435e7ef1beaed",
+   "normalized": "0x5aaeb6053f3e94c9b9a09f33669435e7ef1beaed",
+   "message": "glyphs/1:evm:0x5aaeb6053f3e94c9b9a09f33669435e7ef1beaed",
+   "argon2id": "99c14efc4b653e44b874a9d44f9e59372ab43bf60d6e8bdb7cd77da73c81059d",
+   "indices": [
+    153,
+    193,
+    78,
+    252,
+    75,
+    101
+   ],
+   "emoji": "💍🔭🥚💼🥐🍵",
+   "names": [
+    "ring",
+    "telescope",
+    "egg",
+    "briefcase",
+    "croissant",
+    "tea"
+   ]
+  },
+  {
+   "note": "Solana base58",
+   "namespace": "solana",
+   "input": "7EcDhSYGxXyscszYEp35KHN8vvw3svAuLKTzXwCFLtV",
+   "normalized": "7EcDhSYGxXyscszYEp35KHN8vvw3svAuLKTzXwCFLtV",
+   "message": "glyphs/1:solana:7EcDhSYGxXyscszYEp35KHN8vvw3svAuLKTzXwCFLtV",
+   "argon2id": "6425a4dc051cdacb8cb48f6003fe05ed94f8728e5bfb3038def5457e40ddec1c",
+   "indices": [
+    100,
+    37,
+    164,
+    220,
+    5,
+    28
+   ],
+   "emoji": "☕🐠👗🛁🐻🐞",
+   "names": [
+    "coffee",
+    "fish",
+    "dress",
+    "bathtub",
+    "bear",
+    "ladybug"
+   ]
+  }
+ ]
+}
