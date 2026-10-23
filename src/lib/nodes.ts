@@ -1,5 +1,7 @@
-/** Public nodes that answer browsers directly (they send CORS headers), so requests go from the user's browser to the node, not through xmr.fan. */
-export const PUBLIC_NODES = [
+import health from "../data/node-health.json" with { type: "json" };
+
+/** Nodes that answer browsers directly (they send CORS headers), so requests go from the user's browser to the node, not through xmr.fan. */
+export const BROWSER_NODE_CANDIDATES = [
   "https://node.sethforprivacy.com",
   "https://xmr.cryptostorm.is:18081",
   "https://xmr-node.cakewallet.com:18081",
@@ -8,8 +10,8 @@ export const PUBLIC_NODES = [
 ];
 
 /** Nodes to suggest for wallets, checked live on /node. Includes nodes without CORS (wallets don't need it). */
-export const WALLET_NODES = [
-  ...PUBLIC_NODES,
+export const WALLET_NODE_CANDIDATES = [
+  ...BROWSER_NODE_CANDIDATES,
   "https://node.monerodevs.org:18089",
   "https://node2.monerodevs.org:18089",
   "https://node3.monerodevs.org:18089",
@@ -21,6 +23,15 @@ export const WALLET_NODES = [
   "http://nodex.monerujo.io:18081",
   "http://rucknium.me:18081",
 ];
+
+/** Consecutive failed daily checks (scripts/nodes.ts) after which a node is left out until it recovers. */
+export const NODE_FAILURE_LIMIT = 3;
+
+export interface NodeHealth { failures: number; lastOk?: string }
+const healthy = (url: string) => ((health as Record<string, NodeHealth>)[url]?.failures ?? 0) < NODE_FAILURE_LIMIT;
+
+export const PUBLIC_NODES = BROWSER_NODE_CANDIDATES.filter(healthy);
+export const WALLET_NODES = WALLET_NODE_CANDIDATES.filter(healthy);
 
 export const BLOCK_SECONDS = 120;
 export const PICO_PER_XMR = 1e12;
