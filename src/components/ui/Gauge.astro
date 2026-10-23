@@ -1,0 +1,36 @@
+---
+/* A segmented dial: a half ring of LED segments that light up from the left. Drive it with
+   setGauge() from gauge.ts. `zones` are the fractions where the lit color steps from good to orange to bad. */
+import { cx } from "./styles";
+
+interface Props { label: string; min?: string; max?: string; zones?: [number, number]; size?: "lg" | "sm"; class?: string; [attr: string]: unknown }
+const { label, min = "", max = "", zones = [0.5, 0.8], size = "sm", class: cls, ...attrs } = Astro.props;
+
+const SEGMENTS = 16;
+const W = 200, H = 102, C = 100, OUTER = 98, INNER = 66, GAP = 2.4;
+const point = (r: number, deg: number) => {
+  const a = (deg * Math.PI) / 180;
+  return `${(C - Math.cos(a) * r).toFixed(2)},${(C - Math.sin(a) * r).toFixed(2)}`;
+};
+const segments = Array.from({ length: SEGMENTS }, (_, seg) => {
+  const from = (seg * 180) / SEGMENTS + GAP / 2, to = ((seg + 1) * 180) / SEGMENTS - GAP / 2;
+  return { seg, points: [point(INNER, from), point(OUTER, from), point(OUTER, to), point(INNER, to)].join(" ") };
+});
+const lit = (seg: number) => {
+  const f = (seg + 0.5) / SEGMENTS;
+  return f < zones[0] ? "data-on:fill-good" : f < zones[1] ? "data-on:fill-orange" : "data-on:fill-bad";
+};
+---
+<figure class={cx("grid content-start justify-items-center gap-1 border-2 border-graphite bg-ink px-3 pt-4 pb-3 sm:px-4", cls)} data-gauge data-segments={SEGMENTS} {...attrs}>
+  <figcaption class="justify-self-start font-pixel text-xs tracking-[0.14em] text-ash uppercase">{label}</figcaption>
+  <div class={cx("relative w-full", size === "lg" ? "max-w-80" : "max-w-52")}>
+    <svg viewBox={`0 0 ${W} ${H}`} class="block w-full" aria-hidden="true">
+      {segments.map((s) => <polygon points={s.points} data-seg={s.seg} class={cx("fill-graphite transition-[fill] duration-300", lit(s.seg))} />)}
+    </svg>
+    <div class="absolute inset-x-0 bottom-0 grid justify-items-center">
+      <span data-value class={cx("font-pixel leading-none text-cream", size === "lg" ? "text-[clamp(2rem,4vw,2.75rem)]" : "text-xl sm:text-2xl")}>…</span>
+    </div>
+  </div>
+  <div class={cx("flex w-full justify-between font-pixel text-xs text-ash", size === "lg" ? "max-w-80" : "max-w-52")} aria-hidden="true"><span>{min}</span><span>{max}</span></div>
+  <p data-sub class="min-h-5 text-center text-sm text-ash"></p>
+</figure>
