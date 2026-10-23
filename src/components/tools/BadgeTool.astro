@@ -10,7 +10,7 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 const strings = pickStrings(lang, ["copied"]);
 /** Badge wording in every language, so a Spanish page can make an English badge. */
-const texts = Object.fromEntries(LOCALES.map((l) => [l, Object.fromEntries(BADGE_TEXTS.map((k) => [k, useTranslations(l)(`bd_text_${k}`)]))]));
+const texts = Object.fromEntries(LOCALES.map((l) => [l, Object.fromEntries(BADGE_TEXTS.map((k) => [k, { text: useTranslations(l)(`bd_text_${k}`), sub: useTranslations(l)(`bd_sub_${k}`) }]))]));
 const tab = "relative inline-flex min-h-11 shrink-0 cursor-pointer items-center whitespace-nowrap px-3 font-pixel text-sm text-ash has-checked:bg-graphite has-checked:text-cream has-focus-visible:outline-2 has-focus-visible:outline-orange";
 const group = "flex w-fit min-w-0 flex-wrap bg-well p-0.5 max-sm:w-full max-sm:flex-nowrap max-sm:overflow-x-auto";
 const legend = "mb-2 font-pixel text-xs tracking-[0.14em] text-ash uppercase";
@@ -74,29 +74,36 @@ const legend = "mb-2 font-pixel text-xs tracking-[0.14em] text-ash uppercase";
 
   const root = document.getElementById("badge-tool")!;
   const t = readStrings(root);
-  const texts = JSON.parse(root.dataset.texts!) as Record<Locale, Record<BadgeText, string>>;
+  const texts = JSON.parse(root.dataset.texts!) as Record<Locale, Record<BadgeText, { text: string; sub: string }>>;
   const $ = <T extends HTMLElement = HTMLElement>(s: string) => root.querySelector<T>(s)!;
   const form = $<HTMLFormElement>("[data-form]");
   const preview = $<HTMLCanvasElement>("[data-preview]");
   const value = (name: string) => (form.elements.namedItem(name) as RadioNodeList | HTMLInputElement).value;
 
   /** Russian uses Pixelify Sans: DotGothic16 has no Cyrillic. */
-  const fontFor = (l: Locale) => (l === "ru" ? '"Pixelify Sans", monospace' : '"DotGothic16", monospace');
+  const pixelFont = (l: Locale) => (l === "ru" ? '"Pixelify Sans", monospace' : '"DotGothic16", monospace');
+  const FONT = '"Manrope Variable", "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif';
 
   function options(): BadgeOptions {
     const l = value("lang") as Locale;
-    return { style: value("style") as BadgeStyle, theme: value("theme") as BadgeTheme, text: texts[l][value("text") as BadgeText], font: fontFor(l) };
+    const words = texts[l][value("text") as BadgeText];
+    return { style: value("style") as BadgeStyle, theme: value("theme") as BadgeTheme, text: words.text, sub: words.sub, pixelFont: pixelFont(l), font: FONT };
   }
+
+  const fontsReady = (o: BadgeOptions) => Promise.all([
+    document.fonts.load(`15px ${o.pixelFont}`, o.text),
+    document.fonts.load(`800 20px ${o.font}`, `MONERO${o.sub}`),
+  ]);
 
   const escape = (s: string) => s.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
   const safeUrl = () => { const u = value("url").trim(); return /^https?:\/\/\S+$/i.test(u) ? u : ""; };
 
   async function render() {
     const o = options();
-    await document.fonts.load(`15px ${o.font}`, o.text);
-    const { w, h } = drawBadge(preview, o, 4);
-    // Shown at twice its real size, so the pixels are easy to judge.
-    preview.style.width = `${w * 2}px`;
+    await fontsReady(o);
+    const { w, h } = drawBadge(preview, o, o.style === "pixel" ? 4 : 3);
+    // The pixel sticker is shown at twice its size, so its pixels are easy to judge.
+    preview.style.width = `${o.style === "pixel" ? w * 2 : w * 1.5}px`;
     const url = safeUrl();
     const link = $<HTMLAnchorElement>("[data-preview-link]");
     if (url) link.href = url; else link.removeAttribute("href");
@@ -110,7 +117,7 @@ const legend = "mb-2 font-pixel text-xs tracking-[0.14em] text-ash uppercase";
   form.addEventListener("submit", (e) => e.preventDefault());
   root.querySelectorAll<HTMLButtonElement>("[data-download]").forEach((b) => b.addEventListener("click", async () => {
     const o = options();
-    await document.fonts.load(`15px ${o.font}`, o.text);
+    await fontsReady(o);
     const out = document.createElement("canvas");
     drawBadge(out, o, Number(b.dataset.download));
     const a = document.createElement("a");
