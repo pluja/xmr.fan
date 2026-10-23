@@ -1,4 +1,4 @@
-# The site, behind the shared Caddy on the external `caddy` network (ops/Caddyfile).
+# The site, behind the shared Caddy on the external `caddy` network (ops/Caddyfile), and as a Tor onion service.
 # `jobs` only runs on demand: ops/job.sh uses it for the scheduled jobs, with the repository mounted.
 # MEDIA_DIR (in .env) holds the podcast audio; the site serves it from there.
 services:
@@ -20,6 +20,23 @@ services:
     networks:
       caddy:
         aliases: [xmrfan]
+      onion:
+
+  # The onion service. Its keys (and so the .onion address) live in the tor-data volume.
+  tor:
+    image: ghcr.io/hundehausen/tor-hidden-service:latest
+    restart: unless-stopped
+    environment:
+      SOCKS_BIND: 127.0.0.1
+      HS_XMRFAN: app:4321:80
+      HSTORRC_XMRFAN: |
+        HiddenServicePoWDefensesEnabled 1
+        HiddenServiceEnableIntroDoSDefense 1
+    volumes:
+      - tor-data:/var/lib/tor
+    networks:
+      - onion
+      - default
 
   jobs:
     profiles: [jobs]
@@ -39,3 +56,9 @@ services:
 networks:
   caddy:
     external: true
+  # Only Tor and the site; Tor reaches the internet through `default`.
+  onion:
+    internal: true
+
+volumes:
+  tor-data:
