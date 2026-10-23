@@ -1,5 +1,6 @@
-/* The collectible card a critter is shown on: name, rarity, art window, number and the address it hatched from. */
-import { drawCritter, SIZE, type Critter, type Rarity } from "./critter.ts";
+/* The collectible card a critter is shown on: name and rarity gems, its home, species, number and the address it hatched from. */
+import type { Scene } from "./critter-parts.ts";
+import { critterBounds, drawCritter, type Critter, type Rarity } from "./critter.ts";
 
 export const CARD_W = 240, CARD_H = 336;
 
@@ -13,8 +14,8 @@ const GEMS: Record<Rarity, number> = { common: 1, rare: 2, epic: 3, legendary: 4
 
 export interface CardOptions {
   address: string;
-  /** "Rare", "Legendary"… in the page's language. */
-  rarityLabel: string;
+  /** Species and home, like "Frog · Ocean", in the page's language. */
+  kindLabel: string;
   /** "Hatched from" in the page's language. */
   fromLabel: string;
   font: string;
@@ -52,37 +53,37 @@ export function drawCard(g: CanvasRenderingContext2D, c: Critter, o: CardOptions
     if (on) { g.fillStyle = frame.light; g.fillRect(x + 2, 23, 2, 2); }
   }
 
-  // Art window: a backdrop that fades down, a soft spotlight and a ground shadow.
+  // Art window: the critter's home, a soft spotlight and a ground shadow.
   const wx = 18, wy = 42, ww = CARD_W - 36, wh = 178;
   g.fillStyle = frame.dark; g.fillRect(wx - 2, wy - 2, ww + 4, wh + 4);
-  const sky = g.createLinearGradient(0, wy, 0, wy + wh);
-  sky.addColorStop(0, c.backdrop[0]); sky.addColorStop(1, c.backdrop[1]);
-  g.fillStyle = sky; g.fillRect(wx, wy, ww, wh);
   g.save();
   g.beginPath(); g.rect(wx, wy, ww, wh); g.clip();
-  const glow = g.createRadialGradient(CARD_W / 2, wy + 86, 8, CARD_W / 2, wy + 86, 110);
-  glow.addColorStop(0, `${c.colors.l}55`); glow.addColorStop(1, `${c.colors.l}00`);
+  drawScene(g, c.scene, wx, wy, ww, wh, t);
+  const glow = g.createRadialGradient(CARD_W / 2, wy + 96, 8, CARD_W / 2, wy + 96, 100);
+  glow.addColorStop(0, "#ffffff2a"); glow.addColorStop(1, "#ffffff00");
   g.fillStyle = glow; g.fillRect(wx, wy, ww, wh);
-  // Twinkling stars, more of them on rarer cards.
-  const stars = { common: 10, rare: 18, epic: 26, legendary: 36 }[c.rarity];
-  for (let i = 0; i < stars; i++) {
-    const sx = wx + (sparkleAt(i, 1) % ww), sy = wy + (sparkleAt(i, 2) % (wh - 40));
-    const on = (Math.floor(t * 2 + i * 0.7) % 4) !== 0;
-    g.fillStyle = on ? "#fff8ee" : "#fff8ee55";
-    g.fillRect(sx, sy, 2, 2);
-    if (c.rarity !== "common" && i % 5 === 0 && on) { g.fillRect(sx - 2, sy, 6, 2); g.fillRect(sx, sy - 2, 2, 6); }
-  }
   g.fillStyle = "#00000055";
-  g.beginPath(); g.ellipse(CARD_W / 2, wy + wh - 18, 58, 8, 0, 0, Math.PI * 2); g.fill();
-  const scale = 7, size = SIZE * scale;
-  const bob = Math.sin(t * 2.4) > 0.3 ? -scale / 2 : 0;
-  drawCritter(g, c, Math.round((CARD_W - size) / 2), wy + wh - size - 10 + bob, scale, { blink: o.blink, hidden: o.hidden });
+  g.beginPath(); g.ellipse(CARD_W / 2, wy + wh - 10, 64, 6, 0, 0, Math.PI * 2); g.fill();
+  // As big as fits: the critter's bounding box, scaled by a whole number and standing on the ground.
+  const box = critterBounds(c);
+  const scale = Math.max(3, Math.min(7, Math.floor((ww - 20) / box.w), Math.floor((wh - 28) / box.h)));
+  const bob = Math.sin(t * 2.4) > 0.3 ? -Math.ceil(scale / 2) : 0;
+  const cx = Math.round(CARD_W / 2 - (box.x + box.w / 2) * scale), cy = wy + wh - 8 - (box.y + box.h) * scale;
+  drawCritter(g, c, cx, cy + bob, scale, { blink: o.blink, hidden: o.hidden });
+  if (c.rarity !== "common") {
+    const stars = { rare: 4, epic: 7, legendary: 12 }[c.rarity];
+    for (let i = 0; i < stars; i++) {
+      if ((Math.floor(t * 2 + i * 0.7) % 3) === 0) continue;
+      const sx = wx + 8 + (sparkleAt(i, 5) % (ww - 16)), sy = wy + 8 + (sparkleAt(i, 6) % (wh - 60));
+      g.fillStyle = "#fff8ee"; g.fillRect(sx - 2, sy, 6, 2); g.fillRect(sx, sy - 2, 2, 6);
+    }
+  }
   g.restore();
 
   // Rarity and number.
   g.font = `13px ${o.font}`;
-  g.fillStyle = frame.base;
-  g.fillText(o.rarityLabel.toUpperCase(), 18, 238);
+  g.fillStyle = "#fff1e4";
+  g.fillText(o.kindLabel, 18, 238, 160);
   g.textAlign = "right"; g.fillStyle = "#a59dab";
   g.fillText(`#${String(c.number).padStart(4, "0")}`, CARD_W - 18, 238);
   g.fillStyle = "#3a363f"; g.fillRect(18, 250, CARD_W - 36, 2);
@@ -110,5 +111,74 @@ export function drawCard(g: CanvasRenderingContext2D, c: Critter, o: CardOptions
     shine.addColorStop(0, "#ffffff00"); shine.addColorStop(0.5, c.rarity === "legendary" ? "#fff3c455" : "#ffffff30"); shine.addColorStop(1, "#ffffff00");
     g.fillStyle = shine;
     g.fillRect(0, 0, CARD_W, CARD_H);
+  }
+}
+
+/** Fills the art window with one of eight homes, in chunky 4-pixel blocks. */
+function drawScene(g: CanvasRenderingContext2D, scene: Scene, x: number, y: number, w: number, h: number, t: number) {
+  const block = (bx: number, by: number, bw: number, bh: number, color: string) => { g.fillStyle = color; g.fillRect(x + bx, y + by, bw, bh); };
+  const sky = (top: string, bottom: string) => {
+    const grad = g.createLinearGradient(0, y, 0, y + h);
+    grad.addColorStop(0, top); grad.addColorStop(1, bottom);
+    g.fillStyle = grad; g.fillRect(x, y, w, h);
+  };
+  const twinkle = (count: number, color: string, maxY: number, seed: number) => {
+    for (let i = 0; i < count; i++) {
+      const on = (Math.floor(t * 1.5 + i * 0.9) % 4) !== 0;
+      block(sparkleAt(i, seed) % w, sparkleAt(i, seed + 1) % maxY, 2, 2, on ? color : `${color}55`);
+    }
+  };
+  const ground = h - 20;
+  if (scene === "ocean") {
+    sky("#6ec6ff", "#1f5fa8");
+    for (let i = 0; i < 4; i++) block(0, ground - 8 + i * 8, w, 4, i % 2 ? "#2f7ad1" : "#4b9be6");
+    block(0, ground + 8, w, 20, "#e8d29a");
+    for (let i = 0; i < 6; i++) { const by = (sparkleAt(i, 3) % 120) - ((t * 12 + i * 20) % 140) + 140; block(sparkleAt(i, 4) % w, by, 4, 4, "#bfe6ff88"); }
+  } else if (scene === "forest") {
+    sky("#2f5f3a", "#16301c");
+    for (let i = 0; i < 7; i++) {
+      const tx = (i * 37 + 6) % w, th = 50 + (sparkleAt(i, 7) % 40);
+      for (let r = 0; r < th; r += 8) block(tx + r / 4, ground - th + r, Math.max(4, (th - r) / 1.8 - r / 4), 8, i % 2 ? "#24492c" : "#1d3d24");
+    }
+    block(0, ground, w, 20, "#2c5a2f");
+    twinkle(8, "#e8ff8a", ground - 20, 11);
+  } else if (scene === "desert") {
+    sky("#ffb067", "#ff7a3d");
+    g.fillStyle = "#ffe08a"; g.beginPath(); g.arc(x + w - 42, y + 38, 20, 0, Math.PI * 2); g.fill();
+    block(0, ground - 12, w * 0.6, 12, "#e8a35a");
+    block(w * 0.45, ground - 6, w * 0.55, 6, "#d99048");
+    block(0, ground, w, 20, "#f2c178");
+  } else if (scene === "snow") {
+    sky("#bfe0f5", "#7fb2d9");
+    block(0, ground - 8, w, 28, "#f4fbff");
+    block(0, ground - 8, w, 2, "#ffffff");
+    for (let i = 0; i < 18; i++) { const fy = (sparkleAt(i, 9) + t * 18) % (ground - 8); block(sparkleAt(i, 10) % w, fy, 2, 2, "#ffffff"); }
+  } else if (scene === "space") {
+    sky("#1b1036", "#0b0717");
+    twinkle(28, "#ffffff", h, 12);
+    g.fillStyle = "#c7643a"; g.beginPath(); g.arc(x + 40, y + 42, 16, 0, Math.PI * 2); g.fill();
+    block(16, 40, 48, 3, "#f0b37e");
+    block(0, ground, w, 20, "#3a2a5c");
+  } else if (scene === "city") {
+    sky("#1d2a5c", "#0f1430");
+    twinkle(10, "#ffffff", 60, 13);
+    for (let i = 0; i < 8; i++) {
+      const bw = 18 + (sparkleAt(i, 14) % 14), bh = 40 + (sparkleAt(i, 15) % 60), bx = i * 26 - 4;
+      block(bx, ground - bh, bw, bh, i % 2 ? "#18204a" : "#141a3c");
+      for (let wy2 = ground - bh + 6; wy2 < ground - 6; wy2 += 10) for (let wx2 = bx + 4; wx2 < bx + bw - 4; wx2 += 8)
+        if (sparkleAt(wx2 * 7 + wy2, 16) % 3 === 0) block(wx2, wy2, 4, 4, "#ffd96a");
+    }
+    block(0, ground, w, 20, "#232a4a");
+  } else if (scene === "lava") {
+    sky("#3a0d0d", "#1a0606");
+    block(0, ground - 4, w, 24, "#ff5a1f");
+    for (let i = 0; i < 10; i++) block((i * 23 + Math.floor(t * 8)) % w, ground - 4 + (i % 3) * 6, 8, 4, "#ffc23d");
+    for (let i = 0; i < 10; i++) { const ey = ground - ((t * 20 + sparkleAt(i, 17)) % ground); block(sparkleAt(i, 18) % w, ey, 2, 2, "#ff9b3d"); }
+  } else {
+    sky("#9fdcff", "#d9f3ff");
+    for (const [cx, cy] of [[30, 26], [130, 44]]) { block(cx, cy, 32, 8, "#ffffff"); block(cx + 8, cy - 6, 16, 6, "#ffffff"); }
+    block(0, ground - 4, w, 24, "#5cc15a");
+    block(0, ground - 4, w, 2, "#86dd7a");
+    for (let i = 0; i < 12; i++) block(sparkleAt(i, 19) % w, ground + (sparkleAt(i, 20) % 14), 2, 2, i % 2 ? "#ff8fc8" : "#ffd23f");
   }
 }

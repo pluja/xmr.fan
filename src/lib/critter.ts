@@ -1,46 +1,35 @@
-/* Address art: every Monero address hatches its own pixel critter. The whole address is hashed,
-   so changing any character gives a different critter, which makes look-alike addresses easy to spot. */
+/* Address art: every Monero address hatches its own pixel critter. The whole address is hashed into a
+   species, colors, a signature item and a home, so look-alike addresses hatch strangers. */
 import { keccak_256 } from "@noble/hashes/sha3.js";
+import { HUES, ITEM_COLORS, ITEMS, MARKINGS, SCENES, SPECIES, TAILS, type Hue, type ItemName, type Scene, type Species } from "./critter-parts.ts";
 
-export const SIZE = 24;
-
-/**
- * One letter per pixel: "." empty, o outline, b body, d shade, l light, w white, e eye, s eye sparkle,
- * p blush, t tongue, a accent, g gold.
- */
-export type Pixel = "." | "o" | "b" | "d" | "l" | "w" | "e" | "s" | "p" | "t" | "a" | "g";
-export type Paint = Exclude<Pixel, ".">;
+export const GRID_W = 36, GRID_H = 32;
 
 export const RARITIES = ["common", "rare", "epic", "legendary"] as const;
 export type Rarity = (typeof RARITIES)[number];
 /** Chance of each rarity, in the same order. */
 export const RARITY_ODDS = [0.8, 0.15, 0.04, 0.01] as const;
 
+/**
+ * Pixels are color keys: "" empty, o outline, b body, d shade, l light, m marking, w white, e eye, s sparkle,
+ * p blush, t tongue, a accent, and "i" plus a letter for item colors.
+ */
 export interface Critter {
-  rows: string[];
-  colors: Record<Paint, string>;
-  /** Two backdrop colors, top and bottom. */
-  backdrop: [string, string];
+  pixels: string[][];
+  colors: Record<string, string>;
   name: string;
+  species: Species;
+  hue: Hue;
+  item: ItemName;
+  scene: Scene;
   rarity: Rarity;
   /** A serial number from 1 to 9999, like a trading card. */
   number: number;
-  /** First and last row of the eyes, for blinking; null when they're already shut. */
+  /** First and last row of the eyes, for blinking; null when they're covered or already shut. */
   eyeRows: [number, number] | null;
 }
 
-const HUES = [
-  { o: "#5a2108", d: "#d1520c", b: "#ff7a1a", l: "#ffb27a", sky: ["#4a2a1c", "#1f1714"] },
-  { o: "#0d3b33", d: "#22917a", b: "#3fc1a9", l: "#a3eedd", sky: ["#163a33", "#0f1c1a"] },
-  { o: "#2a1660", d: "#6a3fd1", b: "#9b6bff", l: "#d2bdff", sky: ["#2c2248", "#15121f"] },
-  { o: "#5c1233", d: "#d1477f", b: "#ff6fae", l: "#ffc2dc", sky: ["#4a1f33", "#1f131a"] },
-  { o: "#0f2559", d: "#2f63c9", b: "#4f8dff", l: "#b3d0ff", sky: ["#1d2c4a", "#11161f"] },
-  { o: "#1f420c", d: "#5ca62e", b: "#9be15d", l: "#d7f7b5", sky: ["#253b1c", "#121a10"] },
-  { o: "#5c4205", d: "#cf9d12", b: "#ffd23f", l: "#fff0b3", sky: ["#4a3d1a", "#1f1a10"] },
-  { o: "#5c0f0c", d: "#cc332c", b: "#ff5a4f", l: "#ffb8b3", sky: ["#4a1d1b", "#1f1211"] },
-];
-const ACCENTS = ["#fff1e0", "#ffd23f", "#3fc1a9", "#ff6fae", "#4f8dff", "#ff7a1a", "#9be15d"];
-const SYLLABLES = ["ba", "bo", "ki", "zu", "mo", "ra", "lu", "xe", "pi", "no", "ta", "vi", "go", "fe", "shi", "ko", "ru", "ze", "mi", "da", "wo", "ne", "chu", "ya", "pa", "rin", "mu", "zo"];
+const SYLLABLES = ["pi", "bo", "ka", "zu", "mo", "ru", "ti", "na", "lu", "ko", "fe", "ba", "mi", "do", "sa", "yu", "ro", "ni", "pu", "ge", "wa", "chi", "to", "ri"];
 
 /** sfc32, seeded from the hash, so the same address always draws the same critter. */
 function generator(seed: Uint8Array) {
@@ -54,134 +43,151 @@ function generator(seed: Uint8Array) {
   };
 }
 
+const BODY = new Set(["b", "d", "l", "m"]);
+/** Bodies are 20 pixels wide, from column X0, so they mirror around X0 + 9.5. */
+const X0 = 6;
+const mirror = (x: number) => X0 + 19 - (x - X0);
+
 export function critterFromAddress(address: string): Critter {
   const hash = keccak_256(new TextEncoder().encode(address.trim()));
   const random = generator(hash);
   const pick = <T,>(list: readonly T[]) => list[Math.floor(random() * list.length)];
+
+  const species = pick(Object.keys(SPECIES) as Species[]);
+  const hue = pick(Object.keys(HUES) as Hue[]);
+  const marking = pick(MARKINGS.filter((m) => !m.avoid.includes(hue))).color;
+  const item = pick(Object.keys(ITEMS) as ItemName[]);
+  const scene = pick(SCENES);
   const roll = random();
   const rarity: Rarity = roll < 0.01 ? "legendary" : roll < 0.05 ? "epic" : roll < 0.2 ? "rare" : "common";
 
-  const grid: Pixel[][] = Array.from({ length: SIZE }, () => Array<Pixel>(SIZE).fill("."));
-  const HALF = SIZE / 2;
-  const inside = (x: number, y: number) => y >= 0 && y < SIZE && x >= 0 && x < SIZE;
-  const set = (x: number, y: number, p: Pixel) => {
-    if (!inside(x, y) || x >= HALF) return;
-    grid[y][x] = p;
-    grid[y][SIZE - 1 - x] = p;
-  };
-  const get = (x: number, y: number): Pixel => (inside(x, y) ? grid[y][x] : ".");
-  const isBody = (p: Pixel) => p === "b" || p === "d" || p === "l";
-  const bodyRows = () => grid.map((row, y) => (row.some(isBody) ? y : -1)).filter((y) => y >= 0);
+  const grid: string[][] = Array.from({ length: GRID_H }, () => Array<string>(GRID_W).fill(""));
+  const inside = (x: number, y: number) => x >= 0 && y >= 0 && x < GRID_W && y < GRID_H;
+  const set = (x: number, y: number, p: string) => { if (inside(x, y)) grid[y][x] = p; };
+  const get = (x: number, y: number) => (inside(x, y) ? grid[y][x] : "");
+  const isBody = (x: number, y: number) => BODY.has(get(x, y));
 
-  // Body: a soft ellipse with a ragged edge, drawn on the left half and mirrored.
-  const shape = pick(["blob", "blob", "tall", "wide", "ghost", "slime"] as const);
-  const rx = shape === "wide" ? 8 + random() * 1.5 : shape === "tall" ? 5 + random() : 6 + random() * 1.8;
-  const ry = shape === "tall" ? 8 + random() * 1.2 : shape === "wide" ? 5.5 + random() : 6 + random() * 1.6;
-  const cy = 13.8 + (random() - 0.5);
-  for (let y = 0; y < SIZE; y++) for (let x = 0; x < HALF; x++) {
-    const dx = (x + 0.5 - HALF) / rx;
-    let dy = (y + 0.5 - cy) / ry;
-    // Slimes sit flat and spread at the bottom.
-    if (shape === "slime" && dy > 0) dy *= 0.6;
-    const e = dx * dx + dy * dy;
-    // A thin ragged band keeps the outline organic without turning it into fuzz.
-    if (e < 0.92 || (e < 1.04 && random() < 0.4)) set(x, y, "b");
-  }
-  const top = bodyRows()[0];
-  let bottom = bodyRows().at(-1)!;
-  if (shape === "ghost") for (let x = 0; x < HALF; x++) if (x % 3 === 0) set(x, bottom, ".");
-  bottom = bodyRows().at(-1)!;
+  // Body: the left half mirrored, standing on row 30.
+  const template: readonly string[] = SPECIES[species];
+  const y0 = 30 - (template.length - 1);
+  let eyeX = -1, eyeY = -1;
+  template.forEach((row, r) => [...row].forEach((ch, c) => {
+    if (ch === ".") return;
+    if (ch === "E") { eyeX = X0 + c; eyeY = y0 + r; }
+    // An eye cell takes the color beside it, so eyes on a white face disc sit on white.
+    const p = ch === "#" ? "b" : ch === "k" ? "e" : ch === "E" ? ({ m: "m", w: "w" } as Record<string, string>)[row[c + 1]] ?? "b" : ch;
+    set(X0 + c, y0 + r, p);
+    set(mirror(X0 + c), y0 + r, p);
+  }));
 
-  // Markings.
-  const pattern = pick(["plain", "belly", "belly", "spots", "stripes"] as const);
-  for (let y = 0; y < SIZE; y++) for (let x = 0; x < HALF; x++) {
-    if (get(x, y) !== "b") continue;
-    const belly = ((x + 0.5 - HALF) / (rx * 0.55)) ** 2 + ((y + 0.5 - (cy + ry * 0.35)) / (ry * 0.45)) ** 2 < 1;
-    if (pattern === "belly" && belly) set(x, y, "l");
-    if (pattern === "spots" && random() < 0.1) set(x, y, "l");
-    if (pattern === "stripes" && y % 3 === 0 && y < cy) set(x, y, "d");
+  const pattern = pick(["plain", "plain", "spots", "stripes"] as const);
+  for (let y = 0; y < GRID_H; y++) for (let x = X0; x < X0 + 10; x++) {
+    if (grid[y][x] !== "b") continue;
+    if (pattern === "spots" && random() < 0.07) { set(x, y, "m"); set(mirror(x), y, "m"); }
+    if (pattern === "stripes" && y % 3 === 0 && y < eyeY) { set(x, y, "d"); set(mirror(x), y, "d"); }
   }
 
-  // Head gear, with the rarest critters wearing a halo or a crown.
-  const gear = rarity === "legendary" ? "halo" : rarity === "epic" ? "crown" : pick(["antenna", "horns", "ears", "sprout", "spikes", "none"] as const);
-  const peak = top - 1;
-  const at = (dx: number) => HALF - 1 - dx;
-  if (gear === "antenna") { set(at(0), peak, "o"); set(at(0), peak - 1, "o"); set(at(0), peak - 2, "a"); set(at(1), peak - 2, "a"); set(at(0), peak - 3, "a"); }
-  if (gear === "horns") { set(at(3), peak, "w"); set(at(4), peak, "w"); set(at(4), peak - 1, "w"); set(at(5), peak - 2, "w"); }
-  if (gear === "ears") { set(at(3), peak, "b"); set(at(4), peak, "b"); set(at(5), peak, "b"); set(at(4), peak - 1, "b"); set(at(5), peak - 1, "p"); set(at(5), peak - 2, "b"); }
-  if (gear === "sprout") { set(at(0), peak, "o"); set(at(0), peak - 1, "o"); set(at(1), peak - 2, "a"); set(at(2), peak - 2, "a"); set(at(1), peak - 1, "a"); }
-  if (gear === "spikes") for (const i of [0, 3]) { set(at(i), peak, "d"); set(at(i), peak - 1, "d"); }
-  if (gear === "crown") { for (let i = 0; i < 4; i++) set(at(i), peak, "g"); set(at(0), peak - 1, "a"); set(at(3), peak - 1, "g"); set(at(3), peak - 2, "g"); set(at(1), peak - 1, "g"); }
-  if (gear === "halo") { for (let i = 0; i < 4; i++) { set(at(i), peak - 4, "g"); set(at(i), peak - 2, "g"); } set(at(4), peak - 3, "g"); }
+  const rows = grid.map((row, y) => (row.some((p) => BODY.has(p)) ? y : -1)).filter((y) => y >= 0);
+  const top = rows[0], bottom = rows.at(-1)!;
+  const centerTop = grid.findIndex((row) => BODY.has(row[X0 + 9]));
+  const rightEdge = (y: number) => grid[y].findLastIndex((p) => BODY.has(p));
+  const leftEdge = (y: number) => grid[y].findIndex((p) => BODY.has(p));
 
-  // Arms and feet.
-  if (random() < 0.6) {
-    const armY = Math.round(cy + 1.5), edge = grid[armY].findIndex(isBody);
-    if (edge > 1) { set(edge - 1, armY, "b"); set(edge - 2, armY - (random() < 0.5 ? 1 : 0), "b"); }
+  // Eyes: two pixels wide, the left one at eyeX and the right one mirrored.
+  const eyes = pick(["bead", "bead", "tall", "round", "sleepy", "glare"] as const);
+  const rightEyeX = mirror(eyeX) - 1;
+  const tall = eyes === "tall" && isBody(eyeX, eyeY + 2) && isBody(eyeX + 1, eyeY + 2);
+  const eyeH = tall ? 3 : eyes === "sleepy" ? 1 : 2;
+  for (const [ex, inner] of [[eyeX, eyeX + 1], [rightEyeX, rightEyeX]] as const) {
+    if (eyes === "sleepy") { set(ex, eyeY + 1, "e"); set(ex + 1, eyeY + 1, "e"); continue; }
+    if (eyes === "round") { for (const [dx, dy] of [[0, 0], [1, 0], [0, 1], [1, 1]]) set(ex + dx, eyeY + dy, "w"); set(inner, eyeY + 1, "e"); continue; }
+    for (let y = 0; y < eyeH; y++) { set(ex, eyeY + y, "e"); set(ex + 1, eyeY + y, "e"); }
+    set(ex, eyeY, "s");
+    if (eyes === "glare") { set(ex, eyeY - 1, "o"); set(ex + 1, eyeY - 1, "o"); }
   }
-  if (shape !== "ghost" && shape !== "slime" && bottom + 1 < SIZE) {
-    const footX = grid[bottom].findIndex(isBody) + 1;
-    set(footX, bottom + 1, "d"); set(footX + 1, bottom + 1, "d");
+  if ((eyes === "bead" || eyes === "tall") && random() < 0.6) {
+    for (const x of [eyeX - 1, rightEyeX + 2]) if (isBody(x, eyeY + eyeH)) set(x, eyeY + eyeH, "p");
   }
 
-  // Face.
-  const eyeY = Math.max(top + 2, Math.round(cy - ry * 0.3));
-  const eyeX = HALF - 3 - Math.floor(random() * 2);
-  const eyes = pick(["cute", "cute", "round", "visor", "angry", "happy", "cyclops"] as const);
-  if (eyes === "cute" || eyes === "angry") {
-    for (let y = 0; y < 3; y++) { set(eyeX, eyeY + y, "e"); set(eyeX - 1, eyeY + y, "e"); }
-    set(eyeX - 1, eyeY, "s");
-    if (eyes === "angry") { set(eyeX - 1, eyeY - 2, "o"); set(eyeX, eyeY - 1, "o"); set(eyeX + 1, eyeY - 1, "o"); }
+  // Mouth, unless the species has a beak or no face below the eyes.
+  const mouthY = eyeY + eyeH + 1;
+  const cx = X0 + 9;
+  const beak = species === "owl" || species === "penguin" || species === "robot";
+  if (!beak && isBody(cx, mouthY) && isBody(cx, mouthY + 1)) {
+    const mouth = pick(["smile", "open", "cat", "fang", "tiny"] as const);
+    if (mouth === "smile") { set(cx - 1, mouthY, "e"); set(cx + 2, mouthY, "e"); set(cx, mouthY + 1, "e"); set(cx + 1, mouthY + 1, "e"); }
+    if (mouth === "open") { set(cx, mouthY, "e"); set(cx + 1, mouthY, "e"); set(cx, mouthY + 1, "t"); set(cx + 1, mouthY + 1, "e"); }
+    if (mouth === "cat") { for (const x of [cx - 1, cx, cx + 1, cx + 2]) set(x, mouthY, "e"); set(cx - 1, mouthY - 1, "e"); set(cx + 2, mouthY - 1, "e"); }
+    if (mouth === "fang") { set(cx, mouthY, "e"); set(cx + 1, mouthY, "e"); set(cx + 1, mouthY + 1, "w"); }
+    if (mouth === "tiny") { set(cx, mouthY, "e"); set(cx + 1, mouthY, "e"); }
   }
-  if (eyes === "round") {
-    for (let y = 0; y < 3; y++) for (let x = 0; x < 3; x++) set(eyeX - x, eyeY + y, "w");
-    for (const [x, y] of [[0, 1], [1, 1], [0, 2], [1, 2]]) set(eyeX - x, eyeY + y, "e");
+
+  // A tail on the right breaks the symmetry, which makes a silhouette easier to remember.
+  const tail = TAILS[species];
+  if (tail) {
+    const ty = bottom - 1, tx = rightEdge(ty) + 1;
+    tail.forEach((row, r) => [...row].forEach((ch, c) => { if (ch !== ".") set(tx + c, ty - (tail.length - 1) + r, ch === "#" ? "b" : ch); }));
   }
-  if (eyes === "visor") {
-    for (let x = eyeX - 2; x < HALF; x++) { set(x, eyeY, "e"); set(x, eyeY + 1, "e"); }
-    set(eyeX - 1, eyeY, "a"); set(eyeX, eyeY, "a");
+
+  // The signature item.
+  const it = ITEMS[item];
+  const paint = (rows: readonly string[], x: number, y: number) =>
+    rows.forEach((row, r) => [...row].forEach((ch, c) => { if (ch !== ".") set(x + c, y + r, `i${ch}`); }));
+  let eyesCovered = false;
+  if (it.at === "hand") {
+    const hy = top + Math.round((bottom - top) * 0.55);
+    // The grip sits just outside the body; critters with a tail hold things on the other side.
+    const side = tail ? -1 : 1;
+    let x = (tail ? leftEdge(hy) - 1 : rightEdge(hy) + 1) - it.grip[0];
+    const y = hy - it.grip[1];
+    // Slide it outwards until it no longer covers the body.
+    const covers = (ix: number) => it.rows.some((row, r) => [...row].some((ch, c) => ch !== "." && isBody(ix + c, y + r)));
+    for (let n = 0; n < 10 && covers(x); n++) x += side;
+    paint(it.rows, x, y);
+  } else if (item === "headphones") {
+    const lx = leftEdge(eyeY) - 1, rx = rightEdge(eyeY) + 1, band = centerTop - 1;
+    for (let x = lx; x <= rx; x++) set(x, band, "ik");
+    for (let y = band; y < eyeY + 3; y++) { set(lx, y, "ik"); set(rx, y, "ik"); }
+    for (let y = eyeY; y < eyeY + 3; y++) { set(lx - 1, y, "ir"); set(rx + 1, y, "ir"); }
+  } else if (it.at === "head") {
+    const width = Math.max(...it.rows.map((r) => r.length));
+    paint(it.rows, X0 + 10 - Math.ceil(width / 2), centerTop - it.rows.length);
+  } else if (it.at === "eyes") {
+    eyesCovered = true;
+    for (let x = eyeX - 1; x <= rightEyeX + 2; x++) set(x, eyeY, "ik");
+    for (const ex of [eyeX - 1, rightEyeX]) for (let x = ex; x < ex + 3; x++) set(x, eyeY + 1, "ik");
+    set(eyeX, eyeY, "iw"); set(rightEyeX + 1, eyeY, "iw");
+  } else {
+    const ny = Math.min(bottom - 3, mouthY + 2);
+    for (let y = ny; y < ny + 2; y++) for (let x = leftEdge(y); x <= rightEdge(y); x++) set(x, y, "ir");
+    const end = rightEdge(ny) - 2;
+    set(end, ny + 2, "ir"); set(end + 1, ny + 2, "ir"); set(end, ny + 3, "ir");
   }
-  if (eyes === "happy") { set(eyeX - 1, eyeY + 1, "e"); set(eyeX, eyeY, "e"); set(eyeX + 1, eyeY + 1, "e"); }
-  if (eyes === "cyclops") {
-    for (let y = 0; y < 4; y++) for (let x = 0; x < 2; x++) set(HALF - 1 - x, eyeY + y, "w");
-    set(HALF - 1, eyeY + 1, "e"); set(HALF - 1, eyeY + 2, "e"); set(HALF - 2, eyeY + 2, "e"); set(HALF - 2, eyeY + 1, "s");
-  }
-  if ((eyes === "cute" || eyes === "happy") && random() < 0.7) { set(eyeX - 1, eyeY + 3, "p"); set(eyeX - 2, eyeY + 3, "p"); }
-  const mouthY = Math.min(bottom - 2, eyeY + (eyes === "cyclops" ? 5 : 4));
-  const mouth = pick(["cat", "smile", "fang", "open", "tiny"] as const);
-  if (mouth === "cat") { set(HALF - 1, mouthY, "e"); set(HALF - 2, mouthY + 1, "e"); set(HALF - 3, mouthY, "e"); }
-  if (mouth === "smile") { set(HALF - 1, mouthY + 1, "e"); set(HALF - 2, mouthY + 1, "e"); set(HALF - 3, mouthY, "e"); }
-  if (mouth === "fang") { set(HALF - 1, mouthY, "e"); set(HALF - 2, mouthY, "e"); set(HALF - 2, mouthY + 1, "w"); }
-  if (mouth === "open") { set(HALF - 1, mouthY, "e"); set(HALF - 2, mouthY, "e"); set(HALF - 1, mouthY + 1, "t"); set(HALF - 2, mouthY + 1, "e"); }
-  if (mouth === "tiny") set(HALF - 1, mouthY, "e");
 
   // Light from the top left: edges facing up or left catch it, edges facing down or right fall in shade.
   const lit = grid.map((row) => [...row]);
-  for (let y = 0; y < SIZE; y++) for (let x = 0; x < SIZE; x++) {
+  for (let y = 0; y < GRID_H; y++) for (let x = 0; x < GRID_W; x++) {
     if (grid[y][x] !== "b") continue;
-    if (!isBody(get(x, y + 1)) || !isBody(get(x + 1, y)) || (y > cy && !isBody(get(x, y + 2)))) lit[y][x] = "d";
-    else if (!isBody(get(x, y - 1)) || (y < cy && !isBody(get(x - 1, y)))) lit[y][x] = "l";
+    if (!isBody(x, y + 1) || !isBody(x + 1, y)) lit[y][x] = "d";
+    else if (!isBody(x, y - 1) || !isBody(x - 1, y)) lit[y][x] = "l";
   }
-  // Outline everything that touches the critter, except floating gold and accents.
-  const filled = lit.map((row) => row.map((p) => p !== "."));
-  for (let y = 0; y < SIZE; y++) for (let x = 0; x < SIZE; x++) {
+  // Outline everything, items included, so the shape reads on any backdrop.
+  const filled = lit.map((row) => row.map((p) => p !== ""));
+  for (let y = 0; y < GRID_H; y++) for (let x = 0; x < GRID_W; x++) {
     if (filled[y][x]) continue;
-    if ([[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => filled[y + dy]?.[x + dx] && !"ag".includes(lit[y + dy][x + dx]))) lit[y][x] = "o";
+    if ([[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => filled[y + dy]?.[x + dx])) lit[y][x] = "o";
   }
 
-  const hue = pick(HUES);
-  const name = Array.from({ length: 2 }, () => {
-    const word = Array.from({ length: 2 + Math.floor(random() * 2) }, () => pick(SYLLABLES)).join("");
-    return word[0].toUpperCase() + word.slice(1);
-  }).join(" ");
+  const colors: Record<string, string> = { ...HUES[hue], m: marking, w: "#fffaf2", e: "#1a1420", s: "#ffffff", p: "#ff8fb1", t: "#ff4f6d", a: "#ffb02e", c: "#c8693a" };
+  for (const [k, v] of Object.entries(ITEM_COLORS)) colors[`i${k}`] = v;
+  const name = Array.from({ length: random() < 0.3 ? 3 : 2 }, () => pick(SYLLABLES)).join("");
   return {
-    rows: lit.map((row) => row.join("")),
-    colors: { o: hue.o, b: hue.b, d: hue.d, l: hue.l, w: "#fffaf2", e: "#1a1420", s: "#ffffff", p: "#ff8fb1", t: "#ff4f6d", a: pick(ACCENTS), g: "#ffd23f" },
-    backdrop: hue.sky as [string, string],
-    name,
-    rarity,
+    pixels: lit,
+    colors,
+    name: name[0].toUpperCase() + name.slice(1),
+    species, hue, item, scene, rarity,
     number: (((hash[30] << 8) | hash[31]) % 9999) + 1,
-    eyeRows: eyes === "happy" ? null : [eyeY, eyeY + { cute: 2, angry: 2, round: 2, visor: 1, cyclops: 3 }[eyes]],
+    eyeRows: eyesCovered || eyes === "sleepy" ? null : [eyeY, eyeY + eyeH - 1],
   };
 }
 
@@ -194,16 +200,26 @@ export interface DrawOptions {
 
 /** Paints a critter at (x, y), one square of `scale` per pixel. */
 export function drawCritter(g: CanvasRenderingContext2D, critter: Critter, x: number, y: number, scale: number, o: DrawOptions = {}) {
-  critter.rows.forEach((row, cy) => {
+  const eyes = critter.eyeRows;
+  critter.pixels.forEach((row, cy) => {
     if (cy < (o.hidden ?? 0)) return;
-    [...row].forEach((p, cx) => {
-      if (p === ".") return;
-      let paint = p as Paint;
+    row.forEach((p, cx) => {
+      if (!p) return;
+      let key = p;
       // Shut eyes: the eye rows take the body color, except a dark line along the bottom.
-      const eyes = critter.eyeRows;
-      if (o.blink && eyes && cy >= eyes[0] && cy <= eyes[1] && "esw".includes(p)) paint = cy === eyes[1] ? "e" : "b";
-      g.fillStyle = critter.colors[paint];
+      if (o.blink && eyes && cy >= eyes[0] && cy <= eyes[1] && (p === "e" || p === "s" || p === "w")) key = cy === eyes[1] ? "e" : "b";
+      g.fillStyle = critter.colors[key];
       g.fillRect(x + cx * scale, y + cy * scale, scale, scale);
     });
   });
+}
+
+/** The smallest box around a critter's pixels. */
+export function critterBounds(c: Critter) {
+  let x0 = Infinity, y0 = Infinity, x1 = -1, y1 = -1;
+  c.pixels.forEach((row, y) => row.forEach((p, x) => {
+    if (!p) return;
+    x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y);
+  }));
+  return { x: x0, y: y0, w: x1 - x0 + 1, h: y1 - y0 + 1 };
 }
