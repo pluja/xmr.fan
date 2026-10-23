@@ -35,8 +35,8 @@ $(tail -n 25 "$log")"; exit 1; }
 
 git pull --ff-only --quiet >>"$log" 2>&1 || fail "git pull failed"
 # Jobs run in the compose `jobs` container (Node and ffmpeg) as this user, so the files they write stay ours.
-export JOBS_UID JOBS_GID
-JOBS_UID="$(id -u)" JOBS_GID="$(id -g)"
+RUN_UID="${RUN_UID:-$(id -u)}" RUN_GID="${RUN_GID:-$(id -g)}"
+export RUN_UID RUN_GID
 in_jobs() { docker compose run --rm -T jobs "$@"; }
 docker compose --profile jobs build -q jobs >>"$log" 2>&1 || fail "building the jobs image failed"
 
