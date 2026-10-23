@@ -13,38 +13,36 @@ const strings = pickStrings(lang, [
   "fee_low", "fee_medium", "fee_high", "fee_highest", "dur_s", "dur_min", "dur_h", "dur_d", "dur_y",
 ]);
 const BLOCKS = 30;
-const stat = "grid gap-1 border-t-2 border-graphite pt-3";
+const stat = "grid gap-0.5";
 const statLabel = "font-pixel text-xs tracking-[0.14em] text-ash uppercase";
 ---
-<div id="mempool-tool" class="grid grid-cols-1 gap-8" data-strings={strings} data-lang={lang} data-blocks={BLOCKS}>
-  <section class="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
-    <Gauge size="lg" label={t("mp_fill")} min="0" max={t("mp_n_blocks", { n: 3 })} zones={[1 / 3, 2 / 3]} data-g="fill" />
-    <div data-verdict data-state="calm" class="group/verdict grid content-center gap-4 border-2 border-graphite bg-ink px-5 py-5 sm:px-6">
-      <p class="flex items-center gap-3">
-        <span class="size-4 shrink-0 bg-ash group-data-[state=busy]/verdict:bg-orange group-data-[state=calm]/verdict:bg-good group-data-[state=flood]/verdict:bg-bad group-data-[state=jam]/verdict:bg-flame motion-safe:group-data-[state=flood]/verdict:animate-blink" aria-hidden="true"></span>
-        <span data-state-name class="font-pixel text-3xl leading-none text-cream group-data-[state=busy]/verdict:text-orange group-data-[state=calm]/verdict:text-good group-data-[state=flood]/verdict:text-bad group-data-[state=jam]/verdict:text-flame">…</span>
-      </p>
-      <p data-say class="leading-relaxed text-cream/80" aria-live="polite"></p>
-      <dl class="grid grid-cols-2 gap-4">
-        <div class={stat}><dt class={statLabel}>{t("mp_waiting")}</dt><dd data-waiting class="font-mono text-base text-cream sm:text-lg">…</dd></div>
-        <div class={stat}><dt class={statLabel}>{t("mp_last_block")}</dt><dd data-last class="font-mono text-base text-cream sm:text-lg">…</dd></div>
-      </dl>
-    </div>
+<div id="mempool-tool" class="grid grid-cols-1 gap-6" data-strings={strings} data-lang={lang} data-blocks={BLOCKS}>
+  <section data-verdict data-state="calm" class="group/verdict flex flex-wrap items-center gap-x-6 gap-y-3 border-2 border-graphite bg-ink px-5 py-4">
+    <p class="flex items-center gap-3">
+      <span class="size-4 shrink-0 bg-ash group-data-[state=busy]/verdict:bg-orange group-data-[state=calm]/verdict:bg-good group-data-[state=flood]/verdict:bg-bad group-data-[state=jam]/verdict:bg-flame motion-safe:group-data-[state=flood]/verdict:animate-blink" aria-hidden="true"></span>
+      <span data-state-name class="font-pixel text-2xl leading-none text-cream group-data-[state=busy]/verdict:text-orange group-data-[state=calm]/verdict:text-good group-data-[state=flood]/verdict:text-bad group-data-[state=jam]/verdict:text-flame">…</span>
+    </p>
+    <p data-say class="min-w-[16rem] flex-1 text-cream/80" aria-live="polite"></p>
+    <dl class="flex gap-6">
+      <div class={stat}><dt class={statLabel}>{t("mp_waiting")}</dt><dd data-waiting class="font-mono text-base text-cream">…</dd></div>
+      <div class={stat}><dt class={statLabel}>{t("mp_last_block")}</dt><dd data-last class="font-mono text-base text-cream">…</dd></div>
+    </dl>
   </section>
 
-  <section class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
+  <section class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+    <Gauge label={t("mp_fill")} min="0" max={t("mp_n_blocks", { n: 3 })} zones={[1 / 3, 2 / 3]} data-g="fill" class="max-lg:col-span-2" />
     <Gauge label={t("mp_fee")} min="1×" max="200×" zones={[0.26, 0.52]} data-g="fee" />
     <Gauge label={t("mp_age")} min="0" max="30 min" zones={[1 / 3, 2 / 3]} data-g="age" />
-    <Gauge label={t("mp_recent")} min="0" max="100%" zones={[0.5, 0.9]} data-g="recent" class="max-sm:hidden" />
+    <Gauge label={t("mp_recent")} min="0" max="100%" zones={[0.5, 0.9]} data-g="recent" class="max-lg:hidden" />
   </section>
 
-  <section class="grid gap-4" aria-labelledby="mp-blocks-t">
+  <section class="grid gap-3" aria-labelledby="mp-blocks-t">
     <div class="grid gap-1">
       <h2 id="mp-blocks-t" class="flex items-center gap-2.5 font-pixel text-sm tracking-[0.2em] text-cream uppercase"><span class="size-2 bg-orange"></span>{t("mp_blocks_t")}</h2>
       <p class="text-sm text-ash">{t("mp_blocks_help", { n: BLOCKS })}</p>
     </div>
-    <div class="grid gap-2 border-2 border-graphite bg-ink px-3 pt-8 pb-3 sm:px-4">
-      <div class="relative h-40">
+    <div class="grid gap-2 border-2 border-graphite bg-ink px-3 pt-6 pb-2 sm:px-4">
+      <div class="relative h-28">
         <ol data-bars class="absolute inset-0 flex items-end gap-[2px] sm:gap-1"></ol>
         <i class="pointer-events-none absolute inset-x-0 top-1/3 border-t-2 border-dashed border-cream/40" aria-hidden="true"></i>
       </div>
@@ -52,9 +50,8 @@ const statLabel = "font-pixel text-xs tracking-[0.14em] text-ash uppercase";
     </div>
   </section>
 
-  <div class="grid gap-3 border-t-2 border-graphite pt-5">
-    <TrustNote icon="info">{t("mp_why")}</TrustNote>
-    <TrustNote icon="info">{t("mp_refresh")}</TrustNote>
+  <div class="grid gap-2.5 border-t-2 border-graphite pt-4">
+    <TrustNote icon="info">{`${t("mp_why")} ${t("mp_refresh")}`}</TrustNote>
     <NodeSource lang={lang} dark />
   </div>
 </div>
