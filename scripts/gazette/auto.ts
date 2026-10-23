@@ -5,7 +5,7 @@
    GAZETTE_REVIEW_HOURS (default 12) is the time between "draft ready" and going live;
    npm run gazette:hold -- <week> stops it. PODCAST_LANGS (default "en,es") picks the audio languages. */
 import { spawnSync } from "node:child_process";
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { editionSchema, type EditionData } from "../../src/lib/gazette-schema.ts";
 import { notify } from "../notify.ts";
 import { LANGUAGES } from "./translate.ts";
@@ -50,6 +50,8 @@ async function draft() {
   }
 
   if (existsSync(draftedMarker)) return;
+  // A fresh checkout has no .gazette/ when every step was already done in git.
+  mkdirSync(".gazette", { recursive: true });
   writeFileSync(draftedMarker, new Date().toISOString());
   edition = read();
   const at = new Date(Date.now() + REVIEW_HOURS * 3_600_000).toISOString().slice(11, 16);
