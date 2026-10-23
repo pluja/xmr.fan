@@ -2,15 +2,25 @@
 import PixelIcon from "../PixelIcon.astro";
 import AddressInput from "../ui/AddressInput.astro";
 import TrustNote from "../ui/TrustNote.astro";
-import { button, cx, message } from "../ui/styles";
+import { button, cx, link, message } from "../ui/styles";
 import donations from "../../data/donations.json";
 import { RARITIES, RARITY_ODDS } from "../../lib/critter";
-import { pickStrings, useTranslations, type Locale } from "../../i18n/ui";
+import { HUES, ITEMS, SCENES, SPECIES } from "../../lib/critter-parts";
+import { pickStrings, useTranslations, type Key, type Locale } from "../../i18n/ui";
 
 interface Props { lang: Locale }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const strings = pickStrings(lang, ["ar_error", "ar_meet", "ar_from", "ar_card_alt", "ar_rarity_common", "ar_rarity_rare", "ar_rarity_epic", "ar_rarity_legendary", "copied"]);
+const TRAITS = [
+  ...Object.keys(SPECIES).map((k) => `ar_sp_${k}`),
+  ...Object.keys(HUES).map((k) => `ar_hue_${k}`),
+  ...Object.keys(ITEMS).map((k) => `ar_item_${k}`),
+  ...SCENES.map((k) => `ar_scene_${k}`),
+] as Key[];
+const strings = pickStrings(lang, [
+  "ar_error", "ar_meet", "ar_from", "ar_card_alt", "ar_mine", "ar_stranger_help", "copied",
+  "ar_rarity_common", "ar_rarity_rare", "ar_rarity_epic", "ar_rarity_legendary", ...TRAITS,
+]);
 const ODDS_COLOR = { common: "bg-[#8c8494]", rare: "bg-[#4f8dff]", epic: "bg-[#b46bff]", legendary: "bg-[#ffc83d]" } as const;
 const PRESETS = ["getmonero", "torproject", "grapheneos", "privacyguides", "p2pool", "wikileaks"]
   .map((id) => donations.find((d) => d.id === id))
@@ -27,8 +37,27 @@ const PRESETS = ["getmonero", "torproject", "grapheneos", "privacyguides", "p2po
     </div>
   </section>
 
+  <div data-saved="none" class="group/saved contents">
+    <p class="hidden items-center gap-3 border-2 border-good bg-[#1f3a2a] px-4 py-3 text-cream group-data-[saved=mine]/saved:flex">
+      <PixelIcon name="check" size={18} class="shrink-0 text-good" /><span data-mine></span>
+    </p>
+    <div class="hidden items-center gap-4 border-2 border-bad bg-[#3a1f1f] px-4 py-3 group-data-[saved=stranger]/saved:flex">
+      <canvas data-yours width="96" height="96" class="size-24 shrink-0 bg-black/20 [image-rendering:pixelated]"></canvas>
+      <div class="grid gap-1">
+        <p class="font-pixel text-lg leading-snug text-bad">{t("ar_stranger")}</p>
+        <p data-stranger class="text-sm text-cream/80"></p>
+      </div>
+    </div>
+  </div>
+
   <section data-result data-empty data-rarity="common" class="group/art grid grid-cols-1 items-center gap-6 md:grid-cols-[auto_minmax(0,1fr)] md:gap-10">
-    <canvas data-card class="mx-auto block w-full max-w-[300px] [image-rendering:pixelated] drop-shadow-[8px_8px_0_var(--color-shade)]" role="img" aria-label={t("ar_empty_t")}></canvas>
+    <div class="mx-auto grid w-full max-w-[300px] gap-4">
+      <canvas data-card class="block w-full [image-rendering:pixelated] drop-shadow-[8px_8px_0_var(--color-shade)]" role="img" aria-label={t("ar_empty_t")}></canvas>
+      <div class="grid gap-1.5 group-data-empty/art:hidden">
+        <p class="font-pixel text-xs tracking-[0.14em] text-ash uppercase">{t("ar_recap")}</p>
+        <p data-recap class="flex flex-wrap gap-1.5"></p>
+      </div>
+    </div>
     <div class="grid content-center gap-4">
       <h2 data-heading class="font-pixel text-xl leading-snug text-cream sm:text-2xl">{t("ar_empty_t")}</h2>
       <p class="max-w-[58ch] leading-relaxed text-cream/80">{t("ar_how")}</p>
@@ -48,6 +77,11 @@ const PRESETS = ["getmonero", "torproject", "grapheneos", "privacyguides", "p2po
         <button type="button" data-copy-from="#ar-link" class={button.ghost}><PixelIcon name="copy" size={16} class="text-orange" /><span>{t("bt_copy_link")}</span></button>
         <span id="ar-link" hidden></span>
       </div>
+      <div class="grid gap-1.5 group-data-empty/art:hidden">
+        <button type="button" data-save class={cx(button.ghost, "w-fit")}><PixelIcon name="heart" size={16} class="text-orange" /><span>{t("ar_save")}</span></button>
+        <button type="button" data-forget class={cx(link, "w-fit")} hidden>{t("ar_forget")}</button>
+        <p data-save-note class="text-sm text-ash">{t("ar_save_note")}</p>
+      </div>
     </div>
   </section>
 
@@ -58,7 +92,7 @@ const PRESETS = ["getmonero", "torproject", "grapheneos", "privacyguides", "p2po
   import { addressInput } from "../ui/address-input";
   import { bindCopyButtons } from "../ui/copy";
   import { readStrings } from "../../i18n/format";
-  import { critterFromAddress, SIZE, type Critter } from "../../lib/critter";
+  import { critterBounds, critterFromAddress, drawCritter, GRID_H, type Critter } from "../../lib/critter";
   import { CARD_H, CARD_W, drawCard } from "../../lib/critter-card";
   import { parseAddress } from "../../lib/monero";
 
@@ -74,17 +108,20 @@ const PRESETS = ["getmonero", "torproject", "grapheneos", "privacyguides", "p2po
   g.scale(SCALE, SCALE);
   /** Russian uses Pixelify Sans: DotGothic16 has no Cyrillic. */
   const font = document.documentElement.lang === "ru" ? '"Pixelify Sans", monospace' : '"DotGothic16", monospace';
+  /** The visitor's own address, kept only in this browser. */
+  const MINE = "xmrfan.art.mine";
   let current = "", critter: Critter | undefined, born = 0, frame = 0;
 
+  const kind = (c: Critter) => `${t(`ar_sp_${c.species}`)} · ${t(`ar_scene_${c.scene}`)}`;
   const cardOptions = (time: number) => ({
     address: current,
-    rarityLabel: t(`ar_rarity_${critter!.rarity}`),
+    kindLabel: kind(critter!),
     fromLabel: t("ar_from"),
     font,
     time,
     // A short blink every few seconds.
     blink: time % 3.6 > 3.45,
-    hidden: Math.max(0, SIZE - Math.floor(time * 40)),
+    hidden: Math.max(0, GRID_H - Math.floor(time * 50)),
   });
 
   /** The back of a card, until there's a valid address. */
@@ -104,6 +141,25 @@ const PRESETS = ["getmonero", "torproject", "grapheneos", "privacyguides", "p2po
     if (!still) frame = requestAnimationFrame(tick);
   }
 
+  /** Compares the shown address with the saved one. */
+  function showSaved() {
+    const mine = localStorage.getItem(MINE);
+    const status = $("[data-saved]");
+    status.dataset.saved = !mine || !current ? "none" : mine === current ? "mine" : "stranger";
+    $<HTMLButtonElement>("[data-save]").hidden = !!mine;
+    $("[data-save-note]").hidden = !!mine;
+    $<HTMLButtonElement>("[data-forget]").hidden = !mine;
+    if (!mine || !critter) return;
+    const yours = critterFromAddress(mine);
+    $("[data-mine]").textContent = t("ar_mine", { name: critter.name });
+    $("[data-stranger]").textContent = t("ar_stranger_help", { name: yours.name });
+    const mini = $<HTMLCanvasElement>("[data-yours]").getContext("2d")!;
+    // Cropped to the critter and scaled up, so it's easy to compare with the card.
+    const box = critterBounds(yours), scale = Math.floor(88 / Math.max(box.w, box.h));
+    mini.clearRect(0, 0, 96, 96);
+    drawCritter(mini, yours, Math.round(48 - (box.x + box.w / 2) * scale), Math.round(48 - (box.y + box.h / 2) * scale), scale);
+  }
+
   function load() {
     const value = box.field.value.trim();
     const ok = parseAddress(value).ok;
@@ -115,6 +171,7 @@ const PRESETS = ["getmonero", "torproject", "grapheneos", "privacyguides", "p2po
       cancelAnimationFrame(frame);
       result.toggleAttribute("data-empty", true);
       root.querySelectorAll("[data-odds]").forEach((li) => li.removeAttribute("data-on"));
+      showSaved();
       return drawBack();
     }
     if (value === current) return;
@@ -123,9 +180,17 @@ const PRESETS = ["getmonero", "torproject", "grapheneos", "privacyguides", "p2po
     result.toggleAttribute("data-empty", false);
     root.querySelectorAll<HTMLElement>("[data-odds]").forEach((li) => li.toggleAttribute("data-on", li.dataset.odds === critter!.rarity));
     $("[data-heading]").textContent = t("ar_meet", { name: critter.name });
-    canvas.setAttribute("aria-label", t("ar_card_alt", { name: critter.name, rarity: t(`ar_rarity_${critter.rarity}`) }));
+    const traits = [t(`ar_sp_${critter.species}`), t(`ar_hue_${critter.hue}`), t(`ar_item_${critter.item}`), t(`ar_scene_${critter.scene}`)];
+    $("[data-recap]").replaceChildren(...traits.map((word) => {
+      const chip = document.createElement("span");
+      chip.className = "bg-graphite px-2.5 py-1 font-pixel text-sm text-cream";
+      chip.textContent = word;
+      return chip;
+    }));
+    canvas.setAttribute("aria-label", t("ar_card_alt", { name: critter.name, rarity: t(`ar_rarity_${critter.rarity}`) }) + `: ${traits.join(", ")}`);
     $("#ar-link").textContent = `${location.origin}${location.pathname}#${value}`;
     history.replaceState(null, "", `#${value}`);
+    showSaved();
     cancelAnimationFrame(frame);
     born = performance.now();
     document.fonts.load(`17px ${font}`, critter.name).finally(() => (frame = requestAnimationFrame(tick)));
@@ -137,12 +202,14 @@ const PRESETS = ["getmonero", "torproject", "grapheneos", "privacyguides", "p2po
     out.width = CARD_W * 3; out.height = CARD_H * 3;
     const o = out.getContext("2d")!;
     o.scale(3, 3);
-    drawCard(o, critter, { ...cardOptions(99), blink: false, time: 1.5 });
+    drawCard(o, critter, { ...cardOptions(99), blink: false, time: 1.5, hidden: 0 });
     const a = document.createElement("a");
-    a.download = `${critter.name.toLowerCase().replace(/\s+/g, "-")}.png`;
+    a.download = `${critter.name.toLowerCase()}.png`;
     a.href = out.toDataURL("image/png");
     a.click();
   });
+  $("[data-save]").addEventListener("click", () => { if (current) { localStorage.setItem(MINE, current); showSaved(); } });
+  $("[data-forget]").addEventListener("click", () => { localStorage.removeItem(MINE); showSaved(); });
   box.field.addEventListener("input", load);
   root.querySelectorAll<HTMLButtonElement>("[data-preset]").forEach((b) => b.addEventListener("click", () => { box.set(b.dataset.preset!); load(); }));
   bindCopyButtons(root, t("copied"));
