@@ -32,11 +32,14 @@ const site = Astro.site!;
 const url = new URL(localePath(lang, path), site).href;
 const imageUrl = new URL(image, site).href;
 const podcastFeed = podcastFeedPath(lang, await podcastLanguages());
+import { ONION_HOST } from "../lib/site";
 ---
 <!doctype html>
 <html lang={lang}>
   <Head title={pageTitle} description={desc}>
     <link rel="canonical" href={url} />
+    {/* Tor Browser offers the onion version of this page (Caddy also sends it as a header). */}
+    <meta http-equiv="onion-location" content={new URL(localePath(lang, path), `http://${ONION_HOST}`).href} />
     {LOCALES.map((l) => <link rel="alternate" hreflang={l} href={new URL(localePath(l, path), site)} />)}
     <link rel="alternate" hreflang="x-default" href={new URL(localePath(DEFAULT_LOCALE, path), site)} />
     <link rel="alternate" type="application/rss+xml" title={t("g_title")} href={new URL(localePath(lang, "/feed/news.xml"), site)} />
