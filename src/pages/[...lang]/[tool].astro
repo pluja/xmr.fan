@@ -8,6 +8,7 @@ import ChecksumTool from "../../components/tools/ChecksumTool.astro";
 import Eli5Tool from "../../components/tools/Eli5Tool.astro";
 import DonateTool from "../../components/tools/DonateTool.astro";
 import FeeTool from "../../components/tools/FeeTool.astro";
+import GlyphsTool from "../../components/tools/GlyphsTool.astro";
 import HeightTool from "../../components/tools/HeightTool.astro";
 import MempoolTool from "../../components/tools/MempoolTool.astro";
 import MiningTool from "../../components/tools/MiningTool.astro";
@@ -25,7 +26,7 @@ export const getStaticPaths = () =>
   localeParams().flatMap(({ lang }) =>
     TOOL_PAGES.map((tool) => ({ params: { lang, tool: tool.slug }, props: { tool } })));
 
-const COMPONENTS = { units: UnitConverter, addr: AddressTool, fee: FeeTool, height: HeightTool, node: NodeTool, mining: MiningTool, proof: VerifyTool, dl: ChecksumTool, tx: TxTool, donate: DonateTool, beat: BeatTool, live: LiveTool, eli5: Eli5Tool, pool: MempoolTool, ring: RingTool, art: ArtTool, timeline: TimelineTool, badge: BadgeTool } as const;
+const COMPONENTS = { units: UnitConverter, addr: AddressTool, fee: FeeTool, height: HeightTool, node: NodeTool, mining: MiningTool, proof: VerifyTool, dl: ChecksumTool, tx: TxTool, donate: DonateTool, beat: BeatTool, live: LiveTool, eli5: Eli5Tool, pool: MempoolTool, ring: RingTool, art: ArtTool, timeline: TimelineTool, badge: BadgeTool, glyphs: GlyphsTool } as const;
 
 const { tool } = Astro.props as { tool: Tool };
 const lang = langFromParams(Astro.params);

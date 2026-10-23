@@ -3,6 +3,8 @@ import { defineStrings } from "./define.ts";
 /** Search-friendly page titles and descriptions. Visible headings stay short; these name Monero and say what the page does. */
 export default defineStrings({
   en: {
+    seo_title_glyphs: "Address Glyphs: recognise any crypto address with six emoji",
+    seo_desc_glyphs: "Turn any Monero, Bitcoin or Ethereum address into six emoji that are the same in every wallet and take centuries to fake. An open standard for wallets.",
     seo_title_badge: "Monero accepted badge maker: free pixel badges for your site",
     seo_desc_badge: "Make a free “Monero accepted here” badge for your website or shop: sticker, button or compact style, in six languages. Download a PNG or copy the embed code. Nothing is tracked.",
     seo_title_timeline: "Monero timeline: history, hard forks and upgrades",
@@ -47,6 +49,8 @@ export default defineStrings({
     seo_desc_gazette: "The week in Monero, every Monday: development, ecosystem, community and privacy news, price and network numbers, with sources and a podcast.",
   },
   es: {
+    seo_title_glyphs: "Address Glyphs: reconoce cualquier dirección cripto con seis emojis",
+    seo_desc_glyphs: "Convierte cualquier dirección de Monero, Bitcoin o Ethereum en seis emojis iguales en todas las carteras y que tardarían siglos en falsificarse. Un estándar abierto para carteras.",
     seo_title_badge: "Creador de insignias Monero aceptado: insignias pixel gratis para tu sitio",
     seo_desc_badge: "Crea una insignia gratis de «Aquí se acepta Monero» para tu web o tienda: estilo pegatina, botón o compacto, en seis idiomas. Descarga un PNG o copia el código para insertarla. No se rastrea nada.",
     seo_title_timeline: "Cronología de Monero: historia, hard forks y actualizaciones",
@@ -91,6 +95,8 @@ export default defineStrings({
     seo_desc_gazette: "La semana de Monero cada lunes: desarrollo, ecosistema, comunidad y privacidad, precio y red, con fuentes y un podcast.",
   },
   ru: {
+    seo_title_glyphs: "Address Glyphs: узнавайте любой крипто-адрес по шести эмодзи",
+    seo_desc_glyphs: "Превратите любой адрес Monero, Bitcoin или Ethereum в шесть эмодзи, одинаковых в любом кошельке. Подделка займёт века. Открытый стандарт для кошельков.",
     seo_title_badge: "Создание значка «Принимаем Monero»: бесплатные пиксельные значки для сайта",
     seo_desc_badge: "Создайте бесплатный значок «Здесь принимают Monero» для сайта или магазина: стиль наклейки, кнопки или компактный, на шести языках. Скачайте PNG или скопируйте код для вставки. Никакой слежки.",
     seo_title_timeline: "Хронология Monero: история, хардфорки и обновления",
@@ -135,6 +141,8 @@ export default defineStrings({
     seo_desc_gazette: "Неделя Monero каждый понедельник: разработка, экосистема, сообщество и приватность, цена и сеть, с источниками и подкастом.",
   },
   fr: {
+    seo_title_glyphs: "Address Glyphs : reconnaissez n'importe quelle adresse crypto en six émojis",
+    seo_desc_glyphs: "Transformez toute adresse Monero, Bitcoin ou Ethereum en six émojis identiques dans tous les portefeuilles, et qui demanderaient des siècles à falsifier. Un standard ouvert pour les portefeuilles.",
     seo_title_badge: "Créateur de badge Monero accepté : badges pixel gratuits pour votre site",
     seo_desc_badge: "Créez un badge gratuit « Monero accepté ici » pour votre site ou boutique : style autocollant, bouton ou compact, en six langues. Téléchargez un PNG ou copiez le code d’intégration. Aucun suivi.",
     seo_title_timeline: "Chronologie de Monero : histoire, hard forks et mises à jour",
@@ -179,6 +187,8 @@ export default defineStrings({
     seo_desc_gazette: "La semaine Monero chaque lundi : développement, écosystème, communauté et vie privée, prix et réseau, avec les sources et un podcast.",
   },
   pt: {
+    seo_title_glyphs: "Address Glyphs: reconheça qualquer endereço cripto com seis emojis",
+    seo_desc_glyphs: "Transforme qualquer endereço Monero, Bitcoin ou Ethereum em seis emojis iguais em todas as carteiras e que levariam séculos para falsificar. Um padrão aberto para carteiras.",
     seo_title_badge: "Criador de selo Monero aceito: selos pixel grátis para o seu site",
     seo_desc_badge: "Crie um selo grátis «Aceitamos Monero» para seu site ou loja: estilo adesivo, botão ou compacto, em seis idiomas. Baixe um PNG ou copie o código de incorporação. Nada é rastreado.",
     seo_title_timeline: "Linha do tempo do Monero: história, hard forks e atualizações",
@@ -223,6 +233,8 @@ export default defineStrings({
     seo_desc_gazette: "A semana do Monero toda segunda-feira: desenvolvimento, ecossistema, comunidade e privacidade, preço e rede, com fontes e podcast.",
   },
   ja: {
+    seo_title_glyphs: "Address Glyphs:6つの絵文字で暗号資産アドレスを見分ける",
+    seo_desc_glyphs: "Monero、Bitcoin、Ethereumのアドレスを、どのウォレットでも同じで、偽造に何世紀もかかる6つの絵文字に変換します。ウォレット向けのオープン標準です。",
     seo_title_badge: "Monero 対応バッジ作成ツール：サイト用の無料ピクセルバッジ",
     seo_desc_badge: "ウェブサイトやお店用に「Monero 使えます」バッジを無料で作成。ステッカー、ボタン、コンパクトの3種類で、6言語に対応。PNGをダウンロードするか、埋め込みコードをコピーできます。追跡は一切ありません。",
     seo_title_timeline: "Moneroの年表：歴史、ハードフォーク、アップグレード",
