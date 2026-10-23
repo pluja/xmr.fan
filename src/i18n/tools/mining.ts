@@ -52,7 +52,7 @@ export default defineStrings({
     m_p2pool_every: "un share cada ~{time}",
   },
   ru: {
-    t_mining: "Калькулятор майнинга", d_mining: "Сколько заработает ваш процессор на майнинге Monero.",
+    t_mining: "Калькулятор майнинга", d_mining: "Сколько ваш процессор намайнит Monero.",
     m_hashrate: "Хешрейт",
     m_power: "Мощность (ватт)",
     m_price: "Электричество за кВт·ч",
@@ -77,7 +77,7 @@ export default defineStrings({
     m_p2pool_every: "шара каждые ~{time}",
   },
   fr: {
-    t_mining: "Calculateur de minage", d_mining: "Ce que votre processeur gagnerait en minant du Monero.",
+    t_mining: "Calculateur de minage", d_mining: "Ce que votre CPU gagnerait en minant du Monero.",
     m_hashrate: "Hashrate",
     m_power: "Consommation (watts)",
     m_price: "Électricité par kWh",
@@ -127,7 +127,7 @@ export default defineStrings({
     m_p2pool_every: "uma share a cada ~{time}",
   },
   ja: {
-    t_mining: "マイニング計算機", d_mining: "あなたの CPU で Monero を掘った場合の収益を試算します。",
+    t_mining: "マイニング計算機", d_mining: "あなたの CPU で Monero を掘った場合の収益を試算。",
     m_hashrate: "ハッシュレート",
     m_power: "消費電力（W）",
     m_price: "電気代（kWh あたり）",

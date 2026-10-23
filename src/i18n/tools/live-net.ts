@@ -3,7 +3,7 @@ import { defineStrings } from "../define.ts";
 export default defineStrings({
   en: {
     t_live: "Monero live",
-    d_live: "Calm music from the live Monero network. Leave it on while you work.",
+    d_live: "Calm music from the live Monero network.",
     lv_listen: "Start listening",
     lv_stop: "Stop",
     lv_height: "Block {height}",
@@ -17,7 +17,7 @@ export default defineStrings({
   },
   es: {
     t_live: "Monero en vivo",
-    d_live: "Música tranquila de la red de Monero en vivo. Déjala sonar mientras trabajas.",
+    d_live: "Música tranquila de la red de Monero en vivo.",
     lv_listen: "Empezar a escuchar",
     lv_stop: "Parar",
     lv_height: "Bloque {height}",
@@ -31,7 +31,7 @@ export default defineStrings({
   },
   ru: {
     t_live: "Monero вживую",
-    d_live: "Спокойная музыка живой сети Monero. Включи её фоном во время работы.",
+    d_live: "Спокойная музыка живой сети Monero.",
     lv_listen: "Начать слушать",
     lv_stop: "Стоп",
     lv_height: "Блок {height}",
@@ -45,7 +45,7 @@ export default defineStrings({
   },
   fr: {
     t_live: "Monero en direct",
-    d_live: "Une musique calme jouée par le réseau Monero en direct. Laisse-la tourner pendant que tu travailles.",
+    d_live: "Musique calme du réseau Monero en direct.",
     lv_listen: "Écouter",
     lv_stop: "Stop",
     lv_height: "Bloc {height}",
@@ -59,7 +59,7 @@ export default defineStrings({
   },
   pt: {
     t_live: "Monero ao vivo",
-    d_live: "Música calma da rede Monero ao vivo. Deixe tocando enquanto trabalha.",
+    d_live: "Música calma da rede Monero ao vivo.",
     lv_listen: "Começar a ouvir",
     lv_stop: "Parar",
     lv_height: "Bloco {height}",
@@ -73,7 +73,7 @@ export default defineStrings({
   },
   ja: {
     t_live: "Monero ライブ",
-    d_live: "ライブの Monero ネットワークが奏でる穏やかな音楽。作業中に流しておこう。",
+    d_live: "Monero ネットワークが奏でる穏やかな音楽。",
     lv_listen: "聴き始める",
     lv_stop: "停止",
     lv_height: "ブロック {height}",

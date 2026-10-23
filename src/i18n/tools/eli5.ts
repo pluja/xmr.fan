@@ -3,7 +3,7 @@ import { defineStrings } from "../define.ts";
 export default defineStrings({
   en: {
     t_eli5: "Monero ELI5",
-    d_eli5: "What Monero is and how it keeps payments private, in plain words.",
+    d_eli5: "Monero's privacy, in plain words.",
     el_intro: "Monero is digital money that keeps your payments private. Here is how it works, step by step.",
     el_1_t: "Money you can send to anyone",
     el_1_b: "Monero (XMR) is a digital currency. You can send it to anyone in the world, at any time, without a bank. A payment is confirmed in about 2 minutes.",
@@ -52,7 +52,7 @@ export default defineStrings({
   },
   es: {
     t_eli5: "Monero explicado fácil",
-    d_eli5: "Qué es Monero y cómo mantiene privados los pagos, con palabras sencillas.",
+    d_eli5: "Cómo Monero protege tus pagos, en palabras sencillas.",
     el_intro: "Monero es dinero digital que mantiene tus pagos privados. Así funciona, paso a paso.",
     el_1_t: "Dinero que puedes enviar a cualquiera",
     el_1_b: "Monero (XMR) es una moneda digital. Puedes enviarla a cualquier persona del mundo, en cualquier momento, sin un banco. Un pago se confirma en unos 2 minutos.",
@@ -101,7 +101,7 @@ export default defineStrings({
   },
   ru: {
     t_eli5: "Monero простыми словами",
-    d_eli5: "Что такое Monero и как он делает платежи приватными, простыми словами.",
+    d_eli5: "Приватность Monero простыми словами.",
     el_intro: "Monero — это цифровые деньги, которые сохраняют ваши платежи приватными. Вот как это работает, шаг за шагом.",
     el_1_t: "Деньги, которые можно отправить кому угодно",
     el_1_b: "Monero (XMR) — это цифровая валюта. Вы можете отправить её любому человеку в мире в любое время, без банка. Платёж подтверждается примерно за 2 минуты.",
@@ -150,7 +150,7 @@ export default defineStrings({
   },
   fr: {
     t_eli5: "Monero expliqué simplement",
-    d_eli5: "Ce qu'est Monero et comment il garde les paiements privés, en mots simples.",
+    d_eli5: "La vie privée selon Monero, en mots simples.",
     el_intro: "Monero est de l'argent numérique qui garde vos paiements privés. Voici comment il fonctionne, étape par étape.",
     el_1_t: "De l'argent que vous pouvez envoyer à n'importe qui",
     el_1_b: "Monero (XMR) est une monnaie numérique. Vous pouvez l'envoyer à n'importe qui dans le monde, à tout moment, sans banque. Un paiement est confirmé en environ 2 minutes.",
@@ -199,7 +199,7 @@ export default defineStrings({
   },
   pt: {
     t_eli5: "Monero explicado fácil",
-    d_eli5: "O que é o Monero e como ele mantém os pagamentos privados, em palavras simples.",
+    d_eli5: "A privacidade do Monero, sem jargão.",
     el_intro: "O Monero é um dinheiro digital que mantém seus pagamentos privados. Veja como ele funciona, passo a passo.",
     el_1_t: "Dinheiro que você pode enviar para qualquer pessoa",
     el_1_b: "O Monero (XMR) é uma moeda digital. Você pode enviá-lo para qualquer pessoa no mundo, a qualquer hora, sem banco. Um pagamento é confirmado em cerca de 2 minutos.",
@@ -248,7 +248,7 @@ export default defineStrings({
   },
   ja: {
     t_eli5: "Monero をやさしく解説",
-    d_eli5: "Monero とは何か、どのように支払いのプライバシーを守るのかを、やさしい言葉で説明します。",
+    d_eli5: "Monero が支払いを守る仕組みをやさしく解説。",
     el_intro: "Monero は、支払いのプライバシーを守るデジタルマネーです。仕組みを順番に見ていきましょう。",
     el_1_t: "誰にでも送れるお金",
     el_1_b: "Monero（XMR）はデジタル通貨です。銀行を通さずに、世界中の誰にでも、いつでも送れます。支払いは約2分で確認されます。",

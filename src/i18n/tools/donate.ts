@@ -21,7 +21,7 @@ export default defineStrings({
   },
   ru: {
     dn_tx_desc: "Пожертвование для {name}",
-    t_donate: "Рулетка пожертвований", d_donate: "Поддержите случайный проект, который принимает Monero.",
+    t_donate: "Рулетка пожертвований", d_donate: "Поддержите случайный проект на Monero.",
     dn_spin: "Крутить", dn_all: "Все",
     dn_cat_monero: "Monero", dn_cat_privacy: "Приватность", dn_cat_software: "Свободное ПО", dn_cat_press: "Свободная пресса", dn_cat_knowledge: "Знания",
     dn_source: "Адрес с {site}, проверен {date}.",
@@ -30,7 +30,7 @@ export default defineStrings({
   },
   fr: {
     dn_tx_desc: "Don à {name}",
-    t_donate: "Roulette des dons", d_donate: "Soutenez un projet au hasard qui accepte le Monero.",
+    t_donate: "Roulette des dons", d_donate: "Soutenez un projet au hasard en Monero.",
     dn_spin: "Lancer", dn_all: "Tous",
     dn_cat_monero: "Monero", dn_cat_privacy: "Vie privée", dn_cat_software: "Logiciel libre", dn_cat_press: "Presse libre", dn_cat_knowledge: "Savoir",
     dn_source: "Adresse provenant de {site}, vérifiée le {date}.",

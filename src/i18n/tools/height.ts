@@ -37,7 +37,7 @@ export default defineStrings({
     h_privacy: "Worked out in your browser. Only the current height and block dates come from a node.",
   },
   es: {
-    t_height: "Altura de restauración", d_height: "Encuentra el bloque desde el que restaurar tu monedero.",
+    t_height: "Altura de restauración", d_height: "Desde qué bloque restaurar tu monedero.",
     h_created: "¿Cuándo creaste tu monedero?",
     h_restore: "Altura de restauración",
     h_copy: "Copiar",
