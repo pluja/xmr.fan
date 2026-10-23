@@ -15,5 +15,5 @@ if (values.release) {
 } else {
   mkdirSync(".gazette", { recursive: true });
   if (!existsSync(marker)) writeFileSync(marker, new Date().toISOString());
-  console.log(`Held ${week.id}. Edit src/data/gazette/${week.id}.json if needed, then: npm run gazette:hold -- ${week.id} --release`);
+  console.log(`Held ${week.id}. Edit src/data/gazette/${week.id}.json if needed, then: ops/hold.sh ${week.id} --release`);
 }

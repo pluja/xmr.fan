@@ -137,8 +137,8 @@ On the server, systemd timers run `ops/job.sh`. It pulls, runs one job in the co
 To stop an issue during its review window, from the site's directory on the server:
 
 ```sh
-npm run gazette:hold -- 2026-10-19             # hold it; edit src/data/gazette/2026-10-19.json if needed
-npm run gazette:hold -- 2026-10-19 --release   # it goes live at the next hourly check
+ops/hold.sh 2026-10-19             # hold it; edit src/data/gazette/2026-10-19.json if needed
+ops/hold.sh 2026-10-19 --release   # it goes live at the next hourly check
 ```
 
 **Setup on a VPS** (with Docker, git, and a Caddy container on an external Docker network called `caddy`):
