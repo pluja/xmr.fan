@@ -4,6 +4,7 @@ import Stamp from "../ui/Stamp.astro";
 import TrustNote from "../ui/TrustNote.astro";
 import { button, cx, link } from "../ui/styles";
 import { localePath, pickStrings, useTranslations, type Locale } from "../../i18n/ui";
+import { MONERO_LOGO } from "../../lib/qr";
 import { ERAS, ROUNDS } from "../../lib/ringgame";
 
 interface Props { lang: Locale }
@@ -13,6 +14,8 @@ const strings = pickStrings(lang, [
   "rg_round", "rg_age", "rg_score", "rg_hit", "rg_miss", "rg_next", "rg_won", "rg_lost", "rg_end_2015", "rg_end_today", "rg_fcmp_result",
   "dur_s", "dur_min", "dur_h", "dur_d", "dur_y",
 ]);
+const LOGO_FILL: Record<string, string> = { o: "#ff6600", k: "#4c4c4c", w: "#ffffff" };
+const logo = MONERO_LOGO.flatMap((row, y) => [...row].map((ch, x) => (LOGO_FILL[ch] ? `<rect x="${x}" y="${y}" width="1" height="1" fill="${LOGO_FILL[ch]}"/>` : ""))).join("");
 const tab = "relative inline-flex min-h-11 shrink-0 cursor-pointer items-center whitespace-nowrap px-3 font-pixel text-sm text-ash has-checked:bg-graphite has-checked:text-cream has-focus-visible:outline-2 has-focus-visible:outline-orange";
 const scoreLabel = "font-pixel text-xs tracking-[0.14em] text-ash uppercase";
 ---
@@ -40,7 +43,7 @@ const scoreLabel = "font-pixel text-xs tracking-[0.14em] text-ash uppercase";
     <template data-coin>
       <li>
         <button type="button" class="group relative grid w-full cursor-pointer justify-items-center gap-1.5 border-2 border-graphite bg-well px-1 pt-3 pb-2 text-ash not-disabled:hover:border-orange not-disabled:hover:text-orange disabled:cursor-default data-picked:border-orange data-picked:text-orange data-real:border-good data-real:text-good">
-          <PixelIcon name="coin" size={28} />
+          <svg viewBox="0 0 13 13" width="30" height="30" shape-rendering="crispEdges" aria-hidden="true" class="grayscale-[0.6] transition group-hover:grayscale-0 group-data-picked:grayscale-0 group-data-real:grayscale-0" set:html={logo} />
           <span data-age class="font-mono text-xs text-cream/80"></span>
           <span class="absolute -top-2.5 hidden bg-good px-1.5 font-pixel text-xs text-ink uppercase group-data-real:block">{t("rg_real")}</span>
         </button>
