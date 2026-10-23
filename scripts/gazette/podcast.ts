@@ -2,10 +2,10 @@
      npm run gazette:podcast -- 2026-10-12 [--new-script] [--lang es]
    1. An AI model writes a conversation based only on the issue.
    2. Each turn is voiced with nano-gpt's text-to-speech (NANO_GPT_API_KEY).
-   3. ffmpeg joins the clips into public/podcast/<week>.mp3.
+   3. ffmpeg joins the clips into <MEDIA_DIR>/podcast/<week>.mp3 (MEDIA_DIR defaults to public).
    Clips are cached in .gazette/podcast/<week>/, so a failed run resumes where it stopped.
    --lang writes and voices the episode in another language from the issue's translation
-   (run gazette:translate first); it is saved as public/podcast/<week>.<lang>.mp3.
+   (run gazette:translate first); it is saved as <MEDIA_DIR>/podcast/<week>.<lang>.mp3.
    Optional: PODCAST_HOSTS="Chris:Chris,Jessica:Jessica" (name:voice), PODCAST_HOSTS_ES (per language),
    PODCAST_TTS_MODEL, PODCAST_MINUTES. */
 import { execFileSync } from "node:child_process";
@@ -33,7 +33,9 @@ const suffix = lang === "en" ? "" : `.${lang}`;
 const editionFile = `src/data/gazette/${week.id}.json`;
 const workDir = `.gazette/podcast/${week.id}`;
 const scriptFile = `.gazette/${week.id}.podcast${suffix}.json`;
-const outFile = `public/podcast/${week.id}${suffix}.mp3`;
+/** Where audio is written: public/ in development, a directory outside the build in production. */
+const mediaDir = process.env.MEDIA_DIR ?? "public";
+const outFile = `${mediaDir}/podcast/${week.id}${suffix}.mp3`;
 const newsUrl = `xmr.fan${lang === "en" ? "" : `/${lang}`}/news`;
 
 const apiKey = process.env.NANO_GPT_API_KEY;
@@ -185,7 +187,7 @@ function join(clips: string[]): number {
   ffmpeg("-f", "lavfi", "-i", `anullsrc=r=${SAMPLE_RATE}:cl=mono`, "-t", "0.35", "-c:a", "pcm_s16le", pause);
   const list = `${workDir}/list.txt`;
   writeFileSync(list, clips.flatMap((c) => [`file '${wav(c).split("/").pop()}'`, "file 'pause.wav'"]).join("\n"));
-  mkdirSync("public/podcast", { recursive: true });
+  mkdirSync(`${mediaDir}/podcast`, { recursive: true });
   ffmpeg("-f", "concat", "-safe", "0", "-i", list, "-ac", "1", "-b:a", "64k", outFile);
   const pcmBytes = clips.reduce((n, c) => n + statSync(wav(c)).size - 44, 0) + clips.length * statSync(pause).size;
   return Math.round(pcmBytes / 2 / SAMPLE_RATE);
@@ -211,7 +213,7 @@ const duration = join(clips);
 
 // Re-read the issue: it may have been edited while the audio was being made.
 const latest = editionSchema.parse(JSON.parse(readFileSync(editionFile, "utf8")));
-const episode = { file: `/podcast/${week.id}${suffix}.mp3`, duration, hosts: HOSTS.map((h) => h.name), transcript: turns };
+const episode = { file: `/podcast/${week.id}${suffix}.mp3`, duration, bytes: statSync(outFile).size, hosts: HOSTS.map((h) => h.name), transcript: turns };
 writeFileSync(editionFile, JSON.stringify(
   lang === "en" ? { ...latest, podcast: episode } : { ...latest, podcasts: { ...latest.podcasts, [lang]: episode } },
   null, 2,

@@ -576,7 +576,8 @@
         "host": "Jessica",
         "text": "Update your node, ask where your invoices go, and we'll see you next week."
       }
-    ]
+    ],
+    "bytes": 5109385
   },
   "podcasts": {
     "es": {
@@ -823,7 +824,8 @@
           "host": "Chris",
           "text": "¡Hasta la próxima!"
         }
-      ]
+      ],
+      "bytes": 5178348
     }
   },
   "generated": {

@@ -6,3 +6,4 @@ dist
 sponsor-requests
 .env
 .git
+public/podcast

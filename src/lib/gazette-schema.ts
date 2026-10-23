@@ -97,8 +97,9 @@ export const marketSchema = z.object({
 });
 
 export const podcastSchema = z.object({
-  file: z.string(),     // path under public/, e.g. /podcast/2026-10-12.mp3
+  file: z.string(),     // URL path, e.g. /podcast/2026-10-12.mp3; the file lives in MEDIA_DIR
   duration: z.number(), // seconds
+  bytes: z.number().optional(), // file size, for the feed's enclosure
   hosts: z.array(z.string()),
   transcript: z.array(z.object({ host: z.string(), text: z.string() })),
 });

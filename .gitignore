@@ -3,6 +3,8 @@ dist/
 .astro/
 .DS_Store
 .gazette/
+# Podcast audio is served from MEDIA_DIR, not from git.
+public/podcast/
 
 # Only whitelist what is necessary in the repo.
 *.md

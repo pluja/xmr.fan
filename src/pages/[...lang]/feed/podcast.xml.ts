@@ -11,6 +11,8 @@ export async function getStaticPaths() {
 }
 
 const fileSize = (publicPath: string) => { try { return statSync(`public${publicPath}`).size; } catch { return 0; } };
+/** Episodes record their size, because in production the audio lives outside the build (MEDIA_DIR). */
+const size = (pod: { file: string; bytes?: number }) => pod.bytes ?? fileSize(pod.file);
 const hms = (s: number) => [Math.floor(s / 3600), Math.floor((s % 3600) / 60), Math.floor(s % 60)].map((n) => String(n).padStart(2, "0")).join(":");
 
 export const GET: APIRoute = async ({ params, site }) => {
@@ -48,7 +50,7 @@ export const GET: APIRoute = async ({ params, site }) => {
         date: d.generated?.at ?? d.week,
         description: d.recap ?? d.lead.p,
         extra: [
-          `<enclosure url="${esc(abs(pod.file))}" length="${fileSize(pod.file)}" type="audio/mpeg"/>`,
+          `<enclosure url="${esc(abs(pod.file))}" length="${size(pod)}" type="audio/mpeg"/>`,
           `<itunes:duration>${hms(pod.duration)}</itunes:duration>`,
           `<itunes:episode>${d.no}</itunes:episode>`,
           "<itunes:explicit>false</itunes:explicit>",
