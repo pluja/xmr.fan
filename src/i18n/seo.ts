@@ -3,6 +3,8 @@ import { defineStrings } from "./define.ts";
 /** Search-friendly page titles and descriptions. Visible headings stay short; these name Monero and say what the page does. */
 export default defineStrings({
   en: {
+    seo_title_art: "Monero address art: a pixel critter for every address",
+    seo_desc_art: "Turn any Monero address into its own pixel critter. Change one character and you get a different one, so look-alike addresses are easy to spot. Drawn in your browser.",
     seo_title_ring: "Monero ring signature game: can you find the real coin?",
     seo_desc_ring: "A small game about Monero's ring signatures: spot the real coin among decoys in 2015, today and after FCMP++, and see why a blockchain spy can't beat luck.",
     seo_title_pool: "Monero mempool stress gauge: is the network busy?",
@@ -41,6 +43,8 @@ export default defineStrings({
     seo_desc_gazette: "The week in Monero, every Monday: development, ecosystem, community and privacy news, price and network numbers, with sources and a podcast.",
   },
   es: {
+    seo_title_art: "Arte de direcciones Monero: una criatura pixelada para cada dirección",
+    seo_desc_art: "Convierte cualquier dirección de Monero en su propia criatura pixelada. Cambia un carácter y obtendrás otra distinta, así es fácil detectar direcciones parecidas. Se dibuja en tu navegador.",
     seo_title_ring: "Juego de firmas de anillo de Monero: ¿encuentras la moneda real?",
     seo_desc_ring: "Un pequeño juego sobre las firmas de anillo de Monero: encuentra la moneda real entre los señuelos en 2015, hoy y tras FCMP++, y descubre por qué un espía de la blockchain no puede superar al azar.",
     seo_title_pool: "Medidor de estrés del mempool de Monero: ¿está saturada la red?",
@@ -79,6 +83,8 @@ export default defineStrings({
     seo_desc_gazette: "La semana de Monero cada lunes: desarrollo, ecosistema, comunidad y privacidad, precio y red, con fuentes y un podcast.",
   },
   ru: {
+    seo_title_art: "Арт адресов Monero: пиксельный зверёк для каждого адреса",
+    seo_desc_art: "Превратите любой адрес Monero в своего пиксельного зверька. Измените один символ — получится другой, так что похожие адреса легко заметить. Рисуется в вашем браузере.",
     seo_title_ring: "Игра о кольцевых подписях Monero: найдёте настоящую монету?",
     seo_desc_ring: "Небольшая игра о кольцевых подписях Monero: найдите настоящую монету среди ложных в 2015 году, сегодня и после FCMP++ и узнайте, почему шпион блокчейна не обыграет случай.",
     seo_title_pool: "Нагрузка на мемпул Monero: сеть занята?",
@@ -117,6 +123,8 @@ export default defineStrings({
     seo_desc_gazette: "Неделя Monero каждый понедельник: разработка, экосистема, сообщество и приватность, цена и сеть, с источниками и подкастом.",
   },
   fr: {
+    seo_title_art: "Art d'adresse Monero : une bestiole en pixels pour chaque adresse",
+    seo_desc_art: "Transformez toute adresse Monero en sa propre bestiole en pixels. Changez un caractère et vous en obtenez une autre : les adresses sosies se repèrent facilement. Dessiné dans votre navigateur.",
     seo_title_ring: "Jeu de signatures en anneau Monero : saurez-vous trouver la vraie pièce ?",
     seo_desc_ring: "Un petit jeu sur les signatures en anneau de Monero : repérez la vraie pièce parmi les leurres en 2015, aujourd'hui et après FCMP++, et voyez pourquoi un espion de la blockchain ne bat pas le hasard.",
     seo_title_pool: "Jauge de charge du mempool Monero : le réseau est-il chargé ?",
@@ -155,6 +163,8 @@ export default defineStrings({
     seo_desc_gazette: "La semaine Monero chaque lundi : développement, écosystème, communauté et vie privée, prix et réseau, avec les sources et un podcast.",
   },
   pt: {
+    seo_title_art: "Arte de endereço Monero: um bichinho pixelado para cada endereço",
+    seo_desc_art: "Transforme qualquer endereço Monero em um bichinho pixelado só dele. Mude um caractere e surge outro, então endereços parecidos são fáceis de notar. Desenhado no seu navegador.",
     seo_title_ring: "Jogo de assinaturas em anel do Monero: você acha a moeda real?",
     seo_desc_ring: "Um joguinho sobre as assinaturas em anel do Monero: ache a moeda real entre as iscas em 2015, hoje e depois do FCMP++, e veja por que um espião da blockchain não vence a sorte.",
     seo_title_pool: "Medidor de estresse do mempool do Monero: a rede está cheia?",
@@ -193,6 +203,8 @@ export default defineStrings({
     seo_desc_gazette: "A semana do Monero toda segunda-feira: desenvolvimento, ecossistema, comunidade e privacidade, preço e rede, com fontes e podcast.",
   },
   ja: {
+    seo_title_art: "Moneroアドレスアート:アドレスごとのドット絵の生き物",
+    seo_desc_art: "Moneroアドレスを、そのアドレスだけのドット絵の生き物に変えます。1文字変えると別の生き物になるので、よく似たアドレスも見分けやすくなります。ブラウザ内で描画します。",
     seo_title_ring: "Moneroリング署名ゲーム:本物のコインを見つけられる?",
     seo_desc_ring: "Moneroのリング署名をテーマにした小さなゲーム。2015年、現在、FCMP++後の各時代で、おとりの中から本物のコインを探し、ブロックチェーンの監視者が運に勝てない理由を確かめよう。",
     seo_title_pool: "Moneroメムプール混雑ゲージ:ネットワークは混んでいる?",

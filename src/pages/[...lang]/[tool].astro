@@ -1,5 +1,6 @@
 ---
 import ToolPage from "../../components/ToolPage.astro";
+import ArtTool from "../../components/tools/ArtTool.astro";
 import AddressTool from "../../components/tools/AddressTool.astro";
 import BeatTool from "../../components/tools/BeatTool.astro";
 import ChecksumTool from "../../components/tools/ChecksumTool.astro";
@@ -22,7 +23,7 @@ export const getStaticPaths = () =>
   localeParams().flatMap(({ lang }) =>
     TOOL_PAGES.map((tool) => ({ params: { lang, tool: tool.slug }, props: { tool } })));
 
-const COMPONENTS = { units: UnitConverter, addr: AddressTool, fee: FeeTool, height: HeightTool, node: NodeTool, mining: MiningTool, proof: VerifyTool, dl: ChecksumTool, tx: TxTool, donate: DonateTool, beat: BeatTool, live: LiveTool, eli5: Eli5Tool, pool: MempoolTool, ring: RingTool } as const;
+const COMPONENTS = { units: UnitConverter, addr: AddressTool, fee: FeeTool, height: HeightTool, node: NodeTool, mining: MiningTool, proof: VerifyTool, dl: ChecksumTool, tx: TxTool, donate: DonateTool, beat: BeatTool, live: LiveTool, eli5: Eli5Tool, pool: MempoolTool, ring: RingTool, art: ArtTool } as const;
 
 const { tool } = Astro.props as { tool: Tool };
 const lang = langFromParams(Astro.params);
