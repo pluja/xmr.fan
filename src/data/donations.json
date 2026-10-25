@@ -5,7 +5,7 @@
     "category": "monero",
     "address": "82assiV5dy7guoxxV7vSReZTyY5rGMrWg6BsfvFqiEKRcTiDs7LGMpg5dF5gXVGUWPEXQxyt8SNYx8L8HiGAzvtBK3eJ3EY",
     "source": "https://github.com/busyboredom/acceptxmr",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Self-hosted Monero payment gateway library.",
       "es": "Biblioteca de pasarela de pago de Monero autoalojada.",
@@ -21,7 +21,7 @@
     "category": "monero",
     "address": "4A1tNBcsxhQA7NkswREXTD1QGz8mRyA7fGnCzPyTwqzKdDFMNje7iHUbGhCetfVUZa1PTuZCoPKj8gnJuRrFYJ2R2CEzqbJ",
     "source": "https://github.com/UnstoppableSwap/core",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Monero wallet with BTC-to-XMR atomic swaps.",
       "es": "Monedero de Monero con intercambios atómicos de BTC a XMR.",
@@ -37,7 +37,7 @@
     "category": "monero",
     "address": "4AGJScWSv45E28pmwck9YRP21KuwGx6fuMYV9kTxXFnWEij5FVEUyccBs7ExDy419DJXRPw3u57TH5BaGbsHTdnf6SvY5p5",
     "source": "https://github.com/hinto-janai/gupax",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "GUI bundling P2Pool and XMRig for decentralized mining.",
       "es": "Interfaz gráfica que integra P2Pool y XMRig para minería descentralizada.",
@@ -53,7 +53,7 @@
     "category": "monero",
     "address": "47fo8N5m2VVW4uojadGQVJ34LFR9yXwDrZDRugjvVSjcTWV2WFSoc1XfNpHmxwmVtfNY9wMBch6259G6BXXFmhU49YG1zfB",
     "source": "https://github.com/haveno-dex/haveno",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Decentralized peer-to-peer Monero exchange over Tor.",
       "es": "Exchange descentralizado de Monero entre pares a través de Tor.",
@@ -69,7 +69,7 @@
     "category": "monero",
     "address": "83g1QHgQkbJeHr7m1wpDnNFsJcFMaFx6W7DsH4HuSR5ZHPRkeGErJAjYkHrJgBhq4TUrNrCimXNqwYTV1ywB6Rv86Z8iCAu",
     "source": "https://kycnot.me/about",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "openalias": "kycnot.me",
     "description": {
       "en": "A directory of services that work without identity checks.",
@@ -86,7 +86,7 @@
     "category": "monero",
     "address": "8BciMHULmH1Gu6Jrwv1vEJB11f3sNNSGRVU2PKMuaMJ48wndUuNDbaZ94ijH7H3fKQbhkUA5k98ZHUB3cmuoJjwV7WcT3dC",
     "source": "https://monerica.com/donate",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "A directory of businesses and services that accept Monero.",
       "es": "Un directorio de negocios y servicios que aceptan Monero.",
@@ -102,7 +102,7 @@
     "category": "monero",
     "address": "458KqN1qCy5BXevWrGaqUNHaFXRRcQE739BH9M4BKBi6Ng4U9htN3NbCZdyezD2qNBDaaQ5KZHFhnEQ9brFL8EdL5fxsBfC",
     "source": "https://donate.monerocoalition.org/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "A policy group working for Monero adoption.",
       "es": "Un grupo de incidencia que trabaja por la adopción de Monero.",
@@ -118,7 +118,7 @@
     "category": "monero",
     "address": "888tNkZrPN6JsEgekjMnABU4TBzc2Dt29EPAvkRxbANsAnjyPbb3iQ1YBRk1UXcdRsiKc9dhwMVgN5S9cQUiyoogDavup3H",
     "source": "https://www.getmonero.org/get-started/contributing/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Monero's General Fund, used for the project's needs and emergencies.",
       "es": "El fondo general de Monero, para las necesidades y emergencias del proyecto.",
@@ -134,7 +134,7 @@
     "category": "monero",
     "address": "867TAc58FK2ScH6Kyz9VSJZYSKGbyGfRiJB7M7yV2qEdamdQsxJafEbXxp6QoAkVCjjarKTbsmsZuEm1XymGmSquRdZnN2C",
     "source": "https://monero.observer/monero-observer-funding-2027/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Monero news every day, plus a weekly summary.",
       "es": "Noticias de Monero cada día, y un resumen semanal.",
@@ -150,7 +150,7 @@
     "category": "monero",
     "address": "47e6GvjL4in5Zy5vVHMb9PQtGXQAcFvWSCQn2fuwDYZoZRk3oFjefr51WBNDGG9EjF1YDavg7pwGDFSAVWC5K42CBcLLv5U",
     "source": "https://www.monerotalk.live/donate",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Long-running Monero interview show and podcast.",
       "es": "Programa de entrevistas y podcast sobre Monero con larga trayectoria.",
@@ -166,7 +166,7 @@
     "category": "monero",
     "address": "8AWCa5moRywJcmA6jqnKLJWZMUyoEAFJXBqqDonUnR1SjS8foScqTadcXyE6oVb6Mh2JFeWZtocGxZoZZsMqLNKbNm5Wt3q",
     "source": "https://github.com/monero-ecosystem/monero-python",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Python library for working with Monero wallets and daemons.",
       "es": "Biblioteca de Python para trabajar con monederos y demonios de Monero.",
@@ -182,7 +182,7 @@
     "category": "monero",
     "address": "46FR1GKVqFNQnDiFkH7AuzbUBrGQwz2VdaXTDD4jcjRE8YkkoTYTmZ2Vohsz9gLSqkj5EM6ai9Q7sBoX4FPPYJdGKQQXPVz",
     "source": "https://github.com/woodser/monero-ts",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "TypeScript library for Monero, used by Haveno.",
       "es": "Biblioteca de TypeScript para Monero, usada por Haveno.",
@@ -198,7 +198,7 @@
     "category": "monero",
     "address": "878ca636oEHcjZ3Zimuwx4AZTbeMtqY11eVihramcBgVciC254jpUm9AxbwAd57nxv1HRE9AGG1cXBkvmRzfsFXh1L6f2CU",
     "source": "https://monero.fail/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Directory and health checker of public Monero nodes.",
       "es": "Directorio y verificador de estado de nodos públicos de Monero.",
@@ -214,7 +214,7 @@
     "category": "monero",
     "address": "86oPE889B4qeJn14jkhQkPFnwRUV3Upd8TZjbU89JdWpH7NbECNHXMG67vSLCKZt1nTWK4v445cndXLNtw24WzmNGYs7WeH",
     "source": "https://www.monero.how/donate",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Beginner guides and network stats for Monero.",
       "es": "Guías para principiantes y estadísticas de la red Monero.",
@@ -230,7 +230,7 @@
     "category": "monero",
     "address": "486kDRxeiY4YdG4iVKRv5pbqoygCMeMug2bBnWKQ58euGRsjqWngowMP82Q6DGzGVQ7StNuFqkd8VZWK4iQKF4nUEzueW8j",
     "source": "https://monero.town/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Monero community forum on the Lemmy fediverse.",
       "es": "Foro de la comunidad Monero en el fediverso de Lemmy.",
@@ -246,7 +246,7 @@
     "category": "monero",
     "address": "4AdkPJoxn7JCvAby9szgnt93MSEwdnxdhaASxbTBm6x5dCwmsDep2UYN4FhStDn5i11nsJbpU7oj59ahg8gXb1Mg3viqCuk",
     "source": "https://github.com/m2049r/xmrwallet",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "The original open-source Monero wallet for Android.",
       "es": "El monedero Monero de código abierto original para Android.",
@@ -262,7 +262,7 @@
     "category": "monero",
     "address": "868i3uV9Q8NjigjCnJ6P3L6oMizRYniGuAiVXYVYsBQE9g4gqVWs6qVEDC6SZR3ZiWgC787A9iTcdeFkUdTu8n7q2e7BN9m",
     "source": "https://orangefren.com/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Compare and swap crypto without identity checks.",
       "es": "Compara e intercambia cripto sin verificación de identidad.",
@@ -278,7 +278,7 @@
     "category": "monero",
     "address": "44MnN1f3Eto8DZYUWuE5XZNUtE3vcRzt2j6PzqWpPau34e6Cf4fAxt6X2MBmrm6F9YMEiMNjN6W4Shn4pLcfNAja621jwyg",
     "source": "https://github.com/SChernykh/p2pool",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "The decentralized Monero mining pool, with no fees.",
       "es": "El pool de minería descentralizado de Monero, sin comisiones.",
@@ -294,7 +294,7 @@
     "category": "monero",
     "address": "43HoAhqx9q3MR1crAjpQtYVhvzQhZgqPwSWVQMmPvYmr18qVUEjCHcsEasuCxS486rWSSg1gbGqanet67NWRsh1bQL9KkB9",
     "source": "https://github.com/monero-ecosystem/PiNode-XMR",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Easy Monero node images for Raspberry Pi and other boards.",
       "es": "Imágenes sencillas de nodo Monero para Raspberry Pi y otras placas.",
@@ -310,7 +310,7 @@
     "category": "monero",
     "address": "89Esx7ZAoVcD9wiDw57gxgS7m52sFEEbQiFC4qq18YZy3CdcsXvJ67FYdcDFbmYEGK7xerxgmDptd1C2xLstCbgF3RUhSMT",
     "source": "https://www.revuo-xmr.com/support/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Weekly Monero newsletter.",
       "es": "Boletín semanal sobre Monero.",
@@ -326,7 +326,7 @@
     "category": "monero",
     "address": "48edfHu7V9Z84YzzMa6fUueoELZ9ZRXq9VetWzYGzKt52XU5xvqgzYnDK9URnRoJMk1j8nLwEVsaSWJ4fhdUyZijBGUicoD",
     "source": "https://github.com/xmrig",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "The open-source miner most Monero CPU miners use.",
       "es": "El minero de código abierto que usa la mayoría de quienes minan Monero con CPU.",
@@ -342,7 +342,7 @@
     "category": "privacy",
     "address": "8AsSJ4LMLYHBQxzMXfotoxb6H7knjnzz6XnY1ymrpLBof1SgqJJHPkEbKXiCxVf54STpqmXWJE5hscTK9xLWjkBM3mWDujR",
     "source": "https://accrescent.app/donate/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "A private and secure app store for Android.",
       "es": "Una tienda de aplicaciones privada y segura para Android.",
@@ -358,7 +358,7 @@
     "category": "privacy",
     "address": "84qZgh4rLS16PMuw6PBPbsBQPfzQSLpaJ9DENzXVTwgJPjsAPNFxvf5BpJF9Y2ayp47GFVWvDYnmNJ9dYyT1aAB9BvbVJbk",
     "source": "https://addy.io/donate/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Anonymous email forwarding to keep your real address private.",
       "es": "Reenvío de correo anónimo para mantener privada tu dirección real.",
@@ -374,7 +374,7 @@
     "category": "privacy",
     "address": "48spms39jt1L2L5vyw2RQW6CXD6odUd4jFu19GZcDyKKQV9U88wsJVjSbL4CfRys37jVMdoaWVPSvezCQPhHXUW5UKLqUp3",
     "source": "https://github.com/amnezia-vpn/amnezia-client",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Open-source self-hosted VPN built to resist censorship.",
       "es": "VPN autoalojada de código abierto diseñada para resistir la censura.",
@@ -390,7 +390,7 @@
     "category": "privacy",
     "address": "459FkXUzgevLxJrN8oovyTTtMtk8Cs6XkQX6z4Gr839w9HnpKs2joeWV3ufbe2gHDrYgFAMi7ESHy5uiWwr4zsAQ4Cnda6N",
     "source": "https://decentraleyes.org/donate/monero/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Protects you from tracking by content delivery networks.",
       "es": "Te protege del rastreo de las redes de distribución de contenido.",
@@ -406,7 +406,7 @@
     "category": "privacy",
     "address": "87gHbf4XtTBcxyWkVbjD3zNH6U7mgZj3sbGc2id98sxWG8fCoDTTFQAUrbtLCXNYSw2kP4NLW8kMfi9kzAooE6JVR1cditB",
     "source": "https://disroot.org/cryptocurrency",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Free, privacy-respecting online services run by volunteers.",
       "es": "Servicios en línea gratuitos y respetuosos con la privacidad, gestionados por voluntarios.",
@@ -422,7 +422,7 @@
     "category": "privacy",
     "address": "47arK43NTDZbTrKS8PkGZ65qzQuHMNFqw56TgGsV5R4KMzq9F9MNVimgFrdJkB2ue9DnJp4kD1G7UJqtJbo19frnJGeRnVf",
     "source": "https://emeraldonion.org/donate/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Seattle nonprofit running Tor exit relays.",
       "es": "Organización sin fines de lucro de Seattle que opera nodos de salida de Tor.",
@@ -438,7 +438,7 @@
     "category": "privacy",
     "address": "862CebHaBpFPgYoNC6zw4U8rsXrDjD8s5LMJNS7yVCRHMUKr9dDi7adMSLUMjkDYJ85xahQTCJHHyK5RCvvRJu9x7iSzN9D",
     "source": "https://grapheneos.org/donate",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "A private and secure mobile operating system.",
       "es": "Un sistema operativo móvil privado y seguro.",
@@ -454,7 +454,7 @@
     "category": "privacy",
     "address": "85igd4Dw6ychvi8iUYADHfgLCmdT348SA6sMnYgxE86YZxX98Au6rsF9B9DmcqEXWRZWDcPdarufHUUqwP73GVrq6BaC9dr",
     "source": "https://i2p.net/en/financial-support/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "The Invisible Internet Project, an anonymous overlay network.",
       "es": "El Proyecto Internet Invisible, una red superpuesta anónima.",
@@ -470,7 +470,7 @@
     "category": "privacy",
     "address": "497pJc7X4xqKvcLBLpSUtRgWqMMyo24u4btCos3cak6gbMkpobgSU6492ztUcUBghyeHpYeczB55s38NpuHoH5WGNSPDRMH",
     "source": "https://github.com/PurpleI2P/i2pd",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Lightweight C++ router for the I2P anonymous network.",
       "es": "Router ligero en C++ para la red anónima I2P.",
@@ -486,7 +486,7 @@
     "category": "privacy",
     "address": "82WFzofvGUdY52w9zCfrZWaHVqEDcJH7y1FujzvXdGPeU9UpuFNeCvtCKhtpC6pZmMYuCNgFjcw5mHAgEJQ4RTwV9XRhobX",
     "source": "https://invizible.net/en/donate/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Android app combining Tor, DNSCrypt and I2P with a firewall.",
       "es": "Aplicación de Android que combina Tor, DNSCrypt e I2P con un cortafuegos.",
@@ -502,7 +502,7 @@
     "category": "privacy",
     "address": "84ozcSohQfoV6nRgGfaQ8uBvWphXAH8zDTTuotVnJWF1JMNQfvgNFdbEo4ZnJ9hxPMeYfJuUoWGH3MRaXCfbYk8sFFgm4XL",
     "source": "https://www.kicksecure.com/wiki/Donate",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "A security-hardened Linux system, the base of Whonix.",
       "es": "Un sistema Linux reforzado en seguridad, la base de Whonix.",
@@ -518,7 +518,7 @@
     "category": "privacy",
     "address": "4AM5CVfaGsnEXQQjZSzJvaWufe7pT86ubcZPr83fCjb2Hn3iwcForTWFy2Z3ugXcufUwHaGcucfPMFgPXBFSYGFvNrmV5XR",
     "source": "https://github.com/libredirect/browser_extension",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Browser extension redirecting to privacy-friendly front-ends.",
       "es": "Extensión de navegador que redirige a interfaces que respetan la privacidad.",
@@ -534,7 +534,7 @@
     "category": "privacy",
     "address": "46j26ggSZNT9rN7VeFYXp2PsKEMyJSSYneBVKXY4xeemdfZfCpNg6tQEXQZpWiTTuGX3SbnDPwuh3167cCoYSrqN72H9jPk",
     "source": "https://codeberg.org/nobody/LocalCDN",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Browser extension serving CDN files locally to stop tracking.",
       "es": "Extensión de navegador que sirve archivos de CDN localmente para evitar el rastreo.",
@@ -550,7 +550,7 @@
     "category": "privacy",
     "address": "46H7kvzXh2Uho3L2YGfZEVAoRit48zYBofHysSLoaC53EJZjWadSvACNWf8YFii27eV9HXZ1bAypn5yrVUKDnE1T7bHnVmU",
     "source": "https://lockdown.systems/donate/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "A nonprofit making tools that protect people from surveillance.",
       "es": "Una organización sin ánimo de lucro que crea herramientas contra la vigilancia.",
@@ -566,7 +566,7 @@
     "category": "privacy",
     "address": "49bwESYQjoRL3xmvTcjZKHEKaiGywjLYVQJMUv79bXonGiyDCs8AzE3KiGW2ytTybBCpWJUvov8SjZZEGg66a4e59GXa6k5",
     "source": "https://github.com/MatsuriDayo/NekoBoxForAndroid",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Open-source sing-box proxy client for censorship circumvention.",
       "es": "Cliente proxy sing-box de código abierto para eludir la censura.",
@@ -582,7 +582,7 @@
     "category": "privacy",
     "address": "436sKqJM2qTAie1L5t5PAnfQFNMFkkWfjj1EgcygDvGubt3uB6p4F7xj35tkZbQfG9iuVRTTspWevjUYbfVCELWs2AJELCK",
     "source": "https://onionbrowser.com/donate",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Open-source Tor-powered web browser for iOS.",
       "es": "Navegador web de código abierto para iOS basado en Tor.",
@@ -598,7 +598,7 @@
     "category": "privacy",
     "address": "881k3fqXxgL67djvJ5oLAJNseoWqRNBvz6oWVuLhoogCYxV6aXqtoEgHTZj7ZYmFenbAPdYDsmbjgY6AYmK66SBXPg2W7rT",
     "source": "https://openprivacy.ca/donate/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Canadian nonprofit behind the Cwtch metadata-resistant messenger.",
       "es": "Organización canadiense sin fines de lucro creadora del mensajero Cwtch, resistente a los metadatos.",
@@ -614,7 +614,7 @@
     "category": "privacy",
     "address": "882XLsoGHjXipTq8oKF35H2ytPg28TMFrim35MwvQUir54wuAmXUCx68X1mWGgR5KSdZqykf87tKei5xcJiP3dLSCiWgxUk",
     "source": "https://www.privacyguides.org/donate-monero/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Independent guides and reviews of privacy tools.",
       "es": "Guías y análisis independientes de herramientas de privacidad.",
@@ -630,7 +630,7 @@
     "category": "privacy",
     "address": "4ABHQZ3yJZkBnLoqiKvb3f8eqUnX4iMPb6wdant5ZLGQELctcerceSGEfJnoCk6nnyRZm73wrwSgvZ2WmjYLng6R7sR67nq",
     "source": "https://github.com/XTLS/Xray-core",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Open-source proxy core for bypassing internet censorship.",
       "es": "Núcleo proxy de código abierto para eludir la censura en internet.",
@@ -646,7 +646,7 @@
     "category": "privacy",
     "address": "46PrVgXBdD4cps3SVkHoCDZvMfFdG5q4ej5DYKpuKpTnjiL7pv6KGv7dPh4DPijCGqTbxLDPqZJkobd9SttMiauoP1CQU4y",
     "source": "https://www.qubes-os.org/donate/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "A desktop system that isolates apps in separate virtual machines.",
       "es": "Un sistema de escritorio que aísla las aplicaciones en máquinas virtuales separadas.",
@@ -662,7 +662,7 @@
     "category": "privacy",
     "address": "84FpY1QbxHcgdseePYNmhTHcrgMX4nFfBYtz2GKYToqHVVhJp8Eaw1Z1EedRnKD19b3B8NiLCGVxzKV17UMmmeEsCrPyA5w",
     "source": "https://reticulum.network/donate.html",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Encrypted mesh networking stack for resilient communication.",
       "es": "Pila de red mesh cifrada para comunicaciones resilientes.",
@@ -678,7 +678,7 @@
     "category": "privacy",
     "address": "46qB9tcR1feVZ7xq42tx8V8sLbYdnFdGf6EndL1fCPRuUXroufYGzzCFtZwrjkthAc8C65xBpmWCYAR1KKBXykF76GADvYE",
     "source": "https://riseup.net/en/donate",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Activist-run collective providing secure email and VPN.",
       "es": "Colectivo activista que ofrece correo electrónico y VPN seguros.",
@@ -694,7 +694,7 @@
     "category": "privacy",
     "address": "43fry9taGiwhAtNYEZNfssdzJ8Ra12ewAbQoVsvFzoLS6qMSgsE2FvE7xY52rAnKjPL5r2N88KYvqXpthUfSwa23K1BBMD9",
     "source": "https://secureblue.dev/donate",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Security-hardened Fedora Atomic desktop images.",
       "es": "Imágenes de escritorio Fedora Atomic reforzadas en seguridad.",
@@ -710,7 +710,7 @@
     "category": "privacy",
     "address": "8A3ZWAXrrQddvnT1fPrtbK86ZAoM4nai3Gjg1LEow3JWcryJtovMnHYZnxTJpCLmAbfWbnPMeTzPmMBjAhyd4xoM89hYq1c",
     "source": "https://simplex.chat/donate/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "A private messenger with no user IDs at all.",
       "es": "Una mensajería privada sin ningún identificador de usuario.",
@@ -726,7 +726,7 @@
     "category": "privacy",
     "address": "8BroF38PgGV5KXRMU5fCyfZoidwJgRs23SDv8WwZoaV6BYYKsZJoKBbeBm5fqnw4nKKrhCfemoxivC7mcR13CHnJSo9Dmnh",
     "source": "https://simplifiedprivacy.com/donate.html",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Privacy guides, videos and VPN tools.",
       "es": "Guías de privacidad, vídeos y herramientas VPN.",
@@ -742,7 +742,7 @@
     "category": "privacy",
     "address": "48GEMu7ohyveS4h1dWDpzYVRtxUYYb3yV43SUadaGASkQuX7eRqJLjMUUGmtNJGTkSaijjwUN28Ed7aoq16o1rHGVgUXP7q",
     "source": "https://techlore.tech/support/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Privacy and security education videos and courses.",
       "es": "Videos y cursos sobre privacidad y seguridad.",
@@ -758,7 +758,7 @@
     "category": "privacy",
     "address": "86WGgZpadMze4PmDd7YAR2MjxUBaunv8oXBrkzQTLjdBAaA8onHWc5ZMNwnW6axFAC8wFSswxDoapXMHFDwydq5fHEra79W",
     "source": "https://thenewoil.org/en/crypto/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Beginner-friendly privacy and security guides.",
       "es": "Guías de privacidad y seguridad para principiantes.",
@@ -774,7 +774,7 @@
     "category": "privacy",
     "address": "4AcQxuMBUfJM7uAWpZP1Vs1BzQLC1QR6zZL3sMYdBuayWmpZHmaVYo7EQ3cSneyHYf2LRKJnRtrGz5ogZzjmmGygAyusEcJ",
     "source": "https://donate.torproject.org/cryptocurrency/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Free software and a volunteer network for anonymous browsing.",
       "es": "Software libre y una red de voluntarios para navegar de forma anónima.",
@@ -790,7 +790,7 @@
     "category": "privacy",
     "address": "42REtZh8xwFTadpcd1mB6qH1PBwSJDzF7eyiTQP4HnoU8VEzEktYfavbmpbzutFzLU6CmwX97cpMZ8cbGoKEp6MpRH3qjEF",
     "source": "https://tuta.com/community",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Encrypted email and calendar.",
       "es": "Correo y calendario cifrados.",
@@ -806,7 +806,7 @@
     "category": "privacy",
     "address": "84ZZSsqyh5niztCgxmWAejDLu9eDerWo4Wsx8woEhDGpdKP3BWPtqenNjKuv8vojrB968U3hqYTKgLGt2zEcGopX1qaEPew",
     "source": "https://www.whonix.org/wiki/Donate",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "An operating system that sends all traffic through Tor.",
       "es": "Un sistema operativo que envía todo el tráfico por Tor.",
@@ -822,7 +822,7 @@
     "category": "software",
     "address": "4BDKYvkZVTKdbFbcgsq3NeDXN45jsGKWGFH235J6KqKaDAfqcKEDhhv5y3xp2tMUX6M8u1vJnHPEZahrEZ2mRmmUMKbKpxB",
     "source": "https://acabinc.org/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "The nonprofit behind 4d2.org's free community tools.",
       "es": "La organización sin ánimo de lucro detrás de las herramientas comunitarias de 4d2.org.",
@@ -838,7 +838,7 @@
     "category": "software",
     "address": "49uPsfAgmRDLatMRgJsx5sX6A3DT8tsnj4hLmkcqKUhxesGVEPGrsYVW9EJkYg3uPgBFzQQnZ29pbbYZ1fQLqWByH1biGne",
     "source": "https://artixlinux.org/donate.php",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Arch-based Linux distribution without systemd.",
       "es": "Distribución de Linux basada en Arch y sin systemd.",
@@ -854,7 +854,7 @@
     "category": "software",
     "address": "463y93PsQDTYGVPAHUNcjiYDsxWjn7bL2FS9GYXjetEH5XEoNKB7kCHHQXsuoebbSv8RqGspo61pxhMQQrudDky2AfTGbs3",
     "source": "https://cobalt.tools/donate",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Ad-free, open-source media downloader.",
       "es": "Descargador de contenido multimedia de código abierto y sin anuncios.",
@@ -870,7 +870,7 @@
     "category": "software",
     "address": "86fA3qPTeQtNb2k1vLwEQaAp3XxkvvvXt69gSG5LGunXXikK9koPWZaRQgfFPBPWhMgXjPjccy9LA9xRFchPWQAnPvxh5Le",
     "source": "https://distrowatch.com/dwres.php?resource=donate",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "News and reviews of Linux and BSD systems since 2001.",
       "es": "Noticias y reseñas de sistemas Linux y BSD desde 2001.",
@@ -886,7 +886,7 @@
     "category": "software",
     "address": "49GZLW2J65c9tNDFEjv6gVVVHFhQYwfzmZMQu4tSeYFbPXxD61nWvGU6cSkCBEyixFErrmSPxWFdN6djuQX8nXBiBS3hqWE",
     "source": "https://dyne.org/donate/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Amsterdam free-software foundation behind Tomb and Zenroom.",
       "es": "Fundación de software libre de Ámsterdam creadora de Tomb y Zenroom.",
@@ -902,7 +902,7 @@
     "category": "software",
     "address": "84YJvbzpW8jEbJNUqh2WmWbdEJBFdEaDAhRFZpkmQPcW7f3yY6z8NGrecjmLrd8Wz7cwzXgBprSrJ1k45SQW27phF4iodb5",
     "source": "https://www.fsf.org/about/ways-to-donate/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Nonprofit championing free software and the GNU project.",
       "es": "Organización sin fines de lucro que defiende el software libre y el proyecto GNU.",
@@ -918,7 +918,7 @@
     "category": "software",
     "address": "41nMCtek197boJtiUvGnTFYMatrLEpnpkQDmUECqx5Es2uX3sTKKWVhSL76suXsG3LXqkEJBrCZBgPTwJrDp1FrZJfycGPR",
     "source": "https://invidious.io/donate/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Privacy-respecting alternative front-end to YouTube.",
       "es": "Alternativa de interfaz para YouTube que respeta la privacidad.",
@@ -934,7 +934,7 @@
     "category": "software",
     "address": "48j4Mo7J7t51EeBf35Lpdmehmi9chUwzSXxHrnjpRJ6fPQafPWvSCdFafw3rA5ZRWievfYEDToNso8VppbJf2RVH9cdZmHa",
     "source": "https://github.com/proninyaroslav/libretorrent",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Free and open-source torrent client for Android.",
       "es": "Cliente torrent libre y de código abierto para Android.",
@@ -950,7 +950,7 @@
     "category": "software",
     "address": "47jAx7jMFo5iqy9VgDH98qL1bSK4kr6Pxi7HKWcRwsxbVYJdjxJtyrwXeAUa5MutvcQUmWMBfvAKnPAutDHvWEymUgLm5v8",
     "source": "https://github.com/libre-tube/LibreTube",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Privacy-friendly YouTube client for Android.",
       "es": "Cliente de YouTube para Android que respeta la privacidad.",
@@ -966,7 +966,7 @@
     "category": "software",
     "address": "45ZzMXudMd7RpCGLAwxJxpiccddpVdYmgc5ZV1vL9xhJUN6AK4hY8nEhCJfaT8b81n6wiS32UZSJYMQRxHxACxNDCYzXsew",
     "source": "https://linuxmint.com/donors.php",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "A popular, friendly Linux desktop.",
       "es": "Un escritorio Linux popular y sencillo.",
@@ -982,7 +982,7 @@
     "category": "software",
     "address": "4AHUaNcqAzPEC4mdh6njj7Hu3Pt9sFdM7h13vBaMvdzYJ3a5X4rrpVBCggbKCWtDYnh3gPvzHLsXRjiMydsukky7BBoeCKC",
     "source": "https://organicmaps.app/donate/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Offline maps for hiking, cycling and driving, without tracking.",
       "es": "Mapas sin conexión para senderismo, bici y coche, sin rastreo.",
@@ -998,7 +998,7 @@
     "category": "software",
     "address": "88SXv9zrs5sWQr27JDR9sUURJQT3pF77F3xZrQLBv6sxZGNdgzGZyH54E5BT7G9TWfUgThM1SQBcMd6mHjzRo3pJ5whHeaP",
     "source": "https://parrotsec.org/donate/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "A Linux system for security, privacy and development.",
       "es": "Un sistema Linux para seguridad, privacidad y desarrollo.",
@@ -1014,7 +1014,7 @@
     "category": "software",
     "address": "46YwWDbZD6jVptuk5mLHsuAmh1BnUMSjSNYacozQQEraWSQ93nb2yYVRHoMR6PmFYWEHsLHg9tr1cH5M8Rtn7YaaGQPCjSh",
     "source": "https://revanced.app/donate",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Open-source patcher for Android apps.",
       "es": "Parcheador de código abierto para aplicaciones de Android.",
@@ -1030,7 +1030,7 @@
     "category": "software",
     "address": "85vyiPD4yby5bfkN51kSuc9sjZCMmBaoE5t1MCvxX4SuQMamgK7D8LGYbhkm1XGkgPgYn1FBBa3MiDGANXigEUJcEWib6H8",
     "source": "https://sponsor.ajay.app/donate/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Skips sponsored segments in YouTube videos.",
       "es": "Salta los segmentos patrocinados de los vídeos de YouTube.",
@@ -1046,7 +1046,7 @@
     "category": "software",
     "address": "4AkmHDdHDmJgsz75Yj9gRUJKcroWLg7x6Rf3bBWd4G5ZebiFtPebynKCsJRrVyzh8TZdEM6VqiKF4do5tnQzLAojDzDcs8L",
     "source": "https://www.winboat.app/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Runs Windows apps on Linux.",
       "es": "Ejecuta aplicaciones de Windows en Linux.",
@@ -1062,7 +1062,7 @@
     "category": "press",
     "address": "44JsbshtnhZFjKnhAgZRMENsW7wNAcQFV1jrC845AspaZDSWJqr1JihgvEfiYUFjnj43GPnqX9GW2hmUntp5WQ8bSAQPSg1",
     "source": "https://freedom.press/donate/cryptocurrency/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Nonprofit defending press freedom, makers of SecureDrop.",
       "es": "Organización sin fines de lucro que defiende la libertad de prensa, creadora de SecureDrop.",
@@ -1078,7 +1078,7 @@
     "category": "press",
     "address": "42uDZuVw13kSCf6BFFWanFcofAvCjMeatf3zzA6Gbms7UDgwB6rd6hLYAyP985YoyLdsa8NwhSgtH6dWadw7TeXiTHaMQS8",
     "source": "https://optoutpod.com/donate/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Privacy-focused interview podcast by Seth For Privacy.",
       "es": "Podcast de entrevistas sobre privacidad de Seth For Privacy.",
@@ -1094,7 +1094,7 @@
     "category": "press",
     "address": "42adSJwHXzzLrxvMQ5SkWr45oXYQMnva4WA4wwXWYLmohnWgBeUG6WoK4YEzhRpWwc25wvzNyeF4vBQphQ4saDRx42erDPD",
     "source": "https://shop.wikileaks.org/donate",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Publishes censored and secret documents from whistleblowers.",
       "es": "Publica documentos censurados y secretos de denunciantes.",
@@ -1110,7 +1110,7 @@
     "category": "knowledge",
     "address": "48WhyKv4D9x53SyDFNYuMsHsDzuHXEcht4mWoFtXtE3k4KZ3A7goi3CQWBQQZ3A8PSK7CpwnAFKLnfGiZTAbEpcaCQCghvN",
     "source": "https://libgen.li/",
-    "checked": "2026-10-21",
+    "checked": "2026-10-25",
     "description": {
       "en": "Shadow library of books and scientific articles.",
       "es": "Biblioteca en la sombra de libros y artículos científicos.",
