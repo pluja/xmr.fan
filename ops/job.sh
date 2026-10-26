@@ -53,8 +53,9 @@ in_jobs npm run --silent $cmd >>"$log" 2>&1
 status=$?
 set -e
 cat "$log"
-[ "$status" = 0 ] || fail "npm run $cmd exited with $status"
 
+# Whatever the job wrote is kept even when it then failed: a half-done weekly draft resumes from it, and the
+# donation check exits non-zero when an address went missing but has already marked it to be hidden.
 # shellcheck disable=SC2086
 if [ -n "$(git status --porcelain -- $paths)" ]; then
 	# shellcheck disable=SC2086
@@ -63,3 +64,4 @@ if [ -n "$(git status --porcelain -- $paths)" ]; then
 	git push --quiet >>"$log" 2>&1 || fail "git push failed"
 	if [ "$deploy" = yes ]; then docker compose up -d --build app >>"$log" 2>&1 || fail "redeploy failed"; fi
 fi
+[ "$status" = 0 ] || fail "npm run $cmd exited with $status"
