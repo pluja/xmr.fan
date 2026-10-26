@@ -238,7 +238,7 @@
   },
   "no": 2,
   "week": "2026-10-19",
-  "draft": true,
+  "draft": false,
   "sample": false,
   "network": {
     "hash": 6.5,
@@ -569,6 +569,227 @@
         "text": "Thanks for listening. We'll be back next week."
       }
     ]
+  },
+  "podcasts": {
+    "es": {
+      "file": "/podcast/2026-10-19.es.mp3",
+      "duration": 579,
+      "bytes": 4628733,
+      "hosts": [
+        "Chris",
+        "Jessica"
+      ],
+      "transcript": [
+        {
+          "host": "Chris",
+          "text": "¡Hola a todos y bienvenidos a The xmr.fan Times! Estamos en el número dos, semana del diecinueve de octubre de dos mil veintiséis. Yo soy Chris."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y yo soy Jessica. Hoy tenemos una semana de limpieza silenciosa en el código de Monero, un exchange que pregunta demasiado, el apagón del sitio de CCS y unas cuantas citas que nos hicieron pensar."
+        },
+        {
+          "host": "Chris",
+          "text": "Empecemos por el código. Se fusionaron cuarenta y dos pull requests en el repositorio principal de Monero, y la mayoría son correcciones."
+        },
+        {
+          "host": "Jessica",
+          "text": "Cuarenta y dos. [laughs] Nada llamativo, pero es justo el tipo de trabajo que mantiene a salvo tus fondos y tu nodo. Errores de memoria, verificaciones de monedero, seguridad multifirma, refuerzo de la red."
+        },
+        {
+          "host": "Chris",
+          "text": "Y hay un detalle que me gustó. Ahora se comprueban las contraseñas antes de los pasos multifirma o del cifrado de claves. Antes, un error podía corromper el archivo del monedero después de poner una contraseña incorrecta."
+        },
+        {
+          "host": "Jessica",
+          "text": "Espera, o sea que equivocarte de contraseña podía estropearte el archivo del monedero. [exhales] Qué susto. Menos mal que eso queda corregido."
+        },
+        {
+          "host": "Chris",
+          "text": "Sí. Además se valida el número de participantes multifirma, y las pruebas de transacciones entrantes quedan ligadas a las salidas del destinatario."
+        },
+        {
+          "host": "Jessica",
+          "text": "Cosas que nadie celebra con fuegos artificiales, pero que se agradecen mucho."
+        },
+        {
+          "host": "Chris",
+          "text": "Pasamos al precio. Monero abrió la semana en unos quinientos noventa y ocho dólares y cerró en unos quinientos noventa y dos, un descenso de alrededor del uno por ciento. Bitcoin bajó un dos por ciento."
+        },
+        {
+          "host": "Jessica",
+          "text": "Pero por el camino fue una montaña rusa. El miércoles hubo un empuje hasta el máximo semanal, unos seiscientos cincuenta dólares, y el jueves cayó un cuatro coma siete por ciento."
+        },
+        {
+          "host": "Chris",
+          "text": "Luego el sábado rebotó un cinco coma dos por ciento, pero ese rebote se diluyó el domingo. El mínimo de la semana fue de unos quinientos setenta dólares."
+        },
+        {
+          "host": "Jessica",
+          "text": "Total, que mucho movimiento para terminar casi donde empezó. El cierre queda cerca de la mitad del rango del último mes, y muy por encima de su mínimo de quinientos quince."
+        },
+        {
+          "host": "Chris",
+          "text": "Y lo único ligado al comercio de XMR esta semana es justo nuestro tema estrella, así que... pasemos a él. [curious]"
+        },
+        {
+          "host": "Jessica",
+          "text": "Kraken. Una publicación en Reddit mostró un mensaje del exchange a un cliente. Habían notado retiros de Monero y le pedían que explicara el motivo, el propósito y el uso previsto de ese XMR, con siete días para responder."
+        },
+        {
+          "host": "Chris",
+          "text": "Siete días. Quien lo publicó dice que deberían esperar algo así los usuarios que hayan sacado XMR de la plataforma en los últimos seis meses."
+        },
+        {
+          "host": "Jessica",
+          "text": "O sea que si retiraste XMR en el último medio año, quizá te llegue un cuestionario. [sighs] Qué fastidio."
+        },
+        {
+          "host": "Chris",
+          "text": "Para mí es un recordatorio de cómo tratan los exchanges a las monedas de privacidad. No como algo prohibido, sino como algo que hay que justificar."
+        },
+        {
+          "host": "Jessica",
+          "text": "Eso es. No te dicen que no, te piden que expliques. Y la lección práctica es la que los veteranos ya conocen: cómo adquieres tu XMR importa tanto como lo que haces con él."
+        },
+        {
+          "host": "Chris",
+          "text": "Y eso conecta con una de las citas de OVERHEARD. En r/Monero, alguien escribió, traducido: «Me encanta Monero y me parece una pena que fuera tan difícil conseguirlo»."
+        },
+        {
+          "host": "Jessica",
+          "text": "Qué bien lo resume, ¿no? El cariño por la moneda y la frustración por el acceso en una sola frase."
+        },
+        {
+          "host": "Chris",
+          "text": "Hay otra de Seth For Privacy, en X como @sethforprivacy. Dijo, traducido: «Otro ejemplo más de por qué nunca deberías usar un nodo en el que no confías»."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y viene al caso con la noticia de Cake Wallet. Seth dice que hay una corrección en revisión para una vulnerabilidad en cómo los monederos con protocolo Electrum gestionan las transacciones replace-by-fee. La divulgó públicamente un investigador."
+        },
+        {
+          "host": "Chris",
+          "text": "Ojo, que el problema se encontró en Electrum Wallet y se explota allí. Seth lo subraya como una razón más para no fiarse de servidores cualquiera."
+        },
+        {
+          "host": "Jessica",
+          "text": "La tercera cita es de @GrapheneOS, también traducida: «Tanto el operador del TLD como el registrador pueden hacerse con el DNS de cualquier dominio y obtener certificados válidos de una CA»."
+        },
+        {
+          "host": "Chris",
+          "text": "Una CA es una autoridad certificadora, para quien se pregunte. Y esa cita encaja con otra historia de la semana, que ahora contamos."
+        },
+        {
+          "host": "Jessica",
+          "text": "Antes, el ecosistema. Gran titular: binaryFate apagó el sitio del Sistema de Crowdfunding Comunitario de Monero, el CCS, como medida de emergencia."
+        },
+        {
+          "host": "Chris",
+          "text": "Fue tras la divulgación de dos vulnerabilidades críticas de ejecución remota de código en PHP. Seguirá apagado hasta que se encuentre una vía segura de actualización."
+        },
+        {
+          "host": "Jessica",
+          "text": "Prudencia total. Mejor apagado que comprometido."
+        },
+        {
+          "host": "Chris",
+          "text": "Otra del ecosistema: Biscuit Wallet 1.2.1 permite que los intercambios funcionen en modo Tor, a través de exchanges que no piden identidad. Y añade soporte para SOL, Dogecoin y Arbitrum."
+        },
+        {
+          "host": "Jessica",
+          "text": "Bien por los que quieren intercambiar sin dar la cara. Y ya que hablamos de herramientas, de la comunidad: un usuario informa de que Windows Defender marca la descarga de la nueva GUI del monedero."
+        },
+        {
+          "host": "Chris",
+          "text": "Al descomprimir la GUI cero punto dieciocho punto cinco punto cuatro, aunque el hash coincidía con el publicado. El consejo es verificar tu descarga y tomar las advertencias con cuidado."
+        },
+        {
+          "host": "Jessica",
+          "text": "Verifica siempre el hash. Sí, es un rollo, pero para eso está."
+        },
+        {
+          "host": "Chris",
+          "text": "Más desarrollo, que hay cosas simpáticas. monerod ahora puede reabrir su archivo de registro al recibir una señal SIGUSR1, lo que ayuda con la rotación externa de logs."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y el RPC del monedero gana saldos de cuenta más rápidos y búsquedas de transferencias entre cuentas. Los monederos fríos ahora importan bien las exportaciones de salidas vacías tras una reorganización."
+        },
+        {
+          "host": "Chris",
+          "text": "Y un cambio con sabor a limpieza de armario: GNU Readline sale y entra linenoise, una biblioteca mucho más pequeña, para la entrada por línea de comandos."
+        },
+        {
+          "host": "Jessica",
+          "text": "Se elimina mucho código, aunque trae algunos cambios menores de comportamiento. [laughs] Los de la terminal, atentos."
+        },
+        {
+          "host": "Chris",
+          "text": "Y el equipo de Cuprate publicó un blog sobre el refuerzo del RPC, las mitigaciones en la pila HTTP de Monero y vulnerabilidades pasadas, incluida la campaña de DoS de día cero de dos mil veinticinco."
+        },
+        {
+          "host": "Jessica",
+          "text": "Cuprate cero punto dos punto cero llegará con el tiempo. Por ahora trabajan en el soporte de FCMP++."
+        },
+        {
+          "host": "Chris",
+          "text": "Fuera de Monero, la web pasó una semana movida. Mozilla bloqueó los certificados de eMudhra tras el compromiso de certificados intermedios. Con ellos, un atacante podría suplantar cualquier sitio HTTPS."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y reaccionaron rápido: Tor Browser quince punto cero punto veintiséis y un Tails siete punto quince punto uno de emergencia los bloquean."
+        },
+        {
+          "host": "Chris",
+          "text": "También hay un aviso público sobre trescientos treinta y tres nodos de salida de Tor secuestrados para interceptar tráfico SSH y recuperar correos en texto plano."
+        },
+        {
+          "host": "Jessica",
+          "text": "Consejo práctico: usa claves SSH en lugar de contraseñas y presta atención a las advertencias de cambio de clave de host."
+        },
+        {
+          "host": "Chris",
+          "text": "Las vulnerabilidades de PHP sacudieron la web con caídas e intentos de explotación, aunque los analistas desmintieron algunas afirmaciones sobre exploits. La EFF dijo que es una razón para financiar el código abierto."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y dos de GrapheneOS. Según 404 Media, el DHS engañó al público sobre el registro de un teléfono con GrapheneOS de un activista. Dijeron que buscaban material de abuso infantil, cuando la razón real eran presuntas actividades terroristas. [sarcastic] Qué transparencia."
+        },
+        {
+          "host": "Chris",
+          "text": "Y la buena noticia: GrapheneOS ya tiene un Pixel 7 funcionando con Linux seis punto dieciocho punto cincuenta y ocho, el primer paso para llevar todos los dispositivos compatibles al kernel de Linux upstream."
+        },
+        {
+          "host": "Jessica",
+          "text": "Pasemos a los números de la red. El hashrate semanal medio fue de seis coma cinco gigahashes por segundo, frente a seis coma cero cuatro la semana pasada."
+        },
+        {
+          "host": "Chris",
+          "text": "Veintinueve mil doscientas ochenta y dos transacciones al día, contra veintiocho mil cuatrocientas noventa y cuatro. Y la comisión media fue de cero coma cero cero cero doscientos cuarenta y ocho XMR, casi igual que antes."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y mirando adelante, mucha agenda. El lunes veintiséis a las dieciocho UTC, reunión de Monero Tech en no-wallet-left-behind, sobre Seraphis, JAMTIS y FCMPs."
+        },
+        {
+          "host": "Chris",
+          "text": "El martes veintisiete, misma hora, Cuprate en IRC de Libera y Matrix. Y el miércoles veintiocho a las diecisiete UTC, el Monero Research Lab, con el estado de FCMP++ y probablemente el problema de doxing de get_tx_key."
+        },
+        {
+          "host": "Jessica",
+          "text": "El treinta de octubre empieza el Qubes OS Summit, con las entradas casi agotadas. Y el dieciocho de diciembre, pop-up de privacidad WebWipe en Pubkey, Nueva York, con Doug Tuman de MoneroTalk y el asesor legal de Roman Sterlingov."
+        },
+        {
+          "host": "Chris",
+          "text": "Y hasta aquí el número de esta semana. Todos los enlaces están en xmr.fan/es/news."
+        },
+        {
+          "host": "Jessica",
+          "text": "Gracias por escucharnos. ¡Hasta la próxima!"
+        }
+      ]
+    }
   },
   "generated": {
     "model": "anthropic/claude-sonnet-5.5",
@@ -1235,227 +1456,6 @@
           "XMRの取引に関係する材料は、KrakenがMoneroの直近の出金について顧客に問い合わせているというReddit投稿だけです。木曜日の下落の背景にある、取引所側の圧力と受け取ることもできるでしょう。"
         ]
       }
-    }
-  },
-  "podcasts": {
-    "es": {
-      "file": "/podcast/2026-10-19.es.mp3",
-      "duration": 579,
-      "bytes": 4628733,
-      "hosts": [
-        "Chris",
-        "Jessica"
-      ],
-      "transcript": [
-        {
-          "host": "Chris",
-          "text": "¡Hola a todos y bienvenidos a The xmr.fan Times! Estamos en el número dos, semana del diecinueve de octubre de dos mil veintiséis. Yo soy Chris."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y yo soy Jessica. Hoy tenemos una semana de limpieza silenciosa en el código de Monero, un exchange que pregunta demasiado, el apagón del sitio de CCS y unas cuantas citas que nos hicieron pensar."
-        },
-        {
-          "host": "Chris",
-          "text": "Empecemos por el código. Se fusionaron cuarenta y dos pull requests en el repositorio principal de Monero, y la mayoría son correcciones."
-        },
-        {
-          "host": "Jessica",
-          "text": "Cuarenta y dos. [laughs] Nada llamativo, pero es justo el tipo de trabajo que mantiene a salvo tus fondos y tu nodo. Errores de memoria, verificaciones de monedero, seguridad multifirma, refuerzo de la red."
-        },
-        {
-          "host": "Chris",
-          "text": "Y hay un detalle que me gustó. Ahora se comprueban las contraseñas antes de los pasos multifirma o del cifrado de claves. Antes, un error podía corromper el archivo del monedero después de poner una contraseña incorrecta."
-        },
-        {
-          "host": "Jessica",
-          "text": "Espera, o sea que equivocarte de contraseña podía estropearte el archivo del monedero. [exhales] Qué susto. Menos mal que eso queda corregido."
-        },
-        {
-          "host": "Chris",
-          "text": "Sí. Además se valida el número de participantes multifirma, y las pruebas de transacciones entrantes quedan ligadas a las salidas del destinatario."
-        },
-        {
-          "host": "Jessica",
-          "text": "Cosas que nadie celebra con fuegos artificiales, pero que se agradecen mucho."
-        },
-        {
-          "host": "Chris",
-          "text": "Pasamos al precio. Monero abrió la semana en unos quinientos noventa y ocho dólares y cerró en unos quinientos noventa y dos, un descenso de alrededor del uno por ciento. Bitcoin bajó un dos por ciento."
-        },
-        {
-          "host": "Jessica",
-          "text": "Pero por el camino fue una montaña rusa. El miércoles hubo un empuje hasta el máximo semanal, unos seiscientos cincuenta dólares, y el jueves cayó un cuatro coma siete por ciento."
-        },
-        {
-          "host": "Chris",
-          "text": "Luego el sábado rebotó un cinco coma dos por ciento, pero ese rebote se diluyó el domingo. El mínimo de la semana fue de unos quinientos setenta dólares."
-        },
-        {
-          "host": "Jessica",
-          "text": "Total, que mucho movimiento para terminar casi donde empezó. El cierre queda cerca de la mitad del rango del último mes, y muy por encima de su mínimo de quinientos quince."
-        },
-        {
-          "host": "Chris",
-          "text": "Y lo único ligado al comercio de XMR esta semana es justo nuestro tema estrella, así que... pasemos a él. [curious]"
-        },
-        {
-          "host": "Jessica",
-          "text": "Kraken. Una publicación en Reddit mostró un mensaje del exchange a un cliente. Habían notado retiros de Monero y le pedían que explicara el motivo, el propósito y el uso previsto de ese XMR, con siete días para responder."
-        },
-        {
-          "host": "Chris",
-          "text": "Siete días. Quien lo publicó dice que deberían esperar algo así los usuarios que hayan sacado XMR de la plataforma en los últimos seis meses."
-        },
-        {
-          "host": "Jessica",
-          "text": "O sea que si retiraste XMR en el último medio año, quizá te llegue un cuestionario. [sighs] Qué fastidio."
-        },
-        {
-          "host": "Chris",
-          "text": "Para mí es un recordatorio de cómo tratan los exchanges a las monedas de privacidad. No como algo prohibido, sino como algo que hay que justificar."
-        },
-        {
-          "host": "Jessica",
-          "text": "Eso es. No te dicen que no, te piden que expliques. Y la lección práctica es la que los veteranos ya conocen: cómo adquieres tu XMR importa tanto como lo que haces con él."
-        },
-        {
-          "host": "Chris",
-          "text": "Y eso conecta con una de las citas de OVERHEARD. En r/Monero, alguien escribió, traducido: «Me encanta Monero y me parece una pena que fuera tan difícil conseguirlo»."
-        },
-        {
-          "host": "Jessica",
-          "text": "Qué bien lo resume, ¿no? El cariño por la moneda y la frustración por el acceso en una sola frase."
-        },
-        {
-          "host": "Chris",
-          "text": "Hay otra de Seth For Privacy, en X como @sethforprivacy. Dijo, traducido: «Otro ejemplo más de por qué nunca deberías usar un nodo en el que no confías»."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y viene al caso con la noticia de Cake Wallet. Seth dice que hay una corrección en revisión para una vulnerabilidad en cómo los monederos con protocolo Electrum gestionan las transacciones replace-by-fee. La divulgó públicamente un investigador."
-        },
-        {
-          "host": "Chris",
-          "text": "Ojo, que el problema se encontró en Electrum Wallet y se explota allí. Seth lo subraya como una razón más para no fiarse de servidores cualquiera."
-        },
-        {
-          "host": "Jessica",
-          "text": "La tercera cita es de @GrapheneOS, también traducida: «Tanto el operador del TLD como el registrador pueden hacerse con el DNS de cualquier dominio y obtener certificados válidos de una CA»."
-        },
-        {
-          "host": "Chris",
-          "text": "Una CA es una autoridad certificadora, para quien se pregunte. Y esa cita encaja con otra historia de la semana, que ahora contamos."
-        },
-        {
-          "host": "Jessica",
-          "text": "Antes, el ecosistema. Gran titular: binaryFate apagó el sitio del Sistema de Crowdfunding Comunitario de Monero, el CCS, como medida de emergencia."
-        },
-        {
-          "host": "Chris",
-          "text": "Fue tras la divulgación de dos vulnerabilidades críticas de ejecución remota de código en PHP. Seguirá apagado hasta que se encuentre una vía segura de actualización."
-        },
-        {
-          "host": "Jessica",
-          "text": "Prudencia total. Mejor apagado que comprometido."
-        },
-        {
-          "host": "Chris",
-          "text": "Otra del ecosistema: Biscuit Wallet 1.2.1 permite que los intercambios funcionen en modo Tor, a través de exchanges que no piden identidad. Y añade soporte para SOL, Dogecoin y Arbitrum."
-        },
-        {
-          "host": "Jessica",
-          "text": "Bien por los que quieren intercambiar sin dar la cara. Y ya que hablamos de herramientas, de la comunidad: un usuario informa de que Windows Defender marca la descarga de la nueva GUI del monedero."
-        },
-        {
-          "host": "Chris",
-          "text": "Al descomprimir la GUI cero punto dieciocho punto cinco punto cuatro, aunque el hash coincidía con el publicado. El consejo es verificar tu descarga y tomar las advertencias con cuidado."
-        },
-        {
-          "host": "Jessica",
-          "text": "Verifica siempre el hash. Sí, es un rollo, pero para eso está."
-        },
-        {
-          "host": "Chris",
-          "text": "Más desarrollo, que hay cosas simpáticas. monerod ahora puede reabrir su archivo de registro al recibir una señal SIGUSR1, lo que ayuda con la rotación externa de logs."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y el RPC del monedero gana saldos de cuenta más rápidos y búsquedas de transferencias entre cuentas. Los monederos fríos ahora importan bien las exportaciones de salidas vacías tras una reorganización."
-        },
-        {
-          "host": "Chris",
-          "text": "Y un cambio con sabor a limpieza de armario: GNU Readline sale y entra linenoise, una biblioteca mucho más pequeña, para la entrada por línea de comandos."
-        },
-        {
-          "host": "Jessica",
-          "text": "Se elimina mucho código, aunque trae algunos cambios menores de comportamiento. [laughs] Los de la terminal, atentos."
-        },
-        {
-          "host": "Chris",
-          "text": "Y el equipo de Cuprate publicó un blog sobre el refuerzo del RPC, las mitigaciones en la pila HTTP de Monero y vulnerabilidades pasadas, incluida la campaña de DoS de día cero de dos mil veinticinco."
-        },
-        {
-          "host": "Jessica",
-          "text": "Cuprate cero punto dos punto cero llegará con el tiempo. Por ahora trabajan en el soporte de FCMP++."
-        },
-        {
-          "host": "Chris",
-          "text": "Fuera de Monero, la web pasó una semana movida. Mozilla bloqueó los certificados de eMudhra tras el compromiso de certificados intermedios. Con ellos, un atacante podría suplantar cualquier sitio HTTPS."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y reaccionaron rápido: Tor Browser quince punto cero punto veintiséis y un Tails siete punto quince punto uno de emergencia los bloquean."
-        },
-        {
-          "host": "Chris",
-          "text": "También hay un aviso público sobre trescientos treinta y tres nodos de salida de Tor secuestrados para interceptar tráfico SSH y recuperar correos en texto plano."
-        },
-        {
-          "host": "Jessica",
-          "text": "Consejo práctico: usa claves SSH en lugar de contraseñas y presta atención a las advertencias de cambio de clave de host."
-        },
-        {
-          "host": "Chris",
-          "text": "Las vulnerabilidades de PHP sacudieron la web con caídas e intentos de explotación, aunque los analistas desmintieron algunas afirmaciones sobre exploits. La EFF dijo que es una razón para financiar el código abierto."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y dos de GrapheneOS. Según 404 Media, el DHS engañó al público sobre el registro de un teléfono con GrapheneOS de un activista. Dijeron que buscaban material de abuso infantil, cuando la razón real eran presuntas actividades terroristas. [sarcastic] Qué transparencia."
-        },
-        {
-          "host": "Chris",
-          "text": "Y la buena noticia: GrapheneOS ya tiene un Pixel 7 funcionando con Linux seis punto dieciocho punto cincuenta y ocho, el primer paso para llevar todos los dispositivos compatibles al kernel de Linux upstream."
-        },
-        {
-          "host": "Jessica",
-          "text": "Pasemos a los números de la red. El hashrate semanal medio fue de seis coma cinco gigahashes por segundo, frente a seis coma cero cuatro la semana pasada."
-        },
-        {
-          "host": "Chris",
-          "text": "Veintinueve mil doscientas ochenta y dos transacciones al día, contra veintiocho mil cuatrocientas noventa y cuatro. Y la comisión media fue de cero coma cero cero cero doscientos cuarenta y ocho XMR, casi igual que antes."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y mirando adelante, mucha agenda. El lunes veintiséis a las dieciocho UTC, reunión de Monero Tech en no-wallet-left-behind, sobre Seraphis, JAMTIS y FCMPs."
-        },
-        {
-          "host": "Chris",
-          "text": "El martes veintisiete, misma hora, Cuprate en IRC de Libera y Matrix. Y el miércoles veintiocho a las diecisiete UTC, el Monero Research Lab, con el estado de FCMP++ y probablemente el problema de doxing de get_tx_key."
-        },
-        {
-          "host": "Jessica",
-          "text": "El treinta de octubre empieza el Qubes OS Summit, con las entradas casi agotadas. Y el dieciocho de diciembre, pop-up de privacidad WebWipe en Pubkey, Nueva York, con Doug Tuman de MoneroTalk y el asesor legal de Roman Sterlingov."
-        },
-        {
-          "host": "Chris",
-          "text": "Y hasta aquí el número de esta semana. Todos los enlaces están en xmr.fan/es/news."
-        },
-        {
-          "host": "Jessica",
-          "text": "Gracias por escucharnos. ¡Hasta la próxima!"
-        }
-      ]
     }
   }
 }
