@@ -1,0 +1,1461 @@
+{
+  "recap": "A security-heavy week for Monero: a big batch of hardening fixes landed in the core code, Kraken began questioning customers about their XMR withdrawals, and a pair of critical PHP flaws briefly took the CCS crowdfunding site offline. Cake Wallet scrambled to patch a Bitcoin-side wallet issue, and wider privacy news was dominated by a compromised certificate authority, Tor exit-node trouble and surveillance fights.",
+  "lead": {
+    "src": "github.com/monero-project/monero",
+    "url": "https://github.com/monero-project/monero/pulls?q=is%3Apr%20is%3Amerged%20merged%3A2026-10-19..2026-10-25",
+    "h": "Monero's code gets a big week of security hardening",
+    "p": "Forty-two pull requests merged into the main Monero repository, most of them fixes: memory bugs, wallet checks, multisig safety and network hardening. Not flashy, but it is the kind of quiet clean-up that keeps your funds and node safe.",
+    "more": [
+      {
+        "src": "github.com/monero-project/monero",
+        "url": "https://github.com/monero-project/monero/pull/11575"
+      },
+      {
+        "src": "github.com/monero-project/monero",
+        "url": "https://github.com/monero-project/monero/pull/11574"
+      }
+    ]
+  },
+  "art": {
+    "file": "/news-art/2026-10-19.webp",
+    "alt": "Pixel-art orange shield next to a wrench on a dark table, suggesting security maintenance.",
+    "prompt": "A chunky orange shield resting beside a small wrench on a charcoal table."
+  },
+  "feature": {
+    "src": "monero.observer",
+    "url": "https://monero.observer/mcawesom96/",
+    "h": "Kraken starts asking users why they bought Monero",
+    "dek": "Withdraw XMR in the past six months and you may get a questionnaire from the exchange.",
+    "body": [
+      "A Reddit post this week showed a message from Kraken to a customer: the exchange noticed Monero withdrawals and asked them to explain the rationale, the purpose and the intended use of the XMR, with seven days to reply. The poster describes it as something users who have moved XMR off the platform in the past six months should expect.",
+      "It is a reminder of how exchanges treat privacy coins: not as banned, but as something to be explained. For users, the practical lesson is the one regulars already know, that how you acquire XMR matters as much as what you do with it."
+    ]
+  },
+  "quotes": [
+    {
+      "text": "Yet another example of why you should never use a node you don't trust.",
+      "who": "@sethforprivacy",
+      "url": "https://x.com/sethforprivacy/status/2114316880781377869",
+      "src": "x.com/sethforprivacy"
+    },
+    {
+      "text": "I love Monero and find this a bit of a shame that it was to difficult to obtain.",
+      "who": "reddit.com/r/Monero",
+      "url": "https://www.reddit.com/r/Monero/comments/1xdakc9/question_from_a_programmer/",
+      "src": "reddit.com/r/Monero"
+    },
+    {
+      "text": "Both the TLD operator and registrar can take over DNS for any domain and obtain valid certificates from a CA.",
+      "who": "@GrapheneOS",
+      "url": "https://x.com/GrapheneOS/status/2113894245840949512",
+      "src": "x.com/GrapheneOS"
+    }
+  ],
+  "upcoming": [
+    {
+      "src": "monero.observer",
+      "url": "https://monero.observer/monero-tech-meeting-26-october-2026/",
+      "date": "2026-10-26",
+      "time": "18:00 UTC",
+      "what": "Monero Tech meeting in #no-wallet-left-behind, covering Seraphis/JAMTIS, FCMPs and other long-term development."
+    },
+    {
+      "src": "monero.observer",
+      "url": "https://monero.observer/cuprate-meeting-scheduled-27-october-2026/",
+      "date": "2026-10-27",
+      "time": "18:00 UTC",
+      "what": "Cuprate meeting on IRC-Libera/Matrix, discussing what is next for the alternative Monero node."
+    },
+    {
+      "src": "monero.observer",
+      "url": "https://monero.observer/monero-research-lab-meeting-28-october-2026/",
+      "date": "2026-10-28",
+      "time": "17:00 UTC",
+      "what": "Monero Research Lab meeting, with FCMP++ status and the get_tx_key doxing issue on the likely agenda."
+    },
+    {
+      "src": "qubes-os.org",
+      "url": "https://www.qubes-os.org/news/2026/10/21/qubes-os-summit-2026-nitrokey-sponsorship-last-call-for-tickets/",
+      "date": "2026-10-30",
+      "time": "09:30",
+      "what": "Qubes OS Summit 2026 begins; tickets are nearly gone."
+    },
+    {
+      "src": "monero.observer",
+      "url": "https://monero.observer/unsanctionedf-7/",
+      "date": "2026-12-18",
+      "time": "17:00 EST",
+      "what": "WebWipe privacy pop-up at Pubkey in New York, with MoneroTalk's Doug Tuman and Roman Sterlingov's legal counsel."
+    }
+  ],
+  "sections": {
+    "dev": [
+      {
+        "src": "github.com/monero-project/monero",
+        "url": "https://github.com/monero-project/monero/pull/11565",
+        "h": "Wallet and multisig fixes land in the core repo",
+        "p": "Several merged fixes tighten wallet behavior: passwords are now checked before multisig steps or key encryption (one bug could corrupt a wallet file after a wrong password), multisig participant counts are validated, and incoming-transaction proofs are tied to the recipient's outputs.",
+        "more": [
+          {
+            "src": "github.com/monero-project/monero",
+            "url": "https://github.com/monero-project/monero/pull/11547"
+          },
+          {
+            "src": "github.com/monero-project/monero",
+            "url": "https://github.com/monero-project/monero/pull/11546"
+          }
+        ]
+      },
+      {
+        "src": "reddit.com/r/Monero",
+        "url": "https://www.reddit.com/r/Monero/comments/1xf6jtm/new_cuprate_blog_post_on_rpc_hardening_monero/",
+        "h": "Cuprate publishes RPC hardening write-up",
+        "p": "The Cuprate team posted a blog about hardening RPC, mitigations in Monero's HTTP stack and past vulnerabilities, including the 2025 zero-day DoS campaign. Cuprate 0.2.0 will come eventually; for now, FCMP++ support is being worked on."
+      },
+      {
+        "src": "github.com/monero-project/monero",
+        "url": "https://github.com/monero-project/monero/pull/11562",
+        "h": "Small quality-of-life improvements for node and wallet operators",
+        "p": "monerod can now reopen its log file on a SIGUSR1 signal, which helps external log rotation. Wallet RPC gets faster account balances and cross-account transfer lookups, and cold wallets now import empty output exports correctly after a reorg.",
+        "more": [
+          {
+            "src": "github.com/monero-project/monero",
+            "url": "https://github.com/monero-project/monero/pull/11396"
+          },
+          {
+            "src": "github.com/monero-project/monero",
+            "url": "https://github.com/monero-project/monero/pull/11533"
+          }
+        ]
+      },
+      {
+        "src": "github.com/monero-project/monero",
+        "url": "https://github.com/monero-project/monero/pull/11208",
+        "h": "readline swapped for linenoise",
+        "p": "A merged change replaces GNU Readline with the much smaller linenoise library for command-line input, cutting a lot of code and bringing a few minor behavior changes."
+      }
+    ],
+    "eco": [
+      {
+        "src": "monero.observer",
+        "url": "https://monero.observer/monero-ccs-website-temporarily-disabled-disclosure-critical-php-vulnerabilities/",
+        "h": "CCS site switched off after critical PHP flaws",
+        "p": "binaryFate disabled the Monero Community Crowdfunding System website as an emergency measure after two critical PHP remote-code-execution vulnerabilities were disclosed. It stays down until a safe upgrade path is found."
+      },
+      {
+        "src": "x.com/sethforprivacy",
+        "url": "https://x.com/sethforprivacy/status/2114141395586043909",
+        "h": "Cake Wallet patches a flaw affecting Electrum-protocol wallets",
+        "p": "Seth For Privacy says a fix is in review for a vulnerability in how Electrum-protocol wallets handle replace-by-fee transactions, disclosed publicly by a researcher. He stresses it is a reason never to trust random servers; the problem was found in Electrum Wallet and is exploited there.",
+        "more": [
+          {
+            "src": "x.com/sethforprivacy",
+            "url": "https://x.com/sethforprivacy/status/2114304243330908170"
+          },
+          {
+            "src": "x.com/sethforprivacy",
+            "url": "https://x.com/sethforprivacy/status/2114316880781377869"
+          }
+        ]
+      },
+      {
+        "src": "monero.observer",
+        "url": "https://monero.observer/biscuit-wallet-v1.2.1-released-support-swaps-tor-mode/",
+        "h": "Biscuit Wallet 1.2.1 adds swaps in Tor mode",
+        "p": "The release lets swaps work in Tor mode through exchanges that do not ask for identity, and adds SOL, Dogecoin and Arbitrum support."
+      }
+    ],
+    "comm": [
+      {
+        "src": "reddit.com/r/Monero",
+        "url": "https://www.reddit.com/r/Monero/comments/1xbof1z/windows_defender_detected_multiple_threats_while/",
+        "h": "Windows Defender flags the new GUI wallet download",
+        "p": "A user reports warnings when unzipping the 0.18.5.4 GUI even though the hash matched the published one. Verify your download and treat warnings carefully."
+      }
+    ],
+    "privacy": [
+      {
+        "src": "blog.torproject.org",
+        "url": "https://blog.torproject.org/new-release-tails-7_15_1/",
+        "h": "Tails and Tor Browser react to a compromised certificate authority",
+        "p": "Mozilla blocked eMudhra certificates after intermediate certificates were compromised; with them an attacker could impersonate any HTTPS site. Tor Browser 15.0.26 and an emergency Tails 7.15.1 block them.",
+        "more": [
+          {
+            "src": "blog.torproject.org",
+            "url": "https://blog.torproject.org/new-release-tor-browser-15026/"
+          },
+          {
+            "src": "tails.net",
+            "url": "https://tails.net/news/version_7.15.1/"
+          }
+        ]
+      },
+      {
+        "src": "monero.observer",
+        "url": "https://monero.observer/anon-29/",
+        "h": "333 Tor exit nodes hijacked to intercept SSH",
+        "p": "A PSA says a large group of exit nodes were used to intercept SSH traffic and retrieve plaintext email. Use SSH keys instead of passwords and heed host-key-changed warnings."
+      },
+      {
+        "src": "therecord.media",
+        "url": "https://therecord.media/php-php2shell-exploitation-attempts-pocs",
+        "h": "The PHP vulnerabilities rattle the web",
+        "p": "Critical PHP bugs prompted outages and exploitation attempts, while analysts debunked some exploit claims. EFF argued the episode is a case for funding open source and offered advice on staying safe.",
+        "more": [
+          {
+            "src": "eff.org",
+            "url": "https://www.eff.org/deeplinks/2026/10/vulnerability-apocalypse-and-why-we-should-fund-open-source"
+          },
+          {
+            "src": "eff.org",
+            "url": "https://www.eff.org/deeplinks/2026/10/computer-security-about-get-lot-worse-heres-what-you-can-do"
+          }
+        ]
+      },
+      {
+        "src": "404media.co",
+        "url": "https://www.404media.co/dhs-said-they-searched-man-who-wiped-grapheneos-phone-for-child-abuse-material-they-lied/",
+        "h": "DHS misled the public about a GrapheneOS phone search",
+        "p": "404 Media reports officials said they wanted to search an activist's wiped GrapheneOS phone for child abuse material, when the actual reason was suspected terrorist activities."
+      },
+      {
+        "src": "grapheneos.social",
+        "url": "https://grapheneos.social/@GrapheneOS/117486670347655201",
+        "h": "GrapheneOS ports Pixels to the upstream Linux kernel",
+        "p": "The project says Android's GKI kernel branches have fallen behind upstream, and it has a Pixel 7 running Linux 6.18.58 as a first step toward moving all supported devices.",
+        "more": [
+          {
+            "src": "grapheneos.social",
+            "url": "https://grapheneos.social/@GrapheneOS/117486679929858788"
+          },
+          {
+            "src": "grapheneos.org",
+            "url": "https://grapheneos.org/releases#2026102100"
+          }
+        ]
+      }
+    ]
+  },
+  "no": 2,
+  "week": "2026-10-19",
+  "draft": true,
+  "sample": false,
+  "network": {
+    "hash": 6.5,
+    "fee": 0.000248,
+    "txs": 29282,
+    "height": 3792325,
+    "prev": {
+      "hash": 6.04,
+      "fee": 0.000251,
+      "txs": 28494
+    },
+    "history": []
+  },
+  "market": {
+    "open": 598.01,
+    "close": 592.28,
+    "high": 650.19,
+    "low": 570.57,
+    "change": -1,
+    "volume": 170625751,
+    "volumeChange": 49.5,
+    "mcap": 11148081315,
+    "btcChange": -2,
+    "series": [
+      598.14,
+      594.43,
+      588.81,
+      603.75,
+      583.67,
+      601.81,
+      601.27,
+      607.6,
+      610.64,
+      619.08,
+      616.15,
+      608.83,
+      575.93,
+      579.65,
+      597.64,
+      604.08,
+      607.67,
+      623.97,
+      605.94,
+      647.22,
+      643.68,
+      619.56,
+      609.07,
+      594.62,
+      613.16,
+      606.2,
+      605.64,
+      607.91,
+      595.78,
+      582.16,
+      577.28,
+      584.21,
+      591.44,
+      597.93,
+      604.1,
+      612.28,
+      615.36,
+      602.34,
+      601.72,
+      606.47,
+      601.34,
+      592.28
+    ],
+    "month": {
+      "change": 6.2,
+      "high": 650.19,
+      "low": 515.23
+    },
+    "analysis": {
+      "summary": "The week swung hard inside a narrow net move: Wednesday's push to the week's high was followed by a 4.7% drop on Thursday, and Saturday's 5.2% rebound faded on Sunday. The close sits near the middle of the past month's range, well above its low of 515.23.",
+      "drivers": [
+        {
+          "src": "monero.observer",
+          "url": "https://monero.observer/mcawesom96/",
+          "text": "The only item tied to XMR trading is a Reddit post reporting that Kraken is questioning customers about recent Monero withdrawals, which could be read as exchange-side pressure around Thursday's drop."
+        }
+      ],
+      "watch": []
+    }
+  },
+  "podcast": {
+    "file": "/podcast/2026-10-19.mp3",
+    "duration": 591,
+    "bytes": 4729670,
+    "hosts": [
+      "Chris",
+      "Jessica"
+    ],
+    "transcript": [
+      {
+        "host": "Chris",
+        "text": "Hello and welcome to The xmr.fan Times, issue number two, covering the week of October nineteenth. I'm Chris."
+      },
+      {
+        "host": "Jessica",
+        "text": "And I'm Jessica. Today we've got a big security clean-up in Monero's code, a message from Kraken that's making people nervous, some quotes from around the community, and a few things happening outside Monero that you'll want to know about."
+      },
+      {
+        "host": "Chris",
+        "text": "Okay, lead story. Forty-two pull requests merged into the main Monero repository this week. Forty-two!"
+      },
+      {
+        "host": "Jessica",
+        "text": "Which sounds like a firehose, but most of them are fixes. Memory bugs, wallet checks, multisig safety, network hardening. Not flashy..."
+      },
+      {
+        "host": "Chris",
+        "text": "But it's the kind of quiet clean-up that keeps your funds and your node safe. Honestly, I love weeks like this."
+      },
+      {
+        "host": "Jessica",
+        "text": "[laughs] You would. Give people an example, though, because this can sound abstract."
+      },
+      {
+        "host": "Chris",
+        "text": "Sure. Passwords are now checked before multisig steps or key encryption. And there was a bug where a wrong password could actually corrupt a wallet file."
+      },
+      {
+        "host": "Jessica",
+        "text": "Wait, a wrong password could corrupt the file? That's the one that would ruin your afternoon."
+      },
+      {
+        "host": "Chris",
+        "text": "Right. Fixed now. Also multisig participant counts are validated, and incoming-transaction proofs are tied to the recipient's outputs."
+      },
+      {
+        "host": "Jessica",
+        "text": "So tighter all around. And last issue we talked about point release 0.18.5.4, the small bug-fix update. This week's work is the same spirit: developers keep polishing."
+      },
+      {
+        "host": "Chris",
+        "text": "Speaking of which, there's a little follow-up on that release in the community section. We'll get there."
+      },
+      {
+        "host": "Jessica",
+        "text": "Okay, price first, then the feature. Monero opened the week at around five hundred ninety-eight dollars and closed near five hundred ninety-two. That's down about one percent."
+      },
+      {
+        "host": "Chris",
+        "text": "And Bitcoin was down two percent, so Monero held up a touch better. But the path was bumpy. The range ran from about five hundred seventy to six hundred fifty."
+      },
+      {
+        "host": "Jessica",
+        "text": "Wednesday pushed up to the week's high, then Thursday dropped four point seven percent. Saturday rebounded five point two percent..."
+      },
+      {
+        "host": "Chris",
+        "text": "And Sunday gave a lot of it back. A hard swing inside a narrow net move. The close sits near the middle of the past month's range, and well above that month's low of about five hundred fifteen."
+      },
+      {
+        "host": "Jessica",
+        "text": "And the only item tied to XMR trading this week is our feature story, which some people read as exchange-side pressure around Thursday's drop. Careful, that's a reading, not a proven link."
+      },
+      {
+        "host": "Chris",
+        "text": "Good caveat. So, the feature: Kraken starts asking users why they bought Monero."
+      },
+      {
+        "host": "Jessica",
+        "text": "A Reddit post showed a message from Kraken to a customer. The exchange noticed Monero withdrawals and asked them to explain the rationale, the purpose and the intended use of the XMR."
+      },
+      {
+        "host": "Chris",
+        "text": "And they gave seven days to reply. The poster describes it as something users who have moved XMR off the platform in the past six months should expect."
+      },
+      {
+        "host": "Jessica",
+        "text": "So if you withdrew in the last six months, you might get this questionnaire."
+      },
+      {
+        "host": "Chris",
+        "text": "Exactly. It's a reminder of how exchanges treat privacy coins. Not banned, but something to be explained."
+      },
+      {
+        "host": "Jessica",
+        "text": "[sighs] Which is a little exhausting. But the practical lesson is the one regulars already know: how you acquire XMR matters as much as what you do with it."
+      },
+      {
+        "host": "Chris",
+        "text": "Okay, let's do a few quotes from the community, starting with Seth for Privacy, who posted, quote, \"Yet another example of why you should never use a node you don't trust.\""
+      },
+      {
+        "host": "Jessica",
+        "text": "Which ties into the Cake Wallet story we'll cover in a minute. Next, from the Monero subreddit: \"I love Monero and find this a bit of a shame that it was to difficult to obtain.\" Typo and all."
+      },
+      {
+        "host": "Chris",
+        "text": "That one stings, because it's the access problem in one sentence."
+      },
+      {
+        "host": "Jessica",
+        "text": "It really is. And the third is from GrapheneOS: \"Both the TLD operator and registrar can take over DNS for any domain and obtain valid certificates from a CA.\""
+      },
+      {
+        "host": "Chris",
+        "text": "[curious] That's a pretty big claim about how fragile web trust can be. And remember, last issue's point release mainly repaired DNSSEC checks in the daemon."
+      },
+      {
+        "host": "Jessica",
+        "text": "Right, so that quote lands differently when you know DNSSEC just got attention. Okay, more development news. Cuprate, the alternative Monero node, published a write-up on hardening RPC."
+      },
+      {
+        "host": "Chris",
+        "text": "It covers mitigations in Monero's HTTP stack and past vulnerabilities, including the 2025 zero-day denial-of-service campaign. Cuprate 0.2.0 will come eventually; for now they're working on FCMP++ support."
+      },
+      {
+        "host": "Jessica",
+        "text": "And FCMP++ is the proposed big upgrade to how Monero hides which output you're spending, right? It's also on the Research Lab agenda this week."
+      },
+      {
+        "host": "Chris",
+        "text": "Yes, and that meeting is Wednesday the twenty-eighth at five p.m. UTC, with the get_tx_key doxing issue on the likely agenda too."
+      },
+      {
+        "host": "Jessica",
+        "text": "Smaller stuff for node and wallet operators: monerod can now reopen its log file on a SIGUSR1 signal, which helps with external log rotation."
+      },
+      {
+        "host": "Chris",
+        "text": "Wallet RPC gets faster account balances and cross-account transfer lookups. And cold wallets now import empty output exports correctly after a reorg."
+      },
+      {
+        "host": "Jessica",
+        "text": "There was also a swap of GNU Readline for a much smaller library called linenoise, for command-line input. Cuts a lot of code, with a few minor behavior changes."
+      },
+      {
+        "host": "Chris",
+        "text": "I like deleting code. Fewer lines, fewer places for bugs to hide."
+      },
+      {
+        "host": "Jessica",
+        "text": "[mischievously] Spoken like someone who has never had to maintain any of it."
+      },
+      {
+        "host": "Chris",
+        "text": "[laughs] Fair. Ecosystem news now, and some of it is a bit alarming. binaryFate switched off the Monero Community Crowdfunding System website, the CCS, as an emergency measure."
+      },
+      {
+        "host": "Jessica",
+        "text": "That's where community members propose projects and get funded. It went down after two critical PHP remote-code-execution vulnerabilities were disclosed, and it stays down until a safe upgrade path is found."
+      },
+      {
+        "host": "Chris",
+        "text": "And those PHP bugs are rattling the wider web too, we'll mention that in a bit. Next, Cake Wallet is patching a flaw affecting Electrum-protocol wallets."
+      },
+      {
+        "host": "Jessica",
+        "text": "Seth says a fix is in review for a vulnerability in how those wallets handle replace-by-fee transactions, which a researcher disclosed publicly. He stresses it's a reason never to trust random servers."
+      },
+      {
+        "host": "Chris",
+        "text": "And to be clear, the problem was found in Electrum Wallet and is exploited there. Which loops back to his quote about trusted nodes."
+      },
+      {
+        "host": "Jessica",
+        "text": "Also, Biscuit Wallet 1.2.1 lets swaps work in Tor mode through exchanges that don't ask for identity, and adds SOL, Dogecoin and Arbitrum support."
+      },
+      {
+        "host": "Chris",
+        "text": "Community corner: a user reports that Windows Defender flagged the new 0.18.5.4 GUI wallet download when unzipping it, even though the hash matched the published one."
+      },
+      {
+        "host": "Jessica",
+        "text": "So what does that mean for my wallet, if I'm downloading?"
+      },
+      {
+        "host": "Chris",
+        "text": "Verify your download, and treat warnings carefully. The matching hash is a good sign, but don't just wave it away."
+      },
+      {
+        "host": "Jessica",
+        "text": "Now privacy beyond Monero, and it's a busy one. Mozilla blocked eMudhra certificates after intermediate certificates were compromised."
+      },
+      {
+        "host": "Chris",
+        "text": "With those, an attacker could impersonate any HTTPS site. Tor Browser 15.0.26 and an emergency Tails 7.15.1 now block them, so update."
+      },
+      {
+        "host": "Jessica",
+        "text": "Then there's a PSA that 333 Tor exit nodes were hijacked to intercept SSH traffic and retrieve plaintext email."
+      },
+      {
+        "host": "Chris",
+        "text": "The advice: use SSH keys instead of passwords, and heed host-key-changed warnings. Don't click through them."
+      },
+      {
+        "host": "Jessica",
+        "text": "On the PHP bugs, they caused outages and exploitation attempts, while analysts debunked some exploit claims. EFF argued it's a case for funding open source."
+      },
+      {
+        "host": "Chris",
+        "text": "Two more. 404 Media reports DHS misled the public about a GrapheneOS phone search. Officials said they wanted to search an activist's wiped phone for child abuse material, when the actual reason was suspected terrorist activities."
+      },
+      {
+        "host": "Jessica",
+        "text": "[exhales] Hard to know what to say about that. And GrapheneOS says Android's GKI kernel branches have fallen behind upstream, so it has a Pixel 7 running Linux 6.18.58 as a first step toward moving all supported devices."
+      },
+      {
+        "host": "Chris",
+        "text": "Quick network numbers. Hashrate averaged about six and a half gigahashes per second, up from about six point oh four."
+      },
+      {
+        "host": "Jessica",
+        "text": "Transactions per day were around twenty-nine thousand, two hundred eighty-two, up from twenty-eight thousand, four hundred ninety-four, and the average fee was about zero point zero zero zero two four eight XMR, basically flat."
+      },
+      {
+        "host": "Chris",
+        "text": "Before we go, the calendar. Monday the twenty-sixth, eighteen hundred UTC, is the Monero Tech meeting covering Seraphis, JAMTIS, FCMPs and other long-term development."
+      },
+      {
+        "host": "Jessica",
+        "text": "Tuesday the twenty-seventh, same time, is the Cuprate meeting on IRC-Libera or Matrix. Then Wednesday's Research Lab meeting we mentioned."
+      },
+      {
+        "host": "Chris",
+        "text": "And Qubes OS Summit starts October thirtieth, tickets nearly gone. Also, December eighteenth in New York, there's a WebWipe privacy pop-up at Pubkey with MoneroTalk's Doug Tuman and Roman Sterlingov's legal counsel."
+      },
+      {
+        "host": "Jessica",
+        "text": "That's the show. Find every link for this issue at xmr.fan slash news."
+      },
+      {
+        "host": "Chris",
+        "text": "Thanks for listening. We'll be back next week."
+      }
+    ]
+  },
+  "generated": {
+    "model": "anthropic/claude-sonnet-5.5",
+    "at": "2026-10-26T05:22:32.956Z",
+    "items": 175,
+    "sources": [
+      {
+        "name": "github.com/monero-project/monero",
+        "count": 41
+      },
+      {
+        "name": "reddit.com/r/Monero",
+        "count": 20
+      },
+      {
+        "name": "monero.observer",
+        "count": 16
+      },
+      {
+        "name": "404media.co",
+        "count": 15
+      },
+      {
+        "name": "grapheneos.social",
+        "count": 15
+      },
+      {
+        "name": "eff.org",
+        "count": 13
+      },
+      {
+        "name": "x.com/GrapheneOS",
+        "count": 13
+      },
+      {
+        "name": "x.com/sethforprivacy",
+        "count": 9
+      },
+      {
+        "name": "proton.me",
+        "count": 6
+      },
+      {
+        "name": "therecord.media",
+        "count": 5
+      },
+      {
+        "name": "x.com/cakewallet",
+        "count": 5
+      },
+      {
+        "name": "github.com/monero-project/meta",
+        "count": 3
+      },
+      {
+        "name": "qubes-os.org",
+        "count": 3
+      },
+      {
+        "name": "blog.torproject.org",
+        "count": 2
+      },
+      {
+        "name": "x.com/monero",
+        "count": 2
+      },
+      {
+        "name": "grapheneos.org",
+        "count": 1
+      },
+      {
+        "name": "ivpn.net",
+        "count": 1
+      },
+      {
+        "name": "tails.net",
+        "count": 1
+      },
+      {
+        "name": "whonix.org",
+        "count": 1
+      },
+      {
+        "name": "x.com/fluffypony",
+        "count": 1
+      },
+      {
+        "name": "x.com/Mahirazmol1",
+        "count": 1
+      },
+      {
+        "name": "x.com/MooninPapa",
+        "count": 1
+      }
+    ]
+  },
+  "translations": {
+    "es": {
+      "recap": "Una semana muy centrada en la seguridad para Monero: un gran lote de correcciones de refuerzo llegó al código principal, Kraken empezó a interrogar a sus clientes sobre sus retiros de XMR, y un par de fallos críticos de PHP dejaron brevemente fuera de línea el sitio de crowdfunding CCS. Cake Wallet corrió a parchear un problema de monederos del lado de Bitcoin, y las noticias de privacidad en general estuvieron dominadas por una autoridad certificadora comprometida, problemas con nodos de salida de Tor y batallas por la vigilancia.",
+      "lead": {
+        "h": "El código de Monero vive una gran semana de refuerzo de seguridad",
+        "p": "Cuarenta y dos pull requests se fusionaron en el repositorio principal de Monero, la mayoría correcciones: errores de memoria, verificaciones de monedero, seguridad multifirma y refuerzo de la red. Nada llamativo, pero es el tipo de limpieza silenciosa que mantiene a salvo tus fondos y tu nodo."
+      },
+      "art": {
+        "alt": "Escudo naranja en pixel art junto a una llave inglesa sobre una mesa oscura, que sugiere mantenimiento de seguridad."
+      },
+      "feature": {
+        "h": "Kraken empieza a preguntar a sus usuarios por qué compraron Monero",
+        "dek": "Si retiraste XMR en los últimos seis meses, es posible que el exchange te envíe un cuestionario.",
+        "body": [
+          "Una publicación en Reddit mostró esta semana un mensaje de Kraken a un cliente: el exchange había notado retiros de Monero y le pidió que explicara el motivo, el propósito y el uso previsto de ese XMR, con siete días para responder. Quien lo publicó lo describe como algo que deberían esperar los usuarios que hayan sacado XMR de la plataforma en los últimos seis meses.",
+          "Es un recordatorio de cómo tratan los exchanges a las monedas de privacidad: no como algo prohibido, sino como algo que hay que justificar. Para los usuarios, la lección práctica es la que los veteranos ya conocen: cómo adquieres tu XMR importa tanto como lo que haces con él."
+        ]
+      },
+      "quotes": [
+        {
+          "text": "Otro ejemplo más de por qué nunca deberías usar un nodo en el que no confías."
+        },
+        {
+          "text": "Me encanta Monero y me parece una pena que fuera tan difícil conseguirlo."
+        },
+        {
+          "text": "Tanto el operador del TLD como el registrador pueden hacerse con el DNS de cualquier dominio y obtener certificados válidos de una CA."
+        }
+      ],
+      "upcoming": [
+        {
+          "what": "Reunión de Monero Tech en #no-wallet-left-behind, sobre Seraphis/JAMTIS, FCMPs y otro desarrollo a largo plazo."
+        },
+        {
+          "what": "Reunión de Cuprate en IRC-Libera/Matrix, para hablar de lo que viene para el nodo alternativo de Monero."
+        },
+        {
+          "what": "Reunión del Monero Research Lab, con el estado de FCMP++ y el problema de doxing de get_tx_key probablemente en la agenda."
+        },
+        {
+          "what": "Comienza el Qubes OS Summit 2026; las entradas están casi agotadas."
+        },
+        {
+          "what": "Pop-up de privacidad WebWipe en Pubkey, Nueva York, con Doug Tuman de MoneroTalk y el asesor legal de Roman Sterlingov."
+        }
+      ],
+      "sections": {
+        "dev": [
+          {
+            "h": "Correcciones de monedero y multifirma llegan al repositorio principal",
+            "p": "Varias correcciones fusionadas afinan el comportamiento del monedero: ahora se comprueban las contraseñas antes de los pasos multifirma o del cifrado de claves (un error podía corromper el archivo del monedero tras una contraseña incorrecta), se valida el número de participantes multifirma y las pruebas de transacciones entrantes quedan ligadas a las salidas del destinatario."
+          },
+          {
+            "h": "Cuprate publica un análisis sobre el refuerzo de RPC",
+            "p": "El equipo de Cuprate publicó un blog sobre el refuerzo del RPC, las mitigaciones en la pila HTTP de Monero y vulnerabilidades pasadas, incluida la campaña de DoS de día cero de 2025. Cuprate 0.2.0 llegará con el tiempo; por ahora, se está trabajando en el soporte de FCMP++."
+          },
+          {
+            "h": "Pequeñas mejoras de comodidad para operadores de nodos y monederos",
+            "p": "monerod ahora puede reabrir su archivo de registro al recibir una señal SIGUSR1, lo que ayuda con la rotación externa de logs. El RPC del monedero gana saldos de cuenta más rápidos y búsquedas de transferencias entre cuentas, y los monederos fríos ahora importan correctamente exportaciones de salidas vacías tras una reorganización."
+          },
+          {
+            "h": "readline cambia por linenoise",
+            "p": "Un cambio fusionado sustituye GNU Readline por la biblioteca mucho más pequeña linenoise para la entrada por línea de comandos, eliminando mucho código y trayendo algunos cambios menores de comportamiento."
+          }
+        ],
+        "eco": [
+          {
+            "h": "El sitio de CCS se apaga tras fallos críticos de PHP",
+            "p": "binaryFate desactivó el sitio web del Sistema de Crowdfunding Comunitario de Monero como medida de emergencia tras la divulgación de dos vulnerabilidades críticas de ejecución remota de código en PHP. Seguirá apagado hasta que se encuentre una vía segura de actualización."
+          },
+          {
+            "h": "Cake Wallet parchea un fallo que afecta a monederos con protocolo Electrum",
+            "p": "Seth For Privacy dice que hay una corrección en revisión para una vulnerabilidad en cómo los monederos con protocolo Electrum gestionan las transacciones replace-by-fee, divulgada públicamente por un investigador. Subraya que es una razón para no fiarse nunca de servidores cualquiera; el problema se encontró en Electrum Wallet y se explota allí."
+          },
+          {
+            "h": "Biscuit Wallet 1.2.1 añade intercambios en modo Tor",
+            "p": "La versión permite que los intercambios funcionen en modo Tor a través de exchanges que no piden identidad, y añade soporte para SOL, Dogecoin y Arbitrum."
+          }
+        ],
+        "comm": [
+          {
+            "h": "Windows Defender marca la descarga de la nueva GUI del monedero",
+            "p": "Un usuario informa de advertencias al descomprimir la GUI 0.18.5.4 aunque el hash coincidía con el publicado. Verifica tu descarga y toma las advertencias con cuidado."
+          }
+        ],
+        "privacy": [
+          {
+            "h": "Tails y Tor Browser reaccionan a una autoridad certificadora comprometida",
+            "p": "Mozilla bloqueó los certificados de eMudhra tras el compromiso de certificados intermedios; con ellos, un atacante podría suplantar cualquier sitio HTTPS. Tor Browser 15.0.26 y un Tails 7.15.1 de emergencia los bloquean."
+          },
+          {
+            "h": "333 nodos de salida de Tor secuestrados para interceptar SSH",
+            "p": "Un aviso público dice que un gran grupo de nodos de salida se usó para interceptar tráfico SSH y recuperar correos en texto plano. Usa claves SSH en lugar de contraseñas y presta atención a las advertencias de cambio de clave de host."
+          },
+          {
+            "h": "Las vulnerabilidades de PHP sacuden la web",
+            "p": "Fallos críticos de PHP provocaron caídas e intentos de explotación, mientras que los analistas desmintieron algunas afirmaciones sobre exploits. La EFF argumentó que el episodio es una razón para financiar el código abierto y ofreció consejos para mantenerse a salvo."
+          },
+          {
+            "h": "El DHS engañó al público sobre el registro de un teléfono con GrapheneOS",
+            "p": "404 Media informa de que los funcionarios dijeron que querían registrar el teléfono con GrapheneOS, borrado, de un activista en busca de material de abuso infantil, cuando la razón real eran presuntas actividades terroristas."
+          },
+          {
+            "h": "GrapheneOS lleva los Pixel al kernel de Linux upstream",
+            "p": "El proyecto dice que las ramas del kernel GKI de Android se han quedado atrás respecto al upstream, y ya tiene un Pixel 7 funcionando con Linux 6.18.58 como primer paso para migrar todos los dispositivos compatibles."
+          }
+        ]
+      },
+      "price": {
+        "summary": "La semana osciló con fuerza dentro de un movimiento neto estrecho: el empuje del miércoles hasta el máximo semanal fue seguido por una caída del 4,7% el jueves, y el rebote del 5,2% del sábado se diluyó el domingo. El cierre queda cerca de la mitad del rango del último mes, muy por encima de su mínimo de 515,23.",
+        "drivers": [
+          "El único elemento ligado al comercio de XMR es una publicación en Reddit que informa de que Kraken está interrogando a sus clientes sobre retiros recientes de Monero, lo que podría leerse como presión del lado de los exchanges en torno a la caída del jueves."
+        ]
+      }
+    },
+    "ru": {
+      "recap": "Неделя Monero прошла под знаком безопасности: в основной код влилась большая пачка исправлений для укрепления защиты, Kraken начал расспрашивать клиентов об их выводах XMR, а пара критических уязвимостей в PHP ненадолго положила сайт краудфандинга CCS. Cake Wallet срочно закрывал проблему кошелька на стороне Bitcoin, а в мире приватности главными темами стали скомпрометированный центр сертификации, неполадки с выходными узлами Tor и споры вокруг слежки.",
+      "lead": {
+        "h": "Код Monero получил неделю серьёзного укрепления безопасности",
+        "p": "В главный репозиторий Monero влили сорок два pull request'а, и большинство из них — исправления: ошибки работы с памятью, проверки в кошельке, безопасность multisig и укрепление сети. Ничего эффектного, но именно такая тихая уборка и бережёт ваши средства и ваш узел."
+      },
+      "art": {
+        "alt": "Пиксельный оранжевый щит рядом с гаечным ключом на тёмном столе — намёк на работы по обеспечению безопасности."
+      },
+      "feature": {
+        "h": "Kraken начинает спрашивать пользователей, зачем они купили Monero",
+        "dek": "Если вы выводили XMR за последние полгода, биржа может прислать вам анкету.",
+        "body": [
+          "На этой неделе в Reddit появился пост со сообщением от Kraken одному из клиентов: биржа заметила выводы Monero и попросила объяснить мотивы, цель и предполагаемое использование XMR, дав на ответ семь дней. Автор поста пишет, что такого стоит ожидать всем, кто выводил XMR с платформы за последние полгода.",
+          "Это напоминание о том, как биржи относятся к приватным монетам: их не запрещают, но от пользователя ждут объяснений. Практический вывод для пользователей знаком завсегдатаям: то, как вы получаете XMR, важно не меньше, чем то, что вы с ним делаете."
+        ]
+      },
+      "quotes": [
+        {
+          "text": "Ещё один пример того, почему нельзя пользоваться нодой, которой вы не доверяете."
+        },
+        {
+          "text": "Я люблю Monero, и мне немного жаль, что её было так трудно получить."
+        },
+        {
+          "text": "И оператор домена верхнего уровня, и регистратор могут перехватить DNS любого домена и получить действительные сертификаты у центра сертификации."
+        }
+      ],
+      "upcoming": [
+        {
+          "what": "Встреча Monero Tech в #no-wallet-left-behind: Seraphis/JAMTIS, FCMP и другие долгосрочные разработки."
+        },
+        {
+          "what": "Встреча Cuprate в IRC-Libera/Matrix: обсудят, что дальше ждёт альтернативную ноду Monero."
+        },
+        {
+          "what": "Встреча Monero Research Lab: в повестке, скорее всего, статус FCMP++ и проблема деанонимизации через get_tx_key."
+        },
+        {
+          "what": "Начинается Qubes OS Summit 2026; билетов почти не осталось."
+        },
+        {
+          "what": "Pop-up WebWipe о приватности в Pubkey, Нью-Йорк, с Дугом Туманом из MoneroTalk и юридическим представителем Романа Стерлингова."
+        }
+      ],
+      "sections": {
+        "dev": [
+          {
+            "h": "Исправления кошелька и multisig влиты в основной репозиторий",
+            "p": "Несколько влитых исправлений делают поведение кошелька строже: пароли теперь проверяются перед шагами multisig и шифрованием ключей (одна ошибка могла повредить файл кошелька после неверного пароля), проверяется число участников multisig, а доказательства входящих транзакций привязываются к выходам получателя."
+          },
+          {
+            "h": "Cuprate опубликовал разбор укрепления RPC",
+            "p": "Команда Cuprate выложила блог об укреплении RPC, защитных мерах в HTTP-стеке Monero и прошлых уязвимостях, включая кампанию DoS-атак нулевого дня 2025 года. Cuprate 0.2.0 выйдет со временем; пока идёт работа над поддержкой FCMP++."
+          },
+          {
+            "h": "Небольшие улучшения удобства для операторов нод и кошельков",
+            "p": "monerod теперь умеет заново открывать лог-файл по сигналу SIGUSR1, что удобно для внешней ротации логов. Wallet RPC стал быстрее отдавать балансы аккаунтов и искать переводы между аккаунтами, а холодные кошельки после реорганизации цепочки корректно импортируют пустые экспорты выходов."
+          },
+          {
+            "h": "readline заменён на linenoise",
+            "p": "Влитое изменение заменяет GNU Readline гораздо более компактной библиотекой linenoise для ввода в командной строке: кода становится заметно меньше, а поведение слегка меняется в мелочах."
+          }
+        ],
+        "eco": [
+          {
+            "h": "Сайт CCS отключён из-за критических уязвимостей PHP",
+            "p": "binaryFate в экстренном порядке отключил сайт системы краудфандинга сообщества Monero после раскрытия двух критических уязвимостей удалённого выполнения кода в PHP. Он останется недоступным, пока не найдут безопасный путь обновления."
+          },
+          {
+            "h": "Cake Wallet закрывает уязвимость в кошельках на протоколе Electrum",
+            "p": "Seth For Privacy сообщает, что исправление уязвимости в обработке replace-by-fee-транзакций кошельками на протоколе Electrum находится на ревью; о ней публично рассказал исследователь. Он подчёркивает, что это ещё один повод не доверять случайным серверам; проблему обнаружили в Electrum Wallet, и именно там она эксплуатируется."
+          },
+          {
+            "h": "Biscuit Wallet 1.2.1 добавляет обмены в режиме Tor",
+            "p": "В релизе обмены работают в режиме Tor через сервисы, не требующие удостоверения личности, а также добавлена поддержка SOL, Dogecoin и Arbitrum."
+          }
+        ],
+        "comm": [
+          {
+            "h": "Windows Defender ругается на новую загрузку GUI-кошелька",
+            "p": "Пользователь сообщает о предупреждениях при распаковке GUI 0.18.5.4, хотя хеш совпал с опубликованным. Проверяйте загрузки и относитесь к предупреждениям серьёзно."
+          }
+        ],
+        "privacy": [
+          {
+            "h": "Tails и Tor Browser отреагировали на скомпрометированный центр сертификации",
+            "p": "Mozilla заблокировала сертификаты eMudhra после компрометации промежуточных сертификатов: с их помощью злоумышленник мог выдать себя за любой HTTPS-сайт. Tor Browser 15.0.26 и экстренный Tails 7.15.1 их блокируют."
+          },
+          {
+            "h": "333 выходных узла Tor угнали для перехвата SSH",
+            "p": "В предупреждении сообщается, что большая группа выходных узлов использовалась для перехвата SSH-трафика и получения электронной почты в открытом виде. Используйте SSH-ключи вместо паролей и не игнорируйте предупреждения о смене ключа хоста."
+          },
+          {
+            "h": "Уязвимости PHP встряхнули веб",
+            "p": "Критические ошибки PHP привели к сбоям и попыткам эксплуатации, а аналитики опровергли часть заявлений об эксплойтах. В EFF заявили, что этот случай — аргумент в пользу финансирования открытого ПО, и дали советы по безопасности."
+          },
+          {
+            "h": "DHS ввела общественность в заблуждение насчёт обыска телефона с GrapheneOS",
+            "p": "По данным 404 Media, чиновники говорили, что хотят обыскать стёртый телефон активиста с GrapheneOS на предмет материалов о насилии над детьми, хотя настоящей причиной были подозрения в террористической деятельности."
+          },
+          {
+            "h": "GrapheneOS переносит Pixel на ядро Linux из апстрима",
+            "p": "Проект заявляет, что ветки ядра Android GKI отстали от апстрима, и показывает Pixel 7 с Linux 6.18.58 как первый шаг к переводу на него всех поддерживаемых устройств."
+          }
+        ]
+      },
+      "price": {
+        "summary": "Неделя сильно раскачалась в рамках узкого итогового диапазона: рывок в среду к максимуму недели сменился четверговым падением на 4,7%, а субботний отскок на 5,2% выдохся в воскресенье. Закрытие приходится примерно на середину диапазона последнего месяца, заметно выше его минимума в 515,23.",
+        "drivers": [
+          "Единственная новость, связанная с торговлей XMR, — пост в Reddit о том, что Kraken расспрашивает клиентов о недавних выводах Monero; это можно трактовать как давление со стороны бирж на фоне четверговой просадки."
+        ]
+      }
+    },
+    "fr": {
+      "recap": "Une semaine placée sous le signe de la sécurité pour Monero : une grosse série de correctifs de durcissement a atterri dans le code principal, Kraken a commencé à interroger ses clients sur leurs retraits de XMR, et deux failles critiques de PHP ont brièvement mis hors ligne le site de financement participatif CCS. Cake Wallet s'est empressé de corriger un problème de portefeuille côté Bitcoin, et l'actualité plus large de la vie privée a été dominée par une autorité de certification compromise, des soucis de nœuds de sortie Tor et des bras de fer autour de la surveillance.",
+      "lead": {
+        "h": "Le code de Monero profite d'une grosse semaine de durcissement sécuritaire",
+        "p": "Quarante-deux pull requests ont été fusionnées dans le dépôt principal de Monero, pour la plupart des correctifs : bogues de mémoire, vérifications du portefeuille, sûreté du multisig et durcissement du réseau. Rien de spectaculaire, mais c'est le genre de ménage discret qui protège vos fonds et votre nœud."
+      },
+      "art": {
+        "alt": "Un bouclier orange en pixel art posé à côté d'une clé à molette sur une table sombre, évoquant la maintenance de sécurité."
+      },
+      "feature": {
+        "h": "Kraken commence à demander aux utilisateurs pourquoi ils ont acheté du Monero",
+        "dek": "Si vous avez retiré du XMR au cours des six derniers mois, vous pourriez recevoir un questionnaire de la plateforme.",
+        "body": [
+          "Un post Reddit cette semaine montrait un message de Kraken adressé à un client : la plateforme a remarqué des retraits de Monero et lui demande d'expliquer la raison, l'objectif et l'usage prévu de ces XMR, avec sept jours pour répondre. L'auteur du post présente cela comme quelque chose à quoi doivent s'attendre les utilisateurs ayant sorti du XMR de la plateforme au cours des six derniers mois.",
+          "Cela rappelle la façon dont les plateformes traitent les cryptos axées sur la confidentialité : pas comme des actifs interdits, mais comme quelque chose qu'il faut justifier. Pour les utilisateurs, la leçon pratique est celle que les habitués connaissent déjà : la manière dont vous acquérez du XMR compte autant que ce que vous en faites."
+        ]
+      },
+      "quotes": [
+        {
+          "text": "Encore un exemple de pourquoi il ne faut jamais utiliser un nœud en qui on n'a pas confiance."
+        },
+        {
+          "text": "J'adore Monero et je trouve un peu dommage qu'il ait été aussi difficile d'en obtenir."
+        },
+        {
+          "text": "L'opérateur du TLD comme le bureau d'enregistrement peuvent prendre le contrôle du DNS de n'importe quel domaine et obtenir des certificats valides auprès d'une autorité de certification."
+        }
+      ],
+      "upcoming": [
+        {
+          "what": "Réunion Monero Tech dans #no-wallet-left-behind, consacrée à Seraphis/JAMTIS, aux FCMP et à d'autres développements à long terme."
+        },
+        {
+          "what": "Réunion Cuprate sur IRC-Libera/Matrix, pour discuter de la suite du nœud Monero alternatif."
+        },
+        {
+          "what": "Réunion du Monero Research Lab, avec à l'ordre du jour probable l'état d'avancement de FCMP++ et le problème de doxing lié à get_tx_key."
+        },
+        {
+          "what": "Début du Qubes OS Summit 2026 ; il ne reste presque plus de billets."
+        },
+        {
+          "what": "Pop-up WebWipe sur la vie privée chez Pubkey à New York, avec Doug Tuman de MoneroTalk et l'avocat de Roman Sterlingov."
+        }
+      ],
+      "sections": {
+        "dev": [
+          {
+            "h": "Des correctifs du portefeuille et du multisig atterrissent dans le dépôt principal",
+            "p": "Plusieurs correctifs fusionnés resserrent le comportement du portefeuille : les mots de passe sont désormais vérifiés avant les étapes multisig ou le chiffrement des clés (un bogue pouvait corrompre un fichier de portefeuille après un mauvais mot de passe), le nombre de participants multisig est validé, et les preuves de transactions entrantes sont liées aux sorties du destinataire."
+          },
+          {
+            "h": "Cuprate publie un article sur le durcissement du RPC",
+            "p": "L'équipe Cuprate a publié un billet de blog sur le durcissement du RPC, les mesures d'atténuation dans la pile HTTP de Monero et les vulnérabilités passées, dont la campagne de DoS zero-day de 2025. Cuprate 0.2.0 finira par arriver ; pour l'instant, le travail porte sur la prise en charge de FCMP++."
+          },
+          {
+            "h": "Petites améliorations de confort pour les opérateurs de nœuds et de portefeuilles",
+            "p": "monerod peut désormais rouvrir son fichier de log sur un signal SIGUSR1, ce qui facilite la rotation externe des logs. Le RPC du portefeuille gagne en rapidité pour les soldes de comptes et la recherche de transferts entre comptes, et les portefeuilles froids importent désormais correctement les exports de sorties vides après une réorganisation de la chaîne."
+          },
+          {
+            "h": "readline remplacé par linenoise",
+            "p": "Un changement fusionné remplace GNU Readline par la bibliothèque linenoise, bien plus légère, pour la saisie en ligne de commande, ce qui supprime beaucoup de code et entraîne quelques changements mineurs de comportement."
+          }
+        ],
+        "eco": [
+          {
+            "h": "Le site CCS coupé après des failles critiques de PHP",
+            "p": "binaryFate a désactivé le site du Monero Community Crowdfunding System par mesure d'urgence après la divulgation de deux vulnérabilités critiques d'exécution de code à distance dans PHP. Il restera hors ligne tant qu'une voie de mise à jour sûre n'aura pas été trouvée."
+          },
+          {
+            "h": "Cake Wallet corrige une faille touchant les portefeuilles à protocole Electrum",
+            "p": "Seth For Privacy indique qu'un correctif est en cours de revue pour une vulnérabilité dans la façon dont les portefeuilles à protocole Electrum gèrent les transactions replace-by-fee, divulguée publiquement par un chercheur. Il insiste : c'est une raison de plus de ne jamais faire confiance à des serveurs au hasard ; le problème a été trouvé dans Electrum Wallet et y est exploité."
+          },
+          {
+            "h": "Biscuit Wallet 1.2.1 ajoute les échanges en mode Tor",
+            "p": "Cette version permet aux échanges de fonctionner en mode Tor via des plateformes qui ne demandent pas d'identité, et ajoute la prise en charge de SOL, Dogecoin et Arbitrum."
+          }
+        ],
+        "comm": [
+          {
+            "h": "Windows Defender signale le nouveau téléchargement du portefeuille GUI",
+            "p": "Un utilisateur signale des avertissements lors de la décompression du GUI 0.18.5.4, alors que le hash correspondait à celui publié. Vérifiez votre téléchargement et prenez les avertissements au sérieux."
+          }
+        ],
+        "privacy": [
+          {
+            "h": "Tails et Tor Browser réagissent à une autorité de certification compromise",
+            "p": "Mozilla a bloqué les certificats eMudhra après la compromission de certificats intermédiaires ; avec eux, un attaquant pouvait se faire passer pour n'importe quel site HTTPS. Tor Browser 15.0.26 et un Tails 7.15.1 publié en urgence les bloquent."
+          },
+          {
+            "h": "333 nœuds de sortie Tor détournés pour intercepter du SSH",
+            "p": "Une alerte indique qu'un grand groupe de nœuds de sortie a servi à intercepter du trafic SSH et à récupérer des e-mails en clair. Utilisez des clés SSH plutôt que des mots de passe et tenez compte des avertissements de changement de clé d'hôte."
+          },
+          {
+            "h": "Les vulnérabilités de PHP secouent le web",
+            "p": "Des bogues critiques de PHP ont provoqué des pannes et des tentatives d'exploitation, tandis que des analystes ont démonté certaines affirmations sur les exploits. L'EFF y voit un argument pour financer l'open source et a proposé des conseils pour rester en sécurité."
+          },
+          {
+            "h": "Le DHS a induit le public en erreur sur la fouille d'un téléphone GrapheneOS",
+            "p": "404 Media rapporte que des responsables ont affirmé vouloir fouiller le téléphone GrapheneOS effacé d'un militant à la recherche de contenus pédocriminels, alors que la vraie raison était des activités terroristes présumées."
+          },
+          {
+            "h": "GrapheneOS porte les Pixel vers le noyau Linux amont",
+            "p": "Le projet explique que les branches de noyau GKI d'Android ont pris du retard sur l'amont, et qu'il fait tourner un Pixel 7 sous Linux 6.18.58 comme première étape vers la migration de tous les appareils pris en charge."
+          }
+        ]
+      },
+      "price": {
+        "summary": "La semaine a connu de fortes oscillations dans une variation nette étroite : la poussée de mercredi jusqu'au plus haut de la semaine a été suivie d'une chute de 4,7 % jeudi, et le rebond de 5,2 % de samedi s'est essoufflé dimanche. La clôture se situe vers le milieu de la fourchette du mois écoulé, bien au-dessus de son plus bas à 515,23.",
+        "drivers": [
+          "Le seul élément lié aux échanges de XMR est un post Reddit signalant que Kraken interroge ses clients sur de récents retraits de Monero, ce qui pourrait être lu comme une pression côté plateforme autour de la chute de jeudi."
+        ]
+      }
+    },
+    "pt": {
+      "recap": "Uma semana pesada em segurança para o Monero: um grande lote de correções de reforço entrou no código principal, a Kraken começou a questionar clientes sobre os saques de XMR, e um par de falhas críticas no PHP tirou do ar por um tempo o site de financiamento coletivo CCS. A Cake Wallet correu para corrigir um problema de carteira do lado do Bitcoin, e as notícias mais amplas de privacidade foram dominadas por uma autoridade certificadora comprometida, problemas em nós de saída do Tor e disputas sobre vigilância.",
+      "lead": {
+        "h": "O código do Monero ganha uma grande semana de reforço de segurança",
+        "p": "Quarenta e dois pull requests foram incorporados ao repositório principal do Monero, a maioria deles correções: bugs de memória, verificações na carteira, segurança em multisig e reforço da rede. Nada chamativo, mas é o tipo de faxina silenciosa que mantém seus fundos e seu nó seguros."
+      },
+      "art": {
+        "alt": "Escudo laranja em pixel art ao lado de uma chave inglesa sobre uma mesa escura, sugerindo manutenção de segurança."
+      },
+      "feature": {
+        "h": "A Kraken começa a perguntar aos usuários por que compraram Monero",
+        "dek": "Se você sacou XMR nos últimos seis meses, pode receber um questionário da corretora.",
+        "body": [
+          "Um post no Reddit esta semana mostrou uma mensagem da Kraken para um cliente: a corretora notou saques de Monero e pediu que ele explicasse o motivo, a finalidade e o uso pretendido do XMR, com sete dias para responder. O autor do post descreve isso como algo que os usuários que tiraram XMR da plataforma nos últimos seis meses devem esperar.",
+          "É um lembrete de como as corretoras tratam moedas de privacidade: não como proibidas, mas como algo que precisa ser explicado. Para os usuários, a lição prática é aquela que os veteranos já conhecem: a forma como você adquire XMR importa tanto quanto o que você faz com ele."
+        ]
+      },
+      "quotes": [
+        {
+          "text": "Mais um exemplo de por que você nunca deve usar um nó em que não confia."
+        },
+        {
+          "text": "Eu amo o Monero e acho uma pena que tenha sido tão difícil de obter."
+        },
+        {
+          "text": "Tanto o operador do TLD quanto o registrador podem assumir o DNS de qualquer domínio e obter certificados válidos de uma CA."
+        }
+      ],
+      "upcoming": [
+        {
+          "what": "Reunião Monero Tech em #no-wallet-left-behind, abordando Seraphis/JAMTIS, FCMPs e outros desenvolvimentos de longo prazo."
+        },
+        {
+          "what": "Reunião do Cuprate no IRC-Libera/Matrix, discutindo os próximos passos do nó alternativo do Monero."
+        },
+        {
+          "what": "Reunião do Monero Research Lab, com o status do FCMP++ e o problema de doxing do get_tx_key provavelmente na pauta."
+        },
+        {
+          "what": "Começa o Qubes OS Summit 2026; os ingressos estão quase esgotados."
+        },
+        {
+          "what": "Pop-up de privacidade WebWipe no Pubkey, em Nova York, com Doug Tuman, do MoneroTalk, e o advogado de Roman Sterlingov."
+        }
+      ],
+      "sections": {
+        "dev": [
+          {
+            "h": "Correções de carteira e multisig chegam ao repositório principal",
+            "p": "Várias correções incorporadas deixam o comportamento da carteira mais rigoroso: as senhas agora são verificadas antes das etapas de multisig ou da criptografia de chaves (um bug podia corromper o arquivo da carteira após uma senha errada), o número de participantes do multisig é validado e as provas de transações recebidas ficam vinculadas às saídas do destinatário."
+          },
+          {
+            "h": "Cuprate publica texto sobre o reforço do RPC",
+            "p": "A equipe do Cuprate publicou um blog sobre o reforço do RPC, as mitigações na pilha HTTP do Monero e vulnerabilidades passadas, incluindo a campanha de DoS zero-day de 2025. O Cuprate 0.2.0 virá em algum momento; por ora, o suporte ao FCMP++ está em desenvolvimento."
+          },
+          {
+            "h": "Pequenas melhorias de qualidade de vida para operadores de nó e de carteira",
+            "p": "O monerod agora pode reabrir seu arquivo de log ao receber um sinal SIGUSR1, o que ajuda na rotação externa de logs. O RPC da carteira ganha consultas mais rápidas de saldos de contas e de transferências entre contas, e as carteiras frias agora importam corretamente exportações de saídas vazias após uma reorganização."
+          },
+          {
+            "h": "readline dá lugar ao linenoise",
+            "p": "Uma mudança incorporada substitui o GNU Readline pela biblioteca linenoise, muito menor, na entrada de linha de comando, eliminando bastante código e trazendo algumas pequenas mudanças de comportamento."
+          }
+        ],
+        "eco": [
+          {
+            "h": "Site do CCS é desligado após falhas críticas no PHP",
+            "p": "binaryFate desativou o site do Monero Community Crowdfunding System como medida de emergência depois que duas vulnerabilidades críticas de execução remota de código no PHP foram divulgadas. Ele continua fora do ar até que se encontre um caminho seguro de atualização."
+          },
+          {
+            "h": "Cake Wallet corrige falha que afeta carteiras com protocolo Electrum",
+            "p": "Seth For Privacy diz que uma correção está em revisão para uma vulnerabilidade na forma como carteiras com protocolo Electrum tratam transações replace-by-fee, divulgada publicamente por um pesquisador. Ele ressalta que é mais um motivo para nunca confiar em servidores aleatórios; o problema foi encontrado na Electrum Wallet e é explorado nela."
+          },
+          {
+            "h": "Biscuit Wallet 1.2.1 adiciona swaps no modo Tor",
+            "p": "A versão permite que os swaps funcionem no modo Tor por meio de corretoras que não pedem identidade, e adiciona suporte a SOL, Dogecoin e Arbitrum."
+          }
+        ],
+        "comm": [
+          {
+            "h": "Windows Defender sinaliza o download da nova carteira GUI",
+            "p": "Um usuário relata avisos ao descompactar a GUI 0.18.5.4, mesmo com o hash batendo com o publicado. Verifique o seu download e trate os avisos com cuidado."
+          }
+        ],
+        "privacy": [
+          {
+            "h": "Tails e Tor Browser reagem a uma autoridade certificadora comprometida",
+            "p": "A Mozilla bloqueou certificados da eMudhra depois que certificados intermediários foram comprometidos; com eles, um atacante poderia se passar por qualquer site HTTPS. O Tor Browser 15.0.26 e um Tails 7.15.1 de emergência os bloqueiam."
+          },
+          {
+            "h": "333 nós de saída do Tor sequestrados para interceptar SSH",
+            "p": "Um aviso de utilidade pública diz que um grande grupo de nós de saída foi usado para interceptar tráfego SSH e obter e-mails em texto simples. Use chaves SSH em vez de senhas e dê atenção aos avisos de mudança de chave do host."
+          },
+          {
+            "h": "As vulnerabilidades do PHP abalam a web",
+            "p": "Bugs críticos no PHP provocaram quedas e tentativas de exploração, enquanto analistas desmentiram algumas alegações de exploits. A EFF argumentou que o episódio é um argumento a favor de financiar o código aberto e deu conselhos para se manter seguro."
+          },
+          {
+            "h": "O DHS enganou o público sobre a busca em um celular com GrapheneOS",
+            "p": "A 404 Media informa que autoridades disseram querer vasculhar o celular com GrapheneOS, já apagado, de um ativista em busca de material de abuso infantil, quando o motivo real era a suspeita de atividades terroristas."
+          },
+          {
+            "h": "GrapheneOS leva Pixels para o kernel Linux upstream",
+            "p": "O projeto diz que as ramificações do kernel GKI do Android ficaram para trás em relação ao upstream, e que já tem um Pixel 7 rodando o Linux 6.18.58 como primeiro passo para migrar todos os dispositivos compatíveis."
+          }
+        ]
+      },
+      "price": {
+        "summary": "A semana oscilou forte dentro de um movimento líquido estreito: o impulso de quarta-feira até a máxima da semana foi seguido por uma queda de 4,7% na quinta, e a recuperação de 5,2% no sábado perdeu força no domingo. O fechamento fica perto do meio da faixa do último mês, bem acima da mínima de 515,23.",
+        "drivers": [
+          "O único item ligado à negociação de XMR é um post no Reddit relatando que a Kraken está questionando clientes sobre saques recentes de Monero, o que pode ser lido como pressão do lado das corretoras em torno da queda de quinta-feira."
+        ]
+      }
+    },
+    "ja": {
+      "recap": "セキュリティ色の濃い一週間でした。Monero本体に大量の堅牢化修正が取り込まれ、Krakenは顧客にXMR出金について問い合わせを始め、2件の深刻なPHPの脆弱性でCCSクラウドファンディングサイトが一時オフラインになりました。Cake WalletはBitcoin側のウォレットの問題への対応に追われ、プライバシー関連のニュースでは、認証局の侵害、Tor出口ノードの問題、監視をめぐる争いが話題の中心でした。",
+      "lead": {
+        "h": "Moneroのコードに大規模なセキュリティ強化の一週間",
+        "p": "Moneroのメインリポジトリに42件のプルリクエストがマージされました。大半は修正で、メモリのバグ、ウォレットのチェック、マルチシグの安全性、ネットワークの堅牢化が中心です。派手さはありませんが、あなたの資産とノードを守る地道な掃除のような仕事です。"
+      },
+      "art": {
+        "alt": "暗いテーブルの上にオレンジ色の盾とレンチが並ぶドット絵。セキュリティのメンテナンスを表している。"
+      },
+      "feature": {
+        "h": "Kraken、ユーザーにMoneroを買った理由を尋ね始める",
+        "dek": "過去6か月以内にXMRを出金していたら、取引所からアンケートが届くかもしれません。",
+        "body": [
+          "今週Redditに投稿された内容によると、Krakenが顧客にメッセージを送り、Moneroの出金を確認したとして、XMRの理由、目的、使用予定を説明するよう求め、返信期限は7日だったそうです。投稿者は、過去6か月以内にXMRをプラットフォームから移したユーザーは、同様の連絡を覚悟しておくべきだと述べています。",
+          "取引所がプライバシーコインをどう扱っているかを改めて思い出させる出来事です。禁止されているわけではありませんが、説明を求められる存在だということです。ユーザーにとっての現実的な教訓は、常連ならすでに知っているとおり、XMRをどう入手するかは、それで何をするかと同じくらい重要だということです。"
+        ]
+      },
+      "quotes": [
+        {
+          "text": "信頼できないノードは絶対に使うべきではない、という理由がまた一つ増えましたね。"
+        },
+        {
+          "text": "Moneroは大好きなので、入手がこんなに難しかったのは少し残念です。"
+        },
+        {
+          "text": "TLDの運営者もレジストラも、あらゆるドメインのDNSを乗っ取って、CAから有効な証明書を取得できてしまいます。"
+        }
+      ],
+      "upcoming": [
+        {
+          "what": "#no-wallet-left-behind でのMonero Techミーティング。Seraphis/JAMTIS、FCMP、その他の長期的な開発を扱います。"
+        },
+        {
+          "what": "IRC-Libera/Matrixでのミーティング(Cuprate)。代替Moneroノードの今後について話し合います。"
+        },
+        {
+          "what": "Monero Research Labのミーティング。FCMP++の状況とget_tx_keyによる身元特定の問題が議題になりそうです。"
+        },
+        {
+          "what": "Qubes OS Summit 2026が開幕。チケットはほぼ完売です。"
+        },
+        {
+          "what": "ニューヨークのPubkeyでWebWipeプライバシーポップアップを開催。MoneroTalkのDoug Tuman氏とRoman Sterlingov氏の弁護人が登壇します。"
+        }
+      ],
+      "sections": {
+        "dev": [
+          {
+            "h": "ウォレットとマルチシグの修正がコアリポジトリに反映",
+            "p": "マージされた複数の修正で、ウォレットの挙動が厳密になりました。マルチシグの手順や鍵の暗号化の前にパスワードが確認されるようになり(誤ったパスワードの後でウォレットファイルが壊れるバグがありました)、マルチシグの参加者数も検証され、受信トランザクションの証明が受取人のアウトプットに結び付けられます。"
+          },
+          {
+            "h": "CuprateがRPC堅牢化の解説記事を公開",
+            "p": "Cuprateチームが、RPCの堅牢化、MoneroのHTTPスタックにおける緩和策、2025年のゼロデイDoS攻撃を含む過去の脆弱性についてブログを公開しました。Cuprate 0.2.0はいずれ登場する予定で、現在はFCMP++対応に取り組んでいます。"
+          },
+          {
+            "h": "ノードとウォレットの運用者向けの小さな使い勝手改善",
+            "p": "monerodがSIGUSR1シグナルでログファイルを開き直せるようになり、外部でのログローテーションに役立ちます。ウォレットRPCではアカウント残高とアカウントをまたいだ送金の検索が高速化され、コールドウォレットはリオーグ後の空のアウトプットエクスポートを正しくインポートできるようになりました。"
+          },
+          {
+            "h": "readlineをlinenoiseに置き換え",
+            "p": "マージされた変更で、コマンドライン入力のGNU Readlineがはるかに小さなlinenoiseライブラリに置き換わり、多くのコードが削減され、細かな挙動の変更もいくつかありました。"
+          }
+        ],
+        "eco": [
+          {
+            "h": "深刻なPHPの脆弱性でCCSサイトを停止",
+            "p": "PHPのリモートコード実行につながる深刻な脆弱性が2件公開されたことを受け、binaryFateは緊急措置としてMonero Community Crowdfunding Systemのサイトを無効化しました。安全にアップグレードできる方法が見つかるまで停止が続きます。"
+          },
+          {
+            "h": "Cake Walletが、Electrumプロトコル対応ウォレットに影響する不具合にパッチ",
+            "p": "Seth For Privacyによると、Electrumプロトコル対応ウォレットがreplace-by-fee(手数料置換)トランザクションを扱う際の脆弱性について、ある研究者が公表しており、その修正がレビュー中です。彼は、見知らぬサーバーを決して信用してはいけない理由だと強調しています。問題はElectrum Walletで見つかり、悪用もそこで起きています。"
+          },
+          {
+            "h": "Biscuit Wallet 1.2.1、Torモードでのスワップに対応",
+            "p": "このリリースでは、本人確認を求めない取引所を通じてTorモードでもスワップができるようになり、SOL、Dogecoin、Arbitrumにも対応しました。"
+          }
+        ],
+        "comm": [
+          {
+            "h": "Windows Defenderが新しいGUIウォレットのダウンロードを警告",
+            "p": "あるユーザーから、0.18.5.4のGUIを展開すると、ハッシュが公開されたものと一致していたにもかかわらず警告が出たという報告がありました。ダウンロードは必ず検証し、警告は慎重に扱ってください。"
+          }
+        ],
+        "privacy": [
+          {
+            "h": "TailsとTor Browser、侵害された認証局に対応",
+            "p": "中間証明書が侵害されたことを受け、MozillaはeMudhraの証明書をブロックしました。これを悪用すれば、攻撃者はあらゆるHTTPSサイトになりすませます。Tor Browser 15.0.26と緊急版のTails 7.15.1でブロックされます。"
+          },
+          {
+            "h": "333台のTor出口ノードが乗っ取られ、SSHを傍受",
+            "p": "注意喚起によると、多数の出口ノードがSSH通信の傍受と平文メールの取得に使われていました。パスワードではなくSSH鍵を使い、ホスト鍵が変更されたという警告には必ず従いましょう。"
+          },
+          {
+            "h": "PHPの脆弱性がウェブ全体を揺るがす",
+            "p": "深刻なPHPのバグにより、障害や悪用の試みが相次ぐ一方、アナリストは一部の悪用に関する主張を否定しました。EFFは、この件はオープンソースへの資金提供が必要だという根拠になると主張し、身を守るためのアドバイスも示しました。"
+          },
+          {
+            "h": "DHS、GrapheneOSスマホの捜索について国民に誤った説明",
+            "p": "404 Mediaによると、当局は活動家の初期化されたGrapheneOSスマホを児童虐待コンテンツの捜索のために調べたいと説明していましたが、実際の理由はテロ活動の疑いでした。"
+          },
+          {
+            "h": "GrapheneOS、Pixelをアップストリームのlinuxカーネルへ移植",
+            "p": "プロジェクトによると、AndroidのGKIカーネルブランチはアップストリームから遅れており、対応する全デバイスを移行するための第一歩として、Pixel 7でLinux 6.18.58を動かしているとのことです。"
+          }
+        ]
+      },
+      "price": {
+        "summary": "ネットの値動きは小幅ながら、週の中ではかなり振れました。水曜日に週間高値まで上昇したあと、木曜日は4.7%下落し、土曜日の5.2%の反発も日曜日には勢いを失いました。終値は過去1か月のレンジの中ほどで、安値の515.23を大きく上回っています。",
+        "drivers": [
+          "XMRの取引に関係する材料は、KrakenがMoneroの直近の出金について顧客に問い合わせているというReddit投稿だけです。木曜日の下落の背景にある、取引所側の圧力と受け取ることもできるでしょう。"
+        ]
+      }
+    }
+  },
+  "podcasts": {
+    "es": {
+      "file": "/podcast/2026-10-19.es.mp3",
+      "duration": 579,
+      "bytes": 4628733,
+      "hosts": [
+        "Chris",
+        "Jessica"
+      ],
+      "transcript": [
+        {
+          "host": "Chris",
+          "text": "¡Hola a todos y bienvenidos a The xmr.fan Times! Estamos en el número dos, semana del diecinueve de octubre de dos mil veintiséis. Yo soy Chris."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y yo soy Jessica. Hoy tenemos una semana de limpieza silenciosa en el código de Monero, un exchange que pregunta demasiado, el apagón del sitio de CCS y unas cuantas citas que nos hicieron pensar."
+        },
+        {
+          "host": "Chris",
+          "text": "Empecemos por el código. Se fusionaron cuarenta y dos pull requests en el repositorio principal de Monero, y la mayoría son correcciones."
+        },
+        {
+          "host": "Jessica",
+          "text": "Cuarenta y dos. [laughs] Nada llamativo, pero es justo el tipo de trabajo que mantiene a salvo tus fondos y tu nodo. Errores de memoria, verificaciones de monedero, seguridad multifirma, refuerzo de la red."
+        },
+        {
+          "host": "Chris",
+          "text": "Y hay un detalle que me gustó. Ahora se comprueban las contraseñas antes de los pasos multifirma o del cifrado de claves. Antes, un error podía corromper el archivo del monedero después de poner una contraseña incorrecta."
+        },
+        {
+          "host": "Jessica",
+          "text": "Espera, o sea que equivocarte de contraseña podía estropearte el archivo del monedero. [exhales] Qué susto. Menos mal que eso queda corregido."
+        },
+        {
+          "host": "Chris",
+          "text": "Sí. Además se valida el número de participantes multifirma, y las pruebas de transacciones entrantes quedan ligadas a las salidas del destinatario."
+        },
+        {
+          "host": "Jessica",
+          "text": "Cosas que nadie celebra con fuegos artificiales, pero que se agradecen mucho."
+        },
+        {
+          "host": "Chris",
+          "text": "Pasamos al precio. Monero abrió la semana en unos quinientos noventa y ocho dólares y cerró en unos quinientos noventa y dos, un descenso de alrededor del uno por ciento. Bitcoin bajó un dos por ciento."
+        },
+        {
+          "host": "Jessica",
+          "text": "Pero por el camino fue una montaña rusa. El miércoles hubo un empuje hasta el máximo semanal, unos seiscientos cincuenta dólares, y el jueves cayó un cuatro coma siete por ciento."
+        },
+        {
+          "host": "Chris",
+          "text": "Luego el sábado rebotó un cinco coma dos por ciento, pero ese rebote se diluyó el domingo. El mínimo de la semana fue de unos quinientos setenta dólares."
+        },
+        {
+          "host": "Jessica",
+          "text": "Total, que mucho movimiento para terminar casi donde empezó. El cierre queda cerca de la mitad del rango del último mes, y muy por encima de su mínimo de quinientos quince."
+        },
+        {
+          "host": "Chris",
+          "text": "Y lo único ligado al comercio de XMR esta semana es justo nuestro tema estrella, así que... pasemos a él. [curious]"
+        },
+        {
+          "host": "Jessica",
+          "text": "Kraken. Una publicación en Reddit mostró un mensaje del exchange a un cliente. Habían notado retiros de Monero y le pedían que explicara el motivo, el propósito y el uso previsto de ese XMR, con siete días para responder."
+        },
+        {
+          "host": "Chris",
+          "text": "Siete días. Quien lo publicó dice que deberían esperar algo así los usuarios que hayan sacado XMR de la plataforma en los últimos seis meses."
+        },
+        {
+          "host": "Jessica",
+          "text": "O sea que si retiraste XMR en el último medio año, quizá te llegue un cuestionario. [sighs] Qué fastidio."
+        },
+        {
+          "host": "Chris",
+          "text": "Para mí es un recordatorio de cómo tratan los exchanges a las monedas de privacidad. No como algo prohibido, sino como algo que hay que justificar."
+        },
+        {
+          "host": "Jessica",
+          "text": "Eso es. No te dicen que no, te piden que expliques. Y la lección práctica es la que los veteranos ya conocen: cómo adquieres tu XMR importa tanto como lo que haces con él."
+        },
+        {
+          "host": "Chris",
+          "text": "Y eso conecta con una de las citas de OVERHEARD. En r/Monero, alguien escribió, traducido: «Me encanta Monero y me parece una pena que fuera tan difícil conseguirlo»."
+        },
+        {
+          "host": "Jessica",
+          "text": "Qué bien lo resume, ¿no? El cariño por la moneda y la frustración por el acceso en una sola frase."
+        },
+        {
+          "host": "Chris",
+          "text": "Hay otra de Seth For Privacy, en X como @sethforprivacy. Dijo, traducido: «Otro ejemplo más de por qué nunca deberías usar un nodo en el que no confías»."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y viene al caso con la noticia de Cake Wallet. Seth dice que hay una corrección en revisión para una vulnerabilidad en cómo los monederos con protocolo Electrum gestionan las transacciones replace-by-fee. La divulgó públicamente un investigador."
+        },
+        {
+          "host": "Chris",
+          "text": "Ojo, que el problema se encontró en Electrum Wallet y se explota allí. Seth lo subraya como una razón más para no fiarse de servidores cualquiera."
+        },
+        {
+          "host": "Jessica",
+          "text": "La tercera cita es de @GrapheneOS, también traducida: «Tanto el operador del TLD como el registrador pueden hacerse con el DNS de cualquier dominio y obtener certificados válidos de una CA»."
+        },
+        {
+          "host": "Chris",
+          "text": "Una CA es una autoridad certificadora, para quien se pregunte. Y esa cita encaja con otra historia de la semana, que ahora contamos."
+        },
+        {
+          "host": "Jessica",
+          "text": "Antes, el ecosistema. Gran titular: binaryFate apagó el sitio del Sistema de Crowdfunding Comunitario de Monero, el CCS, como medida de emergencia."
+        },
+        {
+          "host": "Chris",
+          "text": "Fue tras la divulgación de dos vulnerabilidades críticas de ejecución remota de código en PHP. Seguirá apagado hasta que se encuentre una vía segura de actualización."
+        },
+        {
+          "host": "Jessica",
+          "text": "Prudencia total. Mejor apagado que comprometido."
+        },
+        {
+          "host": "Chris",
+          "text": "Otra del ecosistema: Biscuit Wallet 1.2.1 permite que los intercambios funcionen en modo Tor, a través de exchanges que no piden identidad. Y añade soporte para SOL, Dogecoin y Arbitrum."
+        },
+        {
+          "host": "Jessica",
+          "text": "Bien por los que quieren intercambiar sin dar la cara. Y ya que hablamos de herramientas, de la comunidad: un usuario informa de que Windows Defender marca la descarga de la nueva GUI del monedero."
+        },
+        {
+          "host": "Chris",
+          "text": "Al descomprimir la GUI cero punto dieciocho punto cinco punto cuatro, aunque el hash coincidía con el publicado. El consejo es verificar tu descarga y tomar las advertencias con cuidado."
+        },
+        {
+          "host": "Jessica",
+          "text": "Verifica siempre el hash. Sí, es un rollo, pero para eso está."
+        },
+        {
+          "host": "Chris",
+          "text": "Más desarrollo, que hay cosas simpáticas. monerod ahora puede reabrir su archivo de registro al recibir una señal SIGUSR1, lo que ayuda con la rotación externa de logs."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y el RPC del monedero gana saldos de cuenta más rápidos y búsquedas de transferencias entre cuentas. Los monederos fríos ahora importan bien las exportaciones de salidas vacías tras una reorganización."
+        },
+        {
+          "host": "Chris",
+          "text": "Y un cambio con sabor a limpieza de armario: GNU Readline sale y entra linenoise, una biblioteca mucho más pequeña, para la entrada por línea de comandos."
+        },
+        {
+          "host": "Jessica",
+          "text": "Se elimina mucho código, aunque trae algunos cambios menores de comportamiento. [laughs] Los de la terminal, atentos."
+        },
+        {
+          "host": "Chris",
+          "text": "Y el equipo de Cuprate publicó un blog sobre el refuerzo del RPC, las mitigaciones en la pila HTTP de Monero y vulnerabilidades pasadas, incluida la campaña de DoS de día cero de dos mil veinticinco."
+        },
+        {
+          "host": "Jessica",
+          "text": "Cuprate cero punto dos punto cero llegará con el tiempo. Por ahora trabajan en el soporte de FCMP++."
+        },
+        {
+          "host": "Chris",
+          "text": "Fuera de Monero, la web pasó una semana movida. Mozilla bloqueó los certificados de eMudhra tras el compromiso de certificados intermedios. Con ellos, un atacante podría suplantar cualquier sitio HTTPS."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y reaccionaron rápido: Tor Browser quince punto cero punto veintiséis y un Tails siete punto quince punto uno de emergencia los bloquean."
+        },
+        {
+          "host": "Chris",
+          "text": "También hay un aviso público sobre trescientos treinta y tres nodos de salida de Tor secuestrados para interceptar tráfico SSH y recuperar correos en texto plano."
+        },
+        {
+          "host": "Jessica",
+          "text": "Consejo práctico: usa claves SSH en lugar de contraseñas y presta atención a las advertencias de cambio de clave de host."
+        },
+        {
+          "host": "Chris",
+          "text": "Las vulnerabilidades de PHP sacudieron la web con caídas e intentos de explotación, aunque los analistas desmintieron algunas afirmaciones sobre exploits. La EFF dijo que es una razón para financiar el código abierto."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y dos de GrapheneOS. Según 404 Media, el DHS engañó al público sobre el registro de un teléfono con GrapheneOS de un activista. Dijeron que buscaban material de abuso infantil, cuando la razón real eran presuntas actividades terroristas. [sarcastic] Qué transparencia."
+        },
+        {
+          "host": "Chris",
+          "text": "Y la buena noticia: GrapheneOS ya tiene un Pixel 7 funcionando con Linux seis punto dieciocho punto cincuenta y ocho, el primer paso para llevar todos los dispositivos compatibles al kernel de Linux upstream."
+        },
+        {
+          "host": "Jessica",
+          "text": "Pasemos a los números de la red. El hashrate semanal medio fue de seis coma cinco gigahashes por segundo, frente a seis coma cero cuatro la semana pasada."
+        },
+        {
+          "host": "Chris",
+          "text": "Veintinueve mil doscientas ochenta y dos transacciones al día, contra veintiocho mil cuatrocientas noventa y cuatro. Y la comisión media fue de cero coma cero cero cero doscientos cuarenta y ocho XMR, casi igual que antes."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y mirando adelante, mucha agenda. El lunes veintiséis a las dieciocho UTC, reunión de Monero Tech en no-wallet-left-behind, sobre Seraphis, JAMTIS y FCMPs."
+        },
+        {
+          "host": "Chris",
+          "text": "El martes veintisiete, misma hora, Cuprate en IRC de Libera y Matrix. Y el miércoles veintiocho a las diecisiete UTC, el Monero Research Lab, con el estado de FCMP++ y probablemente el problema de doxing de get_tx_key."
+        },
+        {
+          "host": "Jessica",
+          "text": "El treinta de octubre empieza el Qubes OS Summit, con las entradas casi agotadas. Y el dieciocho de diciembre, pop-up de privacidad WebWipe en Pubkey, Nueva York, con Doug Tuman de MoneroTalk y el asesor legal de Roman Sterlingov."
+        },
+        {
+          "host": "Chris",
+          "text": "Y hasta aquí el número de esta semana. Todos los enlaces están en xmr.fan/es/news."
+        },
+        {
+          "host": "Jessica",
+          "text": "Gracias por escucharnos. ¡Hasta la próxima!"
+        }
+      ]
+    }
+  }
+}
