@@ -9,15 +9,15 @@ export const ART_STYLE = `Minimal low-resolution pixel art, like a sprite from a
 - No people, hands, faces, text, letters, numbers or logos.`;
 
 export async function drawImage(scene: string): Promise<{ bytes: Buffer; ext: string }> {
-  const model = process.env.ART_MODEL ?? "openai/gpt-image-2.5/sunburst/text-to-image";
+  const model = process.env.ART_MODEL || "openai/gpt-image-2.5/sunburst/text-to-image";
   const res = await fetch("https://api.nano-gpt.com/api/v1/images", {
     method: "POST",
     headers: { "Content-Type": "application/json", "x-api-key": process.env.NANO_GPT_API_KEY! },
     body: JSON.stringify({
       model,
       prompt: `Scene: ${scene}\n\n${ART_STYLE}`,
-      resolution: process.env.ART_RESOLUTION ?? "1k",
-      aspect_ratio: process.env.ART_ASPECT ?? "16:9",
+      resolution: process.env.ART_RESOLUTION || "1k",
+      aspect_ratio: process.env.ART_ASPECT || "16:9",
       n: 1,
     }),
     signal: AbortSignal.timeout(300_000),

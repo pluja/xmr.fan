@@ -34,15 +34,15 @@ const editionFile = `src/data/gazette/${week.id}.json`;
 const workDir = `.gazette/podcast/${week.id}`;
 const scriptFile = `.gazette/${week.id}.podcast${suffix}.json`;
 /** Where audio is written: public/ in development, a directory outside the build in production. */
-const mediaDir = process.env.MEDIA_DIR ?? "public";
+const mediaDir = process.env.MEDIA_DIR || "public";
 const outFile = `${mediaDir}/podcast/${week.id}${suffix}.mp3`;
 const newsUrl = `xmr.fan${lang === "en" ? "" : `/${lang}`}/news`;
 
 const apiKey = process.env.NANO_GPT_API_KEY;
 if (!apiKey) throw new Error("Set NANO_GPT_API_KEY for text-to-speech.");
-const TTS_MODEL = process.env.PODCAST_TTS_MODEL ?? "elevenlabs/eleven-v4";
-const MINUTES = Number(process.env.PODCAST_MINUTES ?? 12);
-const HOSTS = (process.env[`PODCAST_HOSTS_${lang.toUpperCase()}`] ?? process.env.PODCAST_HOSTS ?? "Chris:Chris,Jessica:Jessica").split(",").map((h) => {
+const TTS_MODEL = process.env.PODCAST_TTS_MODEL || "elevenlabs/eleven-v4";
+const MINUTES = Number(process.env.PODCAST_MINUTES || 12);
+const HOSTS = (process.env[`PODCAST_HOSTS_${lang.toUpperCase()}`] || process.env.PODCAST_HOSTS || "Chris:Chris,Jessica:Jessica").split(",").map((h) => {
   const [name, voice = name] = h.split(":").map((s) => s.trim());
   return { name, voice };
 });

@@ -53,7 +53,7 @@ function summarize(headers: Header[], seconds: number): Stats {
 /** Undefined if no node answers. */
 export async function networkStats(
   week: Week,
-  nodes = process.env.MONERO_NODES?.split(",").map((s) => s.trim()).filter(Boolean) ?? DEFAULT_NODES,
+  nodes = process.env.MONERO_NODES ? process.env.MONERO_NODES.split(",").map((s) => s.trim()).filter(Boolean) : DEFAULT_NODES,
 ): Promise<EditionData["network"]> {
   const from = week.from.getTime() / 1000;
   const to = Math.min(week.to.getTime() / 1000, Date.now() / 1000);

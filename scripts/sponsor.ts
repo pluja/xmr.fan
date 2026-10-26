@@ -10,7 +10,7 @@ import { parseArgs } from "node:util";
 import { slugify, sponsorSchema } from "../src/lib/sponsor-schema.ts";
 import { weekStarting } from "./gazette/week.ts";
 
-const DIR = process.env.SPONSOR_REQUESTS_DIR ?? "sponsor-requests";
+const DIR = process.env.SPONSOR_REQUESTS_DIR || "sponsor-requests";
 const SPONSORS = "src/data/sponsors";
 const { values, positionals } = parseArgs({ allowPositionals: true, options: { usd: { type: "string" }, as: { type: "string" } } });
 const [command, id, week] = positionals;

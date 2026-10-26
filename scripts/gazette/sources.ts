@@ -172,7 +172,7 @@ const NANO = "https://nano-gpt.com/api/v1";
 const nanoKey = () => process.env.NANO_GPT_API_KEY;
 
 /** Override with GAZETTE_X_ACCOUNTS. */
-const X_ACCOUNTS = (process.env.GAZETTE_X_ACCOUNTS ?? "monero,cakewallet,sethforprivacy,fluffypony,MoneroObserver,haveno_network,feather_wallet,GrapheneOS,privacyguides")
+const X_ACCOUNTS = (process.env.GAZETTE_X_ACCOUNTS || "monero,cakewallet,sethforprivacy,fluffypony,MoneroObserver,haveno_network,feather_wallet,GrapheneOS,privacyguides")
   .split(",").map((a) => a.trim()).filter(Boolean);
 
 async function xSearch(query: string, limit: number, w: Week): Promise<any[]> {

@@ -3,7 +3,7 @@
      node --experimental-strip-types scripts/heights.ts */
 import { writeFileSync } from "node:fs";
 
-const NODE = process.env.MONERO_NODE ?? "https://node.sethforprivacy.com";
+const NODE = process.env.MONERO_NODE || "https://node.sethforprivacy.com";
 const STEP = 10_000;
 const CONCURRENCY = 8;
 

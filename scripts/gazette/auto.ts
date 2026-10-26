@@ -12,8 +12,8 @@ import { LANGUAGES } from "./translate.ts";
 import { lastFullWeek } from "./week.ts";
 
 const SITE = "https://xmr.fan";
-const REVIEW_HOURS = Number(process.env.GAZETTE_REVIEW_HOURS ?? 12);
-const PODCAST_LANGS = (process.env.PODCAST_LANGS ?? "en,es").split(",").map((l) => l.trim()).filter(Boolean);
+const REVIEW_HOURS = Number(process.env.GAZETTE_REVIEW_HOURS || 12);
+const PODCAST_LANGS = (process.env.PODCAST_LANGS || "en,es").split(",").map((l) => l.trim()).filter(Boolean);
 
 const week = lastFullWeek();
 const file = `src/data/gazette/${week.id}.json`;

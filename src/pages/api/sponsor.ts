@@ -9,7 +9,7 @@ import { requestSchema } from "../../lib/sponsor";
 
 export const prerender = false;
 
-const DIR = process.env.SPONSOR_REQUESTS_DIR ?? "sponsor-requests";
+const DIR = process.env.SPONSOR_REQUESTS_DIR || "sponsor-requests";
 const MAX_PENDING = 200; // a simple brake against floods
 
 export const POST: APIRoute = async ({ request, redirect }) => {
