@@ -23,7 +23,8 @@ import Subscribe from "../Subscribe.astro";
 import type { IconName } from "../../lib/pixel";
 import { articleLd, breadcrumbLd, excerpt } from "../../lib/seo";
 
-interface Props { lang: Locale; editionId?: string; withDrafts?: boolean }
+/** `path` overrides where the page says it lives (the language switcher, canonical): the preview stays a preview. */
+interface Props { lang: Locale; editionId?: string; withDrafts?: boolean; path?: string }
 const { lang, editionId, withDrafts } = Astro.props;
 const t = useTranslations(lang);
 
@@ -45,7 +46,7 @@ const storiesIn = (key: SectionKey) => d?.sections[key] ?? [];
 const sections = SECTIONS.filter(({ key }) => storiesIn(key).length > 0);
 
 const isLatest = edition === editions[0];
-const path = edition ? editionPath(edition, editions) : "/news";
+const path = Astro.props.path ?? (edition ? editionPath(edition, editions) : "/news");
 const pageUrl = new URL(localePath(lang, path), Astro.site).href;
 const seoTitle = !d ? t("seo_title_gazette") : isLatest ? `${t("seo_title_gazette")} · ${d.lead.h}` : `${d.lead.h} · ${t("g_title")} ${t("g_no", { n: d.no })}`;
 const seoDesc = d ? excerpt(d.recap ?? d.lead.p) : t("seo_desc_gazette");

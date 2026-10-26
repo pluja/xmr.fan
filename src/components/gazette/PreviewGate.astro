@@ -4,8 +4,8 @@ import Container from "../Container.astro";
 import PixelIcon from "../PixelIcon.astro";
 import type { Locale } from "../../i18n/ui";
 
-interface Props { lang: Locale; state: "locked" | "wrong" | "empty" }
-const { lang, state } = Astro.props;
+interface Props { lang: Locale; path: string; state: "locked" | "wrong" | "empty" }
+const { lang, path, state } = Astro.props;
 const COPY = {
   locked: ["Blocked.", "Unpublished issues need the preview key."],
   wrong: ["Wrong key.", "Try again."],
@@ -13,7 +13,7 @@ const COPY = {
 } as const;
 const [title, line] = COPY[state];
 ---
-<Base lang={lang} path="/news" title={title} noindex active="gazette">
+<Base lang={lang} path={path} title={title} noindex active="gazette">
   <Container as="section" class="py-20">
     <h1 class="mb-3 flex items-center gap-3 font-pixel text-[clamp(28px,4.4vw,48px)]">
       <PixelIcon name={state === "empty" ? "lens" : "shield"} size={28} />{title}

@@ -10,6 +10,7 @@ import { previewAccess } from "../../../../lib/gazette-preview";
 export const prerender = false;
 
 const lang = langFromParams(Astro.params);
+const path = `/news/preview/${Astro.params.week}`;
 const access = await previewAccess(Astro);
 if (access === null) return new Response("Not found", { status: 404 });
 if (access instanceof Response) return access;
@@ -17,4 +18,4 @@ if (access !== "open") Astro.response.status = 401;
 const edition = access === "open" && Astro.params.week ? await getEntry("gazette", Astro.params.week) : undefined;
 if (access === "open" && !edition) return new Response("Not found", { status: 404 });
 ---
-{edition ? <EditionPage lang={lang} editionId={edition.id} withDrafts /> : <PreviewGate lang={lang} state={access as "locked" | "wrong"} />}
+{edition ? <EditionPage lang={lang} editionId={edition.id} withDrafts path={path} /> : <PreviewGate lang={lang} path={path} state={access as "locked" | "wrong"} />}
