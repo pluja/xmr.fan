@@ -11,10 +11,13 @@ const t = useTranslations(lang);
 const usd = (n: number, opts: Intl.NumberFormatOptions = {}) => formatNumber(n, lang, { style: "currency", currency: "USD", ...opts });
 const pct = (n: number) => formatNumber(n / 100, lang, { style: "percent", maximumFractionDigits: 1, signDisplay: "exceptZero" });
 const compact = { notation: "compact", maximumFractionDigits: 1 } as const;
+// The locale's own range form ("$571 – $650", "571-650 US$"), kept on one line.
+const usdRange = (low: number, high: number) =>
+  new Intl.NumberFormat(lang, { style: "currency", currency: "USD", maximumFractionDigits: 0 }).formatRange(low, high).replaceAll(" ", "\u00a0");
 const stats = [
   { label: t("m_close"), value: usd(m.close) },
   { label: t("m_change"), value: pct(m.change) },
-  { label: t("m_range"), value: `${usd(m.low, { maximumFractionDigits: 0 })}–${usd(m.high, { maximumFractionDigits: 0 })}` },
+  { label: t("m_range"), value: usdRange(m.low, m.high) },
   { label: t("m_volume"), value: usd(m.volume, compact), note: `${pct(m.volumeChange)} ${t("n_vs_last")}` },
   { label: t("m_vs_btc"), value: pct(m.btcChange) },
 ];

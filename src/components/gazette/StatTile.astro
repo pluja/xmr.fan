@@ -1,11 +1,18 @@
 ---
 interface Props { label: string; value: string; note?: string }
 const { label, value, note } = Astro.props;
+
+// The pixel font advances 0.5em per glyph; CJK glyphs fall back to a font about twice as wide.
+const WIDE = /[\u1100-\u115f\u2e80-\ua4cf\uac00-\ud7a3\uf900-\ufaff\ufe30-\ufe4f\uff00-\uff60\uffe0-\uffe6]/;
+const ems = [...value].reduce((sum, c) => sum + (WIDE.test(c) ? 1 : 0.52), 0);
+const PROMPT_EMS = 0.75;
+// Largest whole-pixel size at which the prompt and value fit the tile on one line, capped at 26px.
+const fontSize = `min(26px, round(down, 100cqi / ${(ems + PROMPT_EMS).toFixed(2)}, 1px))`;
 ---
-<div class="bg-ink px-5 py-4">
+<div class="@container bg-ink px-5 py-4">
   <dt class="text-sm text-ash">{label}</dt>
-  <dd class="mt-1.5 font-pixel text-[clamp(18px,4.2vw,26px)] text-orange [overflow-wrap:anywhere]">
-    <span class="text-lg text-mint" aria-hidden="true">&gt; </span>{value}
+  <dd class="mt-1.5 whitespace-nowrap font-pixel text-orange" style={{ fontSize }}>
+    <span class="text-[0.7em] text-mint" aria-hidden="true">&gt; </span>{value}
   </dd>
   {note && <dd class="mt-1 text-sm text-ash">{note}</dd>}
 </div>
