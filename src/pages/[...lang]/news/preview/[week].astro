@@ -1,0 +1,20 @@
+---
+/* An unpublished issue, for review before it goes live: /news/preview/<week>?key=<GAZETTE_PREVIEW_KEY>.
+   Rendered on request, so the draft only has to be in the deployed build. */
+import { createHash, timingSafeEqual } from "node:crypto";
+import { getEntry } from "astro:content";
+import EditionPage from "../../../../components/gazette/EditionPage.astro";
+import { isLocale, langFromParams } from "../../../../i18n/ui";
+
+export const prerender = false;
+
+const digest = (s: string) => createHash("sha256").update(s).digest();
+const key = process.env.GAZETTE_PREVIEW_KEY || "";
+const given = Astro.url.searchParams.get("key") ?? "";
+const allowed = key !== "" && timingSafeEqual(digest(given), digest(key));
+const validLang = Astro.params.lang === undefined || isLocale(Astro.params.lang);
+const edition = allowed && validLang && Astro.params.week ? await getEntry("gazette", Astro.params.week) : undefined;
+if (!edition) return new Response("Not found", { status: 404 });
+Astro.response.headers.set("Cache-Control", "private, no-store");
+---
+<EditionPage lang={langFromParams(Astro.params)} editionId={edition.id} withDrafts />

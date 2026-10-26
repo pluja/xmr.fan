@@ -20,7 +20,7 @@ notify() {
 
 # What each job runs, which files it may change, its commit message, and whether a change needs a redeploy.
 case "$job" in
-	weekly)    cmd="gazette:auto -- draft";               paths="src/data/gazette public/news-art"; msg="chore(gazette): draft the weekly issue";  deploy=no ;;
+	weekly)    cmd="gazette:auto -- draft";               paths="src/data/gazette public/news-art"; msg="chore(gazette): draft the weekly issue";  deploy=yes ;;
 	publish)   cmd="gazette:auto -- publish";             paths="src/data/gazette";                 msg="chore(gazette): publish the weekly issue"; deploy=yes ;;
 	donations) cmd="donations:check -- --write --notify"; paths="src/data/donations.json";          msg="chore(donations): record address checks";  deploy=yes ;;
 	nodes)     cmd="nodes:check -- --write --notify";     paths="src/data/node-health.json";        msg="chore(nodes): record node health";         deploy=yes ;;

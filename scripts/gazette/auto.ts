@@ -3,7 +3,7 @@
      npm run gazette:auto -- publish   # publish it once the review window has passed, unless held
    Each step is skipped when its output already exists, so a failed run can simply run again.
    GAZETTE_REVIEW_HOURS (default 12) is the time between "draft ready" and going live;
-   ops/hold.sh <week> (or npm run gazette:hold -- <week>) stops it. PODCAST_LANGS (default "en,es") picks the audio languages. */
+   ops/hold.sh <week> (or npm run gazette:hold -- <week>) stops it. With GAZETTE_PREVIEW_KEY set, the notice opens the preview. PODCAST_LANGS (default "en,es") picks the audio languages. */
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { editionSchema, type EditionData } from "../../src/lib/gazette-schema.ts";
@@ -14,6 +14,7 @@ import { lastFullWeek } from "./week.ts";
 const SITE = "https://xmr.fan";
 const REVIEW_HOURS = Number(process.env.GAZETTE_REVIEW_HOURS || 12);
 const PODCAST_LANGS = (process.env.PODCAST_LANGS || "en,es").split(",").map((l) => l.trim()).filter(Boolean);
+const PREVIEW_KEY = process.env.GAZETTE_PREVIEW_KEY || "";
 
 const week = lastFullWeek();
 const file = `src/data/gazette/${week.id}.json`;
@@ -59,6 +60,7 @@ async function draft() {
     title: `Times No. ${edition.no} is ready for review`,
     body: `${headlines(edition)}\n\nGoes live around ${at} UTC. To stop it, on the server: ops/hold.sh ${week.id}`,
     tags: ["newspaper"],
+    click: PREVIEW_KEY ? `${SITE}/news/preview/${week.id}?key=${encodeURIComponent(PREVIEW_KEY)}` : undefined,
   });
 }
 

@@ -9,11 +9,11 @@ export type SectionKey = keyof Edition["data"]["sections"];
 
 export const latestFirst = (eds: Edition[]) => [...eds].sort((a, b) => b.data.week.localeCompare(a.data.week));
 
-/** Newest first. Drafts only appear in development, for review. */
-export async function visibleEditions(): Promise<Edition[]> {
+/** Newest first. Drafts only appear in development and in the keyed preview (/news/preview/<week>). */
+export async function visibleEditions(withDrafts = false): Promise<Edition[]> {
   const all = await getCollection("gazette");
   // GAZETTE_SHOW_DRAFTS=1 includes drafts in a build too (for a staging preview).
-  const showDrafts = import.meta.env.DEV || process.env.GAZETTE_SHOW_DRAFTS === "1";
+  const showDrafts = withDrafts || import.meta.env.DEV || process.env.GAZETTE_SHOW_DRAFTS === "1";
   return latestFirst(showDrafts ? all : all.filter((e) => !e.data.draft));
 }
 

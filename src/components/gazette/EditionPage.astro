@@ -23,11 +23,11 @@ import Subscribe from "../Subscribe.astro";
 import type { IconName } from "../../lib/pixel";
 import { articleLd, breadcrumbLd, excerpt } from "../../lib/seo";
 
-interface Props { lang: Locale; editionId?: string }
-const { lang, editionId } = Astro.props;
+interface Props { lang: Locale; editionId?: string; withDrafts?: boolean }
+const { lang, editionId, withDrafts } = Astro.props;
 const t = useTranslations(lang);
 
-const editions = await visibleEditions();
+const editions = await visibleEditions(withDrafts);
 const edition = editions.find((e) => e.id === editionId) ?? editions[0];
 const others = editions.filter((e) => e !== edition);
 const d = edition && localize(edition.data, lang);
