@@ -9,12 +9,26 @@ const t = useTranslations(lang);
 const at = (iso: string) => new Date(`${iso}T12:00:00Z`);
 const fmt = (opts: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat(lang, { timeZone: "UTC", ...opts });
 const month = fmt({ month: "short" }), day = fmt({ day: "numeric" }), weekday = fmt({ weekday: "short" });
+// Up to four per row, in rows as even as possible: 5 → 3+2, 6 → 3+3, 7 → 4+3.
+const cols = Math.ceil(events.length / Math.ceil(events.length / 4));
+const LG_COLS = ["", "lg:grid-cols-1", "lg:grid-cols-2", "lg:grid-cols-3", "lg:grid-cols-4"];
+// Padding inside the cells instead of a column gap, so the dotted rules meet.
+const lgEdge = (i: number) => {
+  const col = i % cols;
+  if (cols === 1) return "";
+  if (col === 0) return "lg:pr-4";
+  return col === cols - 1 ? "lg:border-l-2 lg:pl-4" : "lg:border-l-2 lg:px-4";
+};
 ---
 <aside aria-label={t("g_coming_up")}>
   <TitleBar icon="calendar" tone="ink">{t("g_coming_up")}</TitleBar>
-  <ol class="grid sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4">
-    {events.map((e) => (
-      <li class="flex gap-3 border-b-2 border-dotted border-graphite py-4 lg:border-b-0 lg:border-l-2 lg:pl-4 lg:first:border-l-0 lg:first:pl-0">
+  <ol class:list={["grid sm:grid-cols-2 sm:gap-x-6 lg:gap-x-0", LG_COLS[cols]]}>
+    {events.map((e, i) => (
+      <li class:list={[
+        "flex gap-3 border-b-2 border-dotted border-graphite py-4 lg:border-b-0",
+        lgEdge(i),
+        i >= cols && "lg:border-t-2",
+      ]}>
         <time datetime={e.date} class="flex h-fit w-11 shrink-0 flex-col border-2 border-ink bg-paper text-center shadow-[3px_3px_0_var(--color-ink)]">
           <span class="bg-ink font-pixel text-[10px] uppercase leading-4 text-orange">{month.format(at(e.date))}</span>
           <span class="font-pixel text-lg leading-6">{day.format(at(e.date))}</span>
