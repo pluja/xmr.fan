@@ -135,7 +135,9 @@ async function feed(f: Feed, w: Week): Promise<Item[]> {
 
 const FEEDS: Feed[] = [
   { source: "getmonero.org", url: "https://www.getmonero.org/feed.xml", kind: "blog" },
-  { source: "monero.observer", url: "https://monero.observer/feed.xml", kind: "news", max: 30 },
+  // Stories (with the calendar) apart from the community messages, which projects post about themselves.
+  { source: "monero.observer", url: "https://monero.observer/feed-stories.xml", kind: "news", max: 30 },
+  { source: "monero.observer", url: "https://monero.observer/feed-messages.xml", kind: "community", max: 15 },
   { source: "revuo-xmr.com", url: "https://www.revuo-xmr.com/index.xml", kind: "newsletter" },
   { source: "CCS proposals", url: "https://repo.getmonero.org/monero-project/ccs-proposals/-/merge_requests.atom", kind: "funding" },
   // Monero wallets and apps.

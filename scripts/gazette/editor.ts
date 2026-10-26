@@ -76,7 +76,7 @@ Score every item from 1 to 5 for how much it matters to Monero users this week:
 3 = minor or fun: niche project announcements, meetings that report decisions, small code changes with some user impact, discussions with real substance, delightful community stories.
 
 Monero users also care about privacy and freedom tech beyond Monero. Score that news on the same scale: 4 for major events (a significant GrapheneOS release or security fix, a big surveillance, encryption or privacy-law story), 3 for notable ones, 1 or 2 for routine posts, questions and opinion.
-2 = routine: refactors, tests, docs, build changes, meeting schedules, routine user questions, self-promotion.
+2 = routine: refactors, tests, docs, build changes, meeting schedules, routine user questions, self-promotion. A project announcing itself (often tagged [ANN]) is self-promotion unless it reports a real release, security issue or event.
 1 = noise: spam, off-topic, price predictions and chart talk, memes, giveaways, fundraisers unrelated to Monero, personal disputes. Accepting XMR donations does not make a cause Monero news.
 
 Judge code changes by their effect on users, not by their existence. Most items should score 1 or 2; that is expected.
@@ -160,6 +160,7 @@ How to write:
 - The lead, feature and news stories list the ids of the items they use in "items" (1 to 3, main source first). State only facts found in those items. Use each item in at most one of them (quotes may reuse an item).
 - Never cover the same thing twice, in this issue or in the earlier issues listed (if any). When a story continues one from an earlier issue, say so briefly ("Last week we reported...; now...").
 - Plain language: briefly explain jargon a regular user would not know.
+- Report, never promote: no endorsements, calls to action or sales language. A product or service is news for what changed, not for what it offers.
 - No price or market talk in these pieces; the price has its own section.
 - Privacy news beyond Monero belongs in "privacy" (or the feature), never presented as Monero news.
 - Headlines: sentence case, specific, at most 80 characters.

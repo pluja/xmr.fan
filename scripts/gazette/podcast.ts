@@ -89,6 +89,10 @@ The facts:
 - Use only facts from the issue. No new facts, numbers or claims. No price predictions, no trading advice.
 - When you quote someone from OVERHEARD, use their exact words and say who said it.
 
+Not an ad:
+- Talk about projects, products and services as news, never as promotion: no endorsements, no calls to action ("go try it", "download it today", "check them out"), no sales language, no picking one service over another.
+- The only exception is SPONSORS, when listed: thank them by name in the sign-off. Never call anything else a sponsor or partner, and do not mention sponsorship at all when there are none.
+
 The conversation:
 - Two people who know Monero well and enjoy talking about it, explaining the week to a curious listener. Make it a real back-and-forth, not two people reading alternate paragraphs: they ask each other questions, follow up ("wait, so what does that mean for my wallet?"), react with surprise or delight, tease each other lightly, sometimes finish a thought the other started, and hand over naturally.
 - Short turns, usually 1 to 3 sentences; an occasional longer one when explaining something.
