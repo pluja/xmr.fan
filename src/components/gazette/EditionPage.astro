@@ -95,13 +95,13 @@ import { ogImage } from "../../lib/tools";
   )}
 
   <Container as="section" class="pb-7 pt-2">
-    <p class="grid grid-cols-2 items-center gap-x-4 gap-y-1 border-y-2 border-ink px-0.5 py-2 font-pixel text-[15px] md:grid-cols-[1fr_auto_1fr] [&>:nth-child(2)]:text-right md:[&>:nth-child(2)]:text-center">
-      <EditionMeta lang={lang} edition={edition} />
-      <span class="col-span-2 md:col-span-1 md:text-right">
+    <div class="border-y-2 border-ink px-0.5 py-2 text-center font-pixel text-[15px] md:grid md:grid-cols-[1fr_auto_1fr] md:items-center md:gap-x-4">
+      <p class="md:contents"><EditionMeta lang={lang} edition={edition} /></p>
+      <p class="mt-0.5 text-[13px] md:mt-0 md:text-right md:text-[15px]">
         {d.sample ? t("g_sample") : t("g_cadence")}
         {!d.sample && lang !== "en" && !d.translated && <span class="block text-xs">{t("g_lang_note")}</span>}
-      </span>
-    </p>
+      </p>
+    </div>
     <h1 class="my-7"><GazetteWordmark label={t("g_title")} /></h1>
     <div class="h-1.5 bg-ink"></div>
   </Container>

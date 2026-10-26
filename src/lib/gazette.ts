@@ -17,8 +17,8 @@ export async function visibleEditions(withDrafts = false): Promise<Edition[]> {
   return latestFirst(showDrafts ? all : all.filter((e) => !e.data.draft));
 }
 
-export const formatDate = (iso: string, lang: Locale) =>
-  new Intl.DateTimeFormat(lang, { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
+export const formatDate = (iso: string, lang: Locale, month: "long" | "short" = "long") =>
+  new Intl.DateTimeFormat(lang, { day: "numeric", month, year: "numeric", timeZone: "UTC" })
     .format(new Date(`${iso}T00:00:00Z`));
 
 export const formatNumber = (n: number, lang: Locale, opts?: Intl.NumberFormatOptions) =>

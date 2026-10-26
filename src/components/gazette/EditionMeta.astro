@@ -6,5 +6,9 @@ interface Props { lang: Locale; edition: Edition }
 const { lang, edition } = Astro.props;
 const t = useTranslations(lang);
 ---
-<span>{t("g_no", { n: edition.data.no })}</span>
-<span>{t("g_week", { d: formatDate(edition.data.week, lang) })}</span>
+<span class="md:text-left">{t("g_no", { n: edition.data.no })}</span>
+<span class="md:hidden" aria-hidden="true"> · </span>
+<span>
+  <span class="md:hidden">{t("g_week", { d: formatDate(edition.data.week, lang, "short") })}</span>
+  <span class="hidden md:inline">{t("g_week", { d: formatDate(edition.data.week, lang) })}</span>
+</span>
