@@ -1,0 +1,18 @@
+---
+/* The newest unpublished issue, behind the preview key: /news/preview */
+import EditionPage from "../../../../components/gazette/EditionPage.astro";
+import PreviewGate from "../../../../components/gazette/PreviewGate.astro";
+import { langFromParams } from "../../../../i18n/ui";
+import { visibleEditions } from "../../../../lib/gazette";
+import { previewAccess } from "../../../../lib/gazette-preview";
+
+export const prerender = false;
+
+const lang = langFromParams(Astro.params);
+const access = await previewAccess(Astro);
+if (access === null) return new Response("Not found", { status: 404 });
+if (access instanceof Response) return access;
+if (access !== "open") Astro.response.status = 401;
+const [draft] = access === "open" ? (await visibleEditions(true)).filter((e) => e.data.draft) : [];
+---
+{draft ? <EditionPage lang={lang} editionId={draft.id} withDrafts /> : <PreviewGate lang={lang} state={access === "open" ? "empty" : access} />}
