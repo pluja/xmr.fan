@@ -211,3 +211,9 @@ test("sponsor requests must accept the rules", async () => {
   assert.equal(requestSchema.safeParse({ ...ok, accept: "" }).success, false);
   assert.equal(requestSchema.safeParse({ ...ok, url: "javascript:alert(1)" }).success, false);
 });
+
+test("podcast audio spells out names the voice would read as one word", async () => {
+  const { forSpeech } = await import("./pronounce.ts");
+  assert.equal(forSpeech("Update monerod, then FCMP++."), "Update monero D, then F C M P plus plus.");
+  assert.equal(forSpeech("monerodevs.org and xmr.fan stay as they are"), "monerodevs.org and xmr.fan stay as they are");
+});
