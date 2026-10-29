@@ -1,62 +1,62 @@
 {
   "https://node.sethforprivacy.com": {
-    "failures": 0,
+    "failures": 1,
     "lastOk": "2026-10-28"
   },
   "https://xmr.cryptostorm.is:18081": {
     "failures": 0,
-    "lastOk": "2026-10-28"
+    "lastOk": "2026-10-29"
   },
   "https://xmr-node.cakewallet.com:18081": {
     "failures": 0,
-    "lastOk": "2026-10-28"
+    "lastOk": "2026-10-29"
   },
   "https://xmr.0xrpc.io": {
     "failures": 0,
-    "lastOk": "2026-10-28"
+    "lastOk": "2026-10-29"
   },
   "https://xmr1.doggett.tech:18089": {
     "failures": 0,
-    "lastOk": "2026-10-28"
+    "lastOk": "2026-10-29"
   },
   "https://node.monerodevs.org:18089": {
     "failures": 0,
-    "lastOk": "2026-10-28"
+    "lastOk": "2026-10-29"
   },
   "https://node2.monerodevs.org:18089": {
     "failures": 0,
-    "lastOk": "2026-10-28"
+    "lastOk": "2026-10-29"
   },
   "https://node3.monerodevs.org:18089": {
     "failures": 0,
-    "lastOk": "2026-10-28"
+    "lastOk": "2026-10-29"
   },
   "https://monero.stackwallet.com:18081": {
     "failures": 0,
-    "lastOk": "2026-10-28"
+    "lastOk": "2026-10-29"
   },
   "https://xmr.privex.io": {
     "failures": 0,
-    "lastOk": "2026-10-28"
+    "lastOk": "2026-10-29"
   },
   "http://xmr.stormycloud.org:18089": {
     "failures": 0,
-    "lastOk": "2026-10-28"
+    "lastOk": "2026-10-29"
   },
   "http://nodes.hashvault.pro:18081": {
     "failures": 0,
-    "lastOk": "2026-10-28"
+    "lastOk": "2026-10-29"
   },
   "http://node.xmr.rocks:18089": {
     "failures": 0,
-    "lastOk": "2026-10-28"
+    "lastOk": "2026-10-29"
   },
   "http://nodex.monerujo.io:18081": {
     "failures": 0,
-    "lastOk": "2026-10-28"
+    "lastOk": "2026-10-29"
   },
   "http://rucknium.me:18081": {
     "failures": 0,
-    "lastOk": "2026-10-28"
+    "lastOk": "2026-10-29"
   }
 }
