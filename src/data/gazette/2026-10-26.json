@@ -193,7 +193,7 @@
   },
   "no": 3,
   "week": "2026-10-26",
-  "draft": true,
+  "draft": false,
   "sample": false,
   "network": {
     "hash": 6.68,
@@ -518,6 +518,239 @@
         "text": "Thanks for listening to The xmr.fan Times. Back next week!"
       }
     ]
+  },
+  "podcasts": {
+    "es": {
+      "file": "/podcast/2026-10-26.es.mp3",
+      "duration": 740,
+      "bytes": 5918346,
+      "hosts": [
+        "Chris",
+        "Jessica"
+      ],
+      "transcript": [
+        {
+          "host": "Chris",
+          "text": "Hola a todos y bienvenidos a The xmr.fan Times, el episodio de la semana del veintiséis de octubre. Soy Chris."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y yo soy Jessica. Hoy tenemos un hito de financiación para FCMP++, una serie larga de mensajes de GrapheneOS sobre Europa y la privacidad, un montón de actualizaciones de software, y varias advertencias de seguridad que conviene tener a mano."
+        },
+        {
+          "host": "Chris",
+          "text": "Empezamos por lo bueno. El trabajo de Boog900 con FCMP++ para Cuprate ya está totalmente financiado."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y para quien se incorpora ahora: FCMP++ es la próxima mejora de Monero en la forma en que las transacciones ocultan su origen, y Cuprate es un nodo alternativo. La comunidad recaudó ochenta y cinco coma cero cinco monero para pagar tres meses de trabajo. Fue el mayor hito de financiación de la semana."
+        },
+        {
+          "host": "Chris",
+          "text": "Ochenta y cinco monero, nada mal. Y no es la única propuesta que se cerró: el trabajo a tiempo completo de jpk68 también quedó financiado otros tres meses."
+        },
+        {
+          "host": "Jessica",
+          "text": "Sí, esa propuesta del CCS, el Community Crowdfunding System, que es el sistema con el que la comunidad financia a desarrolladores, llegó a cuarenta y cinco coma cero cinco monero con cuarenta y cinco contribuciones. La contamos en un número anterior y ahora ya está completa."
+        },
+        {
+          "host": "Chris",
+          "text": "Curioso lo de los números, cuarenta y cinco con cuarenta y cinco. [laughs]"
+        },
+        {
+          "host": "Jessica",
+          "text": "[laughs] Casualidad total. Pasemos al precio, que esta semana fue tranquilo. Abrió en unos quinientos noventa y tres dólares y cerró en unos quinientos noventa y seis, un cambio de cero coma cinco por ciento."
+        },
+        {
+          "host": "Chris",
+          "text": "Con un rango entre quinientos ochenta y cuatro y seiscientos veintidós. Tocó su máximo el jueves, cerca de seiscientos quince, cayó con fuerza el viernes y luego se recuperó."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y sigue en la mitad superior del rango del último mes, después de una subida del diez coma cinco por ciento en treinta días. Mientras tanto, Bitcoin bajó dos coma ocho por ciento en la semana."
+        },
+        {
+          "host": "Chris",
+          "text": "Pues vamos con el tema grande de la semana. GrapheneOS publicó durante el fin de semana una serie larga de mensajes en su cuenta de Mastodon."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y ojo, que esto son afirmaciones y opiniones del propio proyecto, no conclusiones verificadas. Lo que dicen es que Francia, Alemania, España y los Países Bajos están endureciendo su postura contra las herramientas de privacidad."
+        },
+        {
+          "host": "Chris",
+          "text": "También describen una campaña de difamación patrocinada por el Estado contra GrapheneOS, en los Países Bajos y en Alemania, con acusaciones de seguridad que, según ellos, no resisten el escrutinio."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y aquí viene lo que nos toca: en una de las publicaciones incluyen a Monero entre los objetivos. Dicen que GrapheneOS, las aplicaciones de mensajería con cifrado de extremo a extremo, Monero y otros proyectos están siendo blanco de propaganda estatal y corporativa y de leyes contra la privacidad."
+        },
+        {
+          "host": "Chris",
+          "text": "[curious] Y hay otra que va más lejos, ¿no? Predice que los dispositivos seguros y el cifrado sin puertas traseras podrían acabar prohibidos en toda la UE."
+        },
+        {
+          "host": "Jessica",
+          "text": "Eso es lo que dicen ellos, sí. Y hay una tercera idea interesante: que los mismos países que reprimen la privacidad quieren que la gente use productos desarrollados dentro de sus fronteras y bajo su control, sobre todo los muy financiados por los Estados y la UE."
+        },
+        {
+          "host": "Chris",
+          "text": "Una cita de GrapheneOS, traducida del inglés, dice: \"Estos productos tienen, en la práctica, puertas traseras, al no ofrecer los parches y protecciones estándar de privacidad y seguridad mientras engañan a los usuarios.\""
+        },
+        {
+          "host": "Jessica",
+          "text": "Piense uno lo que piense de las acusaciones, lo que muestran es hasta qué punto las preocupaciones de los usuarios de Monero coinciden ahora con las de la comunidad de privacidad en general."
+        },
+        {
+          "host": "Chris",
+          "text": "Y hablando de eso, tenemos una cita más, de monero.observer, también traducida. Dice: \"Asegúrate de activar las advertencias de precio en moneda fiat en los ajustes y de comprobar la tarifa efectiva antes de aceptar cotizaciones. Espero que esto evite que otra persona caiga en la trampa.\""
+        },
+        {
+          "host": "Jessica",
+          "text": "Y esa advertencia viene de un caso concreto de la comunidad. Un usuario de Reddit avisa de que un maker de eigenwallet, cheapestxmr punto silksky punto com, anuncia una comisión mínima, del cero coma cero uno por ciento, pero cobra un recargo de aproximadamente el cincuenta por ciento."
+        },
+        {
+          "host": "Chris",
+          "text": "Uf, del cero coma cero uno al cincuenta. [sighs] Que no te cuenten lo de la comisión sin mirar la tarifa efectiva."
+        },
+        {
+          "host": "Jessica",
+          "text": "Eso. Y ya que hablamos de eigenwallet: un desarrollador principal dijo en un AMA en Reddit, o sea una sesión de preguntas y respuestas, que una extensión de navegador con OrangeFren para hacer intercambios atómicos de Bitcoin a Monero desde Tor Browser no tiene fecha de lanzamiento."
+        },
+        {
+          "host": "Chris",
+          "text": "Pero dijo que, de forma realista, faltan una o dos semanas."
+        },
+        {
+          "host": "Jessica",
+          "text": "Bien. Pasamos al desarrollo, que esta semana viene cargado. Haveno 1.12.0 trae una oleada de correcciones de seguridad."
+        },
+        {
+          "host": "Chris",
+          "text": "Haveno es el exchange descentralizado. Ahora verifica las ofertas, los árbitros y los mensajes de soporte de otros nodos antes de usarlos, e ignora los datos mal formados de los pares."
+        },
+        {
+          "host": "Jessica",
+          "text": "Además protege el proceso de la cartera local con una contraseña aleatoria y limita la frecuencia de las solicitudes de datos de red. Y un cambio práctico: el depósito de seguridad por defecto de las nuevas ofertas pasa a ser del quince por ciento."
+        },
+        {
+          "host": "Chris",
+          "text": "Siguiente: el Research Lab, el laboratorio de investigación de Monero, señala un problema de exposición del remitente en transacciones de dos salidas."
+        },
+        {
+          "host": "Jessica",
+          "text": "Sí. Un punto de debate para la reunión de investigación del veintiocho de octubre dice que las herramientas get_tx_key y check_tx_key pueden desvelar la identidad del remitente en una transacción de dos salidas. La misma agenda cubría la lista de tareas de FCMP++ y un resumen de las auditorías."
+        },
+        {
+          "host": "Chris",
+          "text": "Y ese tema vuelve: la próxima reunión es el cuatro de noviembre a las diecisiete horas UTC, en IRC, en Libera, y en Matrix, con el estado de FCMP++ y este problema de get_tx_key y check_tx_key en el orden del día."
+        },
+        {
+          "host": "Jessica",
+          "text": "Si quieres entender qué significa que un remitente quede expuesto, la página de Monero ELI5, en xmr punto fan barra eli5, explica la privacidad de Monero en palabras sencillas."
+        },
+        {
+          "host": "Chris",
+          "text": "Buen apunte. Más desarrollo: woodser lanzó monero-java versión cero coma ocho coma sesenta y cuatro y monero-ts versión cero coma once coma veintiuno, ambos actualizados a la última versión de Monero."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y ambos sincronizan el acceso a las notas de transacción con las escrituras en la caché de la cartera. Y hay una nota curiosa: Pirate Chain publicó un análisis posterior sobre su exploit de falsificación."
+        },
+        {
+          "host": "Chris",
+          "text": "No es noticia de Monero, pero Rucknium lo compartió con la comunidad de investigación de Monero. Dice que la transacción falsificada habría sido rechazada por el mempool, pero fue aceptada en un bloque que minó el propio atacante."
+        },
+        {
+          "host": "Jessica",
+          "text": "[curious] O sea, que el atacante necesitaba minar su propio bloque. Interesante detalle. Pasamos a las carteras y servicios."
+        },
+        {
+          "host": "Chris",
+          "text": "Cake Wallet y Monero punto com reciben la versión seis coma cinco coma dos. Incluye correcciones como abrir los enlaces externos fuera de la app para que aparezca el bloqueo con PIN, y la corrección de un índice fuera de rango en el personalizador de tarjetas."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y ese mismo día salió una nueva versión de Monero punto com. Luego, Bitcart cero coma once coma cero coma cero, el procesador de pagos autoalojado, que reconstruyó desde cero su checkout."
+        },
+        {
+          "host": "Chris",
+          "text": "Con pagos mediante carteras del navegador, una página de recibo y terminales de pago. Y también incorpora la estimación de las comisiones de la red Monero."
+        },
+        {
+          "host": "Jessica",
+          "text": "Ahora, la parte menos agradable. Chainalysis reveló la exposición de algunos datos de clientes. Dijo que se accedió a nombres, correos, identificadores de usuario y etiquetas de cargo de organización de los usuarios de su plataforma en un incidente de ciberseguridad."
+        },
+        {
+          "host": "Chris",
+          "text": "Asegura que por ahora no hay pruebas de acceso no autorizado al contenido de las investigaciones."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y en la comunidad, se filtraron datos del servicio de intercambio Wagyu. Un grupo que dice ser la banda de ransomware WhiteArmor asegura tener treinta y ocho mil seiscientas veintiocho órdenes y diez mil ciento treinta y nueve direcciones IP, incluidas carteras, sesiones y huellas digitales."
+        },
+        {
+          "host": "Chris",
+          "text": "Se publicó como aviso de utilidad pública, pero la afirmación proviene del propio grupo, así que con cautela."
+        },
+        {
+          "host": "Jessica",
+          "text": "Más hardware. Trezor alerta de un implante en unidades vendidas por CryptoBilis. A quien haya comprado un Trezor a ese revendedor desde marzo de dos mil veintiséis y guarde fondos en él se le indica que los traslade a una cartera nueva con una semilla nueva."
+        },
+        {
+          "host": "Chris",
+          "text": "Es una advertencia general de seguridad cripto, no específica de Monero. Y Keystone destruirá dieciocho mil ochocientas treinta y cinco carteras de hardware comprometidas."
+        },
+        {
+          "host": "Jessica",
+          "text": "Fue tras una brecha que expuso los datos de envío de al menos veinticinco mil novecientos sesenta y cuatro clientes. La empresa pidió disculpas y dijo que los dispositivos cuya clave de autenticación quedó comprometida serán destruidos. También redujo el plazo de conservación de datos de clientes de ciento ochenta a noventa días."
+        },
+        {
+          "host": "Chris",
+          "text": "Bueno, y fuera de Monero. Llega Tor Browser dieciséis punto cero, la primera versión estable basada en Firefox ESR ciento cincuenta y tres."
+        },
+        {
+          "host": "Jessica",
+          "text": "Llegó tras una auditoría de más de doscientos setenta problemas de Firefox que podrían afectar a la privacidad y la seguridad. Y le sigue Tails siete punto dieciséis, que se actualiza a ella y además corrige el soporte de OpenPGP en Thunderbird."
+        },
+        {
+          "host": "Chris",
+          "text": "Quad9 abandonará Francia: el resolvedor DNS sin ánimo de lucro dice que dejará de dar servicio a los usuarios allí el veinticuatro de noviembre, después de que un tribunal le ordenara bloquear sitios acusados de infringir los derechos de autor de una emisora deportiva."
+        },
+        {
+          "host": "Jessica",
+          "text": "La EFF lo considera un resultado previsible de obligar a los proveedores de infraestructura a hacer de policía del copyright. Y Apple añade en iOS veintisiete punto dos una forma de excluir apps de la IA de Siri, en respuesta a la campaña Encrypt It Already de la EFF."
+        },
+        {
+          "host": "Chris",
+          "text": "La preocupación era que las funciones de IA pudieran enviar fuera del dispositivo el contenido de las apps de mensajería segura. Y Google ya puede usar datos de Gmail para dar forma a los anuncios de búsqueda, según explica Proton."
+        },
+        {
+          "host": "Jessica",
+          "text": "Proton describe cómo desconectar Personal Intelligence, pero añade que hacerlo todavía no basta para proteger del todo tus datos. Y por último, un análisis compartido en Reddit sostiene que el proyecto de ley C-22 de Canadá amenaza el cifrado y la privacidad de los usuarios."
+        },
+        {
+          "host": "Chris",
+          "text": "Y otro hilo insta a contactar con los eurodiputados contra el Digital Omnibus de la UE, que, según dice, debilita la protección de datos. Lo que conecta, otra vez, con el tema de GrapheneOS."
+        },
+        {
+          "host": "Jessica",
+          "text": "Cerramos con la red. El hashrate semanal fue de unos seis coma seis ocho gigahashes por segundo, frente a seis coma cinco la semana anterior."
+        },
+        {
+          "host": "Chris",
+          "text": "Las transacciones por día bajaron a veintisiete mil seiscientas ochenta y siete, desde veintinueve mil doscientas ochenta y dos. Y la comisión media fue de cero coma cero cero cero doscientos cuarenta y cuatro monero, casi igual que antes."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y hasta aquí el episodio. Los enlaces de todo lo que hemos comentado están en xmr punto fan barra es barra news."
+        },
+        {
+          "host": "Chris",
+          "text": "Gracias por escucharnos, y nos vemos la semana que viene."
+        }
+      ]
+    }
   },
   "generated": {
     "model": "anthropic/claude-sonnet-5.5",
@@ -1179,239 +1412,6 @@
         "summary": "今週は方向感のない狭いレンジでの推移でした。木曜に615付近でピークをつけた後、金曜に急落し、その後持ち直しました。30日間で10.5%上昇したのち、過去1か月のレンジの上半分に位置しています。",
         "drivers": []
       }
-    }
-  },
-  "podcasts": {
-    "es": {
-      "file": "/podcast/2026-10-26.es.mp3",
-      "duration": 740,
-      "bytes": 5918346,
-      "hosts": [
-        "Chris",
-        "Jessica"
-      ],
-      "transcript": [
-        {
-          "host": "Chris",
-          "text": "Hola a todos y bienvenidos a The xmr.fan Times, el episodio de la semana del veintiséis de octubre. Soy Chris."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y yo soy Jessica. Hoy tenemos un hito de financiación para FCMP++, una serie larga de mensajes de GrapheneOS sobre Europa y la privacidad, un montón de actualizaciones de software, y varias advertencias de seguridad que conviene tener a mano."
-        },
-        {
-          "host": "Chris",
-          "text": "Empezamos por lo bueno. El trabajo de Boog900 con FCMP++ para Cuprate ya está totalmente financiado."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y para quien se incorpora ahora: FCMP++ es la próxima mejora de Monero en la forma en que las transacciones ocultan su origen, y Cuprate es un nodo alternativo. La comunidad recaudó ochenta y cinco coma cero cinco monero para pagar tres meses de trabajo. Fue el mayor hito de financiación de la semana."
-        },
-        {
-          "host": "Chris",
-          "text": "Ochenta y cinco monero, nada mal. Y no es la única propuesta que se cerró: el trabajo a tiempo completo de jpk68 también quedó financiado otros tres meses."
-        },
-        {
-          "host": "Jessica",
-          "text": "Sí, esa propuesta del CCS, el Community Crowdfunding System, que es el sistema con el que la comunidad financia a desarrolladores, llegó a cuarenta y cinco coma cero cinco monero con cuarenta y cinco contribuciones. La contamos en un número anterior y ahora ya está completa."
-        },
-        {
-          "host": "Chris",
-          "text": "Curioso lo de los números, cuarenta y cinco con cuarenta y cinco. [laughs]"
-        },
-        {
-          "host": "Jessica",
-          "text": "[laughs] Casualidad total. Pasemos al precio, que esta semana fue tranquilo. Abrió en unos quinientos noventa y tres dólares y cerró en unos quinientos noventa y seis, un cambio de cero coma cinco por ciento."
-        },
-        {
-          "host": "Chris",
-          "text": "Con un rango entre quinientos ochenta y cuatro y seiscientos veintidós. Tocó su máximo el jueves, cerca de seiscientos quince, cayó con fuerza el viernes y luego se recuperó."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y sigue en la mitad superior del rango del último mes, después de una subida del diez coma cinco por ciento en treinta días. Mientras tanto, Bitcoin bajó dos coma ocho por ciento en la semana."
-        },
-        {
-          "host": "Chris",
-          "text": "Pues vamos con el tema grande de la semana. GrapheneOS publicó durante el fin de semana una serie larga de mensajes en su cuenta de Mastodon."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y ojo, que esto son afirmaciones y opiniones del propio proyecto, no conclusiones verificadas. Lo que dicen es que Francia, Alemania, España y los Países Bajos están endureciendo su postura contra las herramientas de privacidad."
-        },
-        {
-          "host": "Chris",
-          "text": "También describen una campaña de difamación patrocinada por el Estado contra GrapheneOS, en los Países Bajos y en Alemania, con acusaciones de seguridad que, según ellos, no resisten el escrutinio."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y aquí viene lo que nos toca: en una de las publicaciones incluyen a Monero entre los objetivos. Dicen que GrapheneOS, las aplicaciones de mensajería con cifrado de extremo a extremo, Monero y otros proyectos están siendo blanco de propaganda estatal y corporativa y de leyes contra la privacidad."
-        },
-        {
-          "host": "Chris",
-          "text": "[curious] Y hay otra que va más lejos, ¿no? Predice que los dispositivos seguros y el cifrado sin puertas traseras podrían acabar prohibidos en toda la UE."
-        },
-        {
-          "host": "Jessica",
-          "text": "Eso es lo que dicen ellos, sí. Y hay una tercera idea interesante: que los mismos países que reprimen la privacidad quieren que la gente use productos desarrollados dentro de sus fronteras y bajo su control, sobre todo los muy financiados por los Estados y la UE."
-        },
-        {
-          "host": "Chris",
-          "text": "Una cita de GrapheneOS, traducida del inglés, dice: \"Estos productos tienen, en la práctica, puertas traseras, al no ofrecer los parches y protecciones estándar de privacidad y seguridad mientras engañan a los usuarios.\""
-        },
-        {
-          "host": "Jessica",
-          "text": "Piense uno lo que piense de las acusaciones, lo que muestran es hasta qué punto las preocupaciones de los usuarios de Monero coinciden ahora con las de la comunidad de privacidad en general."
-        },
-        {
-          "host": "Chris",
-          "text": "Y hablando de eso, tenemos una cita más, de monero.observer, también traducida. Dice: \"Asegúrate de activar las advertencias de precio en moneda fiat en los ajustes y de comprobar la tarifa efectiva antes de aceptar cotizaciones. Espero que esto evite que otra persona caiga en la trampa.\""
-        },
-        {
-          "host": "Jessica",
-          "text": "Y esa advertencia viene de un caso concreto de la comunidad. Un usuario de Reddit avisa de que un maker de eigenwallet, cheapestxmr punto silksky punto com, anuncia una comisión mínima, del cero coma cero uno por ciento, pero cobra un recargo de aproximadamente el cincuenta por ciento."
-        },
-        {
-          "host": "Chris",
-          "text": "Uf, del cero coma cero uno al cincuenta. [sighs] Que no te cuenten lo de la comisión sin mirar la tarifa efectiva."
-        },
-        {
-          "host": "Jessica",
-          "text": "Eso. Y ya que hablamos de eigenwallet: un desarrollador principal dijo en un AMA en Reddit, o sea una sesión de preguntas y respuestas, que una extensión de navegador con OrangeFren para hacer intercambios atómicos de Bitcoin a Monero desde Tor Browser no tiene fecha de lanzamiento."
-        },
-        {
-          "host": "Chris",
-          "text": "Pero dijo que, de forma realista, faltan una o dos semanas."
-        },
-        {
-          "host": "Jessica",
-          "text": "Bien. Pasamos al desarrollo, que esta semana viene cargado. Haveno 1.12.0 trae una oleada de correcciones de seguridad."
-        },
-        {
-          "host": "Chris",
-          "text": "Haveno es el exchange descentralizado. Ahora verifica las ofertas, los árbitros y los mensajes de soporte de otros nodos antes de usarlos, e ignora los datos mal formados de los pares."
-        },
-        {
-          "host": "Jessica",
-          "text": "Además protege el proceso de la cartera local con una contraseña aleatoria y limita la frecuencia de las solicitudes de datos de red. Y un cambio práctico: el depósito de seguridad por defecto de las nuevas ofertas pasa a ser del quince por ciento."
-        },
-        {
-          "host": "Chris",
-          "text": "Siguiente: el Research Lab, el laboratorio de investigación de Monero, señala un problema de exposición del remitente en transacciones de dos salidas."
-        },
-        {
-          "host": "Jessica",
-          "text": "Sí. Un punto de debate para la reunión de investigación del veintiocho de octubre dice que las herramientas get_tx_key y check_tx_key pueden desvelar la identidad del remitente en una transacción de dos salidas. La misma agenda cubría la lista de tareas de FCMP++ y un resumen de las auditorías."
-        },
-        {
-          "host": "Chris",
-          "text": "Y ese tema vuelve: la próxima reunión es el cuatro de noviembre a las diecisiete horas UTC, en IRC, en Libera, y en Matrix, con el estado de FCMP++ y este problema de get_tx_key y check_tx_key en el orden del día."
-        },
-        {
-          "host": "Jessica",
-          "text": "Si quieres entender qué significa que un remitente quede expuesto, la página de Monero ELI5, en xmr punto fan barra eli5, explica la privacidad de Monero en palabras sencillas."
-        },
-        {
-          "host": "Chris",
-          "text": "Buen apunte. Más desarrollo: woodser lanzó monero-java versión cero coma ocho coma sesenta y cuatro y monero-ts versión cero coma once coma veintiuno, ambos actualizados a la última versión de Monero."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y ambos sincronizan el acceso a las notas de transacción con las escrituras en la caché de la cartera. Y hay una nota curiosa: Pirate Chain publicó un análisis posterior sobre su exploit de falsificación."
-        },
-        {
-          "host": "Chris",
-          "text": "No es noticia de Monero, pero Rucknium lo compartió con la comunidad de investigación de Monero. Dice que la transacción falsificada habría sido rechazada por el mempool, pero fue aceptada en un bloque que minó el propio atacante."
-        },
-        {
-          "host": "Jessica",
-          "text": "[curious] O sea, que el atacante necesitaba minar su propio bloque. Interesante detalle. Pasamos a las carteras y servicios."
-        },
-        {
-          "host": "Chris",
-          "text": "Cake Wallet y Monero punto com reciben la versión seis coma cinco coma dos. Incluye correcciones como abrir los enlaces externos fuera de la app para que aparezca el bloqueo con PIN, y la corrección de un índice fuera de rango en el personalizador de tarjetas."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y ese mismo día salió una nueva versión de Monero punto com. Luego, Bitcart cero coma once coma cero coma cero, el procesador de pagos autoalojado, que reconstruyó desde cero su checkout."
-        },
-        {
-          "host": "Chris",
-          "text": "Con pagos mediante carteras del navegador, una página de recibo y terminales de pago. Y también incorpora la estimación de las comisiones de la red Monero."
-        },
-        {
-          "host": "Jessica",
-          "text": "Ahora, la parte menos agradable. Chainalysis reveló la exposición de algunos datos de clientes. Dijo que se accedió a nombres, correos, identificadores de usuario y etiquetas de cargo de organización de los usuarios de su plataforma en un incidente de ciberseguridad."
-        },
-        {
-          "host": "Chris",
-          "text": "Asegura que por ahora no hay pruebas de acceso no autorizado al contenido de las investigaciones."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y en la comunidad, se filtraron datos del servicio de intercambio Wagyu. Un grupo que dice ser la banda de ransomware WhiteArmor asegura tener treinta y ocho mil seiscientas veintiocho órdenes y diez mil ciento treinta y nueve direcciones IP, incluidas carteras, sesiones y huellas digitales."
-        },
-        {
-          "host": "Chris",
-          "text": "Se publicó como aviso de utilidad pública, pero la afirmación proviene del propio grupo, así que con cautela."
-        },
-        {
-          "host": "Jessica",
-          "text": "Más hardware. Trezor alerta de un implante en unidades vendidas por CryptoBilis. A quien haya comprado un Trezor a ese revendedor desde marzo de dos mil veintiséis y guarde fondos en él se le indica que los traslade a una cartera nueva con una semilla nueva."
-        },
-        {
-          "host": "Chris",
-          "text": "Es una advertencia general de seguridad cripto, no específica de Monero. Y Keystone destruirá dieciocho mil ochocientas treinta y cinco carteras de hardware comprometidas."
-        },
-        {
-          "host": "Jessica",
-          "text": "Fue tras una brecha que expuso los datos de envío de al menos veinticinco mil novecientos sesenta y cuatro clientes. La empresa pidió disculpas y dijo que los dispositivos cuya clave de autenticación quedó comprometida serán destruidos. También redujo el plazo de conservación de datos de clientes de ciento ochenta a noventa días."
-        },
-        {
-          "host": "Chris",
-          "text": "Bueno, y fuera de Monero. Llega Tor Browser dieciséis punto cero, la primera versión estable basada en Firefox ESR ciento cincuenta y tres."
-        },
-        {
-          "host": "Jessica",
-          "text": "Llegó tras una auditoría de más de doscientos setenta problemas de Firefox que podrían afectar a la privacidad y la seguridad. Y le sigue Tails siete punto dieciséis, que se actualiza a ella y además corrige el soporte de OpenPGP en Thunderbird."
-        },
-        {
-          "host": "Chris",
-          "text": "Quad9 abandonará Francia: el resolvedor DNS sin ánimo de lucro dice que dejará de dar servicio a los usuarios allí el veinticuatro de noviembre, después de que un tribunal le ordenara bloquear sitios acusados de infringir los derechos de autor de una emisora deportiva."
-        },
-        {
-          "host": "Jessica",
-          "text": "La EFF lo considera un resultado previsible de obligar a los proveedores de infraestructura a hacer de policía del copyright. Y Apple añade en iOS veintisiete punto dos una forma de excluir apps de la IA de Siri, en respuesta a la campaña Encrypt It Already de la EFF."
-        },
-        {
-          "host": "Chris",
-          "text": "La preocupación era que las funciones de IA pudieran enviar fuera del dispositivo el contenido de las apps de mensajería segura. Y Google ya puede usar datos de Gmail para dar forma a los anuncios de búsqueda, según explica Proton."
-        },
-        {
-          "host": "Jessica",
-          "text": "Proton describe cómo desconectar Personal Intelligence, pero añade que hacerlo todavía no basta para proteger del todo tus datos. Y por último, un análisis compartido en Reddit sostiene que el proyecto de ley C-22 de Canadá amenaza el cifrado y la privacidad de los usuarios."
-        },
-        {
-          "host": "Chris",
-          "text": "Y otro hilo insta a contactar con los eurodiputados contra el Digital Omnibus de la UE, que, según dice, debilita la protección de datos. Lo que conecta, otra vez, con el tema de GrapheneOS."
-        },
-        {
-          "host": "Jessica",
-          "text": "Cerramos con la red. El hashrate semanal fue de unos seis coma seis ocho gigahashes por segundo, frente a seis coma cinco la semana anterior."
-        },
-        {
-          "host": "Chris",
-          "text": "Las transacciones por día bajaron a veintisiete mil seiscientas ochenta y siete, desde veintinueve mil doscientas ochenta y dos. Y la comisión media fue de cero coma cero cero cero doscientos cuarenta y cuatro monero, casi igual que antes."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y hasta aquí el episodio. Los enlaces de todo lo que hemos comentado están en xmr punto fan barra es barra news."
-        },
-        {
-          "host": "Chris",
-          "text": "Gracias por escucharnos, y nos vemos la semana que viene."
-        }
-      ]
     }
   }
 }
