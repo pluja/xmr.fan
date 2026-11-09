@@ -1,0 +1,1729 @@
+{
+  "recap": "The core repo had a busy merge week, led by the FCMP++ tree-building code, plus a long list of wallet, node and privacy fixes. Wallet releases kept coming (Feather, Skylight, Monero One, Cake Wallet), and an outfit called XMR20 mined its own block to tuck a music video into the chain. Outside Monero, Motorola announced official GrapheneOS support and Linux users got fresh security warnings.",
+  "lead": {
+    "src": "github.com/monero-project/monero",
+    "url": "https://github.com/monero-project/monero/pull/11425",
+    "h": "FCMP++ tree-building code lands in the Monero core repo",
+    "p": "The core repo merged the code that builds the FCMP++ tree at consensus, plus a database migration that catches the tree up to the chain tip. It also covers extending and trimming the tree as blocks are added or removed."
+  },
+  "art": {
+    "file": "/news-art/2026-11-02.webp",
+    "alt": "A small pixel-art tree growing from a stack of orange blocks on a table.",
+    "prompt": "A tiny pixel tree growing out of a stack of orange blocks on a table."
+  },
+  "feature": {
+    "src": "monero.observer",
+    "url": "https://monero.observer/xmr20-spends-block-reward-to-inject-598kb-music-video-monero-blockchain/",
+    "h": "A 21-second music video now sits inside a Monero block",
+    "dek": "The XMR20 project says it mined its own block to carry a transaction of almost 599 KB, the largest recorded on Monero.",
+    "body": [
+      "According to Monero Observer, XMR20 seemingly embedded a 21-second MP4 music video in the blockchain this week. The project says it mined block 3,799,494 itself, and that 598,945 bytes of the roughly 599,000-byte transaction sit in the tx_extra field, a free-form data area in each transaction.",
+      "The catch is that nodes only relay up to 1,060 bytes of tx_extra. The project says its payload was 565 times that limit and could never have passed through the mempool, the waiting room where unconfirmed transactions sit. So it put the data in the block's own coinbase transaction, the one that pays the block reward, and mined the block directly. Monero Observer's headline puts the cost at about 0.6 XMR of block reward.",
+      "XMR20 says its pool has stopped mining for now and that the block stays."
+    ]
+  },
+  "quotes": [
+    {
+      "text": "The pool has stopped mining for now; the block stays.",
+      "who": "monero.observer",
+      "url": "https://monero.observer/xmr20-spends-block-reward-to-inject-598kb-music-video-monero-blockchain/",
+      "src": "monero.observer"
+    },
+    {
+      "text": "The hard drive in question was dropped accidentally and is no longer operational.",
+      "who": "reddit.com/r/privacy",
+      "url": "https://www.reddit.com/r/privacy/comments/1xnavww/hard_drive_containing_emails_about_us_postal/",
+      "src": "reddit.com/r/privacy"
+    },
+    {
+      "text": "There's an ongoing state sponsored disinformation campaign against GrapheneOS in multiple western European countries.",
+      "who": "@GrapheneOS",
+      "url": "https://x.com/GrapheneOS/status/2119519227262505451",
+      "src": "x.com/GrapheneOS"
+    }
+  ],
+  "upcoming": [
+    {
+      "src": "monero.observer",
+      "url": "https://monero.observer/monero-research-lab-meeting-11-november-2026/",
+      "date": "2026-11-11",
+      "time": "17:00 UTC",
+      "what": "Monero Research Lab meeting on IRC (Libera) and Matrix; the unconfirmed agenda includes FCMP++ audits and the get_tx_key sender-exposure issue."
+    }
+  ],
+  "sections": {
+    "dev": [
+      {
+        "src": "github.com/monero-project/monero",
+        "url": "https://github.com/monero-project/monero/pulls?q=is%3Apr%20is%3Amerged%20merged%3A2026-11-02..2026-11-08",
+        "h": "31 pull requests merged in the core repo this week",
+        "p": "Beyond the FCMP++ tree work, the batch touches wallet, p2p, RPC and build fixes, plus tidier help text and new Rust build notes in the README. It also includes a fix for a missing double-spend flag in the transaction pool and a correction to the DNS record type used for IPv6 lookups.",
+        "more": [
+          {
+            "src": "github.com/monero-project/monero",
+            "url": "https://github.com/monero-project/monero/pull/11630"
+          },
+          {
+            "src": "github.com/monero-project/monero",
+            "url": "https://github.com/monero-project/monero/pull/11638"
+          }
+        ]
+      },
+      {
+        "src": "github.com/monero-project/monero",
+        "url": "https://github.com/monero-project/monero/pull/11654",
+        "h": "Transaction proofs for old v1 payments work again",
+        "p": "get_tx_proof and check_tx_proof fetched pruned transactions, and for pruned v1 transactions the hash check rejected them, so proofs for historical v1 payments failed. The fix retries without pruning only for v1 and verifies the full transaction hash."
+      },
+      {
+        "src": "github.com/monero-project/monero",
+        "url": "https://github.com/monero-project/monero/pull/11644",
+        "h": "monerod's manual update checks stop leaking DNS around the proxy",
+        "p": "With --proxy set and DNS leaks not allowed, automatic update checks were off, but manual check, download and update requests could still trigger a DNS TXT lookup outside the proxy. They now follow the same policy."
+      },
+      {
+        "src": "github.com/monero-project/monero",
+        "url": "https://github.com/monero-project/monero/pull/11639",
+        "h": "Node operators get a restricted-RPC option and a cleaner ban list",
+        "p": "A new --rpc-restricted-no-login flag lets you publish a restricted RPC port without credentials while the full port stays password-protected. Separately, banned hosts are now dropped from the peer lists loaded at startup, because the ban list was being applied before them.",
+        "more": [
+          {
+            "src": "github.com/monero-project/monero",
+            "url": "https://github.com/monero-project/monero/pull/11651"
+          }
+        ]
+      },
+      {
+        "src": "github.com/monero-project/monero",
+        "url": "https://github.com/monero-project/monero/pull/11587",
+        "h": "Wallet fixes: seed arguments, legacy keys and failed recoveries",
+        "p": "Simplewallet now clears --seed and --electrum-seed values after parsing, though seeds can still show up in process listings and shell history. Other fixes stop old key files being encrypted twice, which made the rewritten file unreadable, and stop a failed createWalletFromKeys call from replacing an existing wallet's cache.",
+        "more": [
+          {
+            "src": "github.com/monero-project/monero",
+            "url": "https://github.com/monero-project/monero/pull/11558"
+          },
+          {
+            "src": "github.com/monero-project/monero",
+            "url": "https://github.com/monero-project/monero/pull/11620"
+          }
+        ]
+      }
+    ],
+    "eco": [
+      {
+        "src": "monero.observer",
+        "url": "https://monero.observer/tobtoht-releases-feather-wallet-v2.9.1/",
+        "h": "Feather Wallet 2.9.1 deprecates its built-in Tor daemon and trims features",
+        "p": "Users who can't connect to a node are told to update, install Tor system-wide, point Feather at Tor Browser's port 9150, or turn Tor off. The release also drops the Fiat column, the Mining and Bounties plugins and ARM32 Linux support, and the Windows build is no longer codesigned.",
+        "more": [
+          {
+            "src": "featherwallet.org",
+            "url": "https://featherwallet.org/changelog#2.9.1 changelog"
+          }
+        ]
+      },
+      {
+        "src": "monero.observer",
+        "url": "https://monero.observer/magic-grants-releases-skylight-wallet-v2.2.0/",
+        "h": "Skylight Wallet 2.2.0 and Monero One 1.1.0 ship updates",
+        "p": "Skylight Wallet from MAGIC Grants now supports hardware security keys and quantum-resistant backups, with hardened memory handling and newer Tor. Monero One for iPhone and Android can now send XMR as a link and send to OpenAlias names, and seed entry is one box per word with a checksum check.",
+        "more": [
+          {
+            "src": "monero.observer",
+            "url": "https://monero.observer/moneroone/"
+          }
+        ]
+      },
+      {
+        "src": "monero.observer",
+        "url": "https://monero.observer/cake-wallet-v6.5.3-pre-release-available-testing/",
+        "h": "Cake Wallet 6.5.3 pre-release opens for public beta testing",
+        "p": "The release adds Zcash on Ledger, BitBox02 Nova on iOS, faster launch and switching, and stronger 2FA and backup protections. The notes also say it prepares privacy tools for the next network upgrade."
+      },
+      {
+        "src": "monero.observer",
+        "url": "https://monero.observer/edge-6/",
+        "h": "Edge adds Stealth Routing, powered by Houdini Swap",
+        "p": "The feature aims to make the on-chain link between a payment's start and end harder to follow, and XMR is supported when a live route is available. Edge notes that individual transactions remain visible and that it does not guarantee anonymity."
+      },
+      {
+        "src": "monero.observer",
+        "url": "https://monero.observer/bitcart-v0.11.1.0-released-new-template-renderer/",
+        "h": "Bitcart 0.11.1.0 fixes Monero parsing of transactions with unusual extra data",
+        "p": "The payment processor also gets a new isolated template renderer written in Rust. Meanwhile woodser released monero-cpp v0.9.12, monero-java v0.8.65 and monero-ts v0.11.22, with monero-cpp moving to Monero 0.18.5.4.",
+        "more": [
+          {
+            "src": "monero.observer",
+            "url": "https://monero.observer/woodser-releases-monero-java-v0.8.65-monero-ts-v0.11.22-monero-cpp-v0.9.12/"
+          }
+        ]
+      }
+    ],
+    "comm": [
+      {
+        "src": "monero.observer",
+        "url": "https://monero.observer/selsta-posts-monero-dev-report-october-2026/",
+        "h": "CCS reports: selsta's October update and jpk68's final report",
+        "p": "selsta says v0.18.5.3 and v0.18.5.4 are out, v0.19.0.0 work continues, the GUI's Qt6 transition is finished and a dozen more HackerOne reports were triaged. jpk68's final report on their full-time CCS proposal lists the merged readline/linenoise patch and work on freeze/thaw methods for the wallet API.",
+        "more": [
+          {
+            "src": "monero.observer",
+            "url": "https://monero.observer/jpk68-completes-ccs-monero-dev-work-full-time/"
+          }
+        ]
+      },
+      {
+        "src": "monero.observer",
+        "url": "https://monero.observer/monero-project-enrolls-into-anthropic-oss-scanner-service/",
+        "h": "Monero joins Anthropic's OSS Scanner",
+        "p": "Anthropic merged plowsof's pull request enrolling Monero in its opt-in vulnerability-finding service for open-source software, after about two weeks of silence. The PR says it was opened with the core maintainers' permission."
+      },
+      {
+        "src": "monero.observer",
+        "url": "https://monero.observer/sunchakr-28/",
+        "h": "Monero Talk #400 hosts THORChain's Chad Barraford",
+        "p": "The episode with host Douglas Tuman covers the network's resilience, cross-chain liquidity and the anticipated Monero integration."
+      },
+      {
+        "src": "monero.observer",
+        "url": "https://monero.observer/debian-ubuntu-derivative-linux-distros-vulnerable-mitm-atacks-apt-bug/",
+        "h": "PSA: APT and Xen bugs affect Debian, Ubuntu and Qubes users",
+        "p": "A reported APT bug lets a remote attacker bypass package verification using redirects and transient HTTP errors, and since .debs install as root the stakes are high. Qubes also warned that Xen versions above 4.6 are vulnerable to a malicious guest reading and writing other domains' memory, and says to keep updating normally.",
+        "more": [
+          {
+            "src": "monero.observer",
+            "url": "https://monero.observer/anon-32/"
+          }
+        ]
+      }
+    ],
+    "privacy": [
+      {
+        "src": "grapheneos.social",
+        "url": "https://grapheneos.social/@GrapheneOS/117570868302057436",
+        "h": "Motorola will officially support GrapheneOS, starting with the Signature 27",
+        "p": "GrapheneOS says Motorola has engineers helping port it to their devices and implement the required security features, and that the new flagship will be the first supported Motorola phone. More devices are promised.",
+        "more": [
+          {
+            "src": "grapheneos.social",
+            "url": "https://grapheneos.social/@GrapheneOS/117570913006181046"
+          }
+        ]
+      },
+      {
+        "src": "therecord.media",
+        "url": "https://therecord.media/digicert-certificate-authority-reports-data-breach",
+        "h": "DigiCert reports a breach involving business customer information",
+        "p": "The certificate authority says an internal business system was externally accessible over the summer when that was not intended, and someone created an unauthorized account."
+      },
+      {
+        "src": "eff.org",
+        "url": "https://www.eff.org/deeplinks/2026/11/were-asking-ninth-circuit-hold-reverse-location-warrants-categorically",
+        "h": "EFF asks the Ninth Circuit to treat tower dump warrants as unconstitutional",
+        "p": "With the ACLU, EFF filed an amicus brief in United States v. Spurlock, a case about warrants that force cell providers to hand over location data on every phone in an area. It is the first such appeals case since this summer's Supreme Court ruling on geofence warrants."
+      },
+      {
+        "src": "blog.torproject.org",
+        "url": "https://blog.torproject.org/arti_2_8_0_released/",
+        "h": "Arti 2.8.0 moves Tor's Rust rewrite closer to running relays",
+        "p": "Most of the work targets using Arti as a relay and directory authority, including computing the consensus from votes, fetching descriptors and bandwidth rate-limiting. The release also includes cleanups to the Tor specification."
+      }
+    ]
+  },
+  "no": 4,
+  "week": "2026-11-02",
+  "draft": true,
+  "sample": false,
+  "network": {
+    "hash": 6.78,
+    "fee": 0.000239,
+    "txs": 29605,
+    "height": 3802377,
+    "prev": {
+      "hash": 6.68,
+      "fee": 0.000244,
+      "txs": 27687
+    },
+    "history": []
+  },
+  "market": {
+    "open": 599.29,
+    "close": 595.7,
+    "high": 642.81,
+    "low": 595.7,
+    "change": -0.6,
+    "volume": 135678487,
+    "volumeChange": 6.1,
+    "mcap": 11216124016,
+    "btcChange": -5,
+    "series": [
+      600.94,
+      607.49,
+      608.24,
+      603.73,
+      600.64,
+      605.97,
+      604.83,
+      608.14,
+      624.54,
+      622.01,
+      626.46,
+      631.85,
+      628.96,
+      642.81,
+      637.56,
+      642.36,
+      634.51,
+      639.6,
+      636.57,
+      636.18,
+      635.91,
+      627.42,
+      607.82,
+      618.23,
+      618.92,
+      619.08,
+      616.79,
+      619.87,
+      622.71,
+      616.65,
+      608.34,
+      612.5,
+      613.72,
+      614.18,
+      609.41,
+      599.26,
+      596.68,
+      597.37,
+      601.04,
+      606.07,
+      605.91,
+      595.7
+    ],
+    "month": {
+      "change": 14.7,
+      "high": 650.19,
+      "low": 515.23
+    },
+    "analysis": {
+      "summary": "The gains came early: price rose through Wednesday, then slipped on four of the last five days and finished at the week's low. The week still sits within the past month's upward trend of about 14.7%.",
+      "drivers": [
+        {
+          "src": "x.com/X_Four_iv",
+          "url": "https://x.com/X_Four_iv/status/2117725120529883636",
+          "text": "According to @X_Four_iv on Nov 3, XMR had been squeezing between descending resistance and rising support, and the account was watching for a breakout; the price rose 4.3% that day."
+        }
+      ],
+      "watch": []
+    }
+  },
+  "podcast": {
+    "file": "/podcast/2026-11-02.mp3",
+    "duration": 863,
+    "bytes": 6902221,
+    "hosts": [
+      "Chris",
+      "Jessica"
+    ],
+    "transcript": [
+      {
+        "host": "Chris",
+        "text": "Hello and welcome to The xmr.fan Times. I'm Chris, this is issue number four, and we're covering the week of November second."
+      },
+      {
+        "host": "Jessica",
+        "text": "And I'm Jessica. This week we've got a music video that now lives inside a Monero block, which is a sentence I never expected to say, plus more FCMP++ progress, a pile of wallet news, and the price."
+      },
+      {
+        "host": "Chris",
+        "text": "Also a date for your calendar, which we'll get to. But let's start with the lead, because it's a continuing story. Last week we talked about Boog900's FCMP++ work for Cuprate hitting its funding goal."
+      },
+      {
+        "host": "Jessica",
+        "text": "Right, and this week the core repo merged the code that builds the FCMP++ tree at consensus. It also merged a database migration that catches the tree up to the chain tip."
+      },
+      {
+        "host": "Chris",
+        "text": "Okay, so in plain words, the tree has to exist and stay current as the chain grows. What else is in there?"
+      },
+      {
+        "host": "Jessica",
+        "text": "The merge also covers extending and trimming the tree as blocks are added or removed. So if the chain reorganizes, the tree follows along in both directions."
+      },
+      {
+        "host": "Chris",
+        "text": "That's the unglamorous plumbing that has to be right. And speaking of FCMP++, if you want the whole story from the beginning, there's a Monero timeline at xmr.fan slash timeline. It goes from CryptoNote to FCMP++, step by step."
+      },
+      {
+        "host": "Jessica",
+        "text": "Nice. And the coming-up item connects to it. On November eleventh at seventeen hundred UTC, there's a Monero Research Lab meeting on IRC on Libera, and on Matrix."
+      },
+      {
+        "host": "Chris",
+        "text": "The agenda isn't confirmed, but it may include FCMP++ audits and the get_tx_key sender-exposure issue. We'll see what actually gets discussed."
+      },
+      {
+        "host": "Jessica",
+        "text": "Okay, price time. Monero opened the week around five hundred ninety-nine dollars and closed around five hundred ninety-six. That's down point six percent."
+      },
+      {
+        "host": "Chris",
+        "text": "And the range was interesting. The low was five ninety-five point seven, which is where it closed, and the high was about six hundred forty-three."
+      },
+      {
+        "host": "Jessica",
+        "text": "So the gains came early. Price rose through Wednesday, then slipped on four of the last five days and finished at the week's low."
+      },
+      {
+        "host": "Chris",
+        "text": "[curious] But Bitcoin was down five percent over the same week, so Monero held up better than that."
+      },
+      {
+        "host": "Jessica",
+        "text": "Yes. And zoom out, and the week still sits inside the past month's upward trend, which is about fourteen point seven percent."
+      },
+      {
+        "host": "Chris",
+        "text": "There was also a chart comment. According to X_Four_iv on November third, Monero had been squeezing between descending resistance and rising support, and the account was watching for a breakout."
+      },
+      {
+        "host": "Jessica",
+        "text": "And the price rose four point three percent that day. That's just reporting what the post said, not a forecast from us."
+      },
+      {
+        "host": "Chris",
+        "text": "Exactly. Okay, the feature. Jessica, you've been waiting to tell this one."
+      },
+      {
+        "host": "Jessica",
+        "text": "[laughs] I have. According to Monero Observer, a project called XMR20 seemingly embedded a twenty-one-second MP4 music video in the blockchain this week."
+      },
+      {
+        "host": "Chris",
+        "text": "A music video. In a block. How big are we talking?"
+      },
+      {
+        "host": "Jessica",
+        "text": "The project says it mined block three million, seven hundred ninety-nine thousand, four hundred ninety-four itself, to carry a transaction of almost six hundred kilobytes. That's the largest recorded on Monero."
+      },
+      {
+        "host": "Chris",
+        "text": "Wait, I thought Monero transactions couldn't carry that much extra data. Don't they have a limit?"
+      },
+      {
+        "host": "Jessica",
+        "text": "Good question, and that's the catch. Of the roughly five hundred ninety-nine thousand bytes, five hundred ninety-eight thousand, nine hundred forty-five sit in a field called tx_extra, a free-form data area in each transaction."
+      },
+      {
+        "host": "Chris",
+        "text": "Okay."
+      },
+      {
+        "host": "Jessica",
+        "text": "But nodes only relay up to one thousand sixty bytes of tx_extra. The project says its payload was five hundred sixty-five times that limit."
+      },
+      {
+        "host": "Chris",
+        "text": "So it could never have gone through the mempool. That's the waiting room where unconfirmed transactions sit."
+      },
+      {
+        "host": "Jessica",
+        "text": "Right. So they skipped the waiting room. They put the data in the block's own coinbase transaction, the one that pays the block reward, and mined the block directly."
+      },
+      {
+        "host": "Chris",
+        "text": "[mischievously] That's a workaround. If the front door is locked, you build your own door."
+      },
+      {
+        "host": "Jessica",
+        "text": "Ha, kind of. And it wasn't free. Monero Observer's headline puts the cost at about six tenths of a monero of block reward."
+      },
+      {
+        "host": "Chris",
+        "text": "And is that the end of it? Are they going to keep doing it?"
+      },
+      {
+        "host": "Jessica",
+        "text": "Per monero.observer, the pool has stopped mining for now. Their words: \"The pool has stopped mining for now; the block stays.\""
+      },
+      {
+        "host": "Chris",
+        "text": "The block stays. Blockchains are not great at forgetting."
+      },
+      {
+        "host": "Jessica",
+        "text": "That's the thing. Okay, we've got a few more quotes from around the web this week. That one was from monero.observer."
+      },
+      {
+        "host": "Chris",
+        "text": "The next is from the subreddit r/privacy, and honestly, I have no context for it in our notes. The line is: \"The hard drive in question was dropped accidentally and is no longer operational.\""
+      },
+      {
+        "host": "Jessica",
+        "text": "[laughs] Well, I'm going to leave that as a mystery. I don't know what the hard drive was, and I'm not going to guess."
+      },
+      {
+        "host": "Chris",
+        "text": "Probably wise. And the third is from the GrapheneOS account, which we'll connect to the privacy news in a bit. They wrote: \"There's an ongoing state sponsored disinformation campaign against GrapheneOS in multiple western European countries.\""
+      },
+      {
+        "host": "Jessica",
+        "text": "That follows from last week, when GrapheneOS accused European governments of a smear campaign. Same thread, still going."
+      },
+      {
+        "host": "Chris",
+        "text": "Okay, on to development. Thirty-one pull requests were merged in the core repo this week. Beyond the FCMP++ tree work, there are wallet, p2p, RPC and build fixes."
+      },
+      {
+        "host": "Jessica",
+        "text": "Plus tidier help text, and new Rust build notes in the README. There's also a fix for a missing double-spend flag in the transaction pool, and a correction to the DNS record type used for IPv6 lookups."
+      },
+      {
+        "host": "Chris",
+        "text": "The double-spend flag one sounds important, but I'll stick to what we know. It was missing, and now it's fixed."
+      },
+      {
+        "host": "Jessica",
+        "text": "Yes. Here's one that's practical. Transaction proofs for old version one payments work again."
+      },
+      {
+        "host": "Chris",
+        "text": "Walk me through that. What broke?"
+      },
+      {
+        "host": "Jessica",
+        "text": "The get_tx_proof and check_tx_proof commands fetched pruned transactions. For pruned version one transactions, the hash check rejected them, so proofs for historical version one payments failed."
+      },
+      {
+        "host": "Chris",
+        "text": "And the fix?"
+      },
+      {
+        "host": "Jessica",
+        "text": "It retries without pruning, only for version one, and verifies the full transaction hash."
+      },
+      {
+        "host": "Chris",
+        "text": "And if you want to confirm a payment with a key or proof, there's a tool for that, at xmr.fan slash verify."
+      },
+      {
+        "host": "Jessica",
+        "text": "Next up is the Monero daemon, monerod, which is the program that runs a node. Its manual update checks were leaking DNS around the proxy."
+      },
+      {
+        "host": "Chris",
+        "text": "Hm, so if you set a proxy, you'd expect everything to go through it."
+      },
+      {
+        "host": "Jessica",
+        "text": "Exactly. With the proxy flag set and DNS leaks not allowed, automatic update checks were already off. But manual check, download and update requests could still trigger a DNS TXT lookup outside the proxy. Now they follow the same policy."
+      },
+      {
+        "host": "Chris",
+        "text": "[sighs] Those small leaks are the ones people miss. Good catch. Also for node operators, there's a new flag called rpc-restricted-no-login."
+      },
+      {
+        "host": "Jessica",
+        "text": "That lets you publish a restricted RPC port without credentials, while the full port stays password-protected. And separately, banned hosts are now dropped from the peer lists loaded at startup."
+      },
+      {
+        "host": "Chris",
+        "text": "Because the ban list was being applied before those peer lists loaded. So the banned hosts crept back in."
+      },
+      {
+        "host": "Jessica",
+        "text": "Right. And a few wallet fixes. Simplewallet now clears the seed and electrum-seed values after parsing, though seeds can still show up in process listings and shell history."
+      },
+      {
+        "host": "Chris",
+        "text": "So it's an improvement, but not a cure. Don't type your seed on the command line."
+      },
+      {
+        "host": "Jessica",
+        "text": "Right. Other fixes stop old key files being encrypted twice, which made the rewritten file unreadable. And a failed createWalletFromKeys call no longer replaces an existing wallet's cache."
+      },
+      {
+        "host": "Chris",
+        "text": "Okay, ecosystem. Feather Wallet two point nine point one deprecates its built-in Tor daemon and trims some features."
+      },
+      {
+        "host": "Jessica",
+        "text": "[curious] Trims how?"
+      },
+      {
+        "host": "Chris",
+        "text": "It drops the Fiat column, the Mining and Bounties plugins, and ARM32 Linux support. And the Windows build is no longer codesigned."
+      },
+      {
+        "host": "Jessica",
+        "text": "And if you can't connect to a node?"
+      },
+      {
+        "host": "Chris",
+        "text": "You're told to update, install Tor system-wide, point Feather at Tor Browser's port nine one five zero, or turn Tor off."
+      },
+      {
+        "host": "Jessica",
+        "text": "Got it. Two more wallet updates. Skylight Wallet two point two point zero, from MAGIC Grants, now supports hardware security keys and quantum-resistant backups, with hardened memory handling and newer Tor."
+      },
+      {
+        "host": "Chris",
+        "text": "And Monero One one point one point zero, for iPhone and Android. It can now send Monero as a link and send to OpenAlias names."
+      },
+      {
+        "host": "Jessica",
+        "text": "Seed entry changed too. It's one box per word, with a checksum check."
+      },
+      {
+        "host": "Chris",
+        "text": "Cake Wallet six point five point three is in pre-release, open for public beta testing. It adds Zcash on Ledger, BitBox02 Nova on iOS, faster launch and switching, and stronger two-factor and backup protections."
+      },
+      {
+        "host": "Jessica",
+        "text": "And the notes say it prepares privacy tools for the next network upgrade."
+      },
+      {
+        "host": "Chris",
+        "text": "Then there's Edge, which added Stealth Routing, powered by Houdini Swap. It aims to make the on-chain link between a payment's start and end harder to follow, and Monero is supported when a live route is available."
+      },
+      {
+        "host": "Jessica",
+        "text": "But Edge notes that individual transactions remain visible, and that it does not guarantee anonymity. They're upfront about that."
+      },
+      {
+        "host": "Chris",
+        "text": "Developer tools too. Bitcart zero point eleven point one point zero fixes Monero parsing of transactions with unusual extra data. The payment processor also gets a new isolated template renderer written in Rust."
+      },
+      {
+        "host": "Jessica",
+        "text": "And woodser released monero-cpp zero point nine point twelve, monero-java zero point eight point sixty-five, and monero-ts zero point eleven point twenty-two. The C++ one moves to Monero zero point eighteen point five point four."
+      },
+      {
+        "host": "Chris",
+        "text": "Now community. selsta posted the October update for the CCS, the Community Crowdfunding System."
+      },
+      {
+        "host": "Jessica",
+        "text": "Versions zero point eighteen point five point three and five point four are out, and work continues on zero point nineteen point zero point zero. The GUI's Qt6 transition is finished, and a dozen more HackerOne reports were triaged."
+      },
+      {
+        "host": "Chris",
+        "text": "And jpk68 filed a final report on their full-time CCS proposal. It lists the merged readline and linenoise patch, and work on freeze and thaw methods for the wallet API."
+      },
+      {
+        "host": "Jessica",
+        "text": "That's the full-time development that hit its goal last week. So that's the story coming full circle."
+      },
+      {
+        "host": "Chris",
+        "text": "Here's a surprising one. Monero joins Anthropic's OSS Scanner."
+      },
+      {
+        "host": "Jessica",
+        "text": "[curious] That's the opt-in vulnerability-finding service for open-source software, right?"
+      },
+      {
+        "host": "Chris",
+        "text": "Yes. Anthropic merged plowsof's pull request enrolling Monero, after about two weeks of silence. The PR says it was opened with the core maintainers' permission."
+      },
+      {
+        "host": "Jessica",
+        "text": "Also, Monero Talk number four hundred hosts THORChain's Chad Barraford, with host Douglas Tuman. They cover the network's resilience, cross-chain liquidity and the anticipated Monero integration."
+      },
+      {
+        "host": "Chris",
+        "text": "Number four hundred. That's a lot of episodes."
+      },
+      {
+        "host": "Jessica",
+        "text": "It is. And a public service announcement for Debian, Ubuntu and Qubes users. A reported APT bug lets a remote attacker bypass package verification using redirects and transient HTTP errors."
+      },
+      {
+        "host": "Chris",
+        "text": "And since .deb packages install as root, the stakes are high. Qubes also warned that Xen versions above four point six are vulnerable to a malicious guest reading and writing other domains' memory."
+      },
+      {
+        "host": "Jessica",
+        "text": "Qubes says to keep updating normally."
+      },
+      {
+        "host": "Chris",
+        "text": "Okay, privacy beyond Monero. Motorola will officially support GrapheneOS, starting with the Signature 27."
+      },
+      {
+        "host": "Jessica",
+        "text": "GrapheneOS says Motorola has engineers helping port it to their devices and implement the required security features. The new flagship will be the first supported Motorola phone, and more devices are promised."
+      },
+      {
+        "host": "Chris",
+        "text": "A good contrast to the disinformation quote earlier. Meanwhile DigiCert reports a breach involving business customer information."
+      },
+      {
+        "host": "Jessica",
+        "text": "The certificate authority says an internal business system was externally accessible over the summer when that was not intended, and someone created an unauthorized account."
+      },
+      {
+        "host": "Chris",
+        "text": "The EFF, with the ACLU, filed an amicus brief asking the Ninth Circuit to treat tower dump warrants as unconstitutional, in United States versus Spurlock."
+      },
+      {
+        "host": "Jessica",
+        "text": "Those are warrants that force cell providers to hand over location data on every phone in an area. It's the first such appeals case since this summer's Supreme Court ruling on geofence warrants."
+      },
+      {
+        "host": "Chris",
+        "text": "And last one. Arti two point eight point zero moves Tor's Rust rewrite closer to running relays."
+      },
+      {
+        "host": "Jessica",
+        "text": "Most of the work targets using Arti as a relay and directory authority. That includes computing the consensus from votes, fetching descriptors and bandwidth rate-limiting, plus cleanups to the Tor specification."
+      },
+      {
+        "host": "Chris",
+        "text": "Now the network numbers, weekly averages. Hashrate was six point seven eight gigahashes per second, up from six point six eight."
+      },
+      {
+        "host": "Jessica",
+        "text": "Transactions per day rose to twenty-nine thousand, six hundred five, from twenty-seven thousand, six hundred eighty-seven. And the average fee was about two hundred thirty-nine millionths of a monero, a touch under last week's two hundred forty-four."
+      },
+      {
+        "host": "Chris",
+        "text": "That's the week. Links for everything are at xmr.fan slash news."
+      },
+      {
+        "host": "Jessica",
+        "text": "Thanks for listening to The xmr.fan Times. We'll see you next week."
+      },
+      {
+        "host": "Chris",
+        "text": "Take care, everyone."
+      }
+    ]
+  },
+  "generated": {
+    "model": "anthropic/claude-sonnet-5.5",
+    "at": "2026-11-09T05:07:28.761Z",
+    "items": 174,
+    "sources": [
+      {
+        "name": "github.com/monero-project/monero",
+        "count": 32
+      },
+      {
+        "name": "x.com/GrapheneOS",
+        "count": 28
+      },
+      {
+        "name": "monero.observer",
+        "count": 23
+      },
+      {
+        "name": "reddit.com/r/privacy",
+        "count": 20
+      },
+      {
+        "name": "404media.co",
+        "count": 15
+      },
+      {
+        "name": "grapheneos.social",
+        "count": 15
+      },
+      {
+        "name": "eff.org",
+        "count": 11
+      },
+      {
+        "name": "proton.me",
+        "count": 5
+      },
+      {
+        "name": "therecord.media",
+        "count": 5
+      },
+      {
+        "name": "github.com/monero-project/meta",
+        "count": 4
+      },
+      {
+        "name": "qubes-os.org",
+        "count": 4
+      },
+      {
+        "name": "grapheneos.org",
+        "count": 3
+      },
+      {
+        "name": "blog.torproject.org",
+        "count": 1
+      },
+      {
+        "name": "featherwallet.org",
+        "count": 1
+      },
+      {
+        "name": "mullvad.net",
+        "count": 1
+      },
+      {
+        "name": "x.com/AntoniaXbt_",
+        "count": 1
+      },
+      {
+        "name": "x.com/dyana1908",
+        "count": 1
+      },
+      {
+        "name": "x.com/freedomdollar5",
+        "count": 1
+      },
+      {
+        "name": "x.com/OrangeFren",
+        "count": 1
+      },
+      {
+        "name": "x.com/thefuzzstone",
+        "count": 1
+      },
+      {
+        "name": "x.com/X_Four_iv",
+        "count": 1
+      }
+    ]
+  },
+  "translations": {
+    "es": {
+      "recap": "El repo principal tuvo una semana de fusiones intensa, encabezada por el código de construcción del árbol de FCMP++, además de una larga lista de correcciones de monedero, nodo y privacidad. Siguieron llegando versiones de monederos (Feather, Skylight, Monero One, Cake Wallet), y un grupo llamado XMR20 minó su propio bloque para colar un videoclip en la cadena. Fuera de Monero, Motorola anunció soporte oficial para GrapheneOS y los usuarios de Linux recibieron nuevas alertas de seguridad.",
+      "lead": {
+        "h": "El código de construcción del árbol de FCMP++ llega al repo principal de Monero",
+        "p": "El repo principal fusionó el código que construye el árbol de FCMP++ a nivel de consenso, junto con una migración de base de datos que pone el árbol al día con la punta de la cadena. También cubre la ampliación y el recorte del árbol a medida que se añaden o eliminan bloques."
+      },
+      "art": {
+        "alt": "Un pequeño árbol en pixel art que crece de una pila de bloques naranjas sobre una mesa."
+      },
+      "feature": {
+        "h": "Un videoclip de 21 segundos ya vive dentro de un bloque de Monero",
+        "dek": "El proyecto XMR20 asegura que minó su propio bloque para incluir una transacción de casi 599 KB, la mayor registrada en Monero.",
+        "body": [
+          "Según Monero Observer, XMR20 aparentemente incrustó esta semana en la cadena de bloques un videoclip MP4 de 21 segundos. El proyecto dice que minó el bloque 3,799,494 por su cuenta y que 598,945 bytes de la transacción, de unos 599,000 bytes, están en el campo tx_extra, un área de datos de formato libre en cada transacción.",
+          "La trampa es que los nodos solo retransmiten hasta 1,060 bytes de tx_extra. El proyecto afirma que su carga era 565 veces ese límite y que nunca habría podido pasar por la mempool, la sala de espera donde aguardan las transacciones sin confirmar. Así que metió los datos en la propia transacción coinbase del bloque, la que paga la recompensa del bloque, y minó el bloque directamente. El titular de Monero Observer calcula el coste en unos 0.6 XMR de recompensa de bloque.",
+          "XMR20 dice que su pool ha dejado de minar por ahora y que el bloque se queda."
+        ]
+      },
+      "quotes": [
+        {
+          "text": "El pool ha dejado de minar por ahora; el bloque se queda."
+        },
+        {
+          "text": "El disco duro en cuestión se cayó accidentalmente y ya no funciona."
+        },
+        {
+          "text": "Hay una campaña de desinformación patrocinada por un Estado contra GrapheneOS en varios países de Europa occidental."
+        }
+      ],
+      "upcoming": [
+        {
+          "what": "Reunión del Monero Research Lab en IRC (Libera) y Matrix; la agenda sin confirmar incluye auditorías de FCMP++ y el problema de exposición del remitente en get_tx_key."
+        }
+      ],
+      "sections": {
+        "dev": [
+          {
+            "h": "31 pull requests fusionadas en el repo principal esta semana",
+            "p": "Además del trabajo en el árbol de FCMP++, el lote toca correcciones de monedero, p2p, RPC y compilación, junto con textos de ayuda más ordenados y nuevas notas de compilación con Rust en el README. También incluye un arreglo para una marca de doble gasto que faltaba en el pool de transacciones y una corrección del tipo de registro DNS usado en las consultas IPv6."
+          },
+          {
+            "h": "Las pruebas de transacción de pagos v1 antiguos vuelven a funcionar",
+            "p": "get_tx_proof y check_tx_proof obtenían transacciones podadas, y en las transacciones v1 podadas la comprobación del hash las rechazaba, así que fallaban las pruebas de pagos v1 históricos. La corrección reintenta sin poda solo para v1 y verifica el hash de la transacción completa."
+          },
+          {
+            "h": "Las comprobaciones manuales de actualización de monerod dejan de filtrar DNS fuera del proxy",
+            "p": "Con --proxy activado y las filtraciones de DNS no permitidas, las comprobaciones automáticas de actualización estaban desactivadas, pero las solicitudes manuales de comprobación, descarga y actualización aún podían provocar una consulta DNS TXT fuera del proxy. Ahora siguen la misma política."
+          },
+          {
+            "h": "Los operadores de nodos reciben una opción de RPC restringido y una lista de bloqueos más limpia",
+            "p": "Un nuevo indicador --rpc-restricted-no-login permite publicar un puerto RPC restringido sin credenciales mientras el puerto completo sigue protegido con contraseña. Por otro lado, los hosts bloqueados ahora se eliminan de las listas de pares cargadas al inicio, porque la lista de bloqueos se aplicaba antes que ellas."
+          },
+          {
+            "h": "Arreglos del monedero: argumentos de semilla, claves heredadas y recuperaciones fallidas",
+            "p": "Simplewallet ahora borra los valores de --seed y --electrum-seed tras analizarlos, aunque las semillas aún pueden aparecer en listados de procesos y en el historial del shell. Otras correcciones evitan que los archivos de claves antiguos se cifren dos veces, lo que dejaba el archivo reescrito ilegible, y evitan que una llamada fallida a createWalletFromKeys reemplace la caché de un monedero existente."
+          }
+        ],
+        "eco": [
+          {
+            "h": "Feather Wallet 2.9.1 deja obsoleto su demonio de Tor integrado y recorta funciones",
+            "p": "A los usuarios que no pueden conectarse a un nodo se les indica que actualicen, instalen Tor en todo el sistema, apunten Feather al puerto 9150 de Tor Browser o desactiven Tor. La versión también elimina la columna Fiat, los plugins de Mining y Bounties y el soporte para Linux ARM32, y la compilación de Windows ya no está firmada con codesign."
+          },
+          {
+            "h": "Skylight Wallet 2.2.0 y Monero One 1.1.0 traen novedades",
+            "p": "Skylight Wallet, de MAGIC Grants, ahora admite llaves de seguridad por hardware y copias de seguridad resistentes a la computación cuántica, con un manejo de memoria reforzado y un Tor más reciente. Monero One para iPhone y Android ahora puede enviar XMR como enlace y enviar a nombres OpenAlias, y la introducción de la semilla es una casilla por palabra con comprobación de suma de verificación."
+          },
+          {
+            "h": "La versión preliminar de Cake Wallet 6.5.3 abre su beta pública",
+            "p": "La versión añade Zcash en Ledger, BitBox02 Nova en iOS, un inicio y cambio de monedero más rápidos, y protecciones más sólidas de 2FA y copias de seguridad. Las notas también dicen que prepara herramientas de privacidad para la próxima actualización de la red."
+          },
+          {
+            "h": "Edge añade Stealth Routing, con tecnología de Houdini Swap",
+            "p": "La función busca que el vínculo en la cadena entre el inicio y el final de un pago sea más difícil de seguir, y XMR es compatible cuando hay una ruta activa disponible. Edge aclara que las transacciones individuales siguen siendo visibles y que no garantiza el anonimato."
+          },
+          {
+            "h": "Bitcart 0.11.1.0 corrige el análisis en Monero de transacciones con datos extra inusuales",
+            "p": "El procesador de pagos también estrena un renderizador de plantillas aislado escrito en Rust. Mientras tanto, woodser publicó monero-cpp v0.9.12, monero-java v0.8.65 y monero-ts v0.11.22, y monero-cpp pasa a Monero 0.18.5.4."
+          }
+        ],
+        "comm": [
+          {
+            "h": "Informes del CCS: la actualización de octubre de selsta y el informe final de jpk68",
+            "p": "selsta cuenta que ya están disponibles v0.18.5.3 y v0.18.5.4, que el trabajo de v0.19.0.0 continúa, que la transición de la GUI a Qt6 está terminada y que se clasificaron una docena más de informes de HackerOne. El informe final de jpk68 sobre su propuesta de dedicación completa al CCS enumera el parche de readline/linenoise ya fusionado y el trabajo en métodos de freeze/thaw para la API del monedero."
+          },
+          {
+            "h": "Monero se une al OSS Scanner de Anthropic",
+            "p": "Anthropic fusionó la pull request de plowsof que inscribe a Monero en su servicio opcional de búsqueda de vulnerabilidades para software de código abierto, tras unas dos semanas de silencio. La PR indica que se abrió con el permiso de los mantenedores del repo principal."
+          },
+          {
+            "h": "Monero Talk #400 recibe a Chad Barraford, de THORChain",
+            "p": "El episodio, con el presentador Douglas Tuman, trata sobre la resiliencia de la red, la liquidez entre cadenas y la esperada integración con Monero."
+          },
+          {
+            "h": "Aviso: fallos en APT y Xen afectan a usuarios de Debian, Ubuntu y Qubes",
+            "p": "Un fallo reportado en APT permite a un atacante remoto saltarse la verificación de paquetes mediante redirecciones y errores HTTP transitorios, y como los .deb se instalan como root, lo que está en juego es mucho. Qubes también advirtió de que las versiones de Xen posteriores a la 4.6 son vulnerables a que un invitado malicioso lea y escriba la memoria de otros dominios, y recomienda seguir actualizando con normalidad."
+          }
+        ],
+        "privacy": [
+          {
+            "h": "Motorola dará soporte oficial a GrapheneOS, empezando por el Signature 27",
+            "p": "GrapheneOS dice que Motorola tiene ingenieros ayudando a portarlo a sus dispositivos y a implementar las funciones de seguridad necesarias, y que el nuevo buque insignia será el primer teléfono Motorola compatible. Prometen más dispositivos."
+          },
+          {
+            "h": "DigiCert informa de una brecha que afecta a información de clientes empresariales",
+            "p": "La autoridad de certificación dice que un sistema interno de negocio fue accesible desde el exterior durante el verano sin que fuera esa la intención, y que alguien creó una cuenta no autorizada."
+          },
+          {
+            "h": "La EFF pide al Noveno Circuito que trate las órdenes de volcado de torres como inconstitucionales",
+            "p": "Junto con la ACLU, la EFF presentó un escrito de amicus curiae en United States v. Spurlock, un caso sobre órdenes que obligan a los operadores móviles a entregar datos de ubicación de todos los teléfonos de una zona. Es el primer caso de apelación de este tipo desde la sentencia del Tribunal Supremo de este verano sobre las órdenes de geovalla."
+          },
+          {
+            "h": "Arti 2.8.0 acerca la reescritura de Tor en Rust a poder ejecutar relays",
+            "p": "Gran parte del trabajo se centra en usar Arti como relay y autoridad de directorio, incluido el cálculo del consenso a partir de los votos, la descarga de descriptores y la limitación de la tasa de ancho de banda. La versión también incluye limpiezas en la especificación de Tor."
+          }
+        ]
+      },
+      "price": {
+        "summary": "Las ganancias llegaron pronto: el precio subió hasta el miércoles, luego cayó en cuatro de los últimos cinco días y cerró en el mínimo de la semana. Aun así, la semana se mantiene dentro de la tendencia alcista del último mes, de cerca de un 14.7%.",
+        "drivers": [
+          "Según @X_Four_iv el 3 de nov., XMR llevaba tiempo comprimiéndose entre una resistencia descendente y un soporte ascendente, y la cuenta vigilaba una ruptura; el precio subió un 4.3% ese día."
+        ]
+      }
+    },
+    "ru": {
+      "recap": "В основном репозитории Monero выдалась горячая неделя слияний: главным событием стал код построения дерева FCMP++, а следом пошёл длинный список исправлений для кошельков, нод и приватности. Релизы кошельков продолжали выходить (Feather, Skylight, Monero One, Cake Wallet), а команда XMR20 намайнила собственный блок, чтобы спрятать в цепочке музыкальный клип. За пределами Monero: Motorola объявила об официальной поддержке GrapheneOS, а пользователи Linux получили свежие предупреждения о безопасности.",
+      "lead": {
+        "h": "Код построения дерева FCMP++ влит в основной репозиторий Monero",
+        "p": "В основной репозиторий влит код, который строит дерево FCMP++ на уровне консенсуса, а также миграция базы данных, подтягивающая дерево до верхушки цепочки. Он же отвечает за расширение и обрезку дерева при добавлении и удалении блоков."
+      },
+      "art": {
+        "alt": "Маленькое пиксельное деревце растёт из стопки оранжевых блоков на столе."
+      },
+      "feature": {
+        "h": "21-секундный музыкальный клип теперь лежит внутри блока Monero",
+        "dek": "Проект XMR20 заявляет, что намайнил собственный блок, чтобы уместить в нём транзакцию почти в 599 КБ — самую большую за всю историю Monero.",
+        "body": [
+          "По данным Monero Observer, на этой неделе XMR20, судя по всему, встроил в блокчейн 21-секундный музыкальный клип в формате MP4. Проект говорит, что сам намайнил блок 3 799 494, и что 598 945 байт из примерно 599 000 байт транзакции лежат в поле tx_extra — области для произвольных данных в каждой транзакции.",
+          "Загвоздка в том, что ноды ретранслируют не больше 1060 байт tx_extra. По словам проекта, его данные превышали этот лимит в 565 раз и никогда не прошли бы через мемпул — «зал ожидания», где сидят неподтверждённые транзакции. Поэтому данные поместили в coinbase-транзакцию самого блока, ту, что выплачивает награду за блок, и намайнили блок напрямую. В заголовке Monero Observer стоимость оценивается примерно в 0,6 XMR награды за блок.",
+          "XMR20 сообщает, что его пул пока прекратил майнинг, а блок останется на месте."
+        ]
+      },
+      "quotes": [
+        {
+          "text": "Пул пока прекратил майнинг; блок остаётся."
+        },
+        {
+          "text": "Тот самый жёсткий диск случайно уронили, и он больше не работает."
+        },
+        {
+          "text": "В нескольких странах Западной Европы идёт организованная при поддержке государства дезинформационная кампания против GrapheneOS."
+        }
+      ],
+      "upcoming": [
+        {
+          "what": "Встреча Monero Research Lab в IRC (Libera) и Matrix; в предварительную повестку входят аудиты FCMP++ и проблема раскрытия отправителя через get_tx_key."
+        }
+      ],
+      "sections": {
+        "dev": [
+          {
+            "h": "31 pull request влит в основной репозиторий за неделю",
+            "p": "Помимо работы над деревом FCMP++, в пакет вошли исправления для кошелька, p2p, RPC и сборки, более аккуратные тексты справки и новые заметки о сборке с Rust в README. Есть и исправление пропавшего флага двойной траты в пуле транзакций, и правка типа DNS-записи, используемого для IPv6-запросов."
+          },
+          {
+            "h": "Доказательства транзакций для старых платежей v1 снова работают",
+            "p": "get_tx_proof и check_tx_proof запрашивали обрезанные (pruned) транзакции, а для обрезанных транзакций v1 проверка хеша их отклоняла, так что доказательства для старых платежей v1 не проходили. Исправление повторяет запрос без обрезки только для v1 и проверяет хеш полной транзакции."
+          },
+          {
+            "h": "Ручные проверки обновлений в monerod больше не пропускают DNS мимо прокси",
+            "p": "Если задан --proxy и утечки DNS запрещены, автоматические проверки обновлений были отключены, но запросы ручной проверки, загрузки и обновления всё ещё могли вызвать DNS TXT-запрос в обход прокси. Теперь они подчиняются той же политике."
+          },
+          {
+            "h": "Операторы нод получили опцию restricted-RPC и более чистый список банов",
+            "p": "Новый флаг --rpc-restricted-no-login позволяет открыть ограниченный RPC-порт без учётных данных, оставив полный порт под паролем. Кроме того, забаненные хосты теперь убираются из списков пиров, загружаемых при запуске: раньше бан-лист применялся раньше них."
+          },
+          {
+            "h": "Исправления кошелька: аргументы seed, старые ключи и неудачные восстановления",
+            "p": "Simplewallet теперь очищает значения --seed и --electrum-seed после разбора, хотя seed-фразы всё ещё могут светиться в списке процессов и истории оболочки. Другие исправления не дают старым файлам ключей шифроваться дважды (из-за чего перезаписанный файл становился нечитаемым) и не позволяют неудачному вызову createWalletFromKeys заменить кэш существующего кошелька."
+          }
+        ],
+        "eco": [
+          {
+            "h": "Feather Wallet 2.9.1 объявляет встроенный демон Tor устаревшим и убирает часть функций",
+            "p": "Тем, кто не может подключиться к ноде, советуют обновиться, установить Tor на всю систему, направить Feather на порт 9150 Tor Browser или отключить Tor. Релиз также убирает колонку Fiat, плагины Mining и Bounties и поддержку ARM32 на Linux, а сборка для Windows больше не подписывается."
+          },
+          {
+            "h": "Вышли Skylight Wallet 2.2.0 и Monero One 1.1.0",
+            "p": "Skylight Wallet от MAGIC Grants теперь поддерживает аппаратные ключи безопасности и квантово-устойчивые резервные копии, получил усиленную работу с памятью и более свежий Tor. Monero One для iPhone и Android научился отправлять XMR в виде ссылки и на имена OpenAlias, а ввод seed-фразы теперь идёт по одному полю на слово с проверкой контрольной суммы."
+          },
+          {
+            "h": "Предрелиз Cake Wallet 6.5.3 открыт для публичного бета-тестирования",
+            "p": "В релиз добавлены Zcash на Ledger, BitBox02 Nova на iOS, более быстрый запуск и переключение, а также усиленная защита 2FA и резервных копий. В примечаниях также сказано, что он готовит инструменты приватности к следующему обновлению сети."
+          },
+          {
+            "h": "Edge добавляет Stealth Routing на базе Houdini Swap",
+            "p": "Функция призвана затруднить отслеживание on-chain связи между началом и концом платежа; XMR поддерживается, когда доступен живой маршрут. В Edge отмечают, что отдельные транзакции остаются видимыми и что анонимность не гарантируется."
+          },
+          {
+            "h": "Bitcart 0.11.1.0 исправляет разбор Monero-транзакций с необычными дополнительными данными",
+            "p": "Платёжный процессор также получил новый изолированный рендерер шаблонов, написанный на Rust. Тем временем woodser выпустил monero-cpp v0.9.12, monero-java v0.8.65 и monero-ts v0.11.22, причём monero-cpp перешёл на Monero 0.18.5.4."
+          }
+        ],
+        "comm": [
+          {
+            "h": "Отчёты CCS: октябрьское обновление selsta и финальный отчёт jpk68",
+            "p": "selsta сообщает, что вышли v0.18.5.3 и v0.18.5.4, работа над v0.19.0.0 продолжается, переход GUI на Qt6 завершён, а ещё около дюжины отчётов на HackerOne разобрано. В финальном отчёте jpk68 по его полноценной CCS-заявке перечислены влитый патч readline/linenoise и работа над методами freeze/thaw для API кошелька."
+          },
+          {
+            "h": "Monero подключается к OSS Scanner от Anthropic",
+            "p": "Anthropic приняла pull request от plowsof, который подключает Monero к её добровольному сервису поиска уязвимостей в открытом ПО, после примерно двух недель молчания. В PR сказано, что он открыт с разрешения мейнтейнеров основного репозитория."
+          },
+          {
+            "h": "В Monero Talk #400 в гостях Чад Барраферд из THORChain",
+            "p": "В выпуске с ведущим Дугласом Таманом обсуждаются устойчивость сети, кросс-чейн ликвидность и ожидаемая интеграция с Monero."
+          },
+          {
+            "h": "Важно: баги в APT и Xen затрагивают пользователей Debian, Ubuntu и Qubes",
+            "p": "Сообщается об ошибке в APT, которая позволяет удалённому атакующему обойти проверку пакетов с помощью редиректов и временных HTTP-ошибок; поскольку .deb-пакеты устанавливаются от root, ставки высоки. Qubes также предупредила, что версии Xen выше 4.6 уязвимы: вредоносная гостевая система может читать и записывать память других доменов. Рекомендация — обновляться как обычно."
+          }
+        ],
+        "privacy": [
+          {
+            "h": "Motorola будет официально поддерживать GrapheneOS, начиная с Signature 27",
+            "p": "GrapheneOS сообщает, что инженеры Motorola помогают портировать систему на их устройства и реализовать необходимые функции безопасности, а новый флагман станет первым поддерживаемым телефоном Motorola. Обещаны и другие устройства."
+          },
+          {
+            "h": "DigiCert сообщает об утечке, затронувшей данные бизнес-клиентов",
+            "p": "Удостоверяющий центр говорит, что летом внутренняя бизнес-система оказалась доступна извне, хотя так быть не должно, и кто-то создал несанкционированную учётную запись."
+          },
+          {
+            "h": "EFF просит Девятый округ признать ордера на «вышечные дампы» неконституционными",
+            "p": "Вместе с ACLU EFF подала заключение «друга суда» по делу United States v. Spurlock об ордерах, обязывающих операторов связи выдавать данные о местоположении всех телефонов в заданной зоне. Это первое такое апелляционное дело после летнего решения Верховного суда о геозаборных ордерах (geofence)."
+          },
+          {
+            "h": "Arti 2.8.0 приближает переписанный на Rust Tor к работе в роли релеев",
+            "p": "Основная часть работы нацелена на использование Arti в роли релея и директории-авторитета, включая вычисление консенсуса из голосов, получение дескрипторов и ограничение пропускной способности. В релиз также вошли правки спецификации Tor."
+          }
+        ]
+      },
+      "price": {
+        "summary": "Рост пришёлся на начало недели: цена поднималась до среды, затем снижалась в четыре из последних пяти дней и закончила неделю на минимуме. При этом неделя остаётся в рамках восходящего тренда последнего месяца примерно в 14,7%.",
+        "drivers": [
+          "По словам @X_Four_iv от 3 ноября, XMR сжимался между нисходящим сопротивлением и растущей поддержкой, и аккаунт следил за пробоем; в тот день цена выросла на 4,3%."
+        ]
+      }
+    },
+    "fr": {
+      "recap": "Semaine bien chargée en fusions pour le dépôt principal, avec en tête le code de construction de l'arbre FCMP++, et une longue liste de correctifs pour le portefeuille, le nœud et la confidentialité. Les versions de portefeuilles se sont enchaînées (Feather, Skylight, Monero One, Cake Wallet), et un groupe baptisé XMR20 a miné son propre bloc pour glisser un clip musical dans la chaîne. En dehors de Monero, Motorola a annoncé un support officiel de GrapheneOS et les utilisateurs de Linux ont reçu de nouvelles alertes de sécurité.",
+      "lead": {
+        "h": "Le code de construction de l'arbre FCMP++ arrive dans le dépôt principal de Monero",
+        "p": "Le dépôt principal a fusionné le code qui construit l'arbre FCMP++ au niveau du consensus, ainsi qu'une migration de base de données qui met l'arbre à niveau jusqu'à la pointe de la chaîne. Il gère aussi l'extension et l'élagage de l'arbre quand des blocs sont ajoutés ou retirés."
+      },
+      "art": {
+        "alt": "Un petit arbre en pixel art qui pousse depuis une pile de blocs orange posée sur une table."
+      },
+      "feature": {
+        "h": "Un clip musical de 21 secondes se cache désormais dans un bloc Monero",
+        "dek": "Le projet XMR20 affirme avoir miné son propre bloc pour y loger une transaction de près de 599 Ko, la plus volumineuse jamais enregistrée sur Monero.",
+        "body": [
+          "Selon Monero Observer, XMR20 aurait apparemment intégré cette semaine un clip musical MP4 de 21 secondes dans la blockchain. Le projet affirme avoir miné lui-même le bloc 3 799 494, et que 598 945 octets de cette transaction d'environ 599 000 octets se trouvent dans le champ tx_extra, une zone de données libre présente dans chaque transaction.",
+          "Le hic, c'est que les nœuds ne relaient que 1 060 octets de tx_extra au maximum. Le projet explique que sa charge utile faisait 565 fois cette limite et n'aurait jamais pu traverser la mempool, la salle d'attente où patientent les transactions non confirmées. Il a donc placé les données dans la transaction coinbase du bloc, celle qui verse la récompense de bloc, et a miné le bloc directement. Le titre de Monero Observer chiffre le coût à environ 0,6 XMR de récompense de bloc.",
+          "XMR20 indique que son pool a cessé de miner pour le moment et que le bloc reste en place."
+        ]
+      },
+      "quotes": [
+        {
+          "text": "Le pool a cessé de miner pour le moment ; le bloc reste."
+        },
+        {
+          "text": "Le disque dur en question est tombé accidentellement et ne fonctionne plus."
+        },
+        {
+          "text": "Une campagne de désinformation soutenue par des États est en cours contre GrapheneOS dans plusieurs pays d'Europe occidentale."
+        }
+      ],
+      "upcoming": [
+        {
+          "what": "Réunion du Monero Research Lab sur IRC (Libera) et Matrix ; l'ordre du jour, non confirmé, comprend les audits FCMP++ et le problème d'exposition de l'expéditeur avec get_tx_key."
+        }
+      ],
+      "sections": {
+        "dev": [
+          {
+            "h": "31 pull requests fusionnées dans le dépôt principal cette semaine",
+            "p": "Au-delà du travail sur l'arbre FCMP++, le lot touche à des correctifs pour le portefeuille, le p2p, le RPC et la compilation, avec en prime des textes d'aide plus soignés et de nouvelles notes de compilation Rust dans le README. Il comprend aussi la correction d'un indicateur de double dépense manquant dans le pool de transactions et d'un type d'enregistrement DNS utilisé pour les recherches IPv6."
+          },
+          {
+            "h": "Les preuves de transaction pour les anciens paiements v1 refonctionnent",
+            "p": "get_tx_proof et check_tx_proof récupéraient des transactions élaguées, et pour les transactions v1 élaguées, la vérification du hash les rejetait, si bien que les preuves de paiements v1 historiques échouaient. Le correctif réessaie sans élagage uniquement pour la v1 et vérifie le hash de la transaction complète."
+          },
+          {
+            "h": "Les vérifications manuelles de mise à jour de monerod ne fuient plus de DNS en contournant le proxy",
+            "p": "Avec --proxy activé et les fuites DNS interdites, les vérifications automatiques de mise à jour étaient désactivées, mais les demandes manuelles de vérification, de téléchargement et de mise à jour pouvaient encore déclencher une requête DNS TXT en dehors du proxy. Elles suivent désormais la même règle."
+          },
+          {
+            "h": "Les opérateurs de nœuds gagnent une option RPC restreint et une liste de bannissement plus propre",
+            "p": "Un nouvel indicateur --rpc-restricted-no-login permet de publier un port RPC restreint sans identifiants, tandis que le port complet reste protégé par mot de passe. Par ailleurs, les hôtes bannis sont maintenant retirés des listes de pairs chargées au démarrage, car la liste de bannissement était appliquée avant elles."
+          },
+          {
+            "h": "Correctifs du portefeuille : arguments de seed, anciennes clés et récupérations ratées",
+            "p": "Simplewallet efface désormais les valeurs de --seed et --electrum-seed après l'analyse, même si les seeds peuvent encore apparaître dans la liste des processus et l'historique du shell. D'autres correctifs empêchent le double chiffrement d'anciens fichiers de clés, qui rendait le fichier réécrit illisible, et évitent qu'un appel createWalletFromKeys raté ne remplace le cache d'un portefeuille existant."
+          }
+        ],
+        "eco": [
+          {
+            "h": "Feather Wallet 2.9.1 abandonne son démon Tor intégré et allège ses fonctionnalités",
+            "p": "Les utilisateurs qui n'arrivent pas à se connecter à un nœud sont invités à mettre à jour, installer Tor à l'échelle du système, pointer Feather vers le port 9150 de Tor Browser, ou désactiver Tor. La version supprime aussi la colonne Fiat, les plugins Mining et Bounties ainsi que la prise en charge de Linux ARM32, et la version Windows n'est plus signée."
+          },
+          {
+            "h": "Skylight Wallet 2.2.0 et Monero One 1.1.0 publient des mises à jour",
+            "p": "Skylight Wallet, de MAGIC Grants, prend désormais en charge les clés de sécurité matérielles et les sauvegardes résistantes au quantique, avec une gestion de la mémoire renforcée et un Tor plus récent. Monero One, sur iPhone et Android, permet maintenant d'envoyer des XMR sous forme de lien et d'envoyer vers des noms OpenAlias, et la saisie de la seed se fait avec une case par mot et une vérification du checksum."
+          },
+          {
+            "h": "La préversion de Cake Wallet 6.5.3 ouvre ses tests bêta publics",
+            "p": "La version ajoute Zcash sur Ledger, BitBox02 Nova sur iOS, un lancement et un changement de portefeuille plus rapides, ainsi que des protections renforcées pour la 2FA et les sauvegardes. Les notes précisent aussi qu'elle prépare des outils de confidentialité pour la prochaine mise à niveau du réseau."
+          },
+          {
+            "h": "Edge ajoute Stealth Routing, propulsé par Houdini Swap",
+            "p": "La fonctionnalité vise à rendre plus difficile à suivre le lien sur la chaîne entre le début et la fin d'un paiement, et XMR est pris en charge lorsqu'une route est disponible. Edge précise que les transactions individuelles restent visibles et qu'il ne garantit pas l'anonymat."
+          },
+          {
+            "h": "Bitcart 0.11.1.0 corrige l'analyse par Monero des transactions contenant des données supplémentaires inhabituelles",
+            "p": "Le processeur de paiements reçoit aussi un nouveau moteur de modèles isolé, écrit en Rust. De son côté, woodser a publié monero-cpp v0.9.12, monero-java v0.8.65 et monero-ts v0.11.22, monero-cpp passant à Monero 0.18.5.4."
+          }
+        ],
+        "comm": [
+          {
+            "h": "Rapports CCS : le point d'octobre de selsta et le rapport final de jpk68",
+            "p": "selsta indique que v0.18.5.3 et v0.18.5.4 sont sorties, que le travail sur v0.19.0.0 continue, que la transition du GUI vers Qt6 est terminée et qu'une douzaine de rapports HackerOne supplémentaires ont été triés. Le rapport final de jpk68 sur sa proposition CCS à plein temps mentionne le patch readline/linenoise fusionné et le travail sur les méthodes freeze/thaw pour l'API du portefeuille."
+          },
+          {
+            "h": "Monero rejoint l'OSS Scanner d'Anthropic",
+            "p": "Anthropic a fusionné la pull request de plowsof qui inscrit Monero à son service facultatif de détection de vulnérabilités pour les logiciels open source, après environ deux semaines de silence. La PR précise qu'elle a été ouverte avec l'autorisation des mainteneurs du dépôt principal."
+          },
+          {
+            "h": "Monero Talk #400 reçoit Chad Barraford de THORChain",
+            "p": "L'épisode, animé par Douglas Tuman, aborde la résilience du réseau, la liquidité inter-chaînes et l'intégration attendue de Monero."
+          },
+          {
+            "h": "Alerte : des bugs d'APT et de Xen touchent les utilisateurs de Debian, Ubuntu et Qubes",
+            "p": "Un bug signalé dans APT permet à un attaquant distant de contourner la vérification des paquets grâce à des redirections et des erreurs HTTP transitoires, et comme les .deb s'installent en root, l'enjeu est de taille. Qubes a aussi prévenu que les versions de Xen supérieures à 4.6 sont vulnérables à un invité malveillant capable de lire et d'écrire dans la mémoire d'autres domaines, et recommande de continuer à mettre à jour normalement."
+          }
+        ],
+        "privacy": [
+          {
+            "h": "Motorola prendra officiellement en charge GrapheneOS, en commençant par le Signature 27",
+            "p": "GrapheneOS indique que Motorola a des ingénieurs qui aident à le porter sur ses appareils et à implémenter les fonctions de sécurité requises, et que le nouveau modèle phare sera le premier téléphone Motorola pris en charge. D'autres appareils sont promis."
+          },
+          {
+            "h": "DigiCert signale une violation touchant des informations de clients professionnels",
+            "p": "L'autorité de certification explique qu'un système interne d'entreprise était accessible de l'extérieur pendant l'été alors que ce n'était pas voulu, et que quelqu'un a créé un compte non autorisé."
+          },
+          {
+            "h": "L'EFF demande à la Ninth Circuit de juger inconstitutionnels les mandats de tower dump",
+            "p": "Avec l'ACLU, l'EFF a déposé un mémoire d'amicus curiae dans l'affaire United States v. Spurlock, qui porte sur des mandats obligeant les opérateurs mobiles à livrer les données de localisation de tous les téléphones d'une zone. C'est la première affaire de ce type en appel depuis la décision de la Cour suprême, cet été, sur les mandats de geofence."
+          },
+          {
+            "h": "Arti 2.8.0 rapproche la réécriture de Tor en Rust de la gestion de relais",
+            "p": "L'essentiel du travail vise à utiliser Arti comme relais et comme autorité d'annuaire, notamment le calcul du consensus à partir des votes, la récupération des descripteurs et la limitation du débit de bande passante. La version comprend aussi des nettoyages dans la spécification de Tor."
+          }
+        ]
+      },
+      "price": {
+        "summary": "Les gains sont venus tôt : le prix a grimpé jusqu'à mercredi, puis a reculé quatre des cinq derniers jours pour terminer au plus bas de la semaine. La semaine reste néanmoins dans la tendance haussière du dernier mois, d'environ 14,7 %.",
+        "drivers": [
+          "Selon @X_Four_iv le 3 nov., XMR était comprimé entre une résistance descendante et un support ascendant, et le compte surveillait une cassure ; le prix a gagné 4,3 % ce jour-là."
+        ]
+      }
+    },
+    "pt": {
+      "recap": "O repositório principal teve uma semana movimentada de merges, liderada pelo código de construção da árvore do FCMP++, além de uma lista longa de correções em carteiras, nós e privacidade. Os lançamentos de carteiras não pararam (Feather, Skylight, Monero One, Cake Wallet), e um grupo chamado XMR20 minerou o próprio bloco para enfiar um clipe musical na cadeia. Fora do Monero, a Motorola anunciou suporte oficial ao GrapheneOS e usuários de Linux receberam novos alertas de segurança.",
+      "lead": {
+        "h": "Código de construção da árvore do FCMP++ chega ao repositório principal do Monero",
+        "p": "O repositório principal incorporou o código que constrói a árvore do FCMP++ no consenso, além de uma migração de banco de dados que atualiza a árvore até a ponta da cadeia. Também cobre a extensão e a poda da árvore conforme blocos são adicionados ou removidos."
+      },
+      "art": {
+        "alt": "Uma pequena árvore em pixel art crescendo de uma pilha de blocos laranja sobre uma mesa."
+      },
+      "feature": {
+        "h": "Um clipe musical de 21 segundos agora mora dentro de um bloco do Monero",
+        "dek": "O projeto XMR20 diz que minerou o próprio bloco para carregar uma transação de quase 599 KB, a maior já registrada no Monero.",
+        "body": [
+          "Segundo o Monero Observer, o XMR20 aparentemente embutiu na blockchain um videoclipe MP4 de 21 segundos esta semana. O projeto diz que minerou o bloco 3.799.494 por conta própria e que 598.945 bytes da transação de cerca de 599.000 bytes estão no campo tx_extra, uma área de dados livre presente em cada transação.",
+          "O pulo do gato é que os nós só retransmitem até 1.060 bytes de tx_extra. O projeto afirma que sua carga era 565 vezes esse limite e jamais passaria pela mempool, a sala de espera onde ficam as transações não confirmadas. Então colocou os dados na própria transação coinbase do bloco, aquela que paga a recompensa do bloco, e minerou o bloco diretamente. A manchete do Monero Observer coloca o custo em cerca de 0,6 XMR de recompensa de bloco.",
+          "O XMR20 diz que sua pool parou de minerar por enquanto e que o bloco fica onde está."
+        ]
+      },
+      "quotes": [
+        {
+          "text": "A pool parou de minerar por enquanto; o bloco fica."
+        },
+        {
+          "text": "O disco rígido em questão caiu acidentalmente e não está mais funcionando."
+        },
+        {
+          "text": "Há uma campanha de desinformação patrocinada por Estados contra o GrapheneOS em vários países da Europa Ocidental."
+        }
+      ],
+      "upcoming": [
+        {
+          "what": "Reunião do Monero Research Lab no IRC (Libera) e no Matrix; a pauta ainda não confirmada inclui auditorias do FCMP++ e o problema de exposição do remetente no get_tx_key."
+        }
+      ],
+      "sections": {
+        "dev": [
+          {
+            "h": "31 pull requests incorporados ao repositório principal esta semana",
+            "p": "Além do trabalho na árvore do FCMP++, o lote mexe em correções de carteira, p2p, RPC e build, além de textos de ajuda mais organizados e novas notas sobre build com Rust no README. Também inclui a correção de uma flag de gasto duplo ausente no pool de transações e o ajuste do tipo de registro DNS usado em consultas IPv6."
+          },
+          {
+            "h": "Provas de transação de pagamentos v1 antigos voltam a funcionar",
+            "p": "get_tx_proof e check_tx_proof buscavam transações podadas, e nas transações v1 podadas a verificação de hash as rejeitava, então as provas de pagamentos v1 históricos falhavam. A correção tenta de novo sem poda apenas para v1 e verifica o hash completo da transação."
+          },
+          {
+            "h": "As verificações manuais de atualização do monerod deixam de vazar DNS fora do proxy",
+            "p": "Com --proxy definido e vazamentos de DNS proibidos, as verificações automáticas de atualização ficavam desligadas, mas pedidos manuais de verificação, download e atualização ainda podiam disparar uma consulta DNS TXT fora do proxy. Agora todos seguem a mesma política."
+          },
+          {
+            "h": "Operadores de nós ganham opção de RPC restrito e uma lista de banimentos mais limpa",
+            "p": "Uma nova flag --rpc-restricted-no-login permite publicar uma porta RPC restrita sem credenciais, enquanto a porta completa continua protegida por senha. Separadamente, hosts banidos agora são removidos das listas de peers carregadas na inicialização, porque a lista de banimentos estava sendo aplicada antes delas."
+          },
+          {
+            "h": "Correções na carteira: argumentos de seed, chaves legadas e recuperações que falham",
+            "p": "O Simplewallet agora limpa os valores de --seed e --electrum-seed depois de interpretá-los, embora as seeds ainda possam aparecer na lista de processos e no histórico do shell. Outras correções impedem que arquivos de chave antigos sejam criptografados duas vezes, o que deixava o arquivo reescrito ilegível, e impedem que uma chamada createWalletFromKeys com falha substitua o cache de uma carteira existente."
+          }
+        ],
+        "eco": [
+          {
+            "h": "Feather Wallet 2.9.1 descontinua o daemon Tor embutido e enxuga recursos",
+            "p": "Quem não consegue se conectar a um nó é orientado a atualizar, instalar o Tor no sistema, apontar o Feather para a porta 9150 do Tor Browser ou desligar o Tor. A versão também remove a coluna Fiat, os plugins Mining e Bounties e o suporte a Linux ARM32, e o build para Windows deixa de ser assinado digitalmente."
+          },
+          {
+            "h": "Skylight Wallet 2.2.0 e Monero One 1.1.0 trazem atualizações",
+            "p": "A Skylight Wallet, da MAGIC Grants, agora oferece suporte a chaves de segurança físicas e backups resistentes à computação quântica, com manuseio de memória reforçado e Tor mais recente. O Monero One para iPhone e Android agora permite enviar XMR como link e enviar para nomes OpenAlias, e a digitação da seed passou a ser uma caixa por palavra, com verificação de checksum."
+          },
+          {
+            "h": "Pré-lançamento da Cake Wallet 6.5.3 abre para testes beta públicos",
+            "p": "A versão traz Zcash na Ledger, BitBox02 Nova no iOS, abertura e troca mais rápidas e proteções mais fortes de 2FA e backup. As notas também dizem que ela prepara ferramentas de privacidade para a próxima atualização da rede."
+          },
+          {
+            "h": "Edge adiciona o Stealth Routing, com tecnologia da Houdini Swap",
+            "p": "O recurso busca dificultar o rastreamento do vínculo on-chain entre o início e o fim de um pagamento, e o XMR é aceito quando há uma rota ativa disponível. A Edge ressalta que transações individuais continuam visíveis e que não garante anonimato."
+          },
+          {
+            "h": "Bitcart 0.11.1.0 corrige a leitura pelo Monero de transações com dados extras incomuns",
+            "p": "O processador de pagamentos também ganha um novo renderizador de templates isolado, escrito em Rust. Enquanto isso, woodser lançou monero-cpp v0.9.12, monero-java v0.8.65 e monero-ts v0.11.22, com o monero-cpp migrando para o Monero 0.18.5.4."
+          }
+        ],
+        "comm": [
+          {
+            "h": "Relatórios do CCS: atualização de outubro do selsta e relatório final do jpk68",
+            "p": "selsta diz que as versões v0.18.5.3 e v0.18.5.4 saíram, o trabalho na v0.19.0.0 continua, a transição da GUI para Qt6 foi concluída e mais uma dúzia de relatórios do HackerOne foi triada. O relatório final do jpk68 sobre sua proposta de dedicação integral no CCS lista o patch de readline/linenoise incorporado e o trabalho em métodos de freeze/thaw para a API da carteira."
+          },
+          {
+            "h": "Monero entra no OSS Scanner da Anthropic",
+            "p": "A Anthropic incorporou o pull request do plowsof que inscreve o Monero no seu serviço opcional de busca de vulnerabilidades para software de código aberto, depois de cerca de duas semanas de silêncio. O PR diz que foi aberto com a permissão dos mantenedores do núcleo."
+          },
+          {
+            "h": "Monero Talk #400 recebe Chad Barraford, da THORChain",
+            "p": "O episódio, com o apresentador Douglas Tuman, aborda a resiliência da rede, a liquidez entre blockchains e a aguardada integração com o Monero."
+          },
+          {
+            "h": "Aviso: bugs no APT e no Xen afetam usuários de Debian, Ubuntu e Qubes",
+            "p": "Um bug reportado no APT permite que um atacante remoto contorne a verificação de pacotes usando redirecionamentos e erros HTTP transitórios, e como os .debs são instalados como root, o risco é alto. O Qubes também alertou que versões do Xen acima da 4.6 são vulneráveis a um convidado malicioso que lê e escreve na memória de outros domínios, e recomenda continuar atualizando normalmente."
+          }
+        ],
+        "privacy": [
+          {
+            "h": "Motorola vai dar suporte oficial ao GrapheneOS, começando pelo Signature 27",
+            "p": "O GrapheneOS diz que a Motorola tem engenheiros ajudando a portá-lo para seus aparelhos e a implementar os recursos de segurança necessários, e que o novo topo de linha será o primeiro celular Motorola suportado. Mais dispositivos são prometidos."
+          },
+          {
+            "h": "DigiCert relata violação envolvendo informações de clientes empresariais",
+            "p": "A autoridade certificadora diz que um sistema interno de negócios ficou acessível externamente durante o verão sem que isso fosse intencional, e alguém criou uma conta não autorizada."
+          },
+          {
+            "h": "EFF pede ao Nono Circuito que trate mandados de tower dump como inconstitucionais",
+            "p": "Junto com a ACLU, a EFF apresentou um amicus brief em United States v. Spurlock, caso sobre mandados que obrigam operadoras de celular a entregar dados de localização de todos os telefones de uma área. É o primeiro caso desse tipo em instância de apelação desde a decisão da Suprema Corte neste verão sobre mandados de geofence."
+          },
+          {
+            "h": "Arti 2.8.0 aproxima a reescrita do Tor em Rust da execução de relays",
+            "p": "A maior parte do trabalho tem como alvo o uso do Arti como relay e autoridade de diretório, incluindo o cálculo do consenso a partir dos votos, a busca de descritores e o limite de taxa de banda. A versão também traz limpezas na especificação do Tor."
+          }
+        ]
+      },
+      "price": {
+        "summary": "Os ganhos vieram cedo: o preço subiu até quarta-feira, depois recuou em quatro dos últimos cinco dias e fechou na mínima da semana. Mesmo assim, a semana continua dentro da tendência de alta de cerca de 14,7% do último mês.",
+        "drivers": [
+          "Segundo @X_Four_iv em 3 de nov., o XMR vinha sendo espremido entre uma resistência descendente e um suporte ascendente, e a conta aguardava um rompimento; o preço subiu 4,3% naquele dia."
+        ]
+      }
+    },
+    "ja": {
+      "recap": "今週のコアリポジトリはマージが盛んで、FCMP++のツリー構築コードを筆頭に、ウォレット、ノード、プライバシー関連の修正が長いリストになりました。ウォレットのリリースも続々(Feather、Skylight、Monero One、Cake Wallet)。XMR20という団体は自前でブロックをマイニングし、ミュージックビデオをチェーンに忍ばせました。Monero以外では、MotorolaがGrapheneOSの公式サポートを発表し、Linuxユーザーには新たなセキュリティ警告が出ています。",
+      "lead": {
+        "h": "FCMP++のツリー構築コードがMoneroコアリポジトリに着地",
+        "p": "コアリポジトリに、コンセンサスでFCMP++ツリーを構築するコードがマージされました。ツリーをチェーンの先端まで追いつかせるデータベースのマイグレーションも含まれます。ブロックの追加や削除に合わせたツリーの拡張・縮小にも対応しています。"
+      },
+      "art": {
+        "alt": "テーブルの上に積まれたオレンジ色のブロックから、小さな木が生えているピクセルアート。"
+      },
+      "feature": {
+        "h": "21秒のミュージックビデオがMoneroのブロックの中に",
+        "dek": "XMR20プロジェクトは、約599 KBというMonero史上最大のトランザクションを載せるために、自分たちでブロックをマイニングしたと述べています。",
+        "body": [
+          "Monero Observerによると、XMR20は今週、21秒のMP4ミュージックビデオをブロックチェーンに埋め込んだようです。プロジェクトの説明では、ブロック3,799,494を自らマイニングし、約599,000バイトのトランザクションのうち598,945バイトを、各トランザクションにある自由形式のデータ領域tx_extraに収めたとのことです。",
+          "ただ、ノードがリレーするtx_extraは最大1,060バイトまで。プロジェクトによれば、ペイロードはその上限の565倍もあり、未承認トランザクションが待機するメモリプール(待合室のような場所)を通過することは到底できませんでした。そこで、ブロック報酬を支払うブロック自身のコインベーストランザクションにデータを入れ、ブロックを直接マイニングしたそうです。Monero Observerの見出しでは、コストはブロック報酬およそ0.6 XMR分とされています。",
+          "XMR20によれば、同プールは当面マイニングを停止しており、ブロックはそのまま残るとのことです。"
+        ]
+      },
+      "quotes": [
+        {
+          "text": "プールは当面マイニングを停止しました。ブロックはそのまま残ります。"
+        },
+        {
+          "text": "問題のハードドライブは誤って落下させてしまい、すでに動作しなくなっています。"
+        },
+        {
+          "text": "西ヨーロッパの複数の国で、国家が支援するGrapheneOSへの偽情報キャンペーンが続いています。"
+        }
+      ],
+      "upcoming": [
+        {
+          "what": "IRC(Libera)とMatrixでのMonero Research Labミーティング。未確定のアジェンダには、FCMP++の監査や、get_tx_keyで送信者が露出する問題が含まれています。"
+        }
+      ],
+      "sections": {
+        "dev": [
+          {
+            "h": "今週コアリポジトリで31件のプルリクエストがマージ",
+            "p": "FCMP++のツリー関連以外にも、ウォレット、p2p、RPC、ビルドの修正が入り、ヘルプテキストの整理やREADMEへのRustビルド手順の追記もありました。トランザクションプールで欠けていた二重支払いフラグの修正や、IPv6の名前解決に使うDNSレコードタイプの訂正も含まれます。"
+          },
+          {
+            "h": "古いv1の支払いに対するトランザクション証明が再び動作",
+            "p": "get_tx_proofとcheck_tx_proofはプルーニング済みトランザクションを取得していましたが、プルーニング済みのv1ではハッシュ検証が弾いてしまい、過去のv1支払いの証明が失敗していました。修正では、v1の場合に限りプルーニングなしで再取得し、トランザクション全体のハッシュを検証します。"
+          },
+          {
+            "h": "monerodの手動アップデート確認が、プロキシを迂回したDNS漏れをしなくなりました",
+            "p": "--proxyを指定しDNS漏れを許可しない設定では、自動アップデート確認はオフになっていましたが、手動の確認・ダウンロード・アップデートのリクエストは、プロキシの外でDNSのTXT検索を発生させる場合がありました。今後は同じポリシーに従います。"
+          },
+          {
+            "h": "ノード運営者向けに制限付きRPCのオプションと、すっきりしたBANリスト",
+            "p": "新しい--rpc-restricted-no-loginフラグにより、フルアクセスのポートはパスワード保護したまま、制限付きRPCポートを認証情報なしで公開できます。また、BANリストが先に適用されていたため、起動時に読み込むピアリストからBAN済みホストが除外されるようになりました。"
+          },
+          {
+            "h": "ウォレットの修正:シード引数、レガシーキー、失敗したリカバリー",
+            "p": "Simplewalletは、パース後に--seedと--electrum-seedの値をクリアするようになりました。ただし、シードがプロセス一覧やシェル履歴に残る可能性は依然あります。ほかにも、古いキーファイルが二重に暗号化されて書き換え後のファイルが読めなくなる問題や、createWalletFromKeysの呼び出しが失敗した際に既存ウォレットのキャッシュが置き換えられてしまう問題が修正されました。"
+          }
+        ],
+        "eco": [
+          {
+            "h": "Feather Wallet 2.9.1、内蔵Torデーモンを非推奨にして機能を整理",
+            "p": "ノードに接続できないユーザーには、アップデートする、Torをシステム全体にインストールする、FeatherをTor Browserのポート9150に向ける、またはTorをオフにする、のいずれかが案内されます。このリリースでは、Fiat列、MiningとBountiesのプラグイン、ARM32 Linuxのサポートも廃止され、Windows版はコード署名されなくなりました。"
+          },
+          {
+            "h": "Skylight Wallet 2.2.0とMonero One 1.1.0がアップデートを公開",
+            "p": "MAGIC GrantsのSkylight Walletは、ハードウェアセキュリティキーと耐量子バックアップに対応し、メモリ処理の強化と新しいTorも取り入れました。iPhone・Android向けのMonero Oneは、XMRをリンクで送れるようになり、OpenAlias名への送金にも対応。シード入力は1単語1ボックスになり、チェックサム検証も行われます。"
+          },
+          {
+            "h": "Cake Wallet 6.5.3のプレリリースが公開ベータテストを開始",
+            "p": "LedgerでのZcash対応、iOSでのBitBox02 Nova対応、起動と切り替えの高速化、2FAとバックアップ保護の強化が加わりました。リリースノートには、次のネットワークアップグレードに向けたプライバシーツールの準備も含まれると書かれています。"
+          },
+          {
+            "h": "Edgeが、Houdini Swapを利用したStealth Routingを追加",
+            "p": "支払いの開始と終了を結ぶオンチェーン上のつながりを追いにくくするための機能で、利用可能なルートがあればXMRにも対応します。Edgeは、個々のトランザクション自体は見えたままであり、匿名性を保証するものではないと注記しています。"
+          },
+          {
+            "h": "Bitcart 0.11.1.0、特殊なextraデータを持つトランザクションのMoneroパース問題を修正",
+            "p": "この決済プロセッサには、Rustで書かれた新しい分離型テンプレートレンダラーも加わりました。一方woodserは、monero-cpp v0.9.12、monero-java v0.8.65、monero-ts v0.11.22をリリースし、monero-cppはMonero 0.18.5.4に移行しました。"
+          }
+        ],
+        "comm": [
+          {
+            "h": "CCSレポート:selstaの10月アップデートとjpk68の最終報告",
+            "p": "selstaによると、v0.18.5.3とv0.18.5.4がリリース済みで、v0.19.0.0の作業は継続中。GUIのQt6移行は完了し、HackerOneの報告もさらに12件ほどトリアージしたとのことです。jpk68のフルタイムCCS提案に関する最終報告には、マージされたreadline/linenoiseパッチや、ウォレットAPIのfreeze/thawメソッドの作業が挙げられています。"
+          },
+          {
+            "h": "MoneroがAnthropicのOSS Scannerに参加",
+            "p": "約2週間の沈黙の末、Anthropicは、オープンソースソフトウェア向けのオプトイン式脆弱性発見サービスにMoneroを登録するplowsofのプルリクエストをマージしました。PRには、コアメンテナーの許可を得て作成したと書かれています。"
+          },
+          {
+            "h": "Monero Talk #400のゲストはTHORChainのChad Barraford",
+            "p": "ホストのDouglas Tumanとのこの回では、ネットワークの耐障害性、クロスチェーン流動性、そして期待されるMoneroとの統合について語られます。"
+          },
+          {
+            "h": "お知らせ:APTとXenのバグがDebian、Ubuntu、Qubesユーザーに影響",
+            "p": "報告されたAPTのバグでは、リモートの攻撃者がリダイレクトと一時的なHTTPエラーを使ってパッケージ検証を回避できます。.debはroot権限でインストールされるため、リスクは大きいです。Qubesも、4.6より新しいXenのバージョンは、悪意あるゲストが他のドメインのメモリを読み書きできる脆弱性があると警告しており、通常どおりアップデートを続けるよう呼びかけています。"
+          }
+        ],
+        "privacy": [
+          {
+            "h": "MotorolaがGrapheneOSを公式サポート、第一弾はSignature 27",
+            "p": "GrapheneOSによると、Motorolaのエンジニアが自社端末への移植と必要なセキュリティ機能の実装を手伝っており、新しいフラッグシップが最初のサポート対象のMotorola端末になります。今後さらに多くのデバイスが予定されています。"
+          },
+          {
+            "h": "DigiCert、法人顧客の情報に関わる侵害を報告",
+            "p": "この認証局によると、社内の業務システムが夏のあいだ意図せず外部からアクセス可能な状態になっており、何者かが不正なアカウントを作成しました。"
+          },
+          {
+            "h": "EFFが第9巡回区控訴裁に、タワーダンプ令状を違憲と見なすよう要請",
+            "p": "EFFはACLUとともに、United States v. Spurlockでアミカスブリーフを提出しました。この事件は、携帯電話事業者に特定エリア内のすべての端末の位置情報を提出させる令状をめぐるものです。今夏の連邦最高裁によるジオフェンス令状の判断以降、この種の控訴審は初めてです。"
+          },
+          {
+            "h": "Arti 2.8.0、TorのRust書き換えがリレー運用にまた一歩近づく",
+            "p": "作業の大半は、Artiをリレーおよびディレクトリ権威として使うためのもので、投票からのコンセンサス計算、ディスクリプターの取得、帯域のレート制限などが含まれます。Torの仕様書の整理も、このリリースに入っています。"
+          }
+        ]
+      },
+      "price": {
+        "summary": "上昇は週の前半に集中しました。価格は水曜まで上がり、その後は直近5日のうち4日で下落して、週の安値で終えています。それでも週全体では、過去1か月の約14.7%の上昇トレンドの範囲内にあります。",
+        "drivers": [
+          "@X_Four_ivの11月3日の投稿によると、XMRは下降する抵抗線と上昇するサポートラインの間で狭まっており、同アカウントはブレイクアウトに注目していました。この日の価格は4.3%上昇しました。"
+        ]
+      }
+    }
+  },
+  "podcasts": {
+    "es": {
+      "file": "/podcast/2026-11-02.es.mp3",
+      "duration": 887,
+      "bytes": 7095319,
+      "hosts": [
+        "Chris",
+        "Jessica"
+      ],
+      "transcript": [
+        {
+          "host": "Chris",
+          "text": "Hola y bienvenidos a The xmr.fan Times, el podcast semanal sobre Monero. Soy Chris, estamos en la semana del dos de noviembre de dos mil veintiséis, y este es el número cuatro."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y yo soy Jessica. Hoy tenemos el árbol de FCMP++ llegando al repo principal, un videoclip que ahora vive dentro de un bloque de Monero, el precio de la semana y un montón de novedades."
+        },
+        {
+          "host": "Chris",
+          "text": "Un videoclip dentro de la cadena de bloques. Ya me estoy riendo antes de empezar. Pero vamos por orden, que la noticia seria es otra."
+        },
+        {
+          "host": "Jessica",
+          "text": "Sí. El repo principal de Monero fusionó el código que construye el árbol de FCMP++ a nivel de consenso. Y viene con una migración de base de datos que pone el árbol al día con la punta de la cadena."
+        },
+        {
+          "host": "Chris",
+          "text": "A ver, traduce eso para quien nos escucha mientras lava los platos. ¿Qué es un árbol aquí?"
+        },
+        {
+          "host": "Jessica",
+          "text": "Sin entrar en lo técnico: es una estructura nueva que la cadena tiene que construir y mantener. Y el código fusionado también cubre cómo se amplía y cómo se recorta a medida que se añaden o se eliminan bloques."
+        },
+        {
+          "host": "Chris",
+          "text": "O sea que no solo crece, también tiene que saber deshacerse cuando la cadena se reorganiza. Eso suena a detalle pequeño, pero luego es lo que rompe cosas."
+        },
+        {
+          "host": "Jessica",
+          "text": "[curious] Exacto. Y si quieres situar FCMP++ en la historia del proyecto, desde CryptoNote hasta hoy, en xmr punto fan barra timeline hay una línea de tiempo paso a paso."
+        },
+        {
+          "host": "Chris",
+          "text": "Buen apunte. Y hablando de pasos, la próxima parada es la reunión del Monero Research Lab, el día once de noviembre a las diecisiete UTC, en IRC de Libera y en Matrix."
+        },
+        {
+          "host": "Jessica",
+          "text": "La agenda no está confirmada, pero incluiría auditorías de FCMP++ y el problema de exposición del remitente en get_tx_key."
+        },
+        {
+          "host": "Chris",
+          "text": "Tomamos nota. Ahora sí, lo divertido: el videoclip."
+        },
+        {
+          "host": "Jessica",
+          "text": "[laughs] Sí, la historia de la semana. Según Monero Observer, el proyecto XMR20 incrustó en la cadena un videoclip MP4 de veintiún segundos."
+        },
+        {
+          "host": "Chris",
+          "text": "Veintiún segundos de vídeo. ¿Y cómo se mete eso en un bloque? Porque no es que uno mande un vídeo por correo."
+        },
+        {
+          "host": "Jessica",
+          "text": "Ahí está el truco. Dicen que minaron ellos mismos el bloque tres millones setecientos noventa y nueve mil cuatrocientos noventa y cuatro. La transacción pesa unos seiscientos mil bytes, casi seiscientos mil, y quinientos noventa y ocho mil novecientos cuarenta y cinco de esos bytes están en el campo tx_extra."
+        },
+        {
+          "host": "Chris",
+          "text": "Y tx_extra es una zona de datos de formato libre que tiene cada transacción, ¿no?"
+        },
+        {
+          "host": "Jessica",
+          "text": "Eso es. Pero los nodos solo retransmiten hasta mil sesenta bytes de tx_extra. El propio proyecto afirma que su carga era quinientas sesenta y cinco veces ese límite."
+        },
+        {
+          "host": "Chris",
+          "text": "Entonces jamás habría pasado por la mempool, que es la sala de espera donde aguardan las transacciones sin confirmar. Los nodos la habrían rechazado."
+        },
+        {
+          "host": "Jessica",
+          "text": "Justo. Así que se saltaron la sala de espera. Metieron los datos en la transacción coinbase del bloque, la que paga la recompensa, y minaron el bloque directamente."
+        },
+        {
+          "host": "Chris",
+          "text": "[sarcastic] Claro, si no te dejan entrar por la puerta, te construyes el edificio. ¿Y cuánto les costó la gracia?"
+        },
+        {
+          "host": "Jessica",
+          "text": "El titular de Monero Observer calcula el coste en unos seis décimos de monero de recompensa de bloque. Y según el proyecto, es la mayor transacción registrada en Monero."
+        },
+        {
+          "host": "Chris",
+          "text": "¿Y ahora qué? ¿Siguen metiendo vídeos?"
+        },
+        {
+          "host": "Jessica",
+          "text": "Aquí va la primera cita de OVERHEARD, de monero.observer, traducida del inglés: «El pool ha dejado de minar por ahora; el bloque se queda.»"
+        },
+        {
+          "host": "Chris",
+          "text": "El bloque se queda. Eso ya es casi un lema. Bueno, pasemos al precio."
+        },
+        {
+          "host": "Jessica",
+          "text": "Semana tranquila en el cierre, pero con movimiento por el camino. Abrió en unos quinientos noventa y nueve dólares y cerró en unos quinientos noventa y seis, un cero coma seis por ciento a la baja."
+        },
+        {
+          "host": "Chris",
+          "text": "El rango fue de quinientos noventa y seis a unos seiscientos cuarenta y tres dólares. Y Bitcoin cayó un cinco por ciento en el mismo periodo."
+        },
+        {
+          "host": "Jessica",
+          "text": "Las ganancias llegaron pronto: subió hasta el miércoles, luego cayó en cuatro de los últimos cinco días y cerró en el mínimo de la semana."
+        },
+        {
+          "host": "Chris",
+          "text": "[exhales] Cerrar en el mínimo siempre deja mal sabor. Aunque la semana sigue dentro de la tendencia alcista del último mes, de cerca de un catorce coma siete por ciento."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y hay una cita en el apartado de precio. @X_Four_iv dijo el tres de noviembre que Monero llevaba tiempo comprimiéndose entre una resistencia descendente y un soporte ascendente, y que vigilaban una ruptura. Ese día el precio subió un cuatro coma tres por ciento."
+        },
+        {
+          "host": "Chris",
+          "text": "Que conste: es lo que dijo esa cuenta, no una recomendación nuestra. Nosotros solo contamos lo que pasó."
+        },
+        {
+          "host": "Jessica",
+          "text": "Eso. Pasamos al desarrollo: treinta y una pull requests fusionadas esta semana en el repo principal."
+        },
+        {
+          "host": "Chris",
+          "text": "Además del árbol de FCMP++, hay correcciones de monedero, p2p, RPC y compilación. También textos de ayuda más ordenados y notas nuevas en el README para compilar con Rust."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y un arreglo para una marca de doble gasto que faltaba en el pool de transacciones, más una corrección del tipo de registro DNS que se usaba en las consultas IPv6."
+        },
+        {
+          "host": "Chris",
+          "text": "Una que me gustó: las pruebas de pago de transacciones v1 antiguas vuelven a funcionar."
+        },
+        {
+          "host": "Jessica",
+          "text": "Sí. get_tx_proof y check_tx_proof obtenían transacciones podadas, y en las v1 podadas la comprobación del hash las rechazaba. Así que fallaban las pruebas de pagos v1 históricos."
+        },
+        {
+          "host": "Chris",
+          "text": "¿Y cómo lo arreglaron?"
+        },
+        {
+          "host": "Jessica",
+          "text": "Reintentan sin poda, solo para v1, y verifican el hash de la transacción completa."
+        },
+        {
+          "host": "Chris",
+          "text": "Otra más de privacidad fina: las comprobaciones manuales de actualización de monerod, el Monero daemon, el programa que ejecuta un nodo, dejan de filtrar DNS fuera del proxy."
+        },
+        {
+          "host": "Jessica",
+          "text": "[curious] A ver si lo entiendo: con la opción --proxy y las filtraciones de DNS no permitidas, las comprobaciones automáticas ya estaban desactivadas. Pero las manuales de comprobación, descarga y actualización todavía podían lanzar una consulta DNS TXT fuera del proxy."
+        },
+        {
+          "host": "Chris",
+          "text": "Eso. Ahora siguen la misma política. Y para operadores de nodos hay una opción nueva, --rpc-restricted-no-login."
+        },
+        {
+          "host": "Jessica",
+          "text": "Permite publicar un puerto RPC restringido sin credenciales mientras el puerto completo sigue protegido con contraseña. Además, los hosts bloqueados ahora se eliminan de las listas de pares cargadas al inicio, porque la lista de bloqueos se aplicaba antes que ellas."
+        },
+        {
+          "host": "Chris",
+          "text": "Y para los monederos: Simplewallet ahora borra los valores de --seed y --electrum-seed después de analizarlos."
+        },
+        {
+          "host": "Jessica",
+          "text": "Ojo, que el propio texto avisa de que las semillas aún pueden aparecer en listados de procesos y en el historial del shell. Otras correcciones evitan que los archivos de claves antiguos se cifren dos veces, lo que dejaba el archivo reescrito ilegible."
+        },
+        {
+          "host": "Chris",
+          "text": "Y que una llamada fallida a createWalletFromKeys reemplace la caché de un monedero existente. Suena a susto evitado."
+        },
+        {
+          "host": "Jessica",
+          "text": "[laughs] Vamos al ecosistema. Feather Wallet 2.9.1 deja obsoleto su demonio de Tor integrado."
+        },
+        {
+          "host": "Chris",
+          "text": "A quien no pueda conectarse a un nodo le indican que actualice, instale Tor en todo el sistema, apunte Feather al puerto 9150 de Tor Browser o desactive Tor. La versión también quita la columna Fiat, los plugins de Mining y Bounties y el soporte para Linux ARM32."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y la compilación de Windows ya no está firmada con codesign. Otras novedades: Skylight Wallet 2.2.0, de MAGIC Grants, admite llaves de seguridad por hardware y copias de seguridad resistentes a la computación cuántica, con manejo de memoria reforzado y un Tor más reciente."
+        },
+        {
+          "host": "Chris",
+          "text": "Monero One 1.1.0, para iPhone y Android, ahora puede enviar Monero como enlace y enviar a nombres OpenAlias. Y la introducción de la semilla es una casilla por palabra, con comprobación de suma de verificación."
+        },
+        {
+          "host": "Jessica",
+          "text": "La versión preliminar de Cake Wallet 6.5.3 abre su beta pública. Trae Zcash en Ledger, BitBox02 Nova en iOS, inicio y cambio de monedero más rápidos, y protecciones más sólidas de 2FA y copias de seguridad."
+        },
+        {
+          "host": "Chris",
+          "text": "Y sus notas dicen que prepara herramientas de privacidad para la próxima actualización de la red."
+        },
+        {
+          "host": "Jessica",
+          "text": "Edge añadió Stealth Routing, con tecnología de Houdini Swap. Busca que el vínculo en la cadena entre el inicio y el final de un pago sea más difícil de seguir, y Monero es compatible cuando hay una ruta activa."
+        },
+        {
+          "host": "Chris",
+          "text": "Edge aclara que las transacciones individuales siguen siendo visibles y que no garantiza el anonimato. Y para los desarrolladores: Bitcart 0.11.1.0 corrige el análisis de transacciones con datos extra inusuales y estrena un renderizador de plantillas aislado en Rust."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y woodser publicó monero-cpp v0.9.12, monero-java v0.8.65 y monero-ts v0.11.22. monero-cpp pasa a Monero 0.18.5.4."
+        },
+        {
+          "host": "Chris",
+          "text": "Pasamos a la comunidad. Informes del CCS, el Community Crowdfunding System: selsta publicó la actualización de octubre."
+        },
+        {
+          "host": "Jessica",
+          "text": "Cuenta que ya están disponibles la v0.18.5.3 y la v0.18.5.4, que el trabajo de la v0.19.0.0 continúa, que la transición de la GUI a Qt6 está terminada y que se clasificaron una docena más de informes de HackerOne."
+        },
+        {
+          "host": "Chris",
+          "text": "Y el informe final de jpk68, de su propuesta de dedicación completa, enumera el parche de readline y linenoise ya fusionado y el trabajo en métodos de freeze y thaw para la API del monedero."
+        },
+        {
+          "host": "Jessica",
+          "text": "Otra: Monero se une al OSS Scanner de Anthropic. Anthropic fusionó la pull request de plowsof que inscribe a Monero en su servicio opcional de búsqueda de vulnerabilidades para software de código abierto."
+        },
+        {
+          "host": "Chris",
+          "text": "Tras unas dos semanas de silencio, dice el resumen. Y la PR indica que se abrió con el permiso de los mantenedores del repo principal."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y Monero Talk número cuatrocientos recibe a Chad Barraford, de THORChain, con el presentador Douglas Tuman. Hablan de resiliencia de la red, liquidez entre cadenas y la esperada integración con Monero."
+        },
+        {
+          "host": "Chris",
+          "text": "También hay un aviso de seguridad. Un fallo reportado en APT permite a un atacante remoto saltarse la verificación de paquetes mediante redirecciones y errores HTTP transitorios."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y como los .deb se instalan como root, lo que está en juego es mucho. Afecta a usuarios de Debian y Ubuntu. Además Qubes advirtió de que las versiones de Xen posteriores a la 4.6 son vulnerables a que un invitado malicioso lea y escriba la memoria de otros dominios."
+        },
+        {
+          "host": "Chris",
+          "text": "Y recomiendan seguir actualizando con normalidad. Bien, privacidad más allá de Monero. Motorola dará soporte oficial a GrapheneOS, empezando por el Signature 27."
+        },
+        {
+          "host": "Jessica",
+          "text": "[mischievously] Dice GrapheneOS que Motorola tiene ingenieros ayudando a portarlo y a implementar las funciones de seguridad necesarias. El nuevo buque insignia será el primer teléfono Motorola compatible, y prometen más dispositivos."
+        },
+        {
+          "host": "Chris",
+          "text": "Y justo GrapheneOS aparece también en OVERHEARD. @GrapheneOS dijo, traducido del inglés: «Hay una campaña de desinformación patrocinada por un Estado contra GrapheneOS en varios países de Europa occidental.»"
+        },
+        {
+          "host": "Jessica",
+          "text": "Y ya que estamos con citas, una de reddit.com barra r barra privacy, también traducida: «El disco duro en cuestión se cayó accidentalmente y ya no funciona.» Sin más contexto en este número."
+        },
+        {
+          "host": "Chris",
+          "text": "[laughs] La frase más misteriosa de la semana. Seguimos. DigiCert informa de una brecha que afecta a información de clientes empresariales."
+        },
+        {
+          "host": "Jessica",
+          "text": "La autoridad de certificación dice que un sistema interno de negocio fue accesible desde el exterior durante el verano sin que fuera esa la intención, y que alguien creó una cuenta no autorizada."
+        },
+        {
+          "host": "Chris",
+          "text": "La EFF, junto con la ACLU, presentó un escrito de amicus curiae pidiendo al Noveno Circuito que trate las órdenes de volcado de torres como inconstitucionales, en United States v. Spurlock."
+        },
+        {
+          "host": "Jessica",
+          "text": "Son órdenes que obligan a los operadores móviles a entregar datos de ubicación de todos los teléfonos de una zona. Es el primer caso de apelación de este tipo desde la sentencia del Tribunal Supremo de este verano sobre las órdenes de geovalla."
+        },
+        {
+          "host": "Chris",
+          "text": "Y cerramos esta parte con Arti 2.8.0, la reescritura de Tor en Rust, que se acerca a poder ejecutar relays."
+        },
+        {
+          "host": "Jessica",
+          "text": "Gran parte del trabajo se centra en usar Arti como relay y autoridad de directorio: cálculo del consenso a partir de los votos, descarga de descriptores y limitación de la tasa de ancho de banda. Más limpiezas en la especificación de Tor."
+        },
+        {
+          "host": "Chris",
+          "text": "Los números de la red, rápido. El hashrate medio fue de unos seis coma siete ocho gigahashes por segundo, frente a seis coma seis ocho la semana anterior."
+        },
+        {
+          "host": "Jessica",
+          "text": "Hubo veintinueve mil seiscientas cinco transacciones al día, contra veintisiete mil seiscientas ochenta y siete. Y la comisión media fue de unas doscientas treinta y nueve millonésimas de monero, un poco menos que las doscientas cuarenta y cuatro de antes."
+        },
+        {
+          "host": "Chris",
+          "text": "Si quieres ver cuánto cuesta una transacción ahora mismo, en xmr punto fan barra fee lo tienes en vivo."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y con eso cerramos el número cuatro. Todos los enlaces de las historias están en xmr punto fan barra es barra news."
+        },
+        {
+          "host": "Chris",
+          "text": "Gracias por escucharnos. Nos oímos la semana que viene."
+        },
+        {
+          "host": "Jessica",
+          "text": "Hasta entonces, cuídense y cuiden su privacidad. ¡Adiós!"
+        }
+      ]
+    }
+  }
+}
