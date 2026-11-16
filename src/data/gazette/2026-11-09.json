@@ -189,7 +189,7 @@
   },
   "no": 5,
   "week": "2026-11-09",
-  "draft": true,
+  "draft": false,
   "sample": false,
   "network": {
     "hash": 6.75,
@@ -687,6 +687,315 @@
         "text": "And I'm Jessica. See you next week on The xmr.fan Times."
       }
     ]
+  },
+  "podcasts": {
+    "es": {
+      "file": "/podcast/2026-11-09.es.mp3",
+      "duration": 826,
+      "bytes": 6605261,
+      "hosts": [
+        "Chris",
+        "Jessica"
+      ],
+      "transcript": [
+        {
+          "host": "Chris",
+          "text": "¡Hola y bienvenidos a The xmr.fan Times! Soy Chris, y esta es la edición número cinco, la semana del nueve de noviembre."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y yo soy Jessica. Hoy hablamos de la retirada de Monero en un exchange, de una prueba matemática verificada por ordenador, de unas apps falsas en la App Store, y de bastantes novedades de desarrollo."
+        },
+        {
+          "host": "Chris",
+          "text": "Y del precio, que esta semana trae tema. Pero empecemos por el exchange. MEXC anunció que retira sus pares de Monero al contado y de futuros perpetuos el trece de noviembre."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y no solo Monero: también los de DASH. Lo importante es el calendario. Los depósitos de Monero ya se cerraron el once de noviembre."
+        },
+        {
+          "host": "Chris",
+          "text": "O sea que ya no se puede meter más Monero ahí, y los pares desaparecen el trece. La noticia dice que quien tenga Monero en MEXC debería leer con atención el calendario, y me parece una buena frase para quedarnos."
+        },
+        {
+          "host": "Jessica",
+          "text": "[sighs] Es la vieja lección: dejar fondos en un exchange siempre te hace depender de lo que decida el exchange. Pero no vamos a dar consejos, solo contamos lo que pasó."
+        },
+        {
+          "host": "Chris",
+          "text": "Exacto. Y eso nos lleva al precio, porque coincidió con la semana. Monero abrió en unos quinientos noventa y nueve dólares y cerró en unos cuatrocientos noventa y cinco. Una caída del diecisiete coma tres por ciento."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y Bitcoin también bajó, un doce coma siete por ciento. El rango de la semana fue de unos cuatrocientos sesenta dólares, el mínimo, a unos seiscientos tres como máximo."
+        },
+        {
+          "host": "Chris",
+          "text": "La caída fue escalonada: la mayoría de los días cerraron a la baja. El sábado fue el golpe más fuerte, un descenso del trece coma tres por ciento, que llevó a Monero a ese mínimo de cuatrocientos cincuenta y nueve con setenta y seis."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y el domingo hubo un rebote que recuperó parte de esa pérdida. Aun así, la semana terminó un once por ciento por debajo de donde estaba un mes antes."
+        },
+        {
+          "host": "Chris",
+          "text": "Según monero.observer, el retroceso sacó a Monero de su canal alcista y lo devolvió al soporte de la media móvil exponencial de doscientos días, en torno a los cuatrocientos sesenta dólares. Compradores y vendedores se disputaban el nivel de quinientos al momento de escribir."
+        },
+        {
+          "host": "Jessica",
+          "text": "[curious] Y ojo con el detalle de la retirada: monero.observer cita el anuncio de MEXC y el cierre de depósitos. Además, un usuario de Reddit señaló que el precio había seguido a la baja a Bitcoin y que ya había caído el martes."
+        },
+        {
+          "host": "Chris",
+          "text": "Así que no sabemos cuánto pesó cada cosa, y no vamos a inventarlo. Pasemos a lo más bonito de la semana, que es el tema principal."
+        },
+        {
+          "host": "Jessica",
+          "text": "Sí, me encanta esta. La firma de seguridad zkSecurity publicó una revisión de los Generalized Bulletproofs, que son un tipo de prueba de conocimiento cero."
+        },
+        {
+          "host": "Chris",
+          "text": "Y para quien no lo tenga fresco: una prueba de conocimiento cero es una forma de demostrar que algo es cierto sin revelar nada más. Si te pica la curiosidad, en xmr.fan barra eli5 tienes la privacidad de Monero explicada en palabras sencillas."
+        },
+        {
+          "host": "Jessica",
+          "text": "Lo especial es que el trabajo viene con una prueba formal escrita en Lean. Lean es una herramienta que permite que un ordenador compruebe cada paso de un argumento matemático."
+        },
+        {
+          "host": "Chris",
+          "text": "O sea, no basta con que un humano diga «sí, me convence». Una máquina revisa todo el razonamiento, paso a paso."
+        },
+        {
+          "host": "Jessica",
+          "text": "Eso. Y cubre el protocolo, según dice el anuncio, «tal como Monero lo implementa». Demuestra tres cosas: que es completo, de conocimiento cero y sólido."
+        },
+        {
+          "host": "Chris",
+          "text": "Vamos una por una, que suenan parecido. Completo significa que las pruebas honestas se aceptan."
+        },
+        {
+          "host": "Jessica",
+          "text": "De conocimiento cero: las pruebas no revelan nada extra. Y sólido: un probador deshonesto no puede lograr que se acepte una afirmación falsa."
+        },
+        {
+          "host": "Chris",
+          "text": "[laughs] Es decir, las que dicen la verdad pasan, no se filtra nada, y las mentirosas no cuelan. Dicho así hasta suena sencillo."
+        },
+        {
+          "host": "Jessica",
+          "text": "Pero hay una salvedad importante, y me parece justo contarla. El anuncio dice que es una formalización independiente, no una comprobación línea por línea de la prueba del informe escrito."
+        },
+        {
+          "host": "Chris",
+          "text": "Entonces no es un sello sobre el texto original."
+        },
+        {
+          "host": "Jessica",
+          "text": "Exacto. Es una segunda vía, distinta, para llegar a la misma conclusión. Y el informe se anunció a través de MAGIC Grants."
+        },
+        {
+          "host": "Chris",
+          "text": "Bien. Cambiamos a lo que se dijo en Reddit esta semana, que tengo tres citas. Todas son de gente en r/Monero y las leemos traducidas del inglés."
+        },
+        {
+          "host": "Jessica",
+          "text": "Empiezo yo. Un usuario escribió: «He analizado el tráfico de red de ambas apps y he confirmado que son ladronas de semillas»."
+        },
+        {
+          "host": "Chris",
+          "text": "Y esa conecta con una noticia de comunidad que vemos enseguida. La segunda cita es más simpática: otro usuario dijo, y lo traduzco: «*saluda con entusiasmo* ¡hola! Llevo varios meses trabajando en esto en segundo plano, pero se me olvidó por completo compartirlo por aquí»."
+        },
+        {
+          "host": "Jessica",
+          "text": "[laughs] Qué sensación tan reconocible. Todos tenemos un proyecto que llevamos meses cocinando y se nos olvida contarlo."
+        },
+        {
+          "host": "Chris",
+          "text": "Y la tercera es una pregunta, también de un usuario de Reddit: «¿Por qué alguien cambiaría sus BTC y/o XMR por una moneda intermedia antes de cobrar en dólares estadounidenses?»."
+        },
+        {
+          "host": "Jessica",
+          "text": "Buena pregunta, y la dejamos ahí flotando, porque no tenemos más datos en esta edición."
+        },
+        {
+          "host": "Chris",
+          "text": "Vamos con la parte de desarrollo. Recordatorio de la semana pasada: el repositorio principal tuvo un montón de fusiones, con el código de construcción del árbol de FCMP++ al frente. Esta semana continúa."
+        },
+        {
+          "host": "Jessica",
+          "text": "Sí, se integraron las herramientas para verificar pruebas de FCMP++ en el consenso. Hay una función que agrupa las pruebas en lotes, repartidos a partes iguales según el número de entradas entre los hilos de la máquina."
+        },
+        {
+          "host": "Chris",
+          "text": "Y luego verifica los lotes en paralelo. O sea, repartir el trabajo entre los núcleos del procesador para ir más rápido."
+        },
+        {
+          "host": "Jessica",
+          "text": "Otra cosa que me gustó: Rucknium publicó un documento que reúne los fallos de falsificación de este año. También se llaman fallos de inflación."
+        },
+        {
+          "host": "Chris",
+          "text": "Y no son solo de Monero: son los que se encontraron o explotaron en proyectos de privacidad de criptomonedas en dos mil veintiséis. Todo en un solo resumen."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y hay un cambio pequeño pero muy sensato en monero-wallet-cli, la cartera de línea de comandos. Ahora registrará solo el nombre del comando en lugar de la línea completa."
+        },
+        {
+          "host": "Chris",
+          "text": "¿Y eso por qué importa?"
+        },
+        {
+          "host": "Jessica",
+          "text": "Porque los argumentos de comandos como set_tx_key o set_daemon pueden contener claves secretas o credenciales. Antes podían acabar escritos en el archivo de registro."
+        },
+        {
+          "host": "Chris",
+          "text": "[curious] ¿Y en el terminal siguen apareciendo?"
+        },
+        {
+          "host": "Jessica",
+          "text": "Sí, siguen apareciendo en el terminal. Además, otro cambio aparte mantiene fuera del archivo de registro la información del intercambio de claves multifirma y las claves de transacción. Lo mismo: en el terminal sí salen."
+        },
+        {
+          "host": "Chris",
+          "text": "Ahora una propuesta que va a dar que hablar. En el Monero Research Lab, thomasbuilds propone sustituir el algoritmo de dificultad original de CryptoNote en la próxima bifurcación dura."
+        },
+        {
+          "host": "Jessica",
+          "text": "El reemplazo sería ASERT, como el que usa Bitcoin Cash, con una vida media de doce horas en lugar de dos días. Es una propuesta, ojo, no algo decidido."
+        },
+        {
+          "host": "Chris",
+          "text": "Y lo de la dificultad es lo que ajusta lo difícil que es minar un bloque según la potencia de la red. Con una vida media más corta, en teoría reacciona más rápido, pero eso ya es terreno de la discusión."
+        },
+        {
+          "host": "Jessica",
+          "text": "Mejor no adelantemos conclusiones. Otra novedad: --tx-proxy ahora puede recibir el nombre de host de un proxy SOCKS."
+        },
+        {
+          "host": "Chris",
+          "text": "Muy práctico si tienes Tor en otro contenedor de Docker. Puedes usar tor dos puntos nueve mil cincuenta, en vez de una dirección IP fija."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y también llegó al repositorio principal el soporte de I2P mediante el protocolo SAM, como espejo de la rama de jpk68 en Codeberg."
+        },
+        {
+          "host": "Chris",
+          "text": "[laughs] Semana de redes anónimas. Pasamos a carteras y software del ecosistema."
+        },
+        {
+          "host": "Jessica",
+          "text": "MMGen Wallet 17.0.0 añade una comprobación de la integridad de los datos de la transacción al firmar con Monero. Verifica que la dirección de cambio pertenece a tu cartera y que el importe mostrado va al destino mostrado."
+        },
+        {
+          "host": "Chris",
+          "text": "Eso protege los fondos si la máquina conectada llegara a verse comprometida. El proyecto insta a los usuarios de Monero a actualizar."
+        },
+        {
+          "host": "Jessica",
+          "text": "Haveno 1.13.0 pasa Tor a la versión cero punto cuatro punto nueve punto quince, y pide la contraseña de la cartera antes de mostrar las claves privadas."
+        },
+        {
+          "host": "Chris",
+          "text": "También evita que mensajes falsificados del buzón oculten los reales, y mantiene el acceso al nodo de Monero fuera de la línea de comandos del proceso de la cartera."
+        },
+        {
+          "host": "Jessica",
+          "text": "Stack Wallet 2.7.5 trae pagos de Monero a varios destinatarios con avisos de pago dividido. Mejora la privacidad de Tor y la conectividad con Trocador, gestiona mejor los intercambios y corrige la restauración de copias de seguridad."
+        },
+        {
+          "host": "Chris",
+          "text": "Y la app Haveno para Android, versión uno punto cero punto once, añade BLIK y tarjetas regalo de Amazon como métodos de pago. También edición de ofertas, activar y desactivar ofertas, y un interruptor de «reservar el importe exacto». Es compatible con Haveno v1.12.0."
+        },
+        {
+          "host": "Jessica",
+          "text": "Ahora la parte de comunidad, que enlaza con la primera cita. Un usuario de Reddit informó de dos apps de iOS que se hacen pasar por carteras de Monero."
+        },
+        {
+          "host": "Chris",
+          "text": "Según su análisis del tráfico de red, envían tu frase semilla al servidor de los estafadores en cuanto creas o importas una cartera."
+        },
+        {
+          "host": "Jessica",
+          "text": "[sighs] Y el recordatorio es incómodo: el proceso de revisión de Apple a veces deja pasar apps maliciosas. Que algo esté en la tienda no significa que sea de fiar."
+        },
+        {
+          "host": "Chris",
+          "text": "Otra de comunidad: plowsof publicó su segundo informe como coordinador del CCS, el Community Crowdfunding System, para el séptimo periodo."
+        },
+        {
+          "host": "Jessica",
+          "text": "Cuenta que ya está diseñada e implementada una configuración de backend recomendada, llamada ccs-bash. Hay un front end rediseñado en Hugo con espejo en ccs.monerodevs.org."
+        },
+        {
+          "host": "Chris",
+          "text": "Y el rediseño de monero-site se portó de Astro a Hugo."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y una más: apareció Kuroshio, un protocolo experimental de canales de pago y pools en capa dos para las próximas actualizaciones FCMP++ y Carrot de Monero."
+        },
+        {
+          "host": "Chris",
+          "text": "Eso sí, la publicación es solo un anuncio con enlaces, así que de detalles técnicos, de momento, poca cosa."
+        },
+        {
+          "host": "Jessica",
+          "text": "Vamos con la privacidad más allá de Monero. El Bundestag alemán aprobó la mayor reforma de las leyes de espionaje del país desde la posguerra."
+        },
+        {
+          "host": "Chris",
+          "text": "Trescientos ocho votos a favor, ciento noventa en contra y setenta y una abstenciones. La ley otorga a los servicios de inteligencia poderes de hackeo y sabotaje."
+        },
+        {
+          "host": "Jessica",
+          "text": "GrapheneOS dice que su port a Android 17 QPR2 está casi completo. Un port anterior para el Pixel 11 se canceló por falta de soporte de MTE, y QPR2 lo añade."
+        },
+        {
+          "host": "Chris",
+          "text": "El proyecto confirmó que funciona. El soporte del Pixel 11 puede llegar después de QPR2, con el soporte de Signature 27 como prioridad principal."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y actualizaciones de seguridad: Tor Browser 16.0.1 incluye importantes parches de Firefox y pasa Tor a la cero punto cuatro punto nueve punto dieciséis. Tails 7.17 le sigue con el nuevo Tor Browser y el cliente de Tor, además de un kernel de Linux más reciente."
+        },
+        {
+          "host": "Chris",
+          "text": "Dos más. Nueva York podrá multar a las empresas con mil dólares por cada caso verificado de fijación de precios basada en vigilancia. Según los informes, crece el impulso a favor de prohibiciones en todo el país."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y la EFF, junto con la ACLU, pidió al Sexto Circuito, en United States v. Sturdivant, que exija una orden judicial para las búsquedas en lectores de matrículas."
+        },
+        {
+          "host": "Chris",
+          "text": "Es un caso en el que la policía siguió a un sospechoso con datos de esos lectores sin orden. Sostienen que ese seguimiento es un registro según la Cuarta Enmienda."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y antes de cerrar, la red en una frase. El hashrate medio fue de unos seis coma siete cinco gigahashes por segundo, frente a seis coma siete ocho la semana anterior."
+        },
+        {
+          "host": "Chris",
+          "text": "Hubo unas veintinueve mil trescientas sesenta y siete transacciones al día, contra veintinueve mil seiscientas cinco. Y la comisión media fue de unas doscientas cuarenta y cuatro millonésimas de monero, casi igual que antes. Si quieres ver lo que cuesta una transacción ahora mismo, está xmr punto fan barra fee."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y una fecha para la agenda: el dieciocho de noviembre a las diecisiete horas UTC hay reunión del Monero Research Lab, en IRC de Libera y en Matrix. En el orden del día, sin confirmar, están las auditorías de FCMP++ y la stressnet."
+        },
+        {
+          "host": "Chris",
+          "text": "Hasta aquí la edición de hoy. Todos los enlaces están en xmr punto fan barra es barra news."
+        },
+        {
+          "host": "Jessica",
+          "text": "Gracias por escucharnos. ¡Nos vemos la próxima semana!"
+        }
+      ]
+    }
   },
   "generated": {
     "model": "anthropic/claude-sonnet-5.5",
@@ -1363,315 +1672,6 @@
           "monero.observerによると、MEXCはXMRの現物と無期限ペアを11月13日に上場廃止すると発表し、XMRの入金を11月11日に締め切りました。また、Redditのユーザーは、価格がBitcoinにつられて下落しており、火曜日の時点ですでに下げていたと指摘しています。"
         ]
       }
-    }
-  },
-  "podcasts": {
-    "es": {
-      "file": "/podcast/2026-11-09.es.mp3",
-      "duration": 826,
-      "bytes": 6605261,
-      "hosts": [
-        "Chris",
-        "Jessica"
-      ],
-      "transcript": [
-        {
-          "host": "Chris",
-          "text": "¡Hola y bienvenidos a The xmr.fan Times! Soy Chris, y esta es la edición número cinco, la semana del nueve de noviembre."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y yo soy Jessica. Hoy hablamos de la retirada de Monero en un exchange, de una prueba matemática verificada por ordenador, de unas apps falsas en la App Store, y de bastantes novedades de desarrollo."
-        },
-        {
-          "host": "Chris",
-          "text": "Y del precio, que esta semana trae tema. Pero empecemos por el exchange. MEXC anunció que retira sus pares de Monero al contado y de futuros perpetuos el trece de noviembre."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y no solo Monero: también los de DASH. Lo importante es el calendario. Los depósitos de Monero ya se cerraron el once de noviembre."
-        },
-        {
-          "host": "Chris",
-          "text": "O sea que ya no se puede meter más Monero ahí, y los pares desaparecen el trece. La noticia dice que quien tenga Monero en MEXC debería leer con atención el calendario, y me parece una buena frase para quedarnos."
-        },
-        {
-          "host": "Jessica",
-          "text": "[sighs] Es la vieja lección: dejar fondos en un exchange siempre te hace depender de lo que decida el exchange. Pero no vamos a dar consejos, solo contamos lo que pasó."
-        },
-        {
-          "host": "Chris",
-          "text": "Exacto. Y eso nos lleva al precio, porque coincidió con la semana. Monero abrió en unos quinientos noventa y nueve dólares y cerró en unos cuatrocientos noventa y cinco. Una caída del diecisiete coma tres por ciento."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y Bitcoin también bajó, un doce coma siete por ciento. El rango de la semana fue de unos cuatrocientos sesenta dólares, el mínimo, a unos seiscientos tres como máximo."
-        },
-        {
-          "host": "Chris",
-          "text": "La caída fue escalonada: la mayoría de los días cerraron a la baja. El sábado fue el golpe más fuerte, un descenso del trece coma tres por ciento, que llevó a Monero a ese mínimo de cuatrocientos cincuenta y nueve con setenta y seis."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y el domingo hubo un rebote que recuperó parte de esa pérdida. Aun así, la semana terminó un once por ciento por debajo de donde estaba un mes antes."
-        },
-        {
-          "host": "Chris",
-          "text": "Según monero.observer, el retroceso sacó a Monero de su canal alcista y lo devolvió al soporte de la media móvil exponencial de doscientos días, en torno a los cuatrocientos sesenta dólares. Compradores y vendedores se disputaban el nivel de quinientos al momento de escribir."
-        },
-        {
-          "host": "Jessica",
-          "text": "[curious] Y ojo con el detalle de la retirada: monero.observer cita el anuncio de MEXC y el cierre de depósitos. Además, un usuario de Reddit señaló que el precio había seguido a la baja a Bitcoin y que ya había caído el martes."
-        },
-        {
-          "host": "Chris",
-          "text": "Así que no sabemos cuánto pesó cada cosa, y no vamos a inventarlo. Pasemos a lo más bonito de la semana, que es el tema principal."
-        },
-        {
-          "host": "Jessica",
-          "text": "Sí, me encanta esta. La firma de seguridad zkSecurity publicó una revisión de los Generalized Bulletproofs, que son un tipo de prueba de conocimiento cero."
-        },
-        {
-          "host": "Chris",
-          "text": "Y para quien no lo tenga fresco: una prueba de conocimiento cero es una forma de demostrar que algo es cierto sin revelar nada más. Si te pica la curiosidad, en xmr.fan barra eli5 tienes la privacidad de Monero explicada en palabras sencillas."
-        },
-        {
-          "host": "Jessica",
-          "text": "Lo especial es que el trabajo viene con una prueba formal escrita en Lean. Lean es una herramienta que permite que un ordenador compruebe cada paso de un argumento matemático."
-        },
-        {
-          "host": "Chris",
-          "text": "O sea, no basta con que un humano diga «sí, me convence». Una máquina revisa todo el razonamiento, paso a paso."
-        },
-        {
-          "host": "Jessica",
-          "text": "Eso. Y cubre el protocolo, según dice el anuncio, «tal como Monero lo implementa». Demuestra tres cosas: que es completo, de conocimiento cero y sólido."
-        },
-        {
-          "host": "Chris",
-          "text": "Vamos una por una, que suenan parecido. Completo significa que las pruebas honestas se aceptan."
-        },
-        {
-          "host": "Jessica",
-          "text": "De conocimiento cero: las pruebas no revelan nada extra. Y sólido: un probador deshonesto no puede lograr que se acepte una afirmación falsa."
-        },
-        {
-          "host": "Chris",
-          "text": "[laughs] Es decir, las que dicen la verdad pasan, no se filtra nada, y las mentirosas no cuelan. Dicho así hasta suena sencillo."
-        },
-        {
-          "host": "Jessica",
-          "text": "Pero hay una salvedad importante, y me parece justo contarla. El anuncio dice que es una formalización independiente, no una comprobación línea por línea de la prueba del informe escrito."
-        },
-        {
-          "host": "Chris",
-          "text": "Entonces no es un sello sobre el texto original."
-        },
-        {
-          "host": "Jessica",
-          "text": "Exacto. Es una segunda vía, distinta, para llegar a la misma conclusión. Y el informe se anunció a través de MAGIC Grants."
-        },
-        {
-          "host": "Chris",
-          "text": "Bien. Cambiamos a lo que se dijo en Reddit esta semana, que tengo tres citas. Todas son de gente en r/Monero y las leemos traducidas del inglés."
-        },
-        {
-          "host": "Jessica",
-          "text": "Empiezo yo. Un usuario escribió: «He analizado el tráfico de red de ambas apps y he confirmado que son ladronas de semillas»."
-        },
-        {
-          "host": "Chris",
-          "text": "Y esa conecta con una noticia de comunidad que vemos enseguida. La segunda cita es más simpática: otro usuario dijo, y lo traduzco: «*saluda con entusiasmo* ¡hola! Llevo varios meses trabajando en esto en segundo plano, pero se me olvidó por completo compartirlo por aquí»."
-        },
-        {
-          "host": "Jessica",
-          "text": "[laughs] Qué sensación tan reconocible. Todos tenemos un proyecto que llevamos meses cocinando y se nos olvida contarlo."
-        },
-        {
-          "host": "Chris",
-          "text": "Y la tercera es una pregunta, también de un usuario de Reddit: «¿Por qué alguien cambiaría sus BTC y/o XMR por una moneda intermedia antes de cobrar en dólares estadounidenses?»."
-        },
-        {
-          "host": "Jessica",
-          "text": "Buena pregunta, y la dejamos ahí flotando, porque no tenemos más datos en esta edición."
-        },
-        {
-          "host": "Chris",
-          "text": "Vamos con la parte de desarrollo. Recordatorio de la semana pasada: el repositorio principal tuvo un montón de fusiones, con el código de construcción del árbol de FCMP++ al frente. Esta semana continúa."
-        },
-        {
-          "host": "Jessica",
-          "text": "Sí, se integraron las herramientas para verificar pruebas de FCMP++ en el consenso. Hay una función que agrupa las pruebas en lotes, repartidos a partes iguales según el número de entradas entre los hilos de la máquina."
-        },
-        {
-          "host": "Chris",
-          "text": "Y luego verifica los lotes en paralelo. O sea, repartir el trabajo entre los núcleos del procesador para ir más rápido."
-        },
-        {
-          "host": "Jessica",
-          "text": "Otra cosa que me gustó: Rucknium publicó un documento que reúne los fallos de falsificación de este año. También se llaman fallos de inflación."
-        },
-        {
-          "host": "Chris",
-          "text": "Y no son solo de Monero: son los que se encontraron o explotaron en proyectos de privacidad de criptomonedas en dos mil veintiséis. Todo en un solo resumen."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y hay un cambio pequeño pero muy sensato en monero-wallet-cli, la cartera de línea de comandos. Ahora registrará solo el nombre del comando en lugar de la línea completa."
-        },
-        {
-          "host": "Chris",
-          "text": "¿Y eso por qué importa?"
-        },
-        {
-          "host": "Jessica",
-          "text": "Porque los argumentos de comandos como set_tx_key o set_daemon pueden contener claves secretas o credenciales. Antes podían acabar escritos en el archivo de registro."
-        },
-        {
-          "host": "Chris",
-          "text": "[curious] ¿Y en el terminal siguen apareciendo?"
-        },
-        {
-          "host": "Jessica",
-          "text": "Sí, siguen apareciendo en el terminal. Además, otro cambio aparte mantiene fuera del archivo de registro la información del intercambio de claves multifirma y las claves de transacción. Lo mismo: en el terminal sí salen."
-        },
-        {
-          "host": "Chris",
-          "text": "Ahora una propuesta que va a dar que hablar. En el Monero Research Lab, thomasbuilds propone sustituir el algoritmo de dificultad original de CryptoNote en la próxima bifurcación dura."
-        },
-        {
-          "host": "Jessica",
-          "text": "El reemplazo sería ASERT, como el que usa Bitcoin Cash, con una vida media de doce horas en lugar de dos días. Es una propuesta, ojo, no algo decidido."
-        },
-        {
-          "host": "Chris",
-          "text": "Y lo de la dificultad es lo que ajusta lo difícil que es minar un bloque según la potencia de la red. Con una vida media más corta, en teoría reacciona más rápido, pero eso ya es terreno de la discusión."
-        },
-        {
-          "host": "Jessica",
-          "text": "Mejor no adelantemos conclusiones. Otra novedad: --tx-proxy ahora puede recibir el nombre de host de un proxy SOCKS."
-        },
-        {
-          "host": "Chris",
-          "text": "Muy práctico si tienes Tor en otro contenedor de Docker. Puedes usar tor dos puntos nueve mil cincuenta, en vez de una dirección IP fija."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y también llegó al repositorio principal el soporte de I2P mediante el protocolo SAM, como espejo de la rama de jpk68 en Codeberg."
-        },
-        {
-          "host": "Chris",
-          "text": "[laughs] Semana de redes anónimas. Pasamos a carteras y software del ecosistema."
-        },
-        {
-          "host": "Jessica",
-          "text": "MMGen Wallet 17.0.0 añade una comprobación de la integridad de los datos de la transacción al firmar con Monero. Verifica que la dirección de cambio pertenece a tu cartera y que el importe mostrado va al destino mostrado."
-        },
-        {
-          "host": "Chris",
-          "text": "Eso protege los fondos si la máquina conectada llegara a verse comprometida. El proyecto insta a los usuarios de Monero a actualizar."
-        },
-        {
-          "host": "Jessica",
-          "text": "Haveno 1.13.0 pasa Tor a la versión cero punto cuatro punto nueve punto quince, y pide la contraseña de la cartera antes de mostrar las claves privadas."
-        },
-        {
-          "host": "Chris",
-          "text": "También evita que mensajes falsificados del buzón oculten los reales, y mantiene el acceso al nodo de Monero fuera de la línea de comandos del proceso de la cartera."
-        },
-        {
-          "host": "Jessica",
-          "text": "Stack Wallet 2.7.5 trae pagos de Monero a varios destinatarios con avisos de pago dividido. Mejora la privacidad de Tor y la conectividad con Trocador, gestiona mejor los intercambios y corrige la restauración de copias de seguridad."
-        },
-        {
-          "host": "Chris",
-          "text": "Y la app Haveno para Android, versión uno punto cero punto once, añade BLIK y tarjetas regalo de Amazon como métodos de pago. También edición de ofertas, activar y desactivar ofertas, y un interruptor de «reservar el importe exacto». Es compatible con Haveno v1.12.0."
-        },
-        {
-          "host": "Jessica",
-          "text": "Ahora la parte de comunidad, que enlaza con la primera cita. Un usuario de Reddit informó de dos apps de iOS que se hacen pasar por carteras de Monero."
-        },
-        {
-          "host": "Chris",
-          "text": "Según su análisis del tráfico de red, envían tu frase semilla al servidor de los estafadores en cuanto creas o importas una cartera."
-        },
-        {
-          "host": "Jessica",
-          "text": "[sighs] Y el recordatorio es incómodo: el proceso de revisión de Apple a veces deja pasar apps maliciosas. Que algo esté en la tienda no significa que sea de fiar."
-        },
-        {
-          "host": "Chris",
-          "text": "Otra de comunidad: plowsof publicó su segundo informe como coordinador del CCS, el Community Crowdfunding System, para el séptimo periodo."
-        },
-        {
-          "host": "Jessica",
-          "text": "Cuenta que ya está diseñada e implementada una configuración de backend recomendada, llamada ccs-bash. Hay un front end rediseñado en Hugo con espejo en ccs.monerodevs.org."
-        },
-        {
-          "host": "Chris",
-          "text": "Y el rediseño de monero-site se portó de Astro a Hugo."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y una más: apareció Kuroshio, un protocolo experimental de canales de pago y pools en capa dos para las próximas actualizaciones FCMP++ y Carrot de Monero."
-        },
-        {
-          "host": "Chris",
-          "text": "Eso sí, la publicación es solo un anuncio con enlaces, así que de detalles técnicos, de momento, poca cosa."
-        },
-        {
-          "host": "Jessica",
-          "text": "Vamos con la privacidad más allá de Monero. El Bundestag alemán aprobó la mayor reforma de las leyes de espionaje del país desde la posguerra."
-        },
-        {
-          "host": "Chris",
-          "text": "Trescientos ocho votos a favor, ciento noventa en contra y setenta y una abstenciones. La ley otorga a los servicios de inteligencia poderes de hackeo y sabotaje."
-        },
-        {
-          "host": "Jessica",
-          "text": "GrapheneOS dice que su port a Android 17 QPR2 está casi completo. Un port anterior para el Pixel 11 se canceló por falta de soporte de MTE, y QPR2 lo añade."
-        },
-        {
-          "host": "Chris",
-          "text": "El proyecto confirmó que funciona. El soporte del Pixel 11 puede llegar después de QPR2, con el soporte de Signature 27 como prioridad principal."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y actualizaciones de seguridad: Tor Browser 16.0.1 incluye importantes parches de Firefox y pasa Tor a la cero punto cuatro punto nueve punto dieciséis. Tails 7.17 le sigue con el nuevo Tor Browser y el cliente de Tor, además de un kernel de Linux más reciente."
-        },
-        {
-          "host": "Chris",
-          "text": "Dos más. Nueva York podrá multar a las empresas con mil dólares por cada caso verificado de fijación de precios basada en vigilancia. Según los informes, crece el impulso a favor de prohibiciones en todo el país."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y la EFF, junto con la ACLU, pidió al Sexto Circuito, en United States v. Sturdivant, que exija una orden judicial para las búsquedas en lectores de matrículas."
-        },
-        {
-          "host": "Chris",
-          "text": "Es un caso en el que la policía siguió a un sospechoso con datos de esos lectores sin orden. Sostienen que ese seguimiento es un registro según la Cuarta Enmienda."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y antes de cerrar, la red en una frase. El hashrate medio fue de unos seis coma siete cinco gigahashes por segundo, frente a seis coma siete ocho la semana anterior."
-        },
-        {
-          "host": "Chris",
-          "text": "Hubo unas veintinueve mil trescientas sesenta y siete transacciones al día, contra veintinueve mil seiscientas cinco. Y la comisión media fue de unas doscientas cuarenta y cuatro millonésimas de monero, casi igual que antes. Si quieres ver lo que cuesta una transacción ahora mismo, está xmr punto fan barra fee."
-        },
-        {
-          "host": "Jessica",
-          "text": "Y una fecha para la agenda: el dieciocho de noviembre a las diecisiete horas UTC hay reunión del Monero Research Lab, en IRC de Libera y en Matrix. En el orden del día, sin confirmar, están las auditorías de FCMP++ y la stressnet."
-        },
-        {
-          "host": "Chris",
-          "text": "Hasta aquí la edición de hoy. Todos los enlaces están en xmr punto fan barra es barra news."
-        },
-        {
-          "host": "Jessica",
-          "text": "Gracias por escucharnos. ¡Nos vemos la próxima semana!"
-        }
-      ]
     }
   }
 }
