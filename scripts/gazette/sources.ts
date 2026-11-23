@@ -19,7 +19,9 @@ type Item = Omit<SourceItem, "id">;
 const UA = "Mozilla/5.0 (compatible; xmr.fan-gazette/1.0; +https://xmr.fan)";
 
 async function get(url: string, headers: Record<string, string> = {}): Promise<Response> {
-  const res = await fetch(url, { headers: { "User-Agent": UA, ...headers }, signal: AbortSignal.timeout(45_000) });
+  const attempt = () => fetch(url, { headers: { "User-Agent": UA, ...headers }, signal: AbortSignal.timeout(45_000) });
+  // One retry for timeouts and dropped connections; HTTP errors are not retried.
+  const res = await attempt().catch(attempt);
   if (!res.ok) throw new Error(`${res.status} ${res.statusText} ${(await res.text()).slice(0, 200)}`.trim());
   return res;
 }
@@ -138,11 +140,9 @@ const FEEDS: Feed[] = [
   // Stories (with the calendar) apart from the community messages, which projects post about themselves.
   { source: "monero.observer", url: "https://monero.observer/feed-stories.xml", kind: "news", max: 30 },
   { source: "monero.observer", url: "https://monero.observer/feed-messages.xml", kind: "community", max: 15 },
-  { source: "revuo-xmr.com", url: "https://www.revuo-xmr.com/index.xml", kind: "newsletter" },
   { source: "CCS proposals", url: "https://repo.getmonero.org/monero-project/ccs-proposals/-/merge_requests.atom", kind: "funding" },
   // Monero wallets and apps.
   { source: "cakewallet.com", url: "https://blog.cakewallet.com/rss/", kind: "blog" },
-  { source: "featherwallet.org", url: "https://featherwallet.org/feed.xml", kind: "blog" },
   { source: "haveno.exchange", url: "https://haveno.exchange/feed.xml", kind: "blog" },
   // Crypto outlets: only what mentions Monero.
   { source: "cointelegraph.com", url: "https://cointelegraph.com/rss/tag/monero", kind: "news" },
@@ -163,7 +163,7 @@ const FEEDS: Feed[] = [
   { source: "proton.me", url: "https://proton.me/blog/feed", kind: "privacy", max: 10 },
   { source: "tails.net", url: "https://tails.net/news/index.en.rss", kind: "privacy" },
   { source: "qubes-os.org", url: "https://www.qubes-os.org/feed.xml", kind: "privacy" },
-  { source: "whonix.org", url: "https://www.whonix.org/blog/feed", kind: "privacy" },
+  { source: "whonix.org", url: "https://forums.whonix.org/c/news/21.rss", kind: "privacy" },
   { source: "simplex.chat", url: "https://simplex.chat/feed.rss", kind: "privacy" },
   { source: "getsession.org", url: "https://getsession.org/feed", kind: "privacy", max: 10 },
 ];
@@ -263,6 +263,7 @@ export async function collectSources(w: Week): Promise<Collected> {
   const jobs: [string, Promise<Item[]>][] = [
     ["monero releases", githubReleases("monero-project/monero", w)],
     ["monero-gui releases", githubReleases("monero-project/monero-gui", w)],
+    ["feather releases", githubReleases("feather-wallet/feather", w)],
     ["monero merged pull requests", githubMergedPulls("monero-project/monero", w)],
     ["meetings (monero-project/meta)", githubIssues("monero-project/meta", "meeting", w)],
     ...FEEDS.map((f): [string, Promise<Item[]>] => [f.source, feed(f, w)]),
