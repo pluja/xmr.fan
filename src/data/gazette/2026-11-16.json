@@ -227,7 +227,7 @@
   },
   "no": 6,
   "week": "2026-11-16",
-  "draft": true,
+  "draft": false,
   "sample": false,
   "network": {
     "hash": 6.67,
