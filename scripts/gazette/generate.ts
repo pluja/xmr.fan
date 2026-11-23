@@ -71,6 +71,9 @@ if (values["reuse-sources"]) {
   const collected = await collectSources(week);
   for (const r of collected.report) report(!r.error, r.name, r.error ?? `${r.count} items`);
   items = collected.items;
+  const failedSources = collected.report.filter((r) => r.error).map((r) => r.name);
+  mkdirSync(WORK_DIR, { recursive: true });
+  writeFileSync(`${WORK_DIR}/${week.id}.failed-sources.json`, JSON.stringify(failedSources));
 }
 const [network, market] = await Promise.all([settle("network stats", networkStats(week)), settle("price (CoinGecko)", marketWeek(week))]);
 if (!items.length) {

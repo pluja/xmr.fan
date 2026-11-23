@@ -21,6 +21,8 @@ const file = `src/data/gazette/${week.id}.json`;
 /** Written when every step of the draft is done; its time starts the review window. */
 const draftedMarker = `.gazette/${week.id}.drafted`;
 const holdMarker = `.gazette/${week.id}.hold`;
+const sourcesFile = `.gazette/${week.id}.sources.json`;
+const failedSourcesFile = `.gazette/${week.id}.failed-sources.json`;
 
 const read = (): EditionData => editionSchema.parse(JSON.parse(readFileSync(file, "utf8")));
 
@@ -34,7 +36,8 @@ const headlines = (e: EditionData) =>
   [e.lead.h, ...Object.values(e.sections).flat().slice(0, 4).map((s) => s.h)].map((h) => `• ${h}`).join("\n");
 
 async function draft() {
-  if (!existsSync(file)) run("gazette", "--week", week.id);
+  // A retry keeps the sources an earlier run fetched: X only reaches back 7 days from now, so refetching loses posts.
+  if (!existsSync(file)) run("gazette", "--week", week.id, ...(existsSync(sourcesFile) ? ["--reuse-sources"] : []));
   let edition = read();
   if (!edition.draft) return console.log(`No. ${edition.no} is already published.`);
 
@@ -57,9 +60,15 @@ async function draft() {
   edition = read();
   const at = new Date(Date.now() + REVIEW_HOURS * 3_600_000).toISOString().slice(11, 16);
   const preview = PREVIEW_KEY ? `${SITE}/news/preview/${week.id}?key=${encodeURIComponent(PREVIEW_KEY)}` : undefined;
+  const failedSources: string[] = existsSync(failedSourcesFile) ? JSON.parse(readFileSync(failedSourcesFile, "utf8")) : [];
   await notify({
     title: `Times No. ${edition.no} is ready for review`,
-    body: [headlines(edition), preview && `Preview: ${preview}`, `Goes live around ${at} UTC. To stop it, on the server: ops/hold.sh ${week.id}`]
+    body: [
+      headlines(edition),
+      failedSources.length && `Sources that failed: ${failedSources.join(", ")}`,
+      preview && `Preview: ${preview}`,
+      `Goes live around ${at} UTC. To stop it, on the server: ops/hold.sh ${week.id}`,
+    ]
       .filter(Boolean)
       .join("\n\n"),
     tags: ["newspaper"],
