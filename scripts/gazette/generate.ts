@@ -3,6 +3,7 @@
      npm run gazette -- --week 2026-10-12 [--force] [--reuse-sources]
      npm run gazette -- --week 2026-10-12 --only-price   # refresh the numbers and redo the price note only
      npm run gazette -- --week 2026-10-12 --only-art     # redraw the headline art from its brief
+     npm run gazette -- --week 2026-10-12 --only-factcheck  # flag claims the cited sources do not support
    Needs OPENAI_ENDPOINT, MODEL and API_KEY. Optional NANO_GPT_API_KEY adds X and
    Reddit (with votes). The draft only appears in development until it is
    approved with: npm run gazette:publish -- <week> */
@@ -12,6 +13,7 @@ import { parseArgs } from "node:util";
 import { editionSchema, type EditionData } from "../../src/lib/gazette-schema.ts";
 import { drawImage } from "./art.ts";
 import { writeEdition, writePrice } from "./editor.ts";
+import { checkFacts } from "./factcheck.ts";
 import { llmConfigFromEnv } from "./llm.ts";
 import { dropCovered, formatMemory, pastIssues } from "./memory.ts";
 import { marketWeek } from "./market.ts";
@@ -31,6 +33,7 @@ const { values } = parseArgs({
     // Refresh the numbers and rewrite only the price note; the rest and the podcast stay.
     "only-price": { type: "boolean", default: false },
     "only-art": { type: "boolean", default: false },
+    "only-factcheck": { type: "boolean", default: false },
   },
 });
 const week = values.week ? weekStarting(values.week) : lastFullWeek();
@@ -47,6 +50,16 @@ if (values["only-art"]) {
   const latest = editionSchema.parse(JSON.parse(readFileSync(outFile, "utf8")));
   writeFileSync(outFile, JSON.stringify({ ...latest, art }, null, 2) + "\n");
   console.log(`Art (${art.file}): ${edition.art.prompt}`);
+  process.exit(0);
+}
+if (values["only-factcheck"]) {
+  const edition = editionSchema.parse(JSON.parse(readFileSync(outFile, "utf8")));
+  const saved = `${WORK_DIR}/${week.id}.sources.json`;
+  if (!existsSync(saved)) throw new Error(`No saved sources at ${saved} to check against.`);
+  const flags = await checkFacts(llmConfigFromEnv(), edition, JSON.parse(readFileSync(saved, "utf8")));
+  writeFileSync(`${WORK_DIR}/${week.id}.factcheck.json`, JSON.stringify(flags, null, 2));
+  console.log(`Fact check: ${flags.length} flag(s)`);
+  for (const f of flags) console.log(`  [${f.story}] "${f.claim}": ${f.problem}`);
   process.exit(0);
 }
 if (existsSync(outFile) && !values.force) {

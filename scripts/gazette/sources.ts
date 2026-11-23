@@ -13,6 +13,8 @@ export interface SourceItem {
   url: string;
   date: string;
   text: string;
+  /** The person who wrote it, where the source names one (e.g. "u/name" on Reddit). */
+  author?: string;
 }
 type Item = Omit<SourceItem, "id">;
 
@@ -115,10 +117,10 @@ const MONERO = /\bmonero\b|\bXMR\b|privacy coins?/i;
 async function feed(f: Feed, w: Week): Promise<Item[]> {
   const doc = xml.parse(await (await get(f.url)).text());
   const rss = asArray(doc.rss?.channel?.item).map((i: any) => ({
-    title: textOf(i.title), url: textOf(i.link), date: textOf(i.pubDate ?? i["dc:date"]), text: textOf(i.description),
+    title: textOf(i.title), url: textOf(i.link), date: textOf(i.pubDate ?? i["dc:date"]), text: textOf(i.description), author: textOf(i["dc:creator"]),
   }));
   const atom = asArray(doc.feed?.entry).map((e: any) => ({
-    title: textOf(e.title), url: atomLink(e.link), date: textOf(e.published ?? e.updated), text: textOf(e.summary ?? e.content),
+    title: textOf(e.title), url: atomLink(e.link), date: textOf(e.published ?? e.updated), text: textOf(e.summary ?? e.content), author: textOf(asArray(e.author)[0]?.name),
   }));
   return [...rss, ...atom]
     .filter((i) => i.url && i.date && inWeek(new Date(i.date), w))
@@ -132,6 +134,8 @@ async function feed(f: Feed, w: Week): Promise<Item[]> {
       url: i.url,
       date: new Date(i.date).toISOString(),
       text: excerpt(i.text),
+      // Reddit's feed names posters "/u/name".
+      ...(i.author.trim() ? { author: i.author.trim().replace(/^\/u\//, "u/") } : {}),
     }));
 }
 
@@ -245,6 +249,7 @@ async function redditTop(w: Week): Promise<Item[]> {
         title: excerpt(p.title, 200),
         url: p.url,
         date: p.createdAt,
+        ...(p.username ? { author: `u/${p.username}` } : {}),
         // Vote counts are not always returned; leave them out rather than show a misleading 0.
         text: excerpt(p.body, 500) + (p.upVotes != null ? ` (${p.upVotes} upvotes, ${p.numberOfComments ?? 0} comments)` : ""),
       };
@@ -257,13 +262,24 @@ const redditRss = (sub: (typeof SUBREDDITS)[number]): Feed => ({
 const redditFallback = (w: Week) =>
   Promise.all(SUBREDDITS.map((sub) => feed(redditRss(sub), w).catch(() => []))).then((lists) => lists.flat());
 
+/** Projects' own release pages, so stories can cite them rather than an aggregator. */
+const RELEASE_REPOS = [
+  "monero-project/monero",
+  "monero-project/monero-gui",
+  "feather-wallet/feather",
+  "SChernykh/p2pool",
+  "Cuprate/cuprate",
+  "cake-tech/cake_wallet",
+  "haveno-dex/haveno",
+  "eigenwallet/core",
+  "monero-oxide/monero-oxide",
+];
+
 export interface Collected { items: SourceItem[]; report: { name: string; count: number; error?: string }[] }
 
 export async function collectSources(w: Week): Promise<Collected> {
   const jobs: [string, Promise<Item[]>][] = [
-    ["monero releases", githubReleases("monero-project/monero", w)],
-    ["monero-gui releases", githubReleases("monero-project/monero-gui", w)],
-    ["feather releases", githubReleases("feather-wallet/feather", w)],
+    ...RELEASE_REPOS.map((repo): [string, Promise<Item[]>] => [`${repo} releases`, githubReleases(repo, w)]),
     ["monero merged pull requests", githubMergedPulls("monero-project/monero", w)],
     ["meetings (monero-project/meta)", githubIssues("monero-project/meta", "meeting", w)],
     ...FEEDS.map((f): [string, Promise<Item[]>] => [f.source, feed(f, w)]),

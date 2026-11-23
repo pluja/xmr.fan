@@ -32,11 +32,17 @@ export function dropCovered(items: SourceItem[], past: EditionData[]): { fresh: 
   return { fresh, dropped: items.length - fresh.length };
 }
 
-/** Empty when there is no history. */
+/** Empty when there is no history. The latest issue keeps what each story said, so follow-ups can say what changed since. */
 export function formatMemory(past: EditionData[]): string {
   if (!past.length) return "";
-  return "PREVIOUSLY IN THE TIMES (most recent first):\n" + past.map((e) => {
-    const heads = [e.lead.h, ...(e.feature ? [e.feature.h] : []), ...Object.values(e.sections).flat().map((s) => s.h)];
-    return `- No. ${e.no}, week of ${e.week}: ${e.recap ?? ""}\n  Headlines: ${heads.join(" | ")}`;
+  return "PREVIOUSLY IN THE TIMES (most recent first):\n" + past.map((e, index) => {
+    const stories = [
+      { h: e.lead.h, said: e.lead.p },
+      ...(e.feature ? [{ h: e.feature.h, said: e.feature.dek ?? e.feature.body[0] }] : []),
+      ...Object.values(e.sections).flat().map((s) => ({ h: s.h, said: s.p })),
+    ];
+    const header = `- No. ${e.no}, week of ${e.week}: ${e.recap ?? ""}`;
+    if (index === 0) return `${header}\n  Stories:\n${stories.map((s) => `  • ${s.h}: ${s.said}`).join("\n")}`;
+    return `${header}\n  Headlines: ${stories.map((s) => s.h).join(" | ")}`;
   }).join("\n");
 }

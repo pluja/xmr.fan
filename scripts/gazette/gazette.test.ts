@@ -4,6 +4,7 @@ import { lastFullWeek, weekStarting, inWeek } from "./week.ts";
 import { resolveDraft, formatItems, parseTriage, selectImportant, resolvePrice, isMarketTalk, speaker } from "./editor.ts";
 import { excerpt, type SourceItem } from "./sources.ts";
 import { retryDelayMs } from "./llm.ts";
+import { unsupportedNumbers, parseFlags } from "./factcheck.ts";
 
 test("last full week runs Monday to Monday", () => {
   const w = lastFullWeek(new Date("2026-10-20T15:00:00Z")); // a Tuesday
@@ -94,7 +95,19 @@ test("quotes must be word for word; who said it comes from the source", () => {
   const r = resolveDraft(reply({ lead: { h: "L", p: "P", items: ["S1"] }, quotes: [{ quote: "Monero is digital cash, and that’s the point.", item: "S3" }], sections: empty }), all);
   assert.deepEqual(r.quotes, [{ text: "Monero is digital cash, and that’s the point.", who: "@alice", url: "https://x.com/alice/status/1", src: "x.com/alice" }]);
   assert.throws(() => resolveDraft(reply({ lead: { h: "L", p: "P", items: ["S1"] }, quotes: [{ quote: "Monero is the future of money.", item: "S3" }], sections: empty }), all), /word for word/);
-  assert.equal(speaker(items[1]), "getmonero.org");
+});
+
+test("quotes are credited to a named person, never to a site or feed", () => {
+  const redditPost: SourceItem = { ...post, id: "S4", source: "reddit.com/r/Monero", url: "https://reddit.com/r/Monero/1", author: "u/bob" };
+  const anonymous: SourceItem = { ...redditPost, id: "S5", url: "https://reddit.com/r/Monero/2", author: undefined };
+  assert.equal(speaker(redditPost), "u/bob");
+  assert.equal(speaker(anonymous), undefined);
+  assert.equal(speaker(items[1]), undefined);
+  assert.equal(speaker({ ...post, source: "x.com/i" }), undefined);
+  const all = [...items, redditPost, anonymous];
+  const quoting = (item: string) => reply({ lead: { h: "L", p: "P", items: ["S1"] }, quotes: [{ quote: "Monero is digital cash", item }], sections: empty });
+  assert.equal(resolveDraft(quoting("S4"), all).quotes?.[0].who, "u/bob");
+  assert.throws(() => resolveDraft(quoting("S5"), all), /no named person/);
 });
 
 test("the feature resolves with its sources and cannot reuse the lead's item", () => {
@@ -150,7 +163,8 @@ test("memory: links cited in recent issues are dropped, and the digest lists the
   const { fresh, dropped } = dropCovered(items, past);
   assert.equal(dropped, 2);
   assert.equal(fresh.length, 0);
-  assert.match(formatMemory(past), /No\. 2, week of 2026-10-05: Recap 2\.\n  Headlines: Lead 2/);
+  assert.match(formatMemory(past), /No\. 2, week of 2026-10-05: Recap 2\.\n  Stories:\n  • Lead 2: P/);
+  assert.match(formatMemory(past), /No\. 1, week of 2026-09-28: Recap 1\.\n  Headlines: Lead 1/);
   assert.equal(formatMemory([]), "");
 });
 
@@ -224,4 +238,16 @@ test("AI retries back off for minutes and honour Retry-After", () => {
   assert.equal(retryDelayMs(1, "90"), 90_000);
   assert.equal(retryDelayMs(1, "3600"), 300_000);
   assert.equal(retryDelayMs(2, "Wed, 21 Oct 2026 07:28:00 GMT"), 60_000);
+});
+
+test("fact check flags numbers that are not in the cited sources", () => {
+  assert.deepEqual(unsupportedNumbers("Tor v0.4.9.15 passed 308 votes to 190 in 2026", "Tor 0.4.9.15 is out; the vote was 308 to 190."), []);
+  assert.deepEqual(unsupportedNumbers("Feather 2.8.1 fixes 3 bugs", "Feather 2.8.0 fixes bugs"), ["2.8.1", "3"]);
+  assert.deepEqual(unsupportedNumbers("1,200 nodes", "1200 nodes"), []);
+});
+
+test("fact check flags point at real stories", () => {
+  const stories = [{ h: "Lead", text: "Lead. P", sources: [] }];
+  assert.deepEqual(parseFlags('{"flags":[{"story":1,"claim":"P","problem":"not in sources"}]}', stories), [{ story: "Lead", claim: "P", problem: "not in sources" }]);
+  assert.throws(() => parseFlags('{"flags":[{"story":2,"claim":"P","problem":"x"}]}', stories), /no story 2/);
 });

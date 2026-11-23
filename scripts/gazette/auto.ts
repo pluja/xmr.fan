@@ -8,6 +8,7 @@ import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { editionSchema, type EditionData } from "../../src/lib/gazette-schema.ts";
 import { notify } from "../notify.ts";
+import type { Flag } from "./factcheck.ts";
 import { LANGUAGES } from "./translate.ts";
 import { lastFullWeek } from "./week.ts";
 
@@ -23,6 +24,8 @@ const draftedMarker = `.gazette/${week.id}.drafted`;
 const holdMarker = `.gazette/${week.id}.hold`;
 const sourcesFile = `.gazette/${week.id}.sources.json`;
 const failedSourcesFile = `.gazette/${week.id}.failed-sources.json`;
+const factcheckFile = `.gazette/${week.id}.factcheck.json`;
+const MAX_FLAGS_IN_NOTICE = 5;
 
 const read = (): EditionData => editionSchema.parse(JSON.parse(readFileSync(file, "utf8")));
 
@@ -40,6 +43,8 @@ async function draft() {
   if (!existsSync(file)) run("gazette", "--week", week.id, ...(existsSync(sourcesFile) ? ["--reuse-sources"] : []));
   let edition = read();
   if (!edition.draft) return console.log(`No. ${edition.no} is already published.`);
+  // A draft written elsewhere has no saved sources here to check against; the notice says so.
+  if (!existsSync(factcheckFile) && existsSync(sourcesFile)) run("gazette", "--week", week.id, "--only-factcheck");
 
   const untranslated = Object.keys(LANGUAGES).filter((l) => !edition.translations?.[l]);
   if (untranslated.length) {
@@ -65,6 +70,7 @@ async function draft() {
     title: `Times No. ${edition.no} is ready for review`,
     body: [
       headlines(edition),
+      factcheckSummary(),
       failedSources.length && `Sources that failed: ${failedSources.join(", ")}`,
       preview && `Preview: ${preview}`,
       `Goes live around ${at} UTC. To stop it, on the server: ops/hold.sh ${week.id}`,
@@ -75,6 +81,16 @@ async function draft() {
     click: preview,
   });
 }
+
+function factcheckSummary(): string {
+  if (!existsSync(factcheckFile)) return "Fact check: not run (no saved sources on this machine).";
+  const flags: Flag[] = JSON.parse(readFileSync(factcheckFile, "utf8"));
+  if (!flags.length) return "Fact check: nothing flagged.";
+  const lines = flags.slice(0, MAX_FLAGS_IN_NOTICE).map((f) => `• ${f.story}: "${f.claim}" (${f.problem})`);
+  const more = flags.length > MAX_FLAGS_IN_NOTICE ? `\n…see ${factcheckFile}` : "";
+  return `Fact check flagged ${flags.length}:\n${lines.join("\n")}${more}`;
+}
+
 
 async function publish() {
   if (!existsSync(file) || !existsSync(draftedMarker)) return console.log(`The issue for ${week.id} isn't ready yet.`);

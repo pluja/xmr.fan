@@ -19,12 +19,12 @@ const ids = z.array(z.string().regex(/^S\d+$/)).min(1).max(3);
 export function formatItems(items: SourceItem[], week: Week, scores?: Map<string, number>, header = true): string {
   const end = isoDate(new Date(week.to.getTime() - 1));
   return (header ? `Week: ${isoDate(week.from)} to ${end} (UTC)\n\n` : "") + items.map((i) =>
-    `[${i.id}] ${i.kind} | ${i.source} | ${i.date.slice(0, 10)}${scores ? ` | importance ${scores.get(i.id)}` : ""}\n` +
+    `[${i.id}] ${i.kind} | ${i.source}${i.author ? ` | by ${i.author}` : ""} | ${i.date.slice(0, 10)}${scores ? ` | importance ${scores.get(i.id)}` : ""}\n` +
     `title: ${i.title}\n${i.text ? `text: ${i.text}\n` : ""}`,
   ).join("\n");
 }
 
-function parseJson(reply: string): unknown {
+export function parseJson(reply: string): unknown {
   try {
     return JSON.parse(reply.replace(/^\s*```(?:json)?\s*|\s*```\s*$/g, ""));
   } catch {
@@ -54,7 +54,7 @@ function citer(items: SourceItem[], { used = new Set<string>(), scores, minScore
 }
 
 /** Feeds parse errors back to the model until it accepts the reply. */
-async function ask<T>(cfg: LlmConfig, system: string, user: string, parse: (reply: string, last: boolean) => T, attempts = 3): Promise<T> {
+export async function ask<T>(cfg: LlmConfig, system: string, user: string, parse: (reply: string, last: boolean) => T, attempts = 3): Promise<T> {
   const messages: Message[] = [{ role: "system", content: system }, { role: "user", content: user }];
   for (let attempt = 1; ; attempt++) {
     const reply = await chat(cfg, messages);
@@ -149,17 +149,18 @@ You receive the week's source items (S1, S2, ...) in two lists, each item with a
 1. "lead": the story that matters most to Monero users this week. A strong headline (at most 70 characters) and a short standfirst in "p": one or two sentences, at most 45 words, saying what happened and why it matters. Details belong in the news sections, not here.
    "art": a picture to go with the lead, drawn later as minimal, chunky, orange-and-charcoal pixel art (like an enlarged 8-bit sprite) in a 16:9 frame. "prompt": one short sentence naming one or two simple, iconic objects (for example a shield, a key, a coin, a wrench, a padlock) and at most a minimal setting such as a table or a floor; a visual metaphor is fine. No busy scenes, no people, hands or faces, no words, letters or logos. "alt": a short description of the picture for screen readers.
 2. "feature": the week's most interesting, surprising or delightful story that is not the lead (it can be wider privacy news Monero users would care about), told as a short article: a headline, a one-line "dek" (standfirst), and 2 to 4 short paragraphs ("body"). Give context and why it matters; you may weave in what people said in the items. Use items scored 3 or more. Use null if nothing deserves it.
-3. "quotes": up to 3 short quotes that capture the week's mood: funny, sharp, insightful or telling, from different people where possible. Each is a sentence or two copied word for word from one item ("item": its id), usually a post on X or Reddit. Never edit, translate or combine the words. Skip spam, insults and price predictions. An empty list is fine.
+3. "quotes": up to 3 short quotes that capture the week's mood: funny, sharp, insightful or telling, from different people where possible. Each is a sentence or two copied word for word from one post on X or Reddit by a named person ("item": its id). Never edit, translate or combine the words. Only statements worth reading on their own: no questions, no "I made this" or other self-promotion, no spam, insults or price predictions. Most weeks have one or two good quotes; an empty list is better than a weak one.
 4. "recap": two or three plain sentences on what this week in Monero was about, for the archive and for writing future issues.
-5. "upcoming": up to 5 dated events after this week that Monero users may care about (meetings, upgrades, releases, deadlines, conferences), soonest first. "date" is YYYY-MM-DD, "time" the time if given (e.g. "17:00 UTC"), "what" one short sentence. Only events with a date stated in the items and after this week. An empty list is fine.
-6. "sections": the rest of the news. "dev" = code, releases, research. "eco" = wallets, services, merchants, funding proposals, adoption. "comm" = community, events, public service announcements. "privacy" = privacy and freedom tech beyond Monero (GrapheneOS, surveillance, encryption, privacy law). Use NEWS ITEMS only. Order each section by importance, most important first. Aim for 3 to 5 stories per section when the material allows, so readers get the full picture of the week; leave out only items that are not worth a reader's minute, and never pad with routine or noise. Each story: a headline and 1 or 2 sentences.
+5. "upcoming": up to 5 dated events after this week that Monero users may care about (meetings, upgrades, releases, deadlines, conferences), soonest first. "date" is YYYY-MM-DD, "time" the time if given (e.g. "17:00 UTC"), "what" one short sentence. Only events with a date stated in the items and after this week. Leave out routine recurring meetings (such as the weekly research or community meetings) unless something specific is decided there. An empty list is fine.
+6. "sections": the rest of the news. "dev" = the Monero protocol, node and core software (monero, monero-gui, p2pool, Cuprate, libraries) and research. "eco" = wallets, apps, exchanges and other services built on Monero (including their releases), merchants, funding proposals, adoption. "comm" = community, events, public service announcements. "privacy" = privacy and freedom tech beyond Monero (GrapheneOS, surveillance, encryption, privacy law). Use NEWS ITEMS only. Order each section by importance, most important first. Aim for 3 to 5 stories per section when the material allows, so readers get the full picture of the week; leave out only items that are not worth a reader's minute, and never pad with routine or noise. Each story: a headline and 1 or 2 sentences.
 
 How to write:
 - Read naturally, like a well-informed friend telling you about their week in Monero: warm, clear, a little playful where it fits. Vary the rhythm. No corporate tone, no hype, no clickbait, no emoji.
 - Use only facts stated in the items. Never add numbers, names, dates, versions or claims that are not in them. If an item is vague, stay vague. Attribute opinions to whoever said them.
-- The lead, feature and news stories list the ids of the items they use in "items" (1 to 3, main source first). State only facts found in those items. Use each item in at most one of them (quotes may reuse an item).
+- The lead, feature and news stories list the ids of the items they use in "items" (1 to 3, main source first). When both are in the list, make the primary source (the project's own release, post or announcement) the main one and an aggregator such as monero.observer the extra. State only facts found in those items. Use each item in at most one of them (quotes may reuse an item).
 - Never cover the same thing twice, in this issue or in the earlier issues listed (if any). When a story continues one from an earlier issue, say so briefly ("Last week we reported...; now...").
 - Plain language: briefly explain jargon a regular user would not know.
+- For a release or security story, end with what a user should do (for example "Feather users should update to 2.8.1"), when the items make that clear. Never invent advice the items do not support.
 - Report, never promote: no endorsements, calls to action or sales language. A product or service is news for what changed, not for what it offers.
 - No price or market talk in these pieces; the price has its own section.
 - Privacy news beyond Monero belongs in "privacy" (or the feature), never presented as Monero news.
@@ -178,8 +179,16 @@ Reply with JSON only:
 const normalize = (s: string) =>
   s.toLowerCase().replace(/[‘’“”"']/g, "").replace(/…|\.\.\./g, "").replace(/\s+/g, " ").trim();
 
-/** "x.com/monero" -> "@monero"; other sources keep their label. */
-export const speaker = (item: SourceItem) => (item.source.startsWith("x.com/") ? `@${item.source.slice(6)}` : item.source);
+/** The named person behind a post, or undefined when quoting it would credit a site or a feed instead of a person. */
+export function speaker(item: SourceItem): string | undefined {
+  if (item.source.startsWith("x.com/")) {
+    const handle = item.source.slice(6);
+    // "i" stands in for a handle X did not return.
+    return handle && handle !== "i" ? `@${handle}` : undefined;
+  }
+  if (item.source.startsWith("reddit.com/")) return item.author;
+  return undefined;
+}
 
 /** Throws with a message the model can act on. On the last attempt (`lenient`), news stories
     that break a citation rule are dropped with a warning instead of failing the whole issue. */
@@ -212,10 +221,12 @@ export function resolveDraft(reply: string, items: SourceItem[], scores?: Map<st
   const resolvedQuotes = quotes.map((q) => {
     const item = byId.get(q.item);
     if (!item) throw new Error(`A quote cites ${q.item}, which is not in the list.`);
+    const who = speaker(item);
+    if (!who) throw new Error(`The quote from ${q.item} has no named person behind it; quote only posts on X or Reddit by a named person, or drop it.`);
     if (!normalize(`${item.title} ${item.text}`).includes(normalize(q.quote))) {
       throw new Error(`The quote "${q.quote.slice(0, 60)}…" is not word for word in ${q.item}. Copy the exact words or drop it.`);
     }
-    return { text: q.quote.trim(), who: speaker(item), url: item.url, src: item.source };
+    return { text: q.quote.trim(), who, url: item.url, src: item.source };
   });
 
   return editorialSchema.parse({
@@ -248,7 +259,7 @@ The page already shows the week's close, change, range, average volume and Bitco
 
 Write:
 1. "summary": one or two short, natural sentences that add something the tiles do not show: when the move happened, where the week sits in the past month, or what stood out. Return "" if there is nothing to add.
-2. "drivers": up to 2 possible reasons for the move, each one sentence citing the items it relies on ("items": 1 to 3 ids). A driver must come from an item that itself talks about XMR's price, trading, exchanges, listings or market sentiment; attribute it ("according to @someone ..."). Never present ordinary news as a reason for a price move unless an item makes that link. Empty if no item explains the move.
+2. "drivers": up to 2 possible reasons for the move, each one sentence citing the items it relies on ("items": 1 to 3 ids). A driver must come from an item that itself talks about XMR's price, trading, exchanges, listings or market sentiment; attribute it ("according to @someone ..."). Never present ordinary news as a reason for a price move unless an item makes that link. Chart talk (breakouts, support, resistance, patterns) and price predictions are not reasons. Empty if no item explains the move.
 
 Describe, do not predict: no price targets, no forecasts, no trading advice, no "bullish" or "bearish". Use only the numbers and facts given.
 
