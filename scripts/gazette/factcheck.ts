@@ -48,7 +48,7 @@ export function numberFlags(stories: CheckedStory[]): Flag[] {
 
 export const FACTCHECK_PROMPT = `You fact-check The xmr.fan Times, a weekly Monero newsletter, before a human editor reviews it.
 
-For each numbered story you get its text and the source items it cites. List every claim in a story that its sources do not support: invented or changed names, numbers, versions, dates or events; opinions presented as fact; a plan or agenda presented as something that already happened; advice the sources do not give. Plain explanations of well-known terms are fine. Do not flag style, tone or missing details.
+For each numbered story you get its text and the source items it cites. Earlier issues may be listed first: use them only to check what a story says about past coverage ("last week we reported..."). List every claim in a story that its sources do not support: invented or changed names, numbers, versions, dates or events; opinions presented as fact; a plan or agenda presented as something that already happened; advice the sources do not give. Plain explanations of well-known terms are fine. Do not flag style, tone or missing details. List only claims with a problem: never include a claim you checked and found supported.
 
 Reply with JSON only: {"flags":[{"story":1,"claim":"the exact words from the story","problem":"what the sources say instead, or that they do not mention it"}]}. Use {"flags":[]} when everything is supported.`;
 
@@ -70,8 +70,10 @@ export function parseFlags(reply: string, stories: CheckedStory[]): Flag[] {
   });
 }
 
-export async function checkFacts(cfg: LlmConfig, edition: EditionData, items: SourceItem[]): Promise<Flag[]> {
+/** `memory` is the digest of earlier issues the issue was written with (see memory.ts), or "". */
+export async function checkFacts(cfg: LlmConfig, edition: EditionData, items: SourceItem[], memory = ""): Promise<Flag[]> {
   const stories = checkedStories(edition, items);
-  const aiFlags = await ask(cfg, FACTCHECK_PROMPT, formatForCheck(stories), (r) => parseFlags(r, stories));
+  const input = memory ? `${memory}\n\n${formatForCheck(stories)}` : formatForCheck(stories);
+  const aiFlags = await ask(cfg, FACTCHECK_PROMPT, input, (r) => parseFlags(r, stories));
   return [...numberFlags(stories), ...aiFlags];
 }

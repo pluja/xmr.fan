@@ -56,7 +56,8 @@ if (values["only-factcheck"]) {
   const edition = editionSchema.parse(JSON.parse(readFileSync(outFile, "utf8")));
   const saved = `${WORK_DIR}/${week.id}.sources.json`;
   if (!existsSync(saved)) throw new Error(`No saved sources at ${saved} to check against.`);
-  const flags = await checkFacts(llmConfigFromEnv(), edition, JSON.parse(readFileSync(saved, "utf8")));
+  const memory = formatMemory(pastIssues(week.id));
+  const flags = await checkFacts(llmConfigFromEnv(), edition, JSON.parse(readFileSync(saved, "utf8")), memory);
   writeFileSync(`${WORK_DIR}/${week.id}.factcheck.json`, JSON.stringify(flags, null, 2));
   console.log(`Fact check: ${flags.length} flag(s)`);
   for (const f of flags) console.log(`  [${f.story}] "${f.claim}": ${f.problem}`);
