@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { lastFullWeek, weekStarting, inWeek } from "./week.ts";
 import { resolveDraft, formatItems, parseTriage, selectImportant, resolvePrice, isMarketTalk, speaker } from "./editor.ts";
 import { excerpt, type SourceItem } from "./sources.ts";
+import { retryDelayMs } from "./llm.ts";
 
 test("last full week runs Monday to Monday", () => {
   const w = lastFullWeek(new Date("2026-10-20T15:00:00Z")); // a Tuesday
@@ -216,4 +217,11 @@ test("podcast audio spells out names the voice would read as one word", async ()
   const { forSpeech } = await import("./pronounce.ts");
   assert.equal(forSpeech("Update monerod, then FCMP++."), "Update monero D, then F C M P plus plus.");
   assert.equal(forSpeech("monerodevs.org and xmr.fan stay as they are"), "monerodevs.org and xmr.fan stay as they are");
+});
+
+test("AI retries back off for minutes and honour Retry-After", () => {
+  assert.deepEqual([1, 2, 3, 4].map((n) => retryDelayMs(n)), [30_000, 60_000, 120_000, 240_000]);
+  assert.equal(retryDelayMs(1, "90"), 90_000);
+  assert.equal(retryDelayMs(1, "3600"), 300_000);
+  assert.equal(retryDelayMs(2, "Wed, 21 Oct 2026 07:28:00 GMT"), 60_000);
 });

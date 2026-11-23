@@ -20,6 +20,16 @@ export interface Message { role: "system" | "user" | "assistant"; content: strin
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
+const MAX_ATTEMPTS = 5;
+const MAX_WAIT_MS = 300_000;
+
+/** Waits 30 s, 1, 2, then 4 min (about 7.5 min in all) so short provider outages pass; the timer retries longer ones. */
+export function retryDelayMs(attempt: number, retryAfter: string | null = null): number {
+  const asked = Number(retryAfter);
+  if (retryAfter && Number.isFinite(asked) && asked > 0) return Math.min(asked * 1000, MAX_WAIT_MS);
+  return Math.min(30_000 * 2 ** (attempt - 1), MAX_WAIT_MS);
+}
+
 /** Reads a streamed (server-sent events) reply, or a plain JSON one if the provider ignores streaming. */
 async function readReply(res: Response): Promise<string> {
   if (!res.headers.get("content-type")?.includes("text/event-stream")) {
@@ -52,10 +62,11 @@ async function readReply(res: Response): Promise<string> {
 export async function chat(cfg: LlmConfig, messages: Message[], { timeoutMs = 900_000 } = {}): Promise<string> {
   let jsonMode = true;
   for (let attempt = 1; ; attempt++) {
-    const retry = async (why: string) => {
-      if (attempt >= 4) throw new Error(`AI request failed: ${why}`);
-      console.warn(`  AI request failed (${why}); retrying in ${5 * attempt}s`);
-      await sleep(5000 * attempt);
+    const retry = async (why: string, retryAfter: string | null = null) => {
+      if (attempt >= MAX_ATTEMPTS) throw new Error(`AI request failed: ${why}`);
+      const waitMs = retryDelayMs(attempt, retryAfter);
+      console.warn(`  AI request failed (${why}); retrying in ${waitMs / 1000}s`);
+      await sleep(waitMs);
     };
     try {
       const res = await fetch(`${cfg.endpoint}/chat/completions`, {
@@ -73,7 +84,7 @@ export async function chat(cfg: LlmConfig, messages: Message[], { timeoutMs = 90
       // Some providers or models reject JSON mode; the prompts ask for JSON anyway.
       if (res.status === 400 && jsonMode) { jsonMode = false; continue; }
       // Rate limits and server errors are often temporary.
-      if (res.status === 429 || res.status >= 500) { await retry(String(res.status)); continue; }
+      if (res.status === 429 || res.status >= 500) { await retry(String(res.status), res.headers.get("retry-after")); continue; }
       if (!res.ok) throw new Error(`AI request failed: ${res.status} ${(await res.text()).slice(0, 300)}`);
       const content = await readReply(res);
       if (!content.trim()) { await retry("empty reply"); continue; }

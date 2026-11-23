@@ -1,9 +1,9 @@
-# Drafts last week's issue on Monday morning; the later runs retry anything that failed.
+# Drafts last week's issue on Monday morning; the later runs, through Wednesday, retry anything that failed.
 [Unit]
 Description=xmr.fan job: weekly
 
 [Timer]
-OnCalendar=Mon *-*-* 05,08,11:00:00 UTC
+OnCalendar=Mon..Wed *-*-* 05,08,11:00:00 UTC
 Persistent=true
 RandomizedDelaySec=5min
 Unit=xmr-fan-job@weekly.service
