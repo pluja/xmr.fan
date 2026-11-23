@@ -1,0 +1,1500 @@
+{
+  "recap": "A security-flavoured week: the Feather Wallet website was suspected of serving a trojanised Windows download after its host shut down over a breach, MMGen Wallet rushed out a patch for two critical signing-check bypasses, and a wrapped-XMR token on another chain collapsed after a roughly $13.5 million exploit. The core repo merged 28 pull requests, mostly hardening. Outside Monero, Tails shipped an emergency release and GrapheneOS accused Google of pressuring phone makers.",
+  "lead": {
+    "src": "monero.observer",
+    "url": "https://monero.observer/feather-wallet-website-suspected-serving-malware-1984-hosting-breach/",
+    "h": "Feather Wallet site suspected of serving a trojan after host breach",
+    "p": "Feather's website went offline when its hosting provider shut down over a security breach, and a user reported the 2.9.1 Windows standalone download differs from the GitHub file and contains a trojan. Maintainer tobtoht has not yet put worries to rest."
+  },
+  "art": {
+    "file": "/news-art/2026-11-16.webp",
+    "alt": "Pixel art of a broken padlock beside a feather on a table, hinting at a compromised download.",
+    "prompt": "A cracked open padlock resting on a table next to a small orange feather."
+  },
+  "feature": {
+    "src": "cointelegraph.com",
+    "url": "https://cointelegraph.com/news/wrapped-monero-token-crashes-998-amid-suspected-135m-exploit?utm_source=rss_feed&utm_medium=rss_tag_monero&utm_campaign=rss_partner_inbound",
+    "h": "A 'wrapped Monero' token crashed 99%, and it was not Monero",
+    "dek": "Wagyu's XMR1 token on another chain lost nearly all its value after an exploit. The real Monero network was not involved.",
+    "body": [
+      "Several crypto outlets reported this week that Wagyu's XMR1 token, a wrapped Monero token, fell by more than 99% after an attacker moved about 5.2 million of the tokens out of the deployer account and sold a fraction of them for roughly $13.5 million. Bitquery traced the sales, and CoinDesk made a point of noting that the token is separate from Monero itself and from Hyperliquid's XMR futures market.",
+      "A wrapped token is an IOU: a version of a coin that lives on another blockchain and depends on whoever issues and backs it. If the issuer's keys or servers are compromised, the IOU can be wrecked while the original coin carries on untouched, which is what happened here. Wagyu's operator blamed a security breach, and Decrypt's headline ties it to a web host.",
+      "Wagyu's founder has promised to reimburse affected traders. Last week's issue noted that data from the Wagyu swap service had leaked, so this is a second bad stretch for the service. The lesson for Monero users is the old one: holding XMR on the Monero chain and holding a wrapped stand-in are very different things."
+    ],
+    "more": [
+      {
+        "src": "coindesk.com",
+        "url": "https://www.coindesk.com/markets/2026/11/20/wrapped-monero-token-plunges-99-as-issuer-linked-wallet-sells-usd13-5-million"
+      },
+      {
+        "src": "decrypt.co",
+        "url": "https://decrypt.co/383732/wrapped-monero-token-collapses-99-after-13-million-hack-blamed-on-web-host"
+      }
+    ]
+  },
+  "upcoming": [
+    {
+      "src": "monero.observer",
+      "url": "https://monero.observer/monero-tech-meeting-23-november-2026/",
+      "date": "2026-11-23",
+      "time": "18:00 UTC",
+      "what": "Monero Tech meeting in #no-wallet-left-behind, covering Seraphis/JAMTIS, FCMPs and other long-term development."
+    },
+    {
+      "src": "monero.observer",
+      "url": "https://monero.observer/cuprate-meeting-scheduled-24-november-2026/",
+      "date": "2026-11-24",
+      "time": "18:00 UTC",
+      "what": "Cuprate meeting on IRC-Libera/Matrix, with updates and next steps for the alternative Monero node."
+    },
+    {
+      "src": "monero.observer",
+      "url": "https://monero.observer/monero-research-lab-meeting-25-november-2026/",
+      "date": "2026-11-25",
+      "time": "17:00 UTC",
+      "what": "Monero Research Lab meeting; the unconfirmed agenda includes replacing the difficulty algorithm with ASERT and an AI/LLM usage disclosure policy."
+    }
+  ],
+  "sections": {
+    "dev": [
+      {
+        "src": "github.com/monero-project/monero",
+        "url": "https://github.com/monero-project/monero/pulls?q=is%3Apr%20is%3Amerged%20merged%3A2026-11-16..2026-11-22",
+        "h": "28 pull requests merged in the core repo this week",
+        "p": "The batch is mostly hardening, with new OSS-Fuzz targets covering FCMP++ and wallet proof, scan and cache code. It also includes a transaction-pool change that caches invalid input IDs and a fix for a coinbase-sum deadlock during block sync.",
+        "more": [
+          {
+            "src": "github.com/monero-project/monero",
+            "url": "https://github.com/monero-project/monero/pull/11737"
+          },
+          {
+            "src": "github.com/monero-project/monero",
+            "url": "https://github.com/monero-project/monero/pull/11710"
+          }
+        ]
+      },
+      {
+        "src": "github.com/monero-project/monero",
+        "url": "https://github.com/monero-project/monero/pull/11696",
+        "h": "Wallet proof checks get tighter against dishonest nodes",
+        "p": "Spend proofs are now bound to the requested transaction, and check_tx_key verifies the transaction ID for old v1 transactions, so a daemon can no longer swap in substituted data. Another change makes the wallet refuse InProofs for transactions it sent, since those can decode its own change.",
+        "more": [
+          {
+            "src": "github.com/monero-project/monero",
+            "url": "https://github.com/monero-project/monero/pull/11693"
+          },
+          {
+            "src": "github.com/monero-project/monero",
+            "url": "https://github.com/monero-project/monero/pull/11655"
+          }
+        ]
+      },
+      {
+        "src": "github.com/monero-project/monero",
+        "url": "https://github.com/monero-project/monero/pull/11726",
+        "h": "Wallet file handling and refresh fixes",
+        "p": "Saving or moving a wallet whose path ends in .keys could overwrite or delete its own files, and that is now handled. The wallet-RPC server also hardens its filename validation, fast_refresh checks an upper bound, and a failed pending transaction no longer marks inputs spent by a confirmed one as unspent.",
+        "more": [
+          {
+            "src": "github.com/monero-project/monero",
+            "url": "https://github.com/monero-project/monero/pull/11724"
+          },
+          {
+            "src": "github.com/monero-project/monero",
+            "url": "https://github.com/monero-project/monero/pull/11720"
+          }
+        ]
+      },
+      {
+        "src": "github.com/monero-project/monero",
+        "url": "https://github.com/monero-project/monero/pull/11697",
+        "h": "Fast N-of-N multisig setup for the CLI wallet",
+        "p": "The CLI wallet gains a way to set up N-of-N multisig without the post-key-exchange round. The patch's author notes that an LLM wrote part of the tests added with it."
+      },
+      {
+        "src": "github.com/monero-project/monero",
+        "url": "https://github.com/monero-project/monero/pull/11653",
+        "h": "P2P fixes: anchor connections and chain-entry requests",
+        "p": "After a restart, both anchor connections are now restored rather than only one. Nodes also ask a peer for the next chain entry when the last one is already known, which stops a loop of repeated drops and reconnects across several peers.",
+        "more": [
+          {
+            "src": "github.com/monero-project/monero",
+            "url": "https://github.com/monero-project/monero/pull/11652"
+          }
+        ]
+      }
+    ],
+    "eco": [
+      {
+        "src": "monero.observer",
+        "url": "https://monero.observer/mmgen-wallet-patches-two-critical-vulnerabilities-v17.0.1/",
+        "h": "MMGen Wallet 17.0.1 fixes two critical signing bypasses",
+        "p": "Last week's 17.0.0 added the check that the offline signer verifies your outputs. An anonymous researcher showed that someone controlling the online machine could still craft transactions that slip past the address-belongs-to-wallet checks. MMGen Wallet users should upgrade urgently."
+      },
+      {
+        "src": "monero.observer",
+        "url": "https://monero.observer/syntheticbird-cuprate-ccs-fully-funded/",
+        "h": "SyntheticBird's Cuprate reproducible-builds CCS is fully funded",
+        "p": "The proposal, 60 XMR raised in 61 contributions, covers implementing reproducible builds in Cuprate, the alternative Monero node. Reproducible builds let anyone check that a binary really matches its source."
+      },
+      {
+        "src": "monero.observer",
+        "url": "https://monero.observer/eigenwallet-submits-ccs-proposal-6-months-dev-work-security-research/",
+        "h": "Eigenwallet asks for six months of funding",
+        "p": "Maintainers einliterflasche and binarybaron propose a Firefox extension for swaps, two refactors of the maker and Ethereum swaps, and ETH-XMR atomic swaps. Security research and protocol and GUI work make up the rest, with each of them putting in 15 hours of it."
+      },
+      {
+        "src": "monero.observer",
+        "url": "https://monero.observer/vtnerd-3/",
+        "h": "vtnerd's Q3 CCS report: mostly P2P-SSL work",
+        "p": "The report marks the latest period complete. Most of the time went to the P2P-SSL pull request for monerod, including rebasing and corrections after LLM reviews."
+      },
+      {
+        "src": "monero.observer",
+        "url": "https://monero.observer/cake-wallet-v6.5.4-pre-release-available-testing/",
+        "h": "Cake Wallet 6.5.4 pre-release opens for beta testing",
+        "p": "The beta adds offline Zcash signing via Cupcake, Bitcoin Cash cold storage, and swaps from any asset without switching wallets first. It also expands Chainflip coin support."
+      }
+    ],
+    "comm": [
+      {
+        "src": "monero.observer",
+        "url": "https://monero.observer/orangefren-28/",
+        "h": "OrangeFren explains how it reimbursed 0trace exit-scam victims",
+        "p": "No-KYC exchange 0trace exit scammed on November 5, and some of its victims were OrangeFren users. OrangeFren published a transparency report on how it verified and reimbursed them under its guarantee, which dates from 2022."
+      },
+      {
+        "src": "monero.observer",
+        "url": "https://monero.observer/monero-talk-interview-cryptography-researcher-muhammed-esgin/",
+        "h": "Monero Talk interviews cryptography researcher Muhammed Esgin",
+        "p": "Esgin, a Monash University lecturer, discusses post-quantum ring signatures and the future of privacy tech. He expects encryption to hold up for a long time without constant upgrades."
+      }
+    ],
+    "privacy": [
+      {
+        "src": "tails.net",
+        "url": "https://tails.net/news/version_7.17.1/",
+        "h": "Tails 7.17.1 is an emergency fix for a uBlock Origin flaw",
+        "p": "A bug in the ad blocker let a malicious website inject JavaScript into other sites you visit afterwards. Tails removed uBlock Origin temporarily to close the hole, so Tails users should update right away.",
+        "more": [
+          {
+            "src": "blog.torproject.org",
+            "url": "https://blog.torproject.org/new-release-tails-7_17_1/"
+          }
+        ]
+      },
+      {
+        "src": "grapheneos.social",
+        "url": "https://grapheneos.social/@GrapheneOS/117645917131936200",
+        "h": "GrapheneOS says Google is pressuring phone makers",
+        "p": "The project says Google has repeatedly questioned OEMs about working with it and threatened them over licensing terms that courts have found illegal. It also says it expects further moves such as bootloader locking on Pixels, and is asking for help reaching prosecutors and regulators.",
+        "more": [
+          {
+            "src": "grapheneos.social",
+            "url": "https://grapheneos.social/@GrapheneOS/117645164586844096"
+          },
+          {
+            "src": "grapheneos.social",
+            "url": "https://grapheneos.social/@GrapheneOS/117645104633012221"
+          }
+        ]
+      },
+      {
+        "src": "404media.co",
+        "url": "https://www.404media.co/ice-is-paying-at-t-to-dig-through-a-mountain-of-call-records-hemisphere-data-analytical-services/",
+        "h": "ICE is paying AT&T for call-record analysis",
+        "p": "An internal ICE document obtained by 404 Media shows payment for access to raw data and analytical services. Experts and lawmakers call it mass surveillance that may touch trillions of records."
+      },
+      {
+        "src": "grapheneos.social",
+        "url": "https://grapheneos.social/@GrapheneOS/117655062915356333",
+        "h": "GrapheneOS shows an RCS proof of concept",
+        "p": "The prototype app has end-to-end encryption compatible with Google Messages and iOS, plus receipts, reactions and file sharing. The project plans to fold what it learned into its own Messaging app.",
+        "more": [
+          {
+            "src": "grapheneos.social",
+            "url": "https://grapheneos.social/@GrapheneOS/117655079083143127"
+          }
+        ]
+      },
+      {
+        "src": "signal.org",
+        "url": "https://signal.org/blog/protecting-your-privacy/",
+        "h": "Signal restricts OS-level AI agents from reading its data",
+        "p": "Signal says it is blocking the latest AI agents built into mobile operating systems from potentially capturing and storing Signal data."
+      }
+    ]
+  },
+  "no": 6,
+  "week": "2026-11-16",
+  "draft": true,
+  "sample": false,
+  "network": {
+    "hash": 6.67,
+    "fee": 0.000224,
+    "txs": 31200,
+    "height": 3812532,
+    "prev": {
+      "hash": 6.75,
+      "fee": 0.000244,
+      "txs": 29367
+    },
+    "history": []
+  },
+  "market": {
+    "open": 498.93,
+    "close": 492.9,
+    "high": 517.37,
+    "low": 427.53,
+    "change": -1.2,
+    "volume": 150656807,
+    "volumeChange": 1,
+    "mcap": 9283536715,
+    "btcChange": -6.6,
+    "series": [
+      496.68,
+      483.71,
+      506.53,
+      506.69,
+      497.92,
+      497.91,
+      491.53,
+      498.23,
+      504.71,
+      507.1,
+      505.15,
+      509.08,
+      505.64,
+      505.51,
+      505.83,
+      502.77,
+      501.35,
+      499.08,
+      499.88,
+      504.78,
+      502.8,
+      502.71,
+      492.6,
+      493.68,
+      495.96,
+      477.93,
+      471.52,
+      454.03,
+      448.79,
+      455.2,
+      448.87,
+      440.02,
+      469.8,
+      474.44,
+      486,
+      488.24,
+      487.27,
+      483.62,
+      487.7,
+      489.7,
+      492.11,
+      492.9
+    ],
+    "month": {
+      "change": -15.6,
+      "high": 642.81,
+      "low": 427.53
+    },
+    "analysis": {
+      "summary": "The week was flat on the close, but Friday saw a 7.8% drop that was almost fully reversed on Saturday, and the low of 427.53 matches the 30-day low, in a month that is still down 15.6%.",
+      "drivers": [
+        {
+          "src": "coindesk.com",
+          "url": "https://www.coindesk.com/markets/2026/11/20/wrapped-monero-token-plunges-99-as-issuer-linked-wallet-sells-usd13-5-million",
+          "text": "Friday's drop coincided with the collapse of Wagyu's wrapped XMR1 token, which CoinDesk and Decrypt reported fell about 99% after a roughly $13.5M sell-off, though CoinDesk notes the token is separate from Monero itself.",
+          "more": [
+            {
+              "src": "decrypt.co",
+              "url": "https://decrypt.co/383732/wrapped-monero-token-collapses-99-after-13-million-hack-blamed-on-web-host"
+            }
+          ]
+        }
+      ],
+      "watch": []
+    }
+  },
+  "podcast": {
+    "file": "/podcast/2026-11-16.mp3",
+    "duration": 689,
+    "bytes": 5513343,
+    "hosts": [
+      "Chris",
+      "Jessica"
+    ],
+    "transcript": [
+      {
+        "host": "Chris",
+        "text": "Hello and welcome to The xmr.fan Times, issue number six, the week of November sixteenth. I'm Chris."
+      },
+      {
+        "host": "Jessica",
+        "text": "And I'm Jessica. We've got a lot today. A Feather Wallet scare that you'll want to hear about, a wrapped Monero token that crashed ninety-nine percent, and a pile of development news."
+      },
+      {
+        "host": "Chris",
+        "text": "Plus some privacy news from outside Monero, and the upcoming meetings. Let's start with the lead, because it's the one that could affect people right now."
+      },
+      {
+        "host": "Jessica",
+        "text": "Right. Feather Wallet's website went offline after its hosting provider shut down over a security breach. And then a user reported that the two point nine point one Windows standalone download from the site differs from the file on GitHub, and that it contains a trojan."
+      },
+      {
+        "host": "Chris",
+        "text": "A trojan, so malware dressed up as the wallet. And that's the nightmare version of a download scare, because the wallet is where your coins live."
+      },
+      {
+        "host": "Jessica",
+        "text": "Exactly. And as of now, the maintainer, tobtoht, has not yet put worries to rest. So this is a suspicion, not a settled story."
+      },
+      {
+        "host": "Chris",
+        "text": "[exhales] Which is an uncomfortable place to be. What does a normal person do with that?"
+      },
+      {
+        "host": "Jessica",
+        "text": "Well, the general lesson is the old one: verify what you download. If you've grabbed a wallet recently, you can check that your download is genuine at xmr.fan slash checksum."
+      },
+      {
+        "host": "Chris",
+        "text": "Good. And we'll keep following this one. Okay, the feature. A wrapped Monero token crashed by more than ninety-nine percent this week, and the headlines made it sound like Monero itself was in trouble."
+      },
+      {
+        "host": "Jessica",
+        "text": "It wasn't. This is Wagyu's XMR1 token, which lives on another chain. Several crypto outlets reported that an attacker moved about five point two million of the tokens out of the deployer account and sold a fraction of them for roughly thirteen and a half million dollars."
+      },
+      {
+        "host": "Chris",
+        "text": "And Bitquery traced those sales. So what exactly is a wrapped token, for someone who's never touched one?"
+      },
+      {
+        "host": "Jessica",
+        "text": "Think of it as an IOU. It's a version of a coin that lives on a different blockchain and depends entirely on whoever issues and backs it. If the issuer's keys or servers get compromised, the IOU can be wrecked while the original coin carries on untouched."
+      },
+      {
+        "host": "Chris",
+        "text": "So the real Monero network was never involved."
+      },
+      {
+        "host": "Jessica",
+        "text": "Right, and CoinDesk made a point of saying that. The token is separate from Monero itself, and also from Hyperliquid's XMR futures market. Wagyu's operator blamed a security breach, and Decrypt's headline ties it to a web host."
+      },
+      {
+        "host": "Chris",
+        "text": "Interesting, a web host again. Same theme as Feather, just a different victim."
+      },
+      {
+        "host": "Jessica",
+        "text": "[curious] Funny how that rhymes. Anyway, Wagyu's founder has promised to reimburse affected traders. And last week's issue noted that data from the Wagyu swap service had leaked, so this is a second bad stretch for them."
+      },
+      {
+        "host": "Chris",
+        "text": "The takeaway being that holding Monero on the Monero chain and holding a wrapped stand-in are very different things."
+      },
+      {
+        "host": "Jessica",
+        "text": "Very different. Which brings us to the price, because the timing matters."
+      },
+      {
+        "host": "Chris",
+        "text": "Okay, so the week opened around four hundred ninety-nine dollars and closed around four hundred ninety-three, down one point two percent. Bitcoin was down six point six percent over the same stretch."
+      },
+      {
+        "host": "Jessica",
+        "text": "But the path was bumpy. Friday saw a seven point eight percent drop that was almost fully reversed on Saturday. The low of about four hundred twenty-eight dollars matches the thirty-day low, in a month that's still down fifteen point six percent."
+      },
+      {
+        "host": "Chris",
+        "text": "And Friday's drop coincided with the Wagyu collapse. CoinDesk and Decrypt reported the token falling about ninety-nine percent after that roughly thirteen and a half million dollar sell-off."
+      },
+      {
+        "host": "Jessica",
+        "text": "Though again, the token is not Monero. We're just noting the timing, no more than that."
+      },
+      {
+        "host": "Chris",
+        "text": "Fair. Let's move to development. Twenty-eight pull requests merged in the core repo this week, and it's mostly hardening."
+      },
+      {
+        "host": "Jessica",
+        "text": "Lots of new OSS-Fuzz targets, which is automated fuzz testing, covering FCMP++ and wallet proof, scan and cache code. There's also a transaction-pool change that caches invalid input IDs, and a fix for a coinbase-sum deadlock during block sync."
+      },
+      {
+        "host": "Chris",
+        "text": "A deadlock during sync sounds miserable if you've ever waited on one."
+      },
+      {
+        "host": "Jessica",
+        "text": "[laughs] Nobody likes a stuck node. There's also a theme of wallet proofs getting tighter against dishonest nodes. Spend proofs are now bound to the requested transaction, and check_tx_key verifies the transaction ID for old version one transactions."
+      },
+      {
+        "host": "Chris",
+        "text": "So a daemon can't just swap in substituted data. And that's the daemon, meaning monerod, the Monero daemon, the program that runs a node."
+      },
+      {
+        "host": "Jessica",
+        "text": "Right. Another change makes the wallet refuse InProofs for transactions it sent, since those can decode its own change."
+      },
+      {
+        "host": "Chris",
+        "text": "There were wallet file fixes too, weren't there? Something about the keys extension."
+      },
+      {
+        "host": "Jessica",
+        "text": "Yes. Saving or moving a wallet whose path ends in dot keys could overwrite or delete its own files, and that's now handled. The wallet-RPC server also hardens its filename validation, fast_refresh checks an upper bound, and a failed pending transaction no longer marks inputs spent by a confirmed one as unspent."
+      },
+      {
+        "host": "Chris",
+        "text": "Good cleanup. Then there's fast N-of-N multisig setup for the CLI wallet."
+      },
+      {
+        "host": "Jessica",
+        "text": "It skips the post-key-exchange round. And the patch's author notes that an LLM wrote part of the tests added with it, so that's disclosed up front."
+      },
+      {
+        "host": "Chris",
+        "text": "And some peer-to-peer fixes. After a restart, both anchor connections are now restored rather than only one."
+      },
+      {
+        "host": "Jessica",
+        "text": "And nodes now ask a peer for the next chain entry when the last one is already known, which stops a loop of repeated drops and reconnects across several peers."
+      },
+      {
+        "host": "Chris",
+        "text": "Okay, ecosystem. Last week's MMGen seventeen point zero point zero added a check that the offline signer verifies your outputs, and now there's a follow-up."
+      },
+      {
+        "host": "Jessica",
+        "text": "Seventeen point zero point one fixes two critical signing bypasses. An anonymous researcher showed that someone controlling the online machine could still craft transactions that slip past the address-belongs-to-wallet checks. MMGen Wallet users should upgrade urgently."
+      },
+      {
+        "host": "Chris",
+        "text": "Funding news now. SyntheticBird's Cuprate reproducible-builds proposal is fully funded."
+      },
+      {
+        "host": "Jessica",
+        "text": "Sixty monero raised in sixty-one contributions, through the Community Crowdfunding System, the CCS. It covers reproducible builds in Cuprate, the alternative Monero node. And reproducible builds let anyone check that a binary really matches its source."
+      },
+      {
+        "host": "Chris",
+        "text": "Which, given our lead story, feels timely."
+      },
+      {
+        "host": "Jessica",
+        "text": "[sighs] Very. Meanwhile, Eigenwallet is asking for six months of funding. Maintainers einliterflasche and binarybaron propose a Firefox extension for swaps, two refactors of the maker and Ethereum swaps, and ETH-XMR atomic swaps."
+      },
+      {
+        "host": "Chris",
+        "text": "And security research plus protocol and GUI work make up the rest."
+      },
+      {
+        "host": "Jessica",
+        "text": "Right, with each of them putting in fifteen hours of it. Also, vtnerd's Q3 CCS report marks the latest period complete. Most of the time went to the P2P-SSL pull request for monerod, including rebasing and corrections after LLM reviews."
+      },
+      {
+        "host": "Chris",
+        "text": "And Cake Wallet six point five point four is in pre-release for beta testing."
+      },
+      {
+        "host": "Jessica",
+        "text": "Offline Zcash signing via Cupcake, Bitcoin Cash cold storage, and swaps from any asset without switching wallets first. It also expands Chainflip coin support."
+      },
+      {
+        "host": "Chris",
+        "text": "Community news. OrangeFren published a transparency report about reimbursing victims of the 0trace exit scam."
+      },
+      {
+        "host": "Jessica",
+        "text": "0trace, a no-KYC exchange, exit scammed on November fifth, and some of its victims were OrangeFren users. OrangeFren explained how it verified and reimbursed them under its guarantee, which dates from twenty twenty-two."
+      },
+      {
+        "host": "Chris",
+        "text": "Also, Monero Talk interviewed cryptography researcher Muhammed Esgin, a Monash University lecturer."
+      },
+      {
+        "host": "Jessica",
+        "text": "They covered post-quantum ring signatures and the future of privacy tech. He expects encryption to hold up for a long time without constant upgrades."
+      },
+      {
+        "host": "Chris",
+        "text": "Now privacy beyond Monero. Tails seven point seventeen point one is an emergency fix."
+      },
+      {
+        "host": "Jessica",
+        "text": "A bug in the uBlock Origin ad blocker let a malicious website inject JavaScript into other sites you visit afterwards. Tails removed uBlock Origin temporarily to close the hole, so Tails users should update right away."
+      },
+      {
+        "host": "Chris",
+        "text": "A few more. GrapheneOS says Google is pressuring phone makers."
+      },
+      {
+        "host": "Jessica",
+        "text": "The project says Google has repeatedly questioned OEMs about working with it and threatened them over licensing terms that courts have found illegal. It also says it expects further moves such as bootloader locking on Pixels, and is asking for help reaching prosecutors and regulators."
+      },
+      {
+        "host": "Chris",
+        "text": "And GrapheneOS also showed an RCS proof of concept."
+      },
+      {
+        "host": "Jessica",
+        "text": "A prototype app with end-to-end encryption compatible with Google Messages and iOS, plus receipts, reactions and file sharing. The project plans to fold what it learned into its own Messaging app."
+      },
+      {
+        "host": "Chris",
+        "text": "On the surveillance side, ICE is paying AT&T for call-record analysis."
+      },
+      {
+        "host": "Jessica",
+        "text": "An internal ICE document obtained by 404 Media shows payment for access to raw data and analytical services. Experts and lawmakers call it mass surveillance that may touch trillions of records."
+      },
+      {
+        "host": "Chris",
+        "text": "And Signal is restricting OS-level AI agents from reading its data."
+      },
+      {
+        "host": "Jessica",
+        "text": "Signal says it's blocking the latest AI agents built into mobile operating systems from potentially capturing and storing Signal data."
+      },
+      {
+        "host": "Chris",
+        "text": "Okay, the meetings coming up. On November twenty-third at eighteen hundred UTC, there's the Monero Tech meeting in the no-wallet-left-behind channel, covering Seraphis and JAMTIS, FCMPs and other long-term development."
+      },
+      {
+        "host": "Jessica",
+        "text": "The next day, November twenty-fourth at eighteen hundred UTC, the Cuprate meeting on IRC Libera or Matrix, with updates and next steps."
+      },
+      {
+        "host": "Chris",
+        "text": "And November twenty-fifth at seventeen hundred UTC, the Monero Research Lab meeting. The unconfirmed agenda includes replacing the difficulty algorithm with ASERT, and an AI and LLM usage disclosure policy."
+      },
+      {
+        "host": "Jessica",
+        "text": "Worth watching, that one. Quick network numbers. Hashrate averaged about six point six seven gigahashes per second, down from six point seven five."
+      },
+      {
+        "host": "Chris",
+        "text": "Transactions per day rose to about thirty-one thousand two hundred, from around twenty-nine thousand three hundred sixty-seven. And the average fee dipped to about two hundred twenty-four millionths of a monero, from two hundred forty-four millionths."
+      },
+      {
+        "host": "Jessica",
+        "text": "If you're curious what a transaction costs right now, there's a live look at xmr.fan slash fee."
+      },
+      {
+        "host": "Chris",
+        "text": "That's the show. Everything we covered has links at xmr.fan slash news."
+      },
+      {
+        "host": "Jessica",
+        "text": "Thanks for listening to The xmr.fan Times. Check your downloads, and we'll see you next week."
+      }
+    ]
+  },
+  "generated": {
+    "model": "anthropic/claude-sonnet-5.5",
+    "at": "2026-11-23T08:41:39.690Z",
+    "items": 150,
+    "sources": [
+      {
+        "name": "github.com/monero-project/monero",
+        "count": 29
+      },
+      {
+        "name": "monero.observer",
+        "count": 23
+      },
+      {
+        "name": "x.com/GrapheneOS",
+        "count": 22
+      },
+      {
+        "name": "404media.co",
+        "count": 15
+      },
+      {
+        "name": "grapheneos.social",
+        "count": 15
+      },
+      {
+        "name": "eff.org",
+        "count": 12
+      },
+      {
+        "name": "proton.me",
+        "count": 5
+      },
+      {
+        "name": "therecord.media",
+        "count": 5
+      },
+      {
+        "name": "github.com/monero-project/meta",
+        "count": 3
+      },
+      {
+        "name": "x.com/OrangeFren",
+        "count": 3
+      },
+      {
+        "name": "x.com/monerovia",
+        "count": 2
+      },
+      {
+        "name": "x.com/sethforprivacy",
+        "count": 2
+      },
+      {
+        "name": "blog.torproject.org",
+        "count": 1
+      },
+      {
+        "name": "coindesk.com",
+        "count": 1
+      },
+      {
+        "name": "cointelegraph.com",
+        "count": 1
+      },
+      {
+        "name": "decrypt.co",
+        "count": 1
+      },
+      {
+        "name": "grapheneos.org",
+        "count": 1
+      },
+      {
+        "name": "mullvad.net",
+        "count": 1
+      },
+      {
+        "name": "signal.org",
+        "count": 1
+      },
+      {
+        "name": "tails.net",
+        "count": 1
+      },
+      {
+        "name": "theblock.co",
+        "count": 1
+      },
+      {
+        "name": "x.com/cakewallet",
+        "count": 1
+      },
+      {
+        "name": "x.com/dyana1908",
+        "count": 1
+      },
+      {
+        "name": "x.com/fluffypony",
+        "count": 1
+      },
+      {
+        "name": "x.com/PulsePaperboy",
+        "count": 1
+      },
+      {
+        "name": "x.com/xenumonero",
+        "count": 1
+      }
+    ]
+  },
+  "translations": {
+    "es": {
+      "recap": "Una semana con sabor a seguridad: se sospechó que el sitio web de Feather Wallet servía una descarga de Windows troyanizada después de que su proveedor de alojamiento cerrara por una brecha; MMGen Wallet sacó a toda prisa un parche para dos omisiones críticas en la verificación de firmas; y un token de XMR envuelto en otra cadena se desplomó tras un exploit de unos 13,5 millones de dólares. El repositorio principal fusionó 28 pull requests, la mayoría de refuerzo de seguridad. Fuera de Monero, Tails lanzó una versión de emergencia y GrapheneOS acusó a Google de presionar a los fabricantes de móviles.",
+      "lead": {
+        "h": "Sospechan que el sitio de Feather Wallet servía un troyano tras la brecha de su proveedor",
+        "p": "El sitio web de Feather se cayó cuando su proveedor de alojamiento cerró por una brecha de seguridad, y un usuario informó de que la descarga independiente de Windows de la 2.9.1 es distinta del archivo de GitHub y contiene un troyano. El mantenedor tobtoht aún no ha disipado las dudas."
+      },
+      "art": {
+        "alt": "Pixel art de un candado roto junto a una pluma sobre una mesa, que sugiere una descarga comprometida."
+      },
+      "feature": {
+        "h": "Un token de «Monero envuelto» se hundió un 99 %, y no era Monero",
+        "dek": "El token XMR1 de Wagyu, en otra cadena, perdió casi todo su valor tras un exploit. La red real de Monero no estuvo involucrada.",
+        "body": [
+          "Varios medios cripto informaron esta semana de que el token XMR1 de Wagyu, un token de Monero envuelto, cayó más de un 99 % después de que un atacante sacara unos 5,2 millones de tokens de la cuenta del desplegador y vendiera una fracción por cerca de 13,5 millones de dólares. Bitquery rastreó las ventas, y CoinDesk se encargó de aclarar que el token es independiente de Monero y del mercado de futuros de XMR de Hyperliquid.",
+          "Un token envuelto es un pagaré: una versión de una moneda que vive en otra blockchain y depende de quien la emite y la respalda. Si las claves o los servidores del emisor se ven comprometidos, el pagaré puede quedar destrozado mientras la moneda original sigue intacta, que es justo lo que pasó aquí. El operador de Wagyu culpó a una brecha de seguridad, y el titular de Decrypt la vincula con un proveedor de alojamiento web.",
+          "El fundador de Wagyu ha prometido reembolsar a los traders afectados. En el número de la semana pasada contamos que se habían filtrado datos del servicio de intercambio de Wagyu, así que esta es una segunda mala racha para el servicio. La lección para los usuarios de Monero es la de siempre: tener XMR en la cadena de Monero y tener un sustituto envuelto son cosas muy distintas."
+        ]
+      },
+      "upcoming": [
+        {
+          "what": "Reunión de Monero Tech en #no-wallet-left-behind, sobre Seraphis/JAMTIS, FCMPs y otros desarrollos a largo plazo."
+        },
+        {
+          "what": "Reunión de Cuprate en IRC-Libera/Matrix, con novedades y próximos pasos del nodo alternativo de Monero."
+        },
+        {
+          "what": "Reunión del Monero Research Lab; la agenda, aún sin confirmar, incluye sustituir el algoritmo de dificultad por ASERT y una política de divulgación del uso de IA/LLM."
+        }
+      ],
+      "sections": {
+        "dev": [
+          {
+            "h": "28 pull requests fusionados en el repositorio principal esta semana",
+            "p": "El lote es sobre todo de refuerzo de seguridad, con nuevos objetivos de OSS-Fuzz que cubren FCMP++ y el código de pruebas, escaneo y caché del monedero. También incluye un cambio en el pool de transacciones que guarda en caché los IDs de entradas inválidas y una corrección de un interbloqueo en la suma de coinbase durante la sincronización de bloques."
+          },
+          {
+            "h": "Las comprobaciones de pruebas del monedero se endurecen frente a nodos deshonestos",
+            "p": "Las pruebas de gasto ahora quedan vinculadas a la transacción solicitada, y check_tx_key verifica el ID de transacción en las antiguas transacciones v1, de modo que un daemon ya no puede colar datos sustituidos. Otro cambio hace que el monedero rechace las InProofs de transacciones que envió él mismo, ya que esas pueden descifrar su propio cambio."
+          },
+          {
+            "h": "Manejo de archivos del monedero y arreglos de refresco",
+            "p": "Guardar o mover un monedero cuya ruta termina en .keys podía sobrescribir o borrar sus propios archivos, y ahora eso está resuelto. El servidor wallet-RPC también refuerza la validación de nombres de archivo, fast_refresh comprueba un límite superior, y una transacción pendiente fallida ya no marca como no gastadas las entradas que gastó una transacción confirmada."
+          },
+          {
+            "h": "Configuración rápida de multifirma N-de-N para el monedero CLI",
+            "p": "El monedero CLI incorpora una forma de configurar multifirma N-de-N sin la ronda posterior al intercambio de claves. El autor del parche señala que un LLM escribió parte de las pruebas añadidas con él."
+          },
+          {
+            "h": "Arreglos de P2P: conexiones ancla y solicitudes de entradas de la cadena",
+            "p": "Tras un reinicio, ahora se restauran las dos conexiones ancla y no solo una. Además, los nodos piden a un par la siguiente entrada de la cadena cuando la última ya es conocida, lo que corta un bucle de desconexiones y reconexiones repetidas con varios pares."
+          }
+        ],
+        "eco": [
+          {
+            "h": "MMGen Wallet 17.0.1 corrige dos omisiones críticas de firma",
+            "p": "La 17.0.0 de la semana pasada añadió la comprobación de que el firmante sin conexión verifique tus salidas. Un investigador anónimo demostró que alguien que controlara la máquina conectada aún podía fabricar transacciones que esquivan las comprobaciones de que la dirección pertenece al monedero. Los usuarios de MMGen Wallet deben actualizar con urgencia."
+          },
+          {
+            "h": "El CCS de compilaciones reproducibles de Cuprate, de SyntheticBird, ya está financiado",
+            "p": "La propuesta, que reunió 60 XMR en 61 contribuciones, cubre la implementación de compilaciones reproducibles en Cuprate, el nodo alternativo de Monero. Las compilaciones reproducibles permiten que cualquiera compruebe que un binario coincide de verdad con su código fuente."
+          },
+          {
+            "h": "Eigenwallet pide financiación para seis meses",
+            "p": "Los mantenedores einliterflasche y binarybaron proponen una extensión de Firefox para los swaps, dos refactorizaciones de los swaps del maker y de Ethereum, y swaps atómicos ETH-XMR. La investigación de seguridad y el trabajo de protocolo y GUI completan el resto, con 15 horas de cada uno de ellos."
+          },
+          {
+            "h": "Informe del tercer trimestre de vtnerd en el CCS: sobre todo trabajo de P2P-SSL",
+            "p": "El informe da por completado el último período. La mayor parte del tiempo se fue en el pull request de P2P-SSL para monerod, incluidos el rebase y las correcciones tras las revisiones con LLM."
+          },
+          {
+            "h": "Se abre la versión preliminar de Cake Wallet 6.5.4 para pruebas beta",
+            "p": "La beta añade firma de Zcash sin conexión mediante Cupcake, almacenamiento en frío de Bitcoin Cash y swaps desde cualquier activo sin tener que cambiar antes de monedero. También amplía el soporte de monedas de Chainflip."
+          }
+        ],
+        "comm": [
+          {
+            "h": "OrangeFren explica cómo reembolsó a las víctimas del exit scam de 0trace",
+            "p": "El exchange sin KYC 0trace se fugó con los fondos el 5 de noviembre, y algunas de sus víctimas eran usuarios de OrangeFren. OrangeFren publicó un informe de transparencia sobre cómo las verificó y reembolsó con arreglo a su garantía, vigente desde 2022."
+          },
+          {
+            "h": "Monero Talk entrevista al investigador en criptografía Muhammed Esgin",
+            "p": "Esgin, profesor de la Universidad de Monash, habla de las firmas de anillo poscuánticas y del futuro de la tecnología de privacidad. Espera que el cifrado aguante mucho tiempo sin actualizaciones constantes."
+          }
+        ],
+        "privacy": [
+          {
+            "h": "Tails 7.17.1 es una corrección de emergencia para un fallo de uBlock Origin",
+            "p": "Un error en el bloqueador de anuncios permitía que un sitio web malicioso inyectara JavaScript en otros sitios que visitaras después. Tails quitó uBlock Origin temporalmente para cerrar el agujero, así que quienes usan Tails deben actualizar de inmediato."
+          },
+          {
+            "h": "GrapheneOS dice que Google presiona a los fabricantes de móviles",
+            "p": "El proyecto afirma que Google ha interrogado repetidamente a los fabricantes sobre su colaboración con él y los ha amenazado con condiciones de licencia que los tribunales han considerado ilegales. También dice que espera nuevas medidas, como el bloqueo del bootloader en los Pixel, y pide ayuda para llegar a fiscales y reguladores."
+          },
+          {
+            "h": "ICE paga a AT&T por el análisis de registros de llamadas",
+            "p": "Un documento interno de ICE obtenido por 404 Media muestra el pago por acceder a datos en bruto y a servicios analíticos. Expertos y legisladores lo califican de vigilancia masiva que podría alcanzar billones de registros."
+          },
+          {
+            "h": "GrapheneOS muestra una prueba de concepto de RCS",
+            "p": "La aplicación prototipo tiene cifrado de extremo a extremo compatible con Google Messages y iOS, además de confirmaciones, reacciones y uso compartido de archivos. El proyecto planea integrar lo aprendido en su propia app de Mensajes."
+          },
+          {
+            "h": "Signal restringe que los agentes de IA a nivel de sistema operativo lean sus datos",
+            "p": "Signal dice que está bloqueando que los agentes de IA más recientes integrados en los sistemas operativos móviles puedan capturar y almacenar datos de Signal."
+          }
+        ]
+      },
+      "price": {
+        "summary": "La semana cerró plana, pero el viernes hubo una caída del 7,8 % que casi se revirtió por completo el sábado, y el mínimo de 427,53 coincide con el mínimo de los últimos 30 días, en un mes que sigue un 15,6 % a la baja.",
+        "drivers": [
+          "La caída del viernes coincidió con el desplome del token XMR1 envuelto de Wagyu, que según CoinDesk y Decrypt cayó cerca de un 99 % tras una venta de unos 13,5 millones de dólares, aunque CoinDesk señala que el token es independiente de Monero."
+        ]
+      }
+    },
+    "ru": {
+      "recap": "Неделя прошла под знаком безопасности: сайт Feather Wallet заподозрили в раздаче троянизированной Windows-версии после того, как его хостинг закрылся из-за взлома; MMGen Wallet срочно выпустил патч для двух критических обходов проверки подписи; а токен wrapped-XMR в другой сети рухнул после эксплойта примерно на $13,5 млн. В основной репозиторий влили 28 pull request'ов, в основном про укрепление защиты. Вне Monero: Tails выпустил экстренный релиз, а GrapheneOS обвинил Google в давлении на производителей телефонов.",
+      "lead": {
+        "h": "Сайт Feather Wallet заподозрили в раздаче трояна после взлома хостинга",
+        "p": "Сайт Feather ушёл в офлайн: его хостинг-провайдер закрылся из-за взлома. Пользователь сообщил, что автономная Windows-версия 2.9.1 отличается от файла на GitHub и содержит троян. Сопровождающий tobtoht пока не развеял опасения."
+      },
+      "art": {
+        "alt": "Пиксель-арт: сломанный замок рядом с пером на столе, намёк на скомпрометированную загрузку."
+      },
+      "feature": {
+        "h": "«Обёрнутый Monero» рухнул на 99%, и это был не Monero",
+        "dek": "Токен XMR1 от Wagyu в другой сети потерял почти всю стоимость после эксплойта. К настоящей сети Monero это не имело отношения.",
+        "body": [
+          "На этой неделе несколько криптоизданий сообщили, что токен XMR1 от Wagyu, обёрнутый токен Monero, упал более чем на 99%: атакующий вывел около 5,2 млн токенов со счёта деплоера и продал часть из них примерно за $13,5 млн. Продажи отследил Bitquery, а CoinDesk специально подчеркнул, что этот токен не связан ни с самим Monero, ни с рынком фьючерсов XMR на Hyperliquid.",
+          "Обёрнутый токен — это расписка: версия монеты, которая живёт в другом блокчейне и зависит от того, кто её выпускает и обеспечивает. Если ключи или серверы эмитента скомпрометированы, расписка может обесцениться, а исходная монета останется нетронутой — именно это и произошло. Оператор Wagyu винит взлом, а заголовок Decrypt связывает инцидент с веб-хостингом.",
+          "Основатель Wagyu пообещал компенсировать потери пострадавшим трейдерам. В прошлом выпуске мы писали об утечке данных сервиса обмена Wagyu, так что для него это уже вторая неудача подряд. Урок для пользователей Monero старый: хранить XMR в цепочке Monero и держать обёрнутый суррогат — это совершенно разные вещи."
+        ]
+      },
+      "upcoming": [
+        {
+          "what": "Встреча Monero Tech в #no-wallet-left-behind: Seraphis/JAMTIS, FCMP и другие долгосрочные разработки."
+        },
+        {
+          "what": "Встреча Cuprate в IRC-Libera/Matrix: новости и дальнейшие шаги по альтернативной ноде Monero."
+        },
+        {
+          "what": "Встреча Monero Research Lab; в неподтверждённой повестке — замена алгоритма сложности на ASERT и политика раскрытия использования ИИ/LLM."
+        }
+      ],
+      "sections": {
+        "dev": [
+          {
+            "h": "На этой неделе в основной репозиторий влили 28 pull request'ов",
+            "p": "Пакет в основном посвящён укреплению защиты: появились новые цели OSS-Fuzz для FCMP++ и кода проверки, сканирования и кеша кошелька. Есть и изменение в пуле транзакций, которое кеширует ID недействительных входов, и исправление взаимной блокировки при суммировании coinbase во время синхронизации блоков."
+          },
+          {
+            "h": "Проверки доказательств в кошельке стали строже к нечестным нодам",
+            "p": "Доказательства траты теперь привязаны к запрошенной транзакции, а check_tx_key проверяет ID транзакции для старых v1-транзакций, так что демон больше не сможет подсунуть подменённые данные. Ещё одно изменение запрещает кошельку принимать InProof для отправленных им транзакций, поскольку они могут раскрыть его собственную сдачу."
+          },
+          {
+            "h": "Работа с файлами кошелька и исправления обновления",
+            "p": "Сохранение или перемещение кошелька с путём, оканчивающимся на .keys, могло перезаписать или удалить его собственные файлы — теперь это учтено. Сервер wallet-RPC также усилил проверку имён файлов, fast_refresh проверяет верхнюю границу, а неудавшаяся ожидающая транзакция больше не помечает как непотраченные входы, уже потраченные подтверждённой."
+          },
+          {
+            "h": "Быстрая настройка N-of-N мультиподписи для CLI-кошелька",
+            "p": "В CLI-кошельке появился способ настроить N-of-N мультиподпись без раунда после обмена ключами. Автор патча отмечает, что часть добавленных тестов написала LLM."
+          },
+          {
+            "h": "Исправления P2P: якорные соединения и запросы записей цепочки",
+            "p": "После перезапуска теперь восстанавливаются оба якорных соединения, а не только одно. Кроме того, ноды запрашивают у пира следующую запись цепочки, если последняя уже известна, — это останавливает цикл повторных обрывов и переподключений сразу к нескольким пирам."
+          }
+        ],
+        "eco": [
+          {
+            "h": "MMGen Wallet 17.0.1 исправляет два критических обхода подписи",
+            "p": "В прошлой неделе вышедшей версии 17.0.0 появилась проверка того, что офлайн-подписант проверяет ваши выходы. Анонимный исследователь показал, что тот, кто контролирует онлайн-машину, всё равно может собрать транзакции, обходящие проверки принадлежности адреса кошельку. Пользователям MMGen Wallet нужно срочно обновиться."
+          },
+          {
+            "h": "CCS SyntheticBird по воспроизводимым сборкам Cuprate полностью профинансирован",
+            "p": "Предложение, собравшее 60 XMR в 61 взносе, покрывает внедрение воспроизводимых сборок в Cuprate — альтернативную ноду Monero. Воспроизводимые сборки позволяют каждому проверить, что бинарник действительно соответствует исходному коду."
+          },
+          {
+            "h": "Eigenwallet просит финансирование на шесть месяцев",
+            "p": "Сопровождающие einliterflasche и binarybaron предлагают расширение для Firefox для обменов, два рефакторинга обменов для мейкера и Ethereum, а также атомарные обмены ETH-XMR. Остальное — исследования безопасности и работа над протоколом и GUI, и на каждую из этих задач каждый из них закладывает по 15 часов."
+          },
+          {
+            "h": "Отчёт vtnerd по CCS за Q3: в основном работа над P2P-SSL",
+            "p": "Отчёт закрывает последний период. Больше всего времени ушло на pull request по P2P-SSL для monerod, включая ребейз и правки после ревью, проведённых с помощью LLM."
+          },
+          {
+            "h": "Предрелиз Cake Wallet 6.5.4 открыт для бета-тестирования",
+            "p": "Бета добавляет офлайн-подпись Zcash через Cupcake, холодное хранение Bitcoin Cash и обмены любого актива без предварительного переключения кошелька. Также расширена поддержка монет в Chainflip."
+          }
+        ],
+        "comm": [
+          {
+            "h": "OrangeFren рассказал, как возместил ущерб жертвам эксит-скама 0trace",
+            "p": "No-KYC обменник 0trace ушёл с деньгами 5 ноября, и среди пострадавших были пользователи OrangeFren. Компания опубликовала отчёт о том, как проверяла и возмещала им потери по своей гарантии, действующей с 2022 года."
+          },
+          {
+            "h": "Monero Talk берёт интервью у исследователя криптографии Мухаммеда Эсгина",
+            "p": "Эсгин, преподаватель Университета Монаша, рассказывает о постквантовых кольцевых подписях и будущем технологий приватности. Он ожидает, что шифрование надолго останется надёжным без постоянных обновлений."
+          }
+        ],
+        "privacy": [
+          {
+            "h": "Tails 7.17.1 — экстренное исправление уязвимости в uBlock Origin",
+            "p": "Баг в блокировщике рекламы позволял вредоносному сайту внедрять JavaScript в другие сайты, которые вы открываете после него. Чтобы закрыть дыру, Tails временно убрал uBlock Origin, поэтому пользователям Tails стоит обновиться немедленно."
+          },
+          {
+            "h": "GrapheneOS: Google давит на производителей телефонов",
+            "p": "Проект сообщает, что Google неоднократно расспрашивал OEM о сотрудничестве с ним и грозил им из-за лицензионных условий, которые суды признали незаконными. Также он ожидает новых шагов, например блокировки загрузчика на Pixel, и просит помочь выйти на прокуроров и регуляторов."
+          },
+          {
+            "h": "ICE платит AT&T за анализ записей звонков",
+            "p": "Внутренний документ ICE, полученный изданием 404 Media, показывает оплату доступа к сырым данным и аналитическим услугам. Эксперты и законодатели называют это массовой слежкой, которая может затрагивать триллионы записей."
+          },
+          {
+            "h": "GrapheneOS показал прототип RCS",
+            "p": "В прототипе приложения есть сквозное шифрование, совместимое с Google Messages и iOS, а также уведомления о прочтении, реакции и обмен файлами. Проект планирует перенести наработки в собственное приложение Messaging."
+          },
+          {
+            "h": "Signal запрещает ИИ-агентам на уровне ОС читать свои данные",
+            "p": "Signal сообщает, что блокирует новейшие ИИ-агенты, встроенные в мобильные операционные системы, чтобы они не могли перехватывать и хранить данные Signal."
+          }
+        ]
+      },
+      "price": {
+        "summary": "По закрытию неделя вышла ровной, но в пятницу было падение на 7,8%, почти полностью отыгранное в субботу, а минимум 427,53 совпадает с 30-дневным минимумом — месяц при этом всё ещё в минусе на 15,6%.",
+        "drivers": [
+          "Пятничное падение совпало с обвалом обёрнутого токена XMR1 от Wagyu, который, по сообщениям CoinDesk и Decrypt, упал примерно на 99% после распродажи на ~$13,5 млн, хотя CoinDesk отмечает, что токен не связан с самим Monero."
+        ]
+      }
+    },
+    "fr": {
+      "recap": "Une semaine placée sous le signe de la sécurité : le site de Feather Wallet est soupçonné d'avoir distribué un téléchargement Windows piégé après l'arrêt de son hébergeur à la suite d'une intrusion, MMGen Wallet a publié en urgence un correctif pour deux contournements critiques de la vérification de signature, et un jeton « wrapped XMR » sur une autre chaîne s'est effondré après une exploitation d'environ 13,5 millions de dollars. Le dépôt principal a fusionné 28 pull requests, surtout du durcissement. Hors Monero, Tails a sorti une version d'urgence et GrapheneOS accuse Google de mettre la pression sur les fabricants de téléphones.",
+      "lead": {
+        "h": "Le site de Feather Wallet soupçonné de servir un cheval de Troie après l'intrusion chez son hébergeur",
+        "p": "Le site de Feather est tombé quand son hébergeur a fermé suite à une faille de sécurité, et un utilisateur signale que le téléchargement Windows autonome de la 2.9.1 diffère du fichier GitHub et contient un cheval de Troie. Le mainteneur tobtoht n'a pas encore dissipé les inquiétudes."
+      },
+      "art": {
+        "alt": "Pixel art d'un cadenas brisé posé à côté d'une plume sur une table, évoquant un téléchargement compromis."
+      },
+      "feature": {
+        "h": "Un jeton « Monero enveloppé » a chuté de 99 %, et ce n'était pas du Monero",
+        "dek": "Le jeton XMR1 de Wagyu, sur une autre chaîne, a perdu presque toute sa valeur après une exploitation. Le vrai réseau Monero n'était pas concerné.",
+        "body": [
+          "Plusieurs médias crypto ont rapporté cette semaine que le jeton XMR1 de Wagyu, un jeton Monero « wrapped », a perdu plus de 99 % après qu'un attaquant a sorti environ 5,2 millions de ces jetons du compte du déployeur et en a vendu une fraction pour quelque 13,5 millions de dollars. Bitquery a retracé les ventes, et CoinDesk a tenu à préciser que ce jeton n'a rien à voir avec Monero lui-même ni avec le marché de contrats à terme XMR de Hyperliquid.",
+          "Un jeton wrapped est une reconnaissance de dette : une version d'une pièce qui vit sur une autre blockchain et dépend de celui qui l'émet et la garantit. Si les clés ou les serveurs de l'émetteur sont compromis, la reconnaissance de dette peut être anéantie alors que la pièce d'origine poursuit tranquillement sa route, ce qui s'est passé ici. L'opérateur de Wagyu a invoqué une faille de sécurité, et le titre de Decrypt la relie à un hébergeur web.",
+          "Le fondateur de Wagyu a promis de rembourser les traders touchés. Le numéro de la semaine dernière signalait déjà une fuite de données du service d'échange Wagyu : c'est donc une deuxième mauvaise passe pour lui. La leçon pour les utilisateurs de Monero est la plus classique : détenir du XMR sur la chaîne Monero et détenir un substitut wrapped, ce n'est pas du tout pareil."
+        ]
+      },
+      "upcoming": [
+        {
+          "what": "Réunion Monero Tech dans #no-wallet-left-behind, sur Seraphis/JAMTIS, les FCMP et d'autres développements à long terme."
+        },
+        {
+          "what": "Réunion Cuprate sur IRC-Libera/Matrix, avec des nouvelles et les prochaines étapes du nœud Monero alternatif."
+        },
+        {
+          "what": "Réunion du Monero Research Lab ; l'ordre du jour, non confirmé, comprend le remplacement de l'algorithme de difficulté par ASERT et une politique de déclaration d'usage de l'IA/des LLM."
+        }
+      ],
+      "sections": {
+        "dev": [
+          {
+            "h": "28 pull requests fusionnées cette semaine dans le dépôt principal",
+            "p": "Le lot est surtout du durcissement, avec de nouvelles cibles OSS-Fuzz couvrant FCMP++ ainsi que le code de preuve, d'analyse et de cache du portefeuille. Il comprend aussi une modification du pool de transactions qui met en cache les identifiants d'entrées invalides et un correctif pour un interblocage sur la somme coinbase pendant la synchronisation des blocs."
+          },
+          {
+            "h": "Les vérifications de preuves du portefeuille se resserrent face aux nœuds malhonnêtes",
+            "p": "Les preuves de dépense sont désormais liées à la transaction demandée, et check_tx_key vérifie l'identifiant de transaction pour les anciennes transactions v1, de sorte qu'un démon ne peut plus glisser des données de substitution. Un autre changement fait refuser au portefeuille les InProofs pour les transactions qu'il a envoyées, puisqu'elles peuvent décoder sa propre monnaie rendue."
+          },
+          {
+            "h": "Gestion des fichiers du portefeuille et correctifs de rafraîchissement",
+            "p": "Enregistrer ou déplacer un portefeuille dont le chemin se termine par .keys pouvait écraser ou supprimer ses propres fichiers ; c'est désormais géré. Le serveur wallet-RPC durcit aussi sa validation des noms de fichiers, fast_refresh vérifie une borne supérieure, et une transaction en attente qui échoue ne marque plus comme non dépensées les entrées déjà dépensées par une transaction confirmée."
+          },
+          {
+            "h": "Configuration rapide du multisig N-sur-N pour le portefeuille CLI",
+            "p": "Le portefeuille CLI gagne un moyen de configurer un multisig N-sur-N sans le tour d'après l'échange de clés. L'auteur du patch précise qu'un LLM a rédigé une partie des tests ajoutés avec."
+          },
+          {
+            "h": "Correctifs P2P : connexions d'ancrage et demandes d'entrées de chaîne",
+            "p": "Après un redémarrage, les deux connexions d'ancrage sont désormais rétablies, et non plus une seule. Les nœuds demandent aussi à un pair l'entrée de chaîne suivante quand la dernière est déjà connue, ce qui met fin à une boucle de déconnexions et de reconnexions répétées avec plusieurs pairs."
+          }
+        ],
+        "eco": [
+          {
+            "h": "MMGen Wallet 17.0.1 corrige deux contournements critiques de la signature",
+            "p": "La 17.0.0 de la semaine dernière ajoutait la vérification par laquelle le signataire hors ligne contrôle vos sorties. Un chercheur anonyme a montré que quelqu'un contrôlant la machine en ligne pouvait encore fabriquer des transactions qui passent entre les mailles des vérifications d'appartenance des adresses au portefeuille. Les utilisateurs de MMGen Wallet doivent mettre à jour d'urgence."
+          },
+          {
+            "h": "Le CCS de SyntheticBird sur les builds reproductibles de Cuprate est entièrement financé",
+            "p": "La proposition, 60 XMR réunis en 61 contributions, couvre la mise en place de builds reproductibles dans Cuprate, le nœud Monero alternatif. Les builds reproductibles permettent à chacun de vérifier qu'un binaire correspond bien à son code source."
+          },
+          {
+            "h": "Eigenwallet demande six mois de financement",
+            "p": "Les mainteneurs einliterflasche et binarybaron proposent une extension Firefox pour les swaps, deux refontes des swaps côté maker et Ethereum, et des swaps atomiques ETH-XMR. La recherche en sécurité et le travail sur le protocole et la GUI font le reste, chacun y consacrant 15 heures."
+          },
+          {
+            "h": "Rapport T3 de vtnerd au CCS : surtout du travail sur P2P-SSL",
+            "p": "Le rapport marque la dernière période comme terminée. L'essentiel du temps est allé à la pull request P2P-SSL pour monerod, y compris des rebases et des corrections après des revues par LLM."
+          },
+          {
+            "h": "La préversion de Cake Wallet 6.5.4 ouvre aux tests bêta",
+            "p": "La bêta ajoute la signature Zcash hors ligne via Cupcake, le stockage à froid de Bitcoin Cash et les échanges depuis n'importe quel actif sans changer d'abord de portefeuille. Elle étend aussi la prise en charge des pièces par Chainflip."
+          }
+        ],
+        "comm": [
+          {
+            "h": "OrangeFren explique comment elle a remboursé les victimes de l'exit scam de 0trace",
+            "p": "L'échange sans KYC 0trace a fait un exit scam le 5 novembre, et certaines de ses victimes étaient des utilisateurs d'OrangeFren. OrangeFren a publié un rapport de transparence sur la façon dont elle les a vérifiées et remboursées au titre de sa garantie, qui date de 2022."
+          },
+          {
+            "h": "Monero Talk interroge le chercheur en cryptographie Muhammed Esgin",
+            "p": "Esgin, chargé de cours à l'Université Monash, parle des signatures en anneau post-quantiques et de l'avenir des technologies de confidentialité. Il s'attend à ce que le chiffrement tienne longtemps sans mises à niveau constantes."
+          }
+        ],
+        "privacy": [
+          {
+            "h": "Tails 7.17.1 est un correctif d'urgence pour une faille de uBlock Origin",
+            "p": "Un bug du bloqueur de publicités permettait à un site malveillant d'injecter du JavaScript dans d'autres sites visités ensuite. Tails a retiré uBlock Origin temporairement pour fermer la brèche : les utilisateurs de Tails doivent donc mettre à jour tout de suite."
+          },
+          {
+            "h": "GrapheneOS affirme que Google met la pression sur les fabricants de téléphones",
+            "p": "Le projet dit que Google a questionné à plusieurs reprises des OEM sur leur collaboration avec lui et les a menacés au sujet de conditions de licence que des tribunaux ont jugées illégales. Il dit aussi s'attendre à d'autres manœuvres, comme le verrouillage du bootloader sur les Pixel, et demande de l'aide pour joindre procureurs et régulateurs."
+          },
+          {
+            "h": "L'ICE paie AT&T pour l'analyse de journaux d'appels",
+            "p": "Un document interne de l'ICE obtenu par 404 Media montre le paiement d'un accès à des données brutes et à des services d'analyse. Des experts et des élus parlent de surveillance de masse pouvant toucher des milliers de milliards d'enregistrements."
+          },
+          {
+            "h": "GrapheneOS présente une preuve de concept RCS",
+            "p": "L'application prototype offre un chiffrement de bout en bout compatible avec Google Messages et iOS, ainsi que les accusés, les réactions et le partage de fichiers. Le projet prévoit d'intégrer ce qu'il a appris à sa propre application Messages."
+          },
+          {
+            "h": "Signal interdit aux agents IA du système d'exploitation de lire ses données",
+            "p": "Signal indique qu'il empêche les derniers agents IA intégrés aux systèmes d'exploitation mobiles de capturer et de stocker potentiellement des données de Signal."
+          }
+        ]
+      },
+      "price": {
+        "summary": "La semaine est restée stable à la clôture, mais vendredi a vu un recul de 7,8 % presque entièrement effacé samedi, et le plus bas de 427,53 correspond au plus bas sur 30 jours, dans un mois qui reste en baisse de 15,6 %.",
+        "drivers": [
+          "Le recul de vendredi a coïncidé avec l'effondrement du jeton wrapped XMR1 de Wagyu, qui, selon CoinDesk et Decrypt, a chuté d'environ 99 % après une vente d'environ 13,5 M$, même si CoinDesk précise que le jeton est distinct de Monero lui-même."
+        ]
+      }
+    },
+    "pt": {
+      "recap": "Uma semana com sabor de segurança: o site da Feather Wallet foi suspeito de distribuir um download trojanizado para Windows depois que seu provedor de hospedagem foi desligado por causa de uma invasão, a MMGen Wallet lançou às pressas um patch para dois bypasses críticos na verificação de assinatura, e um token de XMR \"embrulhado\" em outra rede desabou após um exploit de cerca de US$ 13,5 milhões. O repositório principal incorporou 28 pull requests, a maioria de reforço de segurança. Fora do Monero, o Tails lançou uma versão de emergência e o GrapheneOS acusou o Google de pressionar fabricantes de celulares.",
+      "lead": {
+        "h": "Site da Feather Wallet é suspeito de distribuir trojan após invasão no host",
+        "p": "O site da Feather saiu do ar quando seu provedor de hospedagem foi desligado por causa de uma invasão de segurança, e um usuário relatou que o download standalone da versão 2.9.1 para Windows é diferente do arquivo no GitHub e contém um trojan. O mantenedor tobtoht ainda não dissipou as preocupações."
+      },
+      "art": {
+        "alt": "Pixel art de um cadeado quebrado ao lado de uma pena sobre uma mesa, sugerindo um download comprometido."
+      },
+      "feature": {
+        "h": "Um token de \"Monero embrulhado\" despencou 99%, e não era Monero",
+        "dek": "O token XMR1 da Wagyu, em outra rede, perdeu quase todo o valor após um exploit. A rede Monero de verdade não teve nada a ver com isso.",
+        "body": [
+          "Vários veículos de cripto noticiaram esta semana que o token XMR1 da Wagyu, um token de Monero embrulhado (wrapped), caiu mais de 99% depois que um atacante tirou cerca de 5,2 milhões de tokens da conta do deployer e vendeu uma fração deles por aproximadamente US$ 13,5 milhões. A Bitquery rastreou as vendas, e a CoinDesk fez questão de destacar que o token é separado do próprio Monero e do mercado de futuros de XMR da Hyperliquid.",
+          "Um token embrulhado é uma promissória: uma versão de uma moeda que vive em outra blockchain e depende de quem a emite e a lastreia. Se as chaves ou os servidores do emissor são comprometidos, a promissória pode ir pro brejo enquanto a moeda original segue intacta, que foi exatamente o que aconteceu aqui. O operador da Wagyu culpou uma invasão de segurança, e a manchete da Decrypt a liga a um provedor de hospedagem.",
+          "O fundador da Wagyu prometeu reembolsar os traders afetados. A edição da semana passada mencionou que dados do serviço de swap da Wagyu haviam vazado, então esta é a segunda fase ruim seguida do serviço. A lição para quem usa Monero é a velha de sempre: ter XMR na chain do Monero e ter um substituto embrulhado são coisas muito diferentes."
+        ]
+      },
+      "upcoming": [
+        {
+          "what": "Reunião Monero Tech em #no-wallet-left-behind, cobrindo Seraphis/JAMTIS, FCMPs e outros desenvolvimentos de longo prazo."
+        },
+        {
+          "what": "Reunião do Cuprate no IRC-Libera/Matrix, com novidades e próximos passos do nó Monero alternativo."
+        },
+        {
+          "what": "Reunião do Monero Research Lab; a pauta ainda não confirmada inclui trocar o algoritmo de dificuldade por ASERT e uma política de divulgação do uso de IA/LLM."
+        }
+      ],
+      "sections": {
+        "dev": [
+          {
+            "h": "28 pull requests incorporados ao repositório principal esta semana",
+            "p": "O lote é basicamente de reforço de segurança, com novos alvos do OSS-Fuzz cobrindo o FCMP++ e o código de prova, varredura e cache da carteira. Também inclui uma mudança no pool de transações que guarda em cache IDs de entradas inválidas e a correção de um deadlock na soma de coinbase durante a sincronização de blocos."
+          },
+          {
+            "h": "Verificações de prova da carteira ficam mais rígidas contra nós desonestos",
+            "p": "As provas de gasto agora ficam atreladas à transação solicitada, e o check_tx_key verifica o ID da transação em transações v1 antigas, então um daemon não consegue mais inserir dados substituídos. Outra mudança faz a carteira recusar InProofs de transações que ela mesma enviou, já que elas podem decodificar o próprio troco."
+          },
+          {
+            "h": "Tratamento de arquivos da carteira e correções de refresh",
+            "p": "Salvar ou mover uma carteira cujo caminho termina em .keys podia sobrescrever ou apagar os próprios arquivos, e isso agora está resolvido. O servidor wallet-RPC também reforça a validação de nomes de arquivo, o fast_refresh confere um limite superior, e uma transação pendente que falha não marca mais como não gastas as entradas já gastas por uma transação confirmada."
+          },
+          {
+            "h": "Configuração rápida de multisig N-de-N para a carteira CLI",
+            "p": "A carteira CLI ganha um jeito de configurar multisig N-de-N sem a rodada posterior à troca de chaves. O autor do patch observa que um LLM escreveu parte dos testes adicionados junto."
+          },
+          {
+            "h": "Correções de P2P: conexões âncora e pedidos de entrada da chain",
+            "p": "Depois de uma reinicialização, as duas conexões âncora agora são restauradas, em vez de apenas uma. Os nós também pedem a um peer a próxima entrada da chain quando a última já é conhecida, o que interrompe um ciclo de quedas e reconexões repetidas entre vários peers."
+          }
+        ],
+        "eco": [
+          {
+            "h": "MMGen Wallet 17.0.1 corrige dois bypasses críticos de assinatura",
+            "p": "A versão 17.0.0 da semana passada acrescentou a verificação de que o signatário offline confere as suas saídas. Um pesquisador anônimo mostrou que quem controlasse a máquina online ainda poderia forjar transações que escapam das verificações de que o endereço pertence à carteira. Usuários da MMGen Wallet devem atualizar com urgência."
+          },
+          {
+            "h": "CCS de builds reproduzíveis do Cuprate, de SyntheticBird, está totalmente financiado",
+            "p": "A proposta, com 60 XMR arrecadados em 61 contribuições, cobre a implementação de builds reproduzíveis no Cuprate, o nó Monero alternativo. Builds reproduzíveis permitem que qualquer pessoa confira se um binário realmente corresponde ao seu código-fonte."
+          },
+          {
+            "h": "Eigenwallet pede seis meses de financiamento",
+            "p": "Os mantenedores einliterflasche e binarybaron propõem uma extensão de Firefox para swaps, duas refatorações dos swaps de maker e de Ethereum, e swaps atômicos ETH-XMR. Pesquisa de segurança e trabalho em protocolo e GUI completam o plano, com cada um dedicando 15 horas a essa parte."
+          },
+          {
+            "h": "Relatório do CCS do vtnerd no T3: foco no trabalho de P2P-SSL",
+            "p": "O relatório marca o último período como concluído. A maior parte do tempo foi para o pull request de P2P-SSL do monerod, incluindo rebases e correções depois de revisões feitas por LLMs."
+          },
+          {
+            "h": "Pré-lançamento do Cake Wallet 6.5.4 abre para testes beta",
+            "p": "O beta traz assinatura offline de Zcash via Cupcake, cold storage de Bitcoin Cash e swaps a partir de qualquer ativo sem precisar trocar de carteira antes. Também amplia o suporte a moedas da Chainflip."
+          }
+        ],
+        "comm": [
+          {
+            "h": "OrangeFren explica como reembolsou as vítimas do exit scam da 0trace",
+            "p": "A exchange sem KYC 0trace deu um exit scam em 5 de novembro, e algumas das vítimas eram usuários da OrangeFren. A OrangeFren publicou um relatório de transparência sobre como verificou e reembolsou essas pessoas com base na sua garantia, que existe desde 2022."
+          },
+          {
+            "h": "Monero Talk entrevista o pesquisador de criptografia Muhammed Esgin",
+            "p": "Esgin, professor da Universidade Monash, fala sobre assinaturas em anel pós-quânticas e o futuro da tecnologia de privacidade. Ele espera que a criptografia se mantenha firme por muito tempo sem atualizações constantes."
+          }
+        ],
+        "privacy": [
+          {
+            "h": "Tails 7.17.1 é uma correção de emergência para uma falha no uBlock Origin",
+            "p": "Um bug no bloqueador de anúncios permitia que um site malicioso injetasse JavaScript em outros sites que você visitasse depois. O Tails removeu o uBlock Origin temporariamente para fechar a brecha, então quem usa Tails deve atualizar imediatamente."
+          },
+          {
+            "h": "GrapheneOS diz que o Google está pressionando fabricantes de celulares",
+            "p": "O projeto diz que o Google questionou repetidamente os OEMs sobre trabalhar com ele e os ameaçou com termos de licenciamento que tribunais já consideraram ilegais. Também diz esperar novas medidas, como o bloqueio do bootloader nos Pixels, e pede ajuda para chegar a promotores e reguladores."
+          },
+          {
+            "h": "ICE está pagando à AT&T por análise de registros de chamadas",
+            "p": "Um documento interno do ICE obtido pelo 404 Media mostra pagamento por acesso a dados brutos e serviços analíticos. Especialistas e parlamentares chamam isso de vigilância em massa que pode alcançar trilhões de registros."
+          },
+          {
+            "h": "GrapheneOS mostra uma prova de conceito de RCS",
+            "p": "O app protótipo tem criptografia de ponta a ponta compatível com o Google Messages e o iOS, além de confirmações, reações e compartilhamento de arquivos. O projeto planeja incorporar o que aprendeu ao seu próprio app de Mensagens."
+          },
+          {
+            "h": "Signal impede que agentes de IA no nível do sistema operacional leiam seus dados",
+            "p": "O Signal diz estar bloqueando os agentes de IA mais recentes, embutidos nos sistemas operacionais móveis, de potencialmente capturar e armazenar dados do Signal."
+          }
+        ]
+      },
+      "price": {
+        "summary": "A semana fechou estável, mas na sexta houve uma queda de 7,8% que foi quase totalmente revertida no sábado, e a mínima de 427,53 coincide com a mínima de 30 dias, num mês que ainda acumula queda de 15,6%.",
+        "drivers": [
+          "A queda de sexta coincidiu com o colapso do token XMR1 embrulhado da Wagyu, que a CoinDesk e a Decrypt noticiaram ter caído cerca de 99% após uma venda de aproximadamente US$ 13,5 milhões, embora a CoinDesk observe que o token é separado do próprio Monero."
+        ]
+      }
+    },
+    "ja": {
+      "recap": "セキュリティ色の濃い一週間でした。ホスティング先が侵害を受けて閉鎖されたことを受け、Feather Walletのウェブサイトがトロイの木馬入りのWindows版ダウンロードを配布していた疑いが浮上。MMGen Walletは署名チェックを回避される深刻な2件の脆弱性に急ぎパッチを出し、別チェーン上のラップドXMRトークンは約1,350万ドル相当の攻撃を受けて暴落しました。コアのリポジトリでは28件のプルリクエストがマージされ、大半は堅牢化の内容です。Monero以外では、Tailsが緊急リリースを出し、GrapheneOSはGoogleがスマホメーカーに圧力をかけていると非難しました。",
+      "lead": {
+        "h": "ホスティング先の侵害を受け、Feather Walletのサイトがトロイの木馬を配布した疑い",
+        "p": "ホスティング事業者がセキュリティ侵害を理由に閉鎖されたため、Featherのウェブサイトがオフラインになりました。あるユーザーは、2.9.1のWindows単体版ダウンロードがGitHubのファイルと異なり、トロイの木馬が含まれていると報告しています。メンテナーのtobtohtからは、まだ懸念を払拭する説明は出ていません。"
+      },
+      "art": {
+        "alt": "テーブルの上、壊れた南京錠と羽根が並ぶピクセルアート。改ざんされたダウンロードをほのめかしています。"
+      },
+      "feature": {
+        "h": "「ラップドMonero」トークンが99%暴落。でも、それはMoneroではありません",
+        "dek": "別チェーン上のWagyuのXMR1トークンが、攻撃を受けてほぼ全価値を失いました。本物のMoneroネットワークは無関係です。",
+        "body": [
+          "今週、複数の暗号資産メディアが報じたところによると、ラップドMoneroトークンであるWagyuのXMR1が99%以上下落しました。攻撃者がデプロイヤーのアカウントから約520万枚のトークンを移動し、その一部を約1,350万ドルで売却したとのことです。Bitqueryが売却を追跡し、CoinDeskはこのトークンがMonero本体ともHyperliquidのXMR先物市場とも別物であることをわざわざ指摘しています。",
+          "ラップドトークンとは、いわば借用証書です。別のブロックチェーン上に存在するコインの代替版で、発行して裏付けを担う人に依存します。発行者の鍵やサーバーが侵害されれば、元のコインは無傷のまま、借用証書だけが台無しになりかねません。今回起きたのがまさにそれです。Wagyuの運営者はセキュリティ侵害のせいだとしており、Decryptの見出しはウェブホストとの関連を指摘しています。",
+          "Wagyuの創業者は、被害を受けたトレーダーに補償すると約束しています。先週号では、Wagyuのスワップサービスからデータが流出したとお伝えしましたが、同サービスにとってこれは二度目の災難です。Moneroユーザーにとっての教訓は昔から変わりません。Monero本来のチェーン上でXMRを持つことと、ラップドの代用品を持つことは、まったく別物だということです。"
+        ]
+      },
+      "upcoming": [
+        {
+          "what": "#no-wallet-left-behindでのMonero Techミーティング。Seraphis/JAMTIS、FCMP、その他の長期開発を扱います。"
+        },
+        {
+          "what": "IRC-Libera/MatrixでのCuprateミーティング。代替Moneroノードの進捗報告と今後の予定を共有します。"
+        },
+        {
+          "what": "Monero Research Labミーティング。未確定ですが、議題には難易度アルゴリズムのASERTへの置き換えと、AI/LLM利用の開示ポリシーが含まれています。"
+        }
+      ],
+      "sections": {
+        "dev": [
+          {
+            "h": "今週、コアのリポジトリで28件のプルリクエストがマージ",
+            "p": "大半は堅牢化の内容で、FCMP++やウォレットの証明・スキャン・キャッシュ関連のコードを対象とする新しいOSS-Fuzzターゲットが加わりました。さらに、無効な入力IDをキャッシュするトランザクションプールの変更や、ブロック同期中にcoinbaseの合計値でデッドロックする問題の修正も入っています。"
+          },
+          {
+            "h": "不正なノードに対するウォレットの証明チェックを強化",
+            "p": "支払い証明が要求したトランザクションに紐づけられるようになり、check_tx_keyも古いv1トランザクションのトランザクションIDを検証するようになりました。これでデーモンが差し替えたデータをすり込むことはできません。別の変更では、自分が送ったトランザクションについてはウォレットがInProofを拒否するようになりました。そうした証明からは、自分のお釣りが復号できてしまうためです。"
+          },
+          {
+            "h": "ウォレットファイルの扱いとリフレッシュの修正",
+            "p": "パスが.keysで終わるウォレットを保存・移動すると、自身のファイルを上書きしたり削除したりすることがありましたが、これに対処しました。wallet-RPCサーバーはファイル名の検証も強化し、fast_refreshは上限をチェックするようになり、失敗した保留中トランザクションが、承認済みトランザクションで使用済みになった入力を未使用扱いに戻してしまうこともなくなりました。"
+          },
+          {
+            "h": "CLIウォレットにN-of-Nマルチシグの高速セットアップ",
+            "p": "CLIウォレットに、鍵交換後のラウンドを省いてN-of-Nマルチシグを設定する方法が加わりました。パッチの作者によると、同時に追加されたテストの一部はLLMが書いたそうです。"
+          },
+          {
+            "h": "P2Pの修正:アンカー接続とチェーンエントリのリクエスト",
+            "p": "再起動後に、片方だけでなく両方のアンカー接続が復元されるようになりました。また、直前のエントリがすでに既知の場合は、ノードがピアに次のチェーンエントリを要求します。これで、複数のピアにまたがって切断と再接続が繰り返されるループが止まります。"
+          }
+        ],
+        "eco": [
+          {
+            "h": "MMGen Wallet 17.0.1、署名チェックを回避される深刻な2件の脆弱性を修正",
+            "p": "先週の17.0.0では、オフライン署名側があなたの出力を検証するチェックが追加されました。ところが匿名の研究者が、オンライン側のマシンを支配する人物が、アドレスがウォレットのものか確認するチェックをすり抜けるトランザクションを、それでも作れることを示しました。MMGen Walletのユーザーは早急にアップグレードしてください。"
+          },
+          {
+            "h": "SyntheticBirdのCuprateリプロデューサブルビルドCCSが満額達成",
+            "p": "この提案は、61件の寄付で60 XMRが集まりました。代替MoneroノードであるCuprateにリプロデューサブルビルドを実装するためのものです。リプロデューサブルビルドがあれば、バイナリがソースと本当に一致しているかを誰でも確認できます。"
+          },
+          {
+            "h": "Eigenwalletが6か月分の資金を募集",
+            "p": "メンテナーのeinliterflascheとbinarybaronは、スワップ用のFirefox拡張機能、メイカー側とEthereumスワップの2件のリファクタリング、そしてETH-XMRアトミックスワップを提案しています。残りはセキュリティ調査とプロトコル、GUIの作業で、それぞれが15時間ずつ充てる予定です。"
+          },
+          {
+            "h": "vtnerdのQ3 CCSレポート:ほぼP2P-SSLの作業",
+            "p": "このレポートで直近の期間が完了となります。時間の大半は、monerod向けのP2P-SSLプルリクエストに費やされ、リベースやLLMによるレビュー後の修正も含まれます。"
+          },
+          {
+            "h": "Cake Wallet 6.5.4のプレリリースがベータテスト向けに公開",
+            "p": "ベータ版では、Cupcake経由のZcashオフライン署名、Bitcoin Cashのコールドストレージ、先にウォレットを切り替えなくても任意のアセットからスワップできる機能が加わりました。Chainflipの対応コインも拡大しています。"
+          }
+        ],
+        "comm": [
+          {
+            "h": "OrangeFren、0traceのエグジット詐欺の被害者への補償方法を説明",
+            "p": "KYCなしの取引所0traceは11月5日にエグジット詐欺を行い、被害者の中にはOrangeFrenのユーザーもいました。OrangeFrenは、2022年から続く保証制度に基づき、被害者をどう確認して補償したかを透明性レポートとして公開しました。"
+          },
+          {
+            "h": "Monero Talk、暗号研究者のMuhammed Esginにインタビュー",
+            "p": "モナシュ大学の講師であるEsginが、耐量子リング署名とプライバシー技術の未来について語ります。暗号化は絶え間ないアップグレードなしでも、長期間もつと見ています。"
+          }
+        ],
+        "privacy": [
+          {
+            "h": "Tails 7.17.1、uBlock Originの欠陥に対する緊急修正",
+            "p": "広告ブロッカーのバグにより、悪意のあるウェブサイトが、その後に訪れる他のサイトへJavaScriptを注入できる状態でした。Tailsはこの穴をふさぐため、uBlock Originを一時的に削除しました。Tailsユーザーはすぐに更新してください。"
+          },
+          {
+            "h": "GrapheneOS、Googleがスマホメーカーに圧力をかけていると主張",
+            "p": "プロジェクトによると、GoogleはOEMに対し、GrapheneOSと連携していないかを繰り返し問いただし、裁判所が違法と認定したライセンス条件を盾に脅しているそうです。Pixelのブートローダーロックのようなさらなる動きも予想しており、検察や規制当局につなぐ協力を求めています。"
+          },
+          {
+            "h": "ICE、通話記録の分析のためAT&Tに支払い",
+            "p": "404 Mediaが入手したICEの内部文書によると、生データへのアクセスと分析サービスに対して支払いが行われています。専門家や議員は、数兆件の記録に及びかねない大規模監視だと批判しています。"
+          },
+          {
+            "h": "GrapheneOS、RCSのプルーフ・オブ・コンセプトを公開",
+            "p": "試作アプリは、Google MessagesやiOSと互換性のあるエンドツーエンド暗号化を備え、既読通知、リアクション、ファイル共有にも対応します。プロジェクトは、ここで得た知見を自前のメッセージアプリに取り込む予定です。"
+          },
+          {
+            "h": "Signal、OS搭載のAIエージェントによるデータ読み取りを制限",
+            "p": "Signalは、モバイルOSに組み込まれた最新のAIエージェントが、Signalのデータを取得・保存してしまう可能性をブロックしていると述べています。"
+          }
+        ]
+      },
+      "price": {
+        "summary": "今週の終値はほぼ横ばいでしたが、金曜に7.8%下落し、土曜にほぼ全額を取り戻しました。安値の427.53は30日間の安値と一致しており、月間ではなお15.6%安のままです。",
+        "drivers": [
+          "金曜の下落は、WagyuのラップドXMR1トークンの崩壊と重なりました。CoinDeskとDecryptによると、約1,350万ドル相当の売却を経て約99%下落しましたが、CoinDeskはこのトークンがMonero本体とは別物だと指摘しています。"
+        ]
+      }
+    }
+  },
+  "podcasts": {
+    "es": {
+      "file": "/podcast/2026-11-16.es.mp3",
+      "duration": 685,
+      "bytes": 5480533,
+      "hosts": [
+        "Chris",
+        "Jessica"
+      ],
+      "transcript": [
+        {
+          "host": "Chris",
+          "text": "¡Hola a todos! Bienvenidos a The xmr.fan Times, el número seis, la semana del dieciséis de noviembre. Yo soy Chris."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y yo soy Jessica. Hoy tenemos un susto con una descarga de Feather Wallet, un token de Monero envuelto que se desplomó, mucho trabajo de seguridad en el código y varias reuniones en el calendario."
+        },
+        {
+          "host": "Chris",
+          "text": "Empecemos por lo que más preocupa. El sitio web de Feather se cayó porque su proveedor de alojamiento cerró por una brecha de seguridad. Hasta ahí, un fastidio. Pero luego un usuario informó de algo peor."
+        },
+        {
+          "host": "Jessica",
+          "text": "Sí. Según ese usuario, la descarga independiente de Windows de la versión dos punto nueve punto uno no coincide con el archivo que está en GitHub, y dice que contiene un troyano."
+        },
+        {
+          "host": "Chris",
+          "text": "Ojo, que es un informe de un usuario, no algo confirmado. El mantenedor, tobtoht, aún no ha disipado las dudas."
+        },
+        {
+          "host": "Jessica",
+          "text": "Exacto. Mientras eso se aclara, sirve de recordatorio de para qué existen las verificaciones. Si bajaste algo en esos días, puedes comprobar que tu descarga es auténtica en xmr.fan barra checksum."
+        },
+        {
+          "host": "Chris",
+          "text": "[curious] Y la pregunta obvia: ¿qué hago si ya la instalé?"
+        },
+        {
+          "host": "Jessica",
+          "text": "Hm, no tenemos más datos que esos. Lo prudente es seguir las novedades del mantenedor y no dar nada por resuelto todavía. Dejaremos los enlaces en la página de noticias."
+        },
+        {
+          "host": "Chris",
+          "text": "Vale. Pasamos al precio, que esta semana fue una montaña rusa que terminó casi donde empezó. Abrió en cuatrocientos noventa y ocho dólares con noventa y tres centavos y cerró en cuatrocientos noventa y dos con noventa, un uno coma dos por ciento a la baja."
+        },
+        {
+          "host": "Jessica",
+          "text": "Pero el recorrido tuvo tela. El viernes hubo una caída del siete coma ocho por ciento que el sábado se revirtió casi por completo. El mínimo semanal fue de cuatrocientos veintisiete con cincuenta y tres, que coincide con el mínimo de los últimos treinta días. El máximo, cinco diecisiete con treinta y siete."
+        },
+        {
+          "host": "Chris",
+          "text": "Y el mes sigue un quince coma seis por ciento a la baja. Bitcoin, por su parte, perdió un seis coma seis por ciento en la semana."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y la caída del viernes coincidió con nuestro tema estrella. [exhales] Hablemos de XMR1."
+        },
+        {
+          "host": "Chris",
+          "text": "Sí, el token XMR1 de Wagyu. Es un token de Monero envuelto, y cayó más de un noventa y nueve por ciento. Varios medios contaron que un atacante sacó unos cinco coma dos millones de tokens de la cuenta del desplegador y vendió una fracción por cerca de trece coma cinco millones de dólares."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y aquí viene lo importante: no era Monero. Es un token que vive en otra cadena. CoinDesk aclaró que es independiente de Monero y del mercado de futuros de XMR de Hyperliquid."
+        },
+        {
+          "host": "Chris",
+          "text": "A ver, explícaselo a quien no haya oído nunca lo de «envuelto»."
+        },
+        {
+          "host": "Jessica",
+          "text": "Piénsalo como un pagaré. Es una versión de una moneda que vive en otra blockchain y depende de quien la emite y la respalda. Si se comprometen las claves o los servidores del emisor, el pagaré se puede quedar hecho trizas mientras la moneda original sigue intacta. Y eso es justo lo que pasó."
+        },
+        {
+          "host": "Chris",
+          "text": "El operador de Wagyu culpó a una brecha de seguridad, y el titular de Decrypt la vincula con un proveedor de alojamiento web."
+        },
+        {
+          "host": "Jessica",
+          "text": "[curious] Un momento. Proveedor de alojamiento, brecha de seguridad... ¿no era eso mismo lo de Feather?"
+        },
+        {
+          "host": "Chris",
+          "text": "Suena parecido, pero ojo: las fuentes no dicen que sea el mismo proveedor, así que no vamos a unir cosas que nadie ha unido."
+        },
+        {
+          "host": "Jessica",
+          "text": "Justo, ya me adelantaba yo. Lo que sí sabemos es que el fundador de Wagyu prometió reembolsar a los traders afectados. Y la semana pasada contamos que se habían filtrado datos de su servicio de intercambio, así que es una segunda mala racha."
+        },
+        {
+          "host": "Chris",
+          "text": "La lección es la de siempre: tener Monero en la cadena de Monero y tener un sustituto envuelto son cosas muy distintas."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y ahora, voces de la comunidad. Esta semana, lo que se oye en OVERHEARD..."
+        },
+        {
+          "host": "Chris",
+          "text": "[laughs] Se nos ha quedado la sección en blanco esta semana, no hay citas. Así que seguimos con el desarrollo, que viene cargadito."
+        },
+        {
+          "host": "Jessica",
+          "text": "Veintiocho pull requests fusionados en el repositorio principal. Sobre todo refuerzo de seguridad: nuevos objetivos de OSS-Fuzz que cubren FCMP++ y el código de pruebas, escaneo y caché del monedero."
+        },
+        {
+          "host": "Chris",
+          "text": "También hay un cambio en el pool de transacciones que guarda en caché los identificadores de entradas inválidas, y la corrección de un interbloqueo en la suma de coinbase durante la sincronización de bloques."
+        },
+        {
+          "host": "Jessica",
+          "text": "Lo más jugoso es que las comprobaciones de pruebas del monedero se endurecen frente a nodos deshonestos. Las pruebas de gasto quedan vinculadas a la transacción solicitada, y check_tx_key verifica el identificador de transacción en las viejas transacciones versión uno."
+        },
+        {
+          "host": "Chris",
+          "text": "Traducción: un daemon ya no puede colar datos sustituidos. Y daemon, para quien se una ahora, es el programa que corre en un nodo; en Monero, monerod."
+        },
+        {
+          "host": "Jessica",
+          "text": "Otro cambio hace que el monedero rechace las InProofs de transacciones que envió él mismo, porque esas pueden descifrar su propio cambio."
+        },
+        {
+          "host": "Chris",
+          "text": "Y hay un arreglo con nombre de película de terror. [mischievously] Guardar o mover un monedero cuya ruta termina en punto keys podía sobrescribir o borrar sus propios archivos. Ya está resuelto."
+        },
+        {
+          "host": "Jessica",
+          "text": "Además, el servidor wallet-RPC refuerza la validación de nombres de archivo, fast_refresh comprueba un límite superior, y una transacción pendiente fallida ya no marca como no gastadas las entradas que gastó una transacción confirmada."
+        },
+        {
+          "host": "Chris",
+          "text": "También llega una forma rápida de configurar multifirma N de N en el monedero de línea de comandos, sin la ronda posterior al intercambio de claves. Y el autor del parche avisa de que un LLM escribió parte de las pruebas."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y dos arreglos de red P2P: tras un reinicio ahora se restauran las dos conexiones ancla y no solo una, y los nodos piden a un par la siguiente entrada de la cadena cuando la última ya es conocida. Eso corta un bucle de desconexiones y reconexiones con varios pares."
+        },
+        {
+          "host": "Chris",
+          "text": "Pasemos al ecosistema. Hay un aviso urgente: MMGen Wallet diecisiete punto cero punto uno corrige dos omisiones críticas de firma."
+        },
+        {
+          "host": "Jessica",
+          "text": "La diecisiete punto cero de la semana pasada añadió la comprobación de que el firmante sin conexión verifique tus salidas. Pero un investigador anónimo demostró que alguien que controlara la máquina conectada aún podía fabricar transacciones que esquivan las comprobaciones de que la dirección pertenece al monedero. Quien use MMGen debe actualizar con urgencia."
+        },
+        {
+          "host": "Chris",
+          "text": "Buenas noticias en financiación: el CCS de compilaciones reproducibles de Cuprate, de SyntheticBird, ya está financiado. Sesenta monero en sesenta y una contribuciones. CCS es el Community Crowdfunding System, el sistema de crowdfunding de la comunidad."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y las compilaciones reproducibles permiten que cualquiera compruebe que un binario coincide de verdad con su código fuente. Cuprate es el nodo alternativo de Monero."
+        },
+        {
+          "host": "Chris",
+          "text": "[sarcastic] Qué casualidad que hablemos de eso la misma semana de la descarga de Feather."
+        },
+        {
+          "host": "Jessica",
+          "text": "[laughs] Casualidad total. Siguiente: Eigenwallet pide financiación para seis meses. Los mantenedores einliterflasche y binarybaron proponen una extensión de Firefox para los swaps, dos refactorizaciones de los swaps del maker y de Ethereum, y swaps atómicos entre ETH y Monero."
+        },
+        {
+          "host": "Chris",
+          "text": "Y el informe del tercer trimestre de vtnerd en el CCS: sobre todo trabajo de P2P-SSL. La mayor parte del tiempo se fue en el pull request de P2P-SSL para monerod, con rebase y correcciones tras revisiones con LLM."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y se abre la versión preliminar de Cake Wallet seis punto cinco punto cuatro para pruebas beta. Añade firma de Zcash sin conexión mediante Cupcake, almacenamiento en frío de Bitcoin Cash y swaps desde cualquier activo sin cambiar antes de monedero, y amplía el soporte de monedas de Chainflip."
+        },
+        {
+          "host": "Chris",
+          "text": "En comunidad: OrangeFren explicó cómo reembolsó a las víctimas del exit scam de 0trace. Ese exchange sin KYC se fugó con los fondos el cinco de noviembre, y algunas víctimas eran usuarios de OrangeFren, que publicó un informe de transparencia sobre cómo las verificó y reembolsó con arreglo a su garantía, vigente desde dos mil veintidós."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y Monero Talk entrevistó al investigador en criptografía Muhammed Esgin, profesor de la Universidad de Monash. Habla de firmas de anillo poscuánticas y del futuro de la tecnología de privacidad, y espera que el cifrado aguante mucho tiempo sin actualizaciones constantes."
+        },
+        {
+          "host": "Chris",
+          "text": "Fuera de Monero, pero relevante para la privacidad: Tails siete punto diecisiete punto uno es una corrección de emergencia. Un error en uBlock Origin permitía que un sitio malicioso inyectara JavaScript en otros sitios que visitaras después. Tails quitó uBlock Origin temporalmente, así que a actualizar de inmediato."
+        },
+        {
+          "host": "Jessica",
+          "text": "GrapheneOS dice que Google presiona a los fabricantes de móviles: los habría interrogado repetidamente sobre su colaboración con el proyecto y amenazado con condiciones de licencia que los tribunales han considerado ilegales. Dicen esperar nuevas medidas, como el bloqueo del bootloader en los Pixel, y piden ayuda para llegar a fiscales y reguladores."
+        },
+        {
+          "host": "Chris",
+          "text": "Y GrapheneOS enseñó una prueba de concepto de RCS, con cifrado de extremo a extremo compatible con Google Messages y iOS, confirmaciones, reacciones y archivos. Quieren integrar lo aprendido en su propia app de Mensajes."
+        },
+        {
+          "host": "Jessica",
+          "text": "Dos más: ICE paga a AT&T por el análisis de registros de llamadas, según un documento interno que obtuvo 404 Media. Expertos y legisladores lo califican de vigilancia masiva que podría alcanzar billones de registros. Y Signal restringe que los agentes de IA a nivel de sistema operativo lean sus datos."
+        },
+        {
+          "host": "Chris",
+          "text": "Antes de la red, la agenda. El veintitrés de noviembre, a las seis de la tarde UTC, reunión de Monero Tech sobre Seraphis y JAMTIS, FCMPs y otros desarrollos a largo plazo."
+        },
+        {
+          "host": "Jessica",
+          "text": "El veinticuatro, a la misma hora, reunión de Cuprate. Y el veinticinco, a las cinco UTC, el Monero Research Lab, con una agenda sin confirmar que incluye sustituir el algoritmo de dificultad por ASERT y una política de divulgación del uso de IA y LLM."
+        },
+        {
+          "host": "Chris",
+          "text": "Y los números de la red, en promedios semanales: hashrate de seis coma sesenta y siete gigahashes por segundo, frente a seis coma setenta y cinco la semana anterior. Treinta y un mil doscientas transacciones al día, contra veintinueve mil trescientas sesenta y siete. Y comisión media de cero coma cero cero cero doscientos veinticuatro monero, un poco menos que antes."
+        },
+        {
+          "host": "Jessica",
+          "text": "Y hasta aquí el número seis. Todos los enlaces y las historias completas están en xmr.fan barra es barra news."
+        },
+        {
+          "host": "Chris",
+          "text": "Gracias por escucharnos. ¡Nos oímos la semana que viene!"
+        },
+        {
+          "host": "Jessica",
+          "text": "¡Hasta pronto!"
+        }
+      ]
+    }
+  }
+}
