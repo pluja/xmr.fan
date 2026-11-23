@@ -15,11 +15,11 @@
     "src": "cointelegraph.com",
     "url": "https://cointelegraph.com/news/wrapped-monero-token-crashes-998-amid-suspected-135m-exploit?utm_source=rss_feed&utm_medium=rss_tag_monero&utm_campaign=rss_partner_inbound",
     "h": "A 'wrapped Monero' token crashed 99%, and it was not Monero",
-    "dek": "Wagyu's XMR1 token on another chain lost nearly all its value after an exploit. The real Monero network was not involved.",
+    "dek": "Wagyu's XMR1 token on another chain lost nearly all its value after an exploit. CoinDesk notes the token is separate from Monero itself.",
     "body": [
       "Several crypto outlets reported this week that Wagyu's XMR1 token, a wrapped Monero token, fell by more than 99% after an attacker moved about 5.2 million of the tokens out of the deployer account and sold a fraction of them for roughly $13.5 million. Bitquery traced the sales, and CoinDesk made a point of noting that the token is separate from Monero itself and from Hyperliquid's XMR futures market.",
-      "A wrapped token is an IOU: a version of a coin that lives on another blockchain and depends on whoever issues and backs it. If the issuer's keys or servers are compromised, the IOU can be wrecked while the original coin carries on untouched, which is what happened here. Wagyu's operator blamed a security breach, and Decrypt's headline ties it to a web host.",
-      "Wagyu's founder has promised to reimburse affected traders. Last week's issue noted that data from the Wagyu swap service had leaked, so this is a second bad stretch for the service. The lesson for Monero users is the old one: holding XMR on the Monero chain and holding a wrapped stand-in are very different things."
+      "A wrapped token is an IOU: a version of a coin that lives on another blockchain and depends on whoever issues and backs it. If the issuer is breached, the IOU can be wrecked while the original coin carries on untouched. Wagyu's operator blamed a security breach, and Decrypt's headline ties the hack to a web host.",
+      "Wagyu's operator has promised to reimburse affected traders. In late October we reported a group's claim that it had leaked data from Wagyu's swap service, so this is a second bad stretch for the service. The lesson for Monero users is the old one: holding XMR on the Monero chain and holding a wrapped stand-in are very different things."
     ],
     "more": [
       {
@@ -77,7 +77,7 @@
         "src": "github.com/monero-project/monero",
         "url": "https://github.com/monero-project/monero/pull/11696",
         "h": "Wallet proof checks get tighter against dishonest nodes",
-        "p": "Spend proofs are now bound to the requested transaction, and check_tx_key verifies the transaction ID for old v1 transactions, so a daemon can no longer swap in substituted data. Another change makes the wallet refuse InProofs for transactions it sent, since those can decode its own change.",
+        "p": "Two fixes stop a dishonest node from fooling proof checks on old v1 transactions: one could swap a transaction's inputs to pass a spend proof, the other could change the amount check_tx_key reports. Another change makes the wallet refuse InProofs for transactions it sent, since those can decode its own change.",
         "more": [
           {
             "src": "github.com/monero-project/monero",
@@ -129,7 +129,7 @@
         "src": "monero.observer",
         "url": "https://monero.observer/mmgen-wallet-patches-two-critical-vulnerabilities-v17.0.1/",
         "h": "MMGen Wallet 17.0.1 fixes two critical signing bypasses",
-        "p": "Last week's 17.0.0 added the check that the offline signer verifies your outputs. An anonymous researcher showed that someone controlling the online machine could still craft transactions that slip past the address-belongs-to-wallet checks. MMGen Wallet users should upgrade urgently."
+        "p": "An anonymous researcher found two critical flaws that let someone with access to the online machine craft transactions slipping past the offline signer's address-belongs-to-wallet checks. MMGen Wallet users should upgrade urgently."
       },
       {
         "src": "monero.observer",
