@@ -100,9 +100,9 @@
     "id": "monerocoalition",
     "name": "Monero Coalition",
     "category": "monero",
-    "address": "458KqN1qCy5BXevWrGaqUNHaFXRRcQE739BH9M4BKBi6Ng4U9htN3NbCZdyezD2qNBDaaQ5KZHFhnEQ9brFL8EdL5fxsBfC",
+    "address": "84bd98CwmvthsEPZsoQRtaNxCNrqokUbLLXXJoStaLBRhgtX8xsFr3K3GaGdv8N2KPNa3hgQ3ht3CihYTPWWa2FQJm3eenq",
     "source": "https://donate.monerocoalition.org/",
-    "checked": "2026-11-08",
+    "checked": "2026-11-23",
     "description": {
       "en": "A policy group working for Monero adoption.",
       "es": "Un grupo de incidencia que trabaja por la adopción de Monero.",
@@ -110,8 +110,7 @@
       "fr": "Un groupe de plaidoyer pour l'adoption du Monero.",
       "pt": "Um grupo de advocacy pela adoção do Monero.",
       "ja": "Monero の普及に取り組む政策グループ。"
-    },
-    "missing": true
+    }
   },
   {
     "id": "getmonero",
@@ -576,23 +575,6 @@
       "pt": "Cliente proxy sing-box de código aberto para contornar a censura.",
       "ja": "検閲回避のためのオープンソースのsing-boxプロキシクライアント。"
     }
-  },
-  {
-    "id": "onionbrowser",
-    "name": "Onion Browser",
-    "category": "privacy",
-    "address": "436sKqJM2qTAie1L5t5PAnfQFNMFkkWfjj1EgcygDvGubt3uB6p4F7xj35tkZbQfG9iuVRTTspWevjUYbfVCELWs2AJELCK",
-    "source": "https://onionbrowser.com/donate",
-    "checked": "2026-11-15",
-    "description": {
-      "en": "Open-source Tor-powered web browser for iOS.",
-      "es": "Navegador web de código abierto para iOS basado en Tor.",
-      "ru": "Open-source веб-браузер для iOS на основе Tor.",
-      "fr": "Navigateur web open source pour iOS basé sur Tor.",
-      "pt": "Navegador web de código aberto para iOS baseado em Tor.",
-      "ja": "Torを利用するiOS向けオープンソースのウェブブラウザ。"
-    },
-    "missing": true
   },
   {
     "id": "openprivacy",
